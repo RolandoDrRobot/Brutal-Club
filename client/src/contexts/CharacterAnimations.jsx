@@ -87,6 +87,35 @@ const staminaCosts = {
   "punches": 25,  // Combo de puñetazos - alto costo
 };
 
+// NUEVO: Timing realista para cada tipo de ataque
+const ATTACK_TIMINGS = {
+  "punch": { 
+    attack: 800,    // 0.8s ejecutando el ataque
+    recovery: 300,  // 0.3s de recuperación
+    total: 1100     // 1.1s total
+  },
+  "kick": { 
+    attack: 1200,   // 1.2s ejecutando el ataque
+    recovery: 400,  // 0.4s de recuperación
+    total: 1600     // 1.6s total
+  },
+  "punches": { 
+    attack: 2000,   // 2.0s ejecutando el combo
+    recovery: 600,  // 0.6s de recuperación
+    total: 2600     // 2.6s total
+  }
+};
+
+// NUEVO: Estados de combate realista
+const COMBAT_STATES = {
+  IDLE: 'IDLE',                 // Puede atacar, bloquear o moverse
+  ATTACKING: 'ATTACKING',       // Ejecutando ataque - oponente NO puede atacar
+  RECOVERING: 'RECOVERING',     // Recuperándose del ataque - vulnerable a contraataques
+  BLOCKING: 'BLOCKING',         // Bloqueando - puede recibir daño reducido
+  STUNNED: 'STUNNED',          // Aturdido - no puede hacer nada
+  HURT: 'HURT'                 // Recibiendo daño - breve momento de vulnerabilidad
+};
+
 // Constantes de stamina
 const MAX_STAMINA = 100;
 const STAMINA_REGEN_RATE = 15; // Stamina que se regenera por segundo (reducido de 20 a 15)
@@ -126,6 +155,16 @@ export const CharacterAnimationsProvider = (props) => {
   // Estados de defensa/bloqueo
   const [player1IsBlocking, setPlayer1IsBlocking] = useState(false);
   const [player2IsBlocking, setPlayer2IsBlocking] = useState(false);
+  
+  // NUEVO: Estados de combate realista
+  const [player1CombatState, setPlayer1CombatState] = useState(COMBAT_STATES.IDLE);
+  const [player2CombatState, setPlayer2CombatState] = useState(COMBAT_STATES.IDLE);
+  
+  // NUEVO: Referencias para el sistema de timing
+  const player1AttackTimerRef = useRef(null);
+  const player2AttackTimerRef = useRef(null);
+  const player1RecoveryTimerRef = useRef(null);
+  const player2RecoveryTimerRef = useRef(null);
   
   // Sistema de IA para Player 2
   const [isAIEnabled, setIsAIEnabled] = useState(true); // IA siempre activada
@@ -758,6 +797,11 @@ export const CharacterAnimationsProvider = (props) => {
     console.log(`player2IsBlocking: ${player2IsBlocking}`);
     console.log(`player2Stamina: ${player2Stamina}`);
     
+    // NUEVO: Log del estado de combate
+    console.log(`player1CombatState: ${player1CombatState}`);
+    console.log(`player2CombatState: ${player2CombatState}`);
+    console.log(`canPlayer2Attack: ${canPlayerAttack(2)}`);
+    
     // VERIFICACIÓN PRIORITARIA: Si el combate terminó, detener IA inmediatamente
     const combatEnded = player1IsDead || player2IsDead;
     if (combatEnded) {
@@ -784,12 +828,21 @@ export const CharacterAnimationsProvider = (props) => {
       return;
     }
 
+    // NUEVA LÓGICA: Verificar si puede atacar con el sistema de turnos
+    const canAttack = canPlayerAttack(2);
+    console.log(`AI can attack: ${canAttack}`);
+    
+    if (!canAttack) {
+      console.log("AI cannot attack due to turn system - waiting");
+      return;
+    }
+
     // Configuración de dificultad
     const difficultyConfig = {
       easy: {
         reactionTime: { min: 1500, max: 3000 }, // 1.5-3 segundos
-        attackChance: 0.4, // 40% de probabilidad de atacar
-        blockChance: 0.1,  // 10% de probabilidad de bloquear (reducido de 0.3)
+        attackChance: 0.5, // AUMENTADO: 50% de probabilidad de atacar (más agresivo)
+        blockChance: 0.1,  // 10% de probabilidad de bloquear
         smartBlockChance: 0.1, // 10% de bloqueo inteligente
         staminaAwareness: 0.2 // 20% de consciencia de stamina
       }
@@ -802,8 +855,15 @@ export const CharacterAnimationsProvider = (props) => {
     console.log(`Attack threshold: ${config.attackChance}`);
     console.log(`Block threshold: ${config.attackChance + config.blockChance}`);
 
+    // NUEVA LÓGICA: Ser más agresivo si el oponente está en RECOVERING
+    let attackChanceModified = config.attackChance;
+    if (player1CombatState === COMBAT_STATES.RECOVERING) {
+      attackChanceModified += 0.3; // +30% de probabilidad si el oponente se está recuperando
+      console.log(`Player 1 is recovering - AI attack chance increased to ${attackChanceModified}`);
+    }
+
     // Decidir acción basada en probabilidades
-    if (action < config.attackChance) {
+    if (action < attackChanceModified) {
       console.log("AI decides to attack");
       // Decidir qué ataque usar
       const attackTypes = ['punch', 'kick', 'punches'];
@@ -818,11 +878,11 @@ export const CharacterAnimationsProvider = (props) => {
         // En modo fácil, preferir ataques más simples
         let selectedAttack;
         if (aiDifficulty === 'easy') {
-          // 60% punch, 30% kick, 10% punches
+          // 50% punch, 35% kick, 15% punches (más balanceado)
           const rand = Math.random();
-          if (rand < 0.6 && availableAttacks.includes('punch')) {
+          if (rand < 0.5 && availableAttacks.includes('punch')) {
             selectedAttack = 'punch';
-          } else if (rand < 0.9 && availableAttacks.includes('kick')) {
+          } else if (rand < 0.85 && availableAttacks.includes('kick')) {
             selectedAttack = 'kick';
           } else {
             selectedAttack = availableAttacks[Math.floor(Math.random() * availableAttacks.length)];
@@ -832,12 +892,12 @@ export const CharacterAnimationsProvider = (props) => {
         }
 
         console.log(`AI selected attack: ${selectedAttack}`);
-        console.log("Calling triggerPlayer2Attack...");
+        console.log("🤖 AI calling triggerPlayer2Attack with turn system...");
         triggerPlayer2Attack(selectedAttack);
       } else {
         console.log("AI wanted to attack but no attacks available due to stamina");
       }
-    } else if (action < config.attackChance + config.blockChance) {
+    } else if (action < attackChanceModified + config.blockChance) {
       console.log("AI decides to block");
       // Decidir si bloquear
       if (player2Stamina > 20) { // Solo bloquear si tiene suficiente stamina
@@ -935,96 +995,60 @@ export const CharacterAnimationsProvider = (props) => {
     return { attackIndex, defenseIndex };
   };
 
-  // Función para activar ataque del jugador 1 contra jugador 2
+  // NUEVO: Función para activar ataque del jugador 1 con sistema de turnos realista
   const triggerPlayer1Attack = (attackAnimationName) => {
-    // No permitir ataques si algún jugador está muerto o si el atacante está bloqueando
-    if (player1IsDead || player2IsDead || player1IsBlocking) {
-      console.log("Cannot attack - a player is dead or attacker is blocking");
+    console.log(`🎯 Player 1 attempting ${attackAnimationName} attack`);
+    
+    // NUEVA LÓGICA: Verificar si puede atacar usando el sistema de turnos
+    if (!canPlayerAttack(1)) {
+      console.log("❌ Player 1 attack blocked by turn system");
       return;
     }
 
     // Verificar stamina para golpes fuertes
     const staminaCost = staminaCosts[attackAnimationName] || 0;
     if (staminaCost > 0 && player1Stamina < staminaCost) {
-      console.log(`Player 1 needs ${staminaCost} stamina for ${attackAnimationName} but only has ${player1Stamina}`);
+      console.log(`❌ Player 1 needs ${staminaCost} stamina for ${attackAnimationName} but only has ${player1Stamina}`);
       return;
     }
 
-    console.log("Player 1 attacks:", attackAnimationName);
+    console.log(`✅ Player 1 ${attackAnimationName} attack approved - executing sequence`);
     
     // Consumir stamina si es necesario
     if (staminaCost > 0) {
       consumePlayer1Stamina(staminaCost);
     }
     
-    // Limpiar timeout anterior si existe
-    if (attackTimeoutRef.current) {
-      clearTimeout(attackTimeoutRef.current);
-    }
-    
-    const { attackIndex, defenseIndex } = getAttackAnimations(attackAnimationName);
-    console.log(`P1 Attack: ${animations[attackIndex]}, P2 Defense: ${animations[defenseIndex]}`);
-    
-    // Ejecutar las animaciones de ataque usando las funciones protegidas
-    setPlayer1Animation(attackIndex);
-    // Solo cambiar animación del defensor si no está bloqueando
-    if (!player2IsBlocking) {
-      setPlayer2Animation(defenseIndex);
-    }
-    
-    // Aplicar daño al Player 2
-    applyDamageToPlayer2(attackAnimationName);
-    
-    // Volver a idle después de 2 segundos solo si no hay muerte
-    attackTimeoutRef.current = setTimeout(() => {
-      returnToIdle();
-    }, 2000);
+    // NUEVA LÓGICA: Usar el sistema de secuencia de ataque realista
+    executeAttackSequence(1, attackAnimationName, 2);
   };
 
-  // Función para activar ataque del jugador 2 contra jugador 1
+  // NUEVO: Función para activar ataque del jugador 2 con sistema de turnos realista
   const triggerPlayer2Attack = (attackAnimationName) => {
-    // No permitir ataques si algún jugador está muerto o si el atacante está bloqueando
-    if (player1IsDead || player2IsDead || player2IsBlocking) {
-      console.log("Cannot attack - a player is dead or attacker is blocking");
+    console.log(`🎯 Player 2 attempting ${attackAnimationName} attack`);
+    
+    // NUEVA LÓGICA: Verificar si puede atacar usando el sistema de turnos
+    if (!canPlayerAttack(2)) {
+      console.log("❌ Player 2 attack blocked by turn system");
       return;
     }
 
     // Verificar stamina para golpes fuertes
     const staminaCost = staminaCosts[attackAnimationName] || 0;
     if (staminaCost > 0 && player2Stamina < staminaCost) {
-      console.log(`Player 2 needs ${staminaCost} stamina for ${attackAnimationName} but only has ${player2Stamina}`);
+      console.log(`❌ Player 2 needs ${staminaCost} stamina for ${attackAnimationName} but only has ${player2Stamina}`);
       return;
     }
 
-    console.log("Player 2 attacks:", attackAnimationName);
+    console.log(`✅ Player 2 ${attackAnimationName} attack approved - executing sequence`);
     
     // Consumir stamina si es necesario
     if (staminaCost > 0) {
       consumePlayer2Stamina(staminaCost);
     }
     
-    // Limpiar timeout anterior si existe
-    if (attackTimeoutRef.current) {
-      clearTimeout(attackTimeoutRef.current);
-    }
-    
-    const { attackIndex, defenseIndex } = getAttackAnimations(attackAnimationName);
-    console.log(`P2 Attack: ${animations[attackIndex]}, P1 Defense: ${animations[defenseIndex]}`);
-    
-    // Ejecutar las animaciones de ataque usando las funciones protegidas
-    setPlayer2Animation(attackIndex);
-    // Solo cambiar animación del defensor si no está bloqueando
-    if (!player1IsBlocking) {
-      setPlayer1Animation(defenseIndex);
-    }
-    
-    // Aplicar daño al Player 1
-    applyDamageToPlayer1(attackAnimationName);
-    
-    // Volver a idle después de 2 segundos solo si no hay muerte
-    attackTimeoutRef.current = setTimeout(() => {
-      returnToIdle();
-    }, 2000);
+    // NUEVA LÓGICA: Usar el sistema de secuencia de ataque realista
+    executeAttackSequence(2, attackAnimationName, 1);
   };
 
   // Función para activar animación sincronizada (modo normal)
@@ -1101,6 +1125,14 @@ export const CharacterAnimationsProvider = (props) => {
     console.log("Initializing combat mode with intro animation - Pete vs Tyler");
     resetHealth(); // Resetear vida y stamina al iniciar combate (esto revive a todos)
     
+    // NUEVO: Resetear estados de combate realista
+    setPlayer1CombatState(COMBAT_STATES.IDLE);
+    setPlayer2CombatState(COMBAT_STATES.IDLE);
+    
+    // NUEVO: Limpiar todos los timers del sistema de turnos
+    clearPlayerTimers(1);
+    clearPlayerTimers(2);
+    
     // Resetear flag de victoria para nueva sesión de combate
     setVictoryCountedThisRound(false);
     console.log("🔄 Victory flag reset for new combat session");
@@ -1125,7 +1157,13 @@ export const CharacterAnimationsProvider = (props) => {
       const player2CombatIdleIndex = findAnimationIndex("idleFight", 2);
       setPlayer1AnimationIndex(player1CombatIdleIndex);
       setPlayer2AnimationIndex(player2CombatIdleIndex);
+      
+      // NUEVO: Asegurar que ambos jugadores estén en estado IDLE después del intro
+      setPlayer1CombatState(COMBAT_STATES.IDLE);
+      setPlayer2CombatState(COMBAT_STATES.IDLE);
+      
       console.log("Intro finished - Pete (Player 1) and Tyler (Player 2) now in combat idle, ready to fight!");
+      console.log("🥊 REALISTIC TURN SYSTEM ACTIVE - Players can only attack when opponent is not attacking!");
       
       // Iniciar IA después de que termine la intro
       if (isAIEnabled) {
@@ -1144,6 +1182,14 @@ export const CharacterAnimationsProvider = (props) => {
     
     // Detener IA inmediatamente
     stopAI();
+    
+    // NUEVO: Limpiar todos los timers del sistema de turnos
+    clearPlayerTimers(1);
+    clearPlayerTimers(2);
+    
+    // NUEVO: Resetear estados de combate realista
+    setPlayer1CombatState(COMBAT_STATES.IDLE);
+    setPlayer2CombatState(COMBAT_STATES.IDLE);
     
     // Limpiar todos los timeouts e intervals
     if (attackTimeoutRef.current) {
@@ -1196,11 +1242,13 @@ export const CharacterAnimationsProvider = (props) => {
     }
     
     console.log("Combat state cleaned up - Pete (Player 1) and Tyler (Player 2) ready");
+    console.log("🔄 Realistic turn system deactivated");
   };
 
   // Limpiar timeouts al desmontar el componente
   useEffect(() => {
     return () => {
+      // Limpiar timers originales
       if (attackTimeoutRef.current) clearTimeout(attackTimeoutRef.current);
       if (introTimeoutRef.current) clearTimeout(introTimeoutRef.current);
       if (player1BlockTimeoutRef.current) clearTimeout(player1BlockTimeoutRef.current);
@@ -1210,6 +1258,12 @@ export const CharacterAnimationsProvider = (props) => {
       if (player1BlockStaminaRef.current) clearInterval(player1BlockStaminaRef.current);
       if (player2BlockStaminaRef.current) clearInterval(player2BlockStaminaRef.current);
       if (aiActionTimeoutRef.current) clearTimeout(aiActionTimeoutRef.current);
+      
+      // NUEVO: Limpiar timers del sistema de turnos
+      if (player1AttackTimerRef.current) clearTimeout(player1AttackTimerRef.current);
+      if (player2AttackTimerRef.current) clearTimeout(player2AttackTimerRef.current);
+      if (player1RecoveryTimerRef.current) clearTimeout(player1RecoveryTimerRef.current);
+      if (player2RecoveryTimerRef.current) clearTimeout(player2RecoveryTimerRef.current);
     };
   }, []);
 
@@ -1267,6 +1321,136 @@ export const CharacterAnimationsProvider = (props) => {
   useEffect(() => {
     console.log(`🎯 PLAYER 1 WINS COUNTER CHANGED: ${player1Wins}`);
   }, [player1Wins]);
+
+  // NUEVO: Funciones del sistema de turnos realista
+  
+  // Función para verificar si un jugador puede atacar
+  const canPlayerAttack = (player) => {
+    const playerState = player === 1 ? player1CombatState : player2CombatState;
+    const opponentState = player === 1 ? player2CombatState : player1CombatState;
+    const playerIsDead = player === 1 ? player1IsDead : player2IsDead;
+    const opponentIsDead = player === 1 ? player2IsDead : player1IsDead;
+    const playerIsBlocking = player === 1 ? player1IsBlocking : player2IsBlocking;
+    
+    // No puede atacar si está muerto, bloqueando, o si el oponente está atacando
+    if (playerIsDead || opponentIsDead || playerIsBlocking) {
+      return false;
+    }
+    
+    // REGLA CLAVE: No puede atacar si el oponente está en estado ATTACKING
+    if (opponentState === COMBAT_STATES.ATTACKING) {
+      console.log(`Player ${player} cannot attack - opponent is attacking!`);
+      return false;
+    }
+    
+    // Solo puede atacar si está en IDLE o RECOVERING
+    return playerState === COMBAT_STATES.IDLE || playerState === COMBAT_STATES.RECOVERING;
+  };
+  
+  // Función para cambiar el estado de combate de un jugador
+  const setPlayerCombatState = (player, newState) => {
+    console.log(`Player ${player} state: ${player === 1 ? player1CombatState : player2CombatState} -> ${newState}`);
+    
+    if (player === 1) {
+      setPlayer1CombatState(newState);
+    } else {
+      setPlayer2CombatState(newState);
+    }
+  };
+  
+  // Función para limpiar todos los timers de un jugador
+  const clearPlayerTimers = (player) => {
+    if (player === 1) {
+      if (player1AttackTimerRef.current) {
+        clearTimeout(player1AttackTimerRef.current);
+        player1AttackTimerRef.current = null;
+      }
+      if (player1RecoveryTimerRef.current) {
+        clearTimeout(player1RecoveryTimerRef.current);
+        player1RecoveryTimerRef.current = null;
+      }
+    } else {
+      if (player2AttackTimerRef.current) {
+        clearTimeout(player2AttackTimerRef.current);
+        player2AttackTimerRef.current = null;
+      }
+      if (player2RecoveryTimerRef.current) {
+        clearTimeout(player2RecoveryTimerRef.current);
+        player2RecoveryTimerRef.current = null;
+      }
+    }
+  };
+  
+  // Función para ejecutar la secuencia completa de ataque con timing realista
+  const executeAttackSequence = (attackerPlayer, attackType, defenderPlayer) => {
+    const timing = ATTACK_TIMINGS[attackType];
+    if (!timing) {
+      console.error(`No timing found for attack type: ${attackType}`);
+      return;
+    }
+    
+    console.log(`🥊 ATTACK SEQUENCE START - Player ${attackerPlayer} ${attackType} (${timing.total}ms total)`);
+    
+    // Limpiar timers previos del atacante
+    clearPlayerTimers(attackerPlayer);
+    
+    // FASE 1: ATTACKING - El atacante está ejecutando el ataque
+    setPlayerCombatState(attackerPlayer, COMBAT_STATES.ATTACKING);
+    
+    // Ejecutar animaciones de ataque y defensa
+    const { attackIndex, defenseIndex } = getAttackAnimations(attackType);
+    
+    if (attackerPlayer === 1) {
+      setPlayer1Animation(attackIndex);
+      // Solo cambiar animación del defensor si no está bloqueando
+      if (!player2IsBlocking) {
+        setPlayer2Animation(defenseIndex);
+        setPlayerCombatState(2, COMBAT_STATES.HURT);
+      }
+    } else {
+      setPlayer2Animation(attackIndex);
+      // Solo cambiar animación del defensor si no está bloqueando
+      if (!player1IsBlocking) {
+        setPlayer1Animation(defenseIndex);
+        setPlayerCombatState(1, COMBAT_STATES.HURT);
+      }
+    }
+    
+    // FASE 2: Aplicar daño cuando termina la animación de ataque
+    const attackTimerRef = attackerPlayer === 1 ? player1AttackTimerRef : player2AttackTimerRef;
+    attackTimerRef.current = setTimeout(() => {
+      console.log(`⚡ IMPACT - Player ${attackerPlayer} ${attackType} hits!`);
+      
+      // Aplicar daño
+      if (attackerPlayer === 1) {
+        applyDamageToPlayer2(attackType);
+      } else {
+        applyDamageToPlayer1(attackType);
+      }
+      
+      // FASE 3: RECOVERING - El atacante entra en recuperación
+      setPlayerCombatState(attackerPlayer, COMBAT_STATES.RECOVERING);
+      console.log(`🔄 Player ${attackerPlayer} entering recovery phase (${timing.recovery}ms)`);
+      
+      // FASE 4: Volver a IDLE después de la recuperación
+      const recoveryTimerRef = attackerPlayer === 1 ? player1RecoveryTimerRef : player2RecoveryTimerRef;
+      recoveryTimerRef.current = setTimeout(() => {
+        console.log(`✅ ATTACK SEQUENCE COMPLETE - Player ${attackerPlayer} back to IDLE`);
+        setPlayerCombatState(attackerPlayer, COMBAT_STATES.IDLE);
+        
+        // Volver el defensor a IDLE también (si no está muerto)
+        const defenderIsDead = defenderPlayer === 1 ? player1IsDead : player2IsDead;
+        if (!defenderIsDead) {
+          setPlayerCombatState(defenderPlayer, COMBAT_STATES.IDLE);
+        }
+        
+        // Volver ambos a animación idle si no están muertos
+        returnToIdle();
+        
+      }, timing.recovery);
+      
+    }, timing.attack);
+  };
 
   return (
     <CharacterAnimationsContext.Provider
@@ -1331,6 +1515,13 @@ export const CharacterAnimationsProvider = (props) => {
         
         // Constantes para la UI
         staminaCosts,
+        
+        // NUEVO: Sistema de turnos realista
+        player1CombatState,
+        player2CombatState,
+        canPlayerAttack,
+        COMBAT_STATES, // Exportar las constantes para uso en UI
+        ATTACK_TIMINGS, // Exportar timings para debugging/UI
       }}
     >
       {props.children}

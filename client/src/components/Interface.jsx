@@ -35,7 +35,12 @@ const Interface = () => {
     player2IsBlocking,
     togglePlayer1Block,
     togglePlayer2Block,
-    staminaCosts
+    staminaCosts,
+    player1CombatState,
+    player2CombatState,
+    canPlayerAttack,
+    COMBAT_STATES,
+    ATTACK_TIMINGS
   } = useCharacterAnimations();
 
   // Media queries para responsive design
@@ -137,11 +142,17 @@ const Interface = () => {
   // Determinar si el combate ha terminado
   const isCombatOver = player1IsDead || player2IsDead;
 
-  // Función para verificar si un ataque está disponible
-  const canAttack = (playerStamina, attackName, isPlayerDead, isPlayerBlocking) => {
+  // NUEVA: Función para verificar si un ataque está disponible con sistema de turnos
+  const canAttack = (player, attackName, playerStamina, isPlayerDead, isPlayerBlocking) => {
+    // Verificaciones básicas
     if (isPlayerDead || isPlayerBlocking || isCombatOver) return false;
+    
+    // Verificar stamina
     const cost = staminaCosts[attackName] || 0;
-    return playerStamina >= cost;
+    if (playerStamina < cost) return false;
+    
+    // NUEVA LÓGICA: Usar el sistema de turnos realista
+    return canPlayerAttack(player);
   };
 
   // Función para verificar si se puede bloquear
@@ -531,7 +542,7 @@ const Interface = () => {
                   justifyContent: "space-around"
                 }}>
                   {attackButtons.map((attack, index) => {
-                    const canUseAttack = canAttack(player1Stamina, attack.name, player1IsDead, player1IsBlocking);
+                    const canUseAttack = canAttack(player1CombatState, attack.name, player1Stamina, player1IsDead, player1IsBlocking);
                     const staminaCost = staminaCosts[attack.name] || 0;
                     
                     return (
@@ -668,6 +679,61 @@ const Interface = () => {
                 }}>
                   {player1IsDead ? "💀" : "🏆"}
                   </Text>
+                )}
+                
+                {/* NUEVO: Indicador de Estado de Combate Realista */}
+                {isCombatMode && !isCombatOver && (
+                  <Box style={{
+                    padding: isMobile ? "4px 8px" : "8px 12px",
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    border: "2px solid #04cbee",
+                    borderRadius: isMobile ? "8px" : "12px",
+                    textAlign: "center",
+                    minWidth: isMobile ? "80px" : "140px",
+                    boxShadow: "0 0 10px rgba(4, 203, 238, 0.5)"
+                  }}>
+                    <Text size={isMobile ? "xs" : "sm"} color="#04cbee" weight={700} style={{
+                      fontSize: isMobile ? "8px" : "12px",
+                      textShadow: "0 0 5px #04cbee",
+                      marginBottom: "2px"
+                    }}>
+                      TURN SYSTEM
+                    </Text>
+                    
+                    <Stack spacing={2}>
+                      {/* Estado Player 1 */}
+                      <Box style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <Text size={isMobile ? "xs" : "sm"} style={{
+                          fontSize: isMobile ? "7px" : "10px",
+                          color: player1CombatState === COMBAT_STATES.ATTACKING ? "#fc3f31" : 
+                                player1CombatState === COMBAT_STATES.RECOVERING ? "#ffa500" : 
+                                canPlayerAttack(1) ? "#42cf52" : "#888",
+                          fontWeight: 600
+                        }}>
+                          P1: {player1CombatState === COMBAT_STATES.ATTACKING ? "⚔️ ATK" : 
+                               player1CombatState === COMBAT_STATES.RECOVERING ? "🔄 REC" :
+                               player1CombatState === COMBAT_STATES.HURT ? "💥 HRT" :
+                               canPlayerAttack(1) ? "✅ RDY" : "❌ WAIT"}
+                        </Text>
+                      </Box>
+                      
+                      {/* Estado Player 2 */}
+                      <Box style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <Text size={isMobile ? "xs" : "sm"} style={{
+                          fontSize: isMobile ? "7px" : "10px",
+                          color: player2CombatState === COMBAT_STATES.ATTACKING ? "#fc3f31" : 
+                                player2CombatState === COMBAT_STATES.RECOVERING ? "#ffa500" : 
+                                canPlayerAttack(2) ? "#42cf52" : "#888",
+                          fontWeight: 600
+                        }}>
+                          P2: {player2CombatState === COMBAT_STATES.ATTACKING ? "⚔️ ATK" : 
+                               player2CombatState === COMBAT_STATES.RECOVERING ? "🔄 REC" :
+                               player2CombatState === COMBAT_STATES.HURT ? "💥 HRT" :
+                               canPlayerAttack(2) ? "✅ RDY" : "❌ WAIT"}
+                        </Text>
+                      </Box>
+                    </Stack>
+                  </Box>
                 )}
                 
               {/* Botón de Reset mejorado */}
