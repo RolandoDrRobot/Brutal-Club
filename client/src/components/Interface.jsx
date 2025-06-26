@@ -4,6 +4,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import React from "react";
 import MusicPlayer from "./MusicPlayer";
 import MainMenu from "./MainMenu";
+import CharacterSelect from "./CharacterSelect";
 import punchImg from "../assets/punch.png";
 import kickImg from "../assets/kick.png";
 import comboImg from "../assets/combo.png";
@@ -114,6 +115,11 @@ const Interface = () => {
     navigateToCombat,
     navigateBackToDance,
     navigateBackToMenu,
+    navigateToCharacterSelect,
+    navigateBackFromCharacterSelect,
+    handleCharacterSelection,
+    selectedPlayer1Character,
+    selectedPlayer2Character,
     isCombatMode,
     setIsCombatMode,
     triggerPlayer1Attack,
@@ -437,9 +443,17 @@ const Interface = () => {
       {currentScreen === 'menu' && (
         <MainMenu 
           onStartClick={navigateToCombat}
-          onFightersClick={() => console.log("FIGHTERS menu clicked")}
+          onFightersClick={navigateToCharacterSelect}
           onShopClick={() => console.log("SHOP menu clicked")}
           onBackClick={navigateBackToDance}
+        />
+      )}
+
+      {/* Mostrar pantalla de selección de personajes cuando currentScreen es 'characterSelect' */}
+      {currentScreen === 'characterSelect' && (
+        <CharacterSelect 
+          onSelectClick={handleCharacterSelection}
+          onBackClick={navigateBackFromCharacterSelect}
         />
       )}
 

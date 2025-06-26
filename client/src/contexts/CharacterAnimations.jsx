@@ -129,8 +129,13 @@ export const CharacterAnimationsProvider = (props) => {
   const [animations, setAnimations] = useState([]);
   
   // NUEVO: Sistema de navegación de pantallas
-  // Posibles valores: 'dance', 'menu', 'combat'
+  // Posibles valores: 'dance', 'menu', 'combat', 'characterSelect'
   const [currentScreen, setCurrentScreen] = useState('dance');
+  
+  // NUEVO: Sistema de selección de personajes
+  const [selectedPlayer1Character, setSelectedPlayer1Character] = useState('pete');
+  const [selectedPlayer2Character, setSelectedPlayer2Character] = useState('tyler');
+  const [isSelectingCharacter, setIsSelectingCharacter] = useState(false);
   
   // Sistema de combate
   const [player1AnimationIndex, setPlayer1AnimationIndex] = useState(0);
@@ -1458,31 +1463,43 @@ export const CharacterAnimationsProvider = (props) => {
 
   // NUEVO: Funciones de navegación entre pantallas
   const navigateToMenu = () => {
-    console.log("Navigating from dance to main menu");
     setCurrentScreen('menu');
-    // Pausar cualquier animación de baile en curso
-    setAnimationIndex(-1);
   };
 
   const navigateToCombat = () => {
-    console.log("Navigating from menu to combat");
     setCurrentScreen('combat');
     setIsCombatMode(true);
     initializeCombat();
   };
 
   const navigateBackToDance = () => {
-    console.log("Navigating back to dance screen");
     setCurrentScreen('dance');
     setIsCombatMode(false);
-    cleanupCombatState();
   };
 
   const navigateBackToMenu = () => {
-    console.log("Navigating back to menu from combat");
     setCurrentScreen('menu');
     setIsCombatMode(false);
-    cleanupCombatState();
+  };
+
+  // NUEVAS: Funciones de navegación para selección de personajes
+  const navigateToCharacterSelect = () => {
+    setCurrentScreen('characterSelect');
+    setIsSelectingCharacter(true);
+  };
+
+  const navigateBackFromCharacterSelect = () => {
+    setCurrentScreen('menu');
+    setIsSelectingCharacter(false);
+  };
+
+  const handleCharacterSelection = (character) => {
+    // Por ahora solo cambiamos el personaje del Player 1
+    setSelectedPlayer1Character(character.model);
+    console.log(`Selected character: ${character.name} (${character.model})`);
+    
+    // Volver al menú principal después de seleccionar
+    navigateBackFromCharacterSelect();
   };
 
   return (
@@ -1563,6 +1580,16 @@ export const CharacterAnimationsProvider = (props) => {
         canPlayerAttack,
         COMBAT_STATES, // Exportar las constantes para uso en UI
         ATTACK_TIMINGS, // Exportar timings para debugging/UI
+        
+        // NUEVO: Sistema de selección de personajes
+        selectedPlayer1Character,
+        selectedPlayer2Character,
+        isSelectingCharacter,
+        setSelectedPlayer1Character,
+        setSelectedPlayer2Character,
+        navigateToCharacterSelect,
+        navigateBackFromCharacterSelect,
+        handleCharacterSelection,
       }}
     >
       {props.children}
