@@ -5,6 +5,7 @@ import React from "react";
 import MusicPlayer from "./MusicPlayer";
 import MainMenu from "./MainMenu";
 import CharacterSelect from "./CharacterSelect";
+import '../styles/fightAnimations.css';
 import punchImg from "../assets/punch.png";
 import kickImg from "../assets/kick.png";
 import comboImg from "../assets/combo.png";
@@ -68,39 +69,23 @@ const interfaceStyles = `
   }
   
   @keyframes impactShake {
-    0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
-    10% { transform: translateX(-3px) translateY(-2px) rotate(0.5deg); }
-    20% { transform: translateX(3px) translateY(2px) rotate(-0.5deg); }
-    30% { transform: translateX(-2px) translateY(-1px) rotate(0.3deg); }
-    40% { transform: translateX(2px) translateY(1px) rotate(-0.3deg); }
-    50% { transform: translateX(-1px) translateY(-0.5px) rotate(0.1deg); }
-    60% { transform: translateX(1px) translateY(0.5px) rotate(-0.1deg); }
-    70% { transform: translateX(0) translateY(0) rotate(0deg); }
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px) rotate(1deg); }
+    75% { transform: translateX(3px) rotate(-1deg); }
   }
   
   @keyframes buttonPowerUp {
     0% {
       transform: scale(1);
-      box-shadow: 
-        0 0 20px #fc3f31,
-        0 0 40px rgba(252, 63, 49, 0.3),
-        inset 0 0 20px rgba(252, 63, 49, 0.1);
+      box-shadow: 0 0 10px rgba(252, 63, 49, 0.3);
     }
     50% {
-      transform: scale(1.08);
-      box-shadow: 
-        0 0 40px #fc3f31,
-        0 0 80px rgba(252, 63, 49, 0.8),
-        0 0 120px rgba(252, 63, 49, 0.4),
-        inset 0 0 40px rgba(252, 63, 49, 0.3);
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(252, 63, 49, 0.8);
     }
     100% {
-      transform: scale(1.05);
-      box-shadow: 
-        0 0 30px #fc3f31,
-        0 0 60px rgba(252, 63, 49, 0.6),
-        0 0 90px rgba(252, 63, 49, 0.3),
-        inset 0 0 30px rgba(252, 63, 49, 0.2);
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(252, 63, 49, 0.3);
     }
   }
 `;
@@ -466,7 +451,10 @@ const Interface = () => {
             left: "50%",
             transform: "translateX(-50%)"
           }}>
-            <div style={{ textAlign: "center" }}>
+            <div style={{ 
+              textAlign: "center",
+              animation: "titleSlam 1.5s ease-out 0.3s both"
+            }}>
               <div style={{ 
                 color: "#fc3f31",
                 textTransform: "uppercase",
@@ -523,7 +511,7 @@ const Interface = () => {
               onClick={handleNavigateToMenu}
               disabled={isTransitioning}
               style={{
-                fontSize: isMobile ? "36px" : "48px",
+                fontSize: isMobile ? "24px" : "32px",
                 fontWeight: 700,
                 padding: isMobile ? "15px 40px" : "20px 60px",
                 minHeight: isMobile ? "80px" : "100px",
@@ -550,7 +538,7 @@ const Interface = () => {
                 `,
                 transition: "all 0.3s ease",
                 cursor: isTransitioning ? "not-allowed" : "pointer",
-                animation: isTransitioning ? "buttonPowerUp 0.6s ease-out" : "none",
+                animation: isTransitioning ? "buttonPowerUp 0.6s ease-out" : "buttonsPunchSequence 1s ease-out 0.8s both",
                 opacity: isTransitioning ? 0.8 : 1
               }}
               onMouseEnter={(e) => {
@@ -577,6 +565,19 @@ const Interface = () => {
       {/* Modo de combate - currentScreen 'combat' */}
       {currentScreen === 'combat' && isCombatMode && (
         <>
+          <div 
+            className="fight-screen-background"
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              zIndex: 50,
+              animation: "screenEnterFromTop 1.2s ease-out"
+            }}
+          />
+          
           {/* Mensaje de Victoria - Overlay cuando termina el combate */}
           {isCombatOver && (
             <Affix position={{ 
@@ -592,17 +593,23 @@ const Interface = () => {
                 boxShadow: "none",
                 textAlign: "center",
                 width: isMobile ? "90vw" : "400px",
-                maxWidth: isMobile ? "90vw" : "400px"
+                maxWidth: isMobile ? "90vw" : "400px",
+                animation: "fightPunchIn 1s ease-out",
+                zIndex: 1001
               }}>
                 <Stack spacing="lg" align="center">
                   <Text size={isMobile ? "xl" : "2xl"} weight={700} style={{ 
-                    color: player1IsDead ? "#fc3f31" : "#F5F5DC"
+                    color: player1IsDead ? "#fc3f31" : "#F5F5DC",
+                    animation: "titleSlam 0.8s ease-out"
                   }}>
                     🏆 {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"} 🏆
                   </Text>
                   
                   {/* Botones de acción */}
-                  <Group spacing="xs" position="center" style={{ width: "100%" }}>
+                  <Group spacing="xs" position="center" style={{ 
+                    width: "100%",
+                    animation: "buttonsPunchSequence 1s ease-out 0.3s both"
+                  }}>
                     {/* Botón Modo Baile */}
                     <img 
                       src={danceImg}
@@ -613,7 +620,20 @@ const Interface = () => {
                         height: "80px",
                         objectFit: "contain",
                         cursor: "pointer",
-                        flex: 1
+                        flex: 1,
+                        transition: "all 0.3s ease"
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isMobile) {
+                          e.target.style.transform = "scale(1.1)";
+                          e.target.style.filter = "drop-shadow(0 0 10px #fc3f31)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isMobile) {
+                          e.target.style.transform = "scale(1)";
+                          e.target.style.filter = "none";
+                        }
                       }}
                     />
 
@@ -630,7 +650,20 @@ const Interface = () => {
                         height: "80px",
                         objectFit: "contain",
                         cursor: "pointer",
-                        flex: 1
+                        flex: 1,
+                        transition: "all 0.3s ease"
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isMobile) {
+                          e.target.style.transform = "scale(1.1)";
+                          e.target.style.filter = "drop-shadow(0 0 10px #fc3f31)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isMobile) {
+                          e.target.style.transform = "scale(1)";
+                          e.target.style.filter = "none";
+                        }
                       }}
                     />
                   </Group>

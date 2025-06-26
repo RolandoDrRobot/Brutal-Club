@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Box, Text, Stack, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import '../styles/fightAnimations.css';
 
 const CharacterSelect = ({ onSelectClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -22,84 +23,6 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
     }
   ];
 
-  // Inject fight-themed CSS animations
-  React.useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes characterEnter {
-        0% {
-          transform: scale(0.8) translateY(50px);
-          opacity: 0;
-        }
-        100% {
-          transform: scale(1) translateY(0);
-          opacity: 1;
-        }
-      }
-      
-      @keyframes characterSwitch {
-        0% {
-          transform: scale(1) rotateY(0deg);
-          opacity: 1;
-        }
-        50% {
-          transform: scale(0.8) rotateY(90deg);
-          opacity: 0.3;
-        }
-        100% {
-          transform: scale(1) rotateY(0deg);
-          opacity: 1;
-        }
-      }
-      
-      @keyframes arrowPulse {
-        0%, 100% {
-          transform: scale(1);
-          opacity: 0.7;
-        }
-        50% {
-          transform: scale(1.2);
-          opacity: 1;
-        }
-      }
-      
-      @keyframes selectButtonGlow {
-        0%, 100% {
-          box-shadow: 
-            0 0 20px #fc3f31,
-            0 0 40px rgba(252, 63, 49, 0.3),
-            inset 0 0 20px rgba(252, 63, 49, 0.1);
-        }
-        50% {
-          box-shadow: 
-            0 0 40px #fc3f31,
-            0 0 80px rgba(252, 63, 49, 0.6),
-            inset 0 0 40px rgba(252, 63, 49, 0.3);
-        }
-      }
-      
-      @keyframes titlePunch {
-        0% {
-          transform: translateY(-30px) scale(0.9);
-          opacity: 0;
-        }
-        60% {
-          transform: translateY(5px) scale(1.05);
-          opacity: 1;
-        }
-        100% {
-          transform: translateY(0) scale(1);
-          opacity: 1;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-    
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
-
   const handlePreviousCharacter = () => {
     setSelectedCharacter((prev) => (prev === 0 ? characters.length - 1 : prev - 1));
   };
@@ -114,24 +37,9 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
 
   return (
     <Box
+      className="fight-screen-container fight-screen-background"
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: '#1a1a1a',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        backgroundImage: `
-          radial-gradient(circle at 30% 30%, rgba(252, 63, 49, 0.1) 0%, transparent 50%),
-          radial-gradient(circle at 70% 70%, rgba(252, 63, 49, 0.1) 0%, transparent 50%),
-          radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%)
-        `,
-        animation: "characterEnter 1s ease-out"
+        animation: "screenEnterFromRight 1.2s ease-out"
       }}
     >
       {/* Main title */}
@@ -140,37 +48,10 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         marginBottom: isMobile ? '30px' : '40px',
         animation: "titlePunch 1.2s ease-out"
       }}>
-        <Text
-          style={{
-            fontSize: isMobile ? '50px' : '80px',
-            fontWeight: 900,
-            color: '#fc3f31',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '6px',
-            textShadow: `
-              0 0 20px #fc3f31,
-              0 0 40px rgba(252, 63, 49, 0.5),
-              0 4px 20px rgba(252, 63, 49, 0.3)
-            `,
-            lineHeight: 0.9,
-            marginBottom: '10px'
-          }}
-        >
+        <Text className="fight-title">
           FIGHT CLUB
         </Text>
-        <Text
-          style={{
-            fontSize: isMobile ? '20px' : '32px',
-            fontWeight: 700,
-            color: '#F5F5DC',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '3px',
-            textShadow: `
-              0 0 10px #F5F5DC,
-              0 0 20px rgba(245, 245, 220, 0.3)
-            `
-          }}
-        >
+        <Text className="fight-subtitle">
           SELECT CHARACTER
         </Text>
       </Box>
@@ -326,27 +207,12 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
           variant="outline"
           size="xl"
           onClick={handleSelectCharacter}
+          className="fight-button"
           style={{
             fontSize: isMobile ? "28px" : "36px",
-            fontWeight: 700,
             padding: isMobile ? "15px 40px" : "20px 60px",
             minHeight: isMobile ? "70px" : "90px",
             minWidth: isMobile ? "200px" : "280px",
-            backgroundColor: "transparent",
-            borderColor: "#fc3f31",
-            border: "4px solid #fc3f31",
-            borderRadius: "15px",
-            color: "#fc3f31",
-            textTransform: "uppercase",
-            letterSpacing: "3px",
-            fontFamily: "Anton, sans-serif",
-            boxShadow: `
-              0 0 20px #fc3f31,
-              0 0 40px rgba(252, 63, 49, 0.3),
-              inset 0 0 20px rgba(252, 63, 49, 0.1)
-            `,
-            transition: "all 0.3s ease",
-            cursor: "pointer",
             animation: "selectButtonGlow 2s ease-in-out infinite"
           }}
           onMouseEnter={(e) => {
