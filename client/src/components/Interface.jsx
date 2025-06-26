@@ -13,6 +13,7 @@ import coverImg from "../assets/cover.png";
 import resetImg from "../assets/reset.png";
 import danceImg from "../assets/dance.png";
 import fightImg from "../assets/fight.png";
+import mainButtonImg from "../assets/mainbutton.jpeg";
 
 // CSS Animations for the interface
 const interfaceStyles = `
@@ -519,6 +520,10 @@ const Interface = () => {
                 maxWidth: isMobile ? "calc(100vw - 40px)" : "350px",
                 margin: isMobile ? "0 20px" : "0",
                 backgroundColor: isTransitioning ? "rgba(252, 63, 49, 0.2)" : "transparent",
+                backgroundImage: `url(${mainButtonImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
                 borderColor: "#fc3f31",
                 border: "4px solid #fc3f31",
                 borderRadius: "15px",
@@ -526,6 +531,15 @@ const Interface = () => {
                 textTransform: "uppercase",
                 letterSpacing: "3px",
                 fontFamily: "Anton, sans-serif",
+                textAlign: "left",
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                textShadow: `
+                  0 0 10px #000000,
+                  0 0 20px #000000,
+                  2px 2px 4px #000000
+                `,
                 boxShadow: isTransitioning ? `
                   0 0 40px #fc3f31,
                   0 0 80px rgba(252, 63, 49, 0.8),

@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Button, Box, Text, Stack, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
+import mainButtonImg from '../assets/mainbutton.jpeg';
 
 const CharacterSelect = ({ onSelectClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const isVerySmall = useMediaQuery("(max-width: 480px)");
   const [selectedCharacter, setSelectedCharacter] = useState(0);
 
   // Información de los personajes disponibles
@@ -39,19 +41,23 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: "screenEnterFromRight 1.2s ease-out"
+        animation: "screenEnterFromRight 1.2s ease-out",
+        padding: isMobile ? "20px" : "40px"
       }}
     >
       {/* Main title */}
       <Box style={{ 
         textAlign: 'center', 
-        marginBottom: isMobile ? '30px' : '40px',
+        marginBottom: isVerySmall ? '15px' : isMobile ? '20px' : '30px',
         animation: "titlePunch 1.2s ease-out"
       }}>
-        <Text className="fight-title">
+        <Text className="fight-title" style={{ 
+          fontSize: isMobile ? '32px' : '48px',
+          marginBottom: isVerySmall ? '5px' : isMobile ? '10px' : '15px'
+        }}>
           FIGHT CLUB
         </Text>
-        <Text className="fight-subtitle">
+        <Text className="fight-subtitle" style={{ fontSize: isMobile ? '14px' : '18px' }}>
           SELECT CHARACTER
         </Text>
       </Box>
@@ -63,7 +69,8 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         justifyContent: 'center',
         width: '100%',
         maxWidth: '800px',
-        margin: isMobile ? '20px 0' : '40px 0'
+        height: isVerySmall ? '55vh' : isMobile ? '65vh' : '70vh',
+        margin: isVerySmall ? '10px 0' : isMobile ? '15px 0' : '25px 0'
       }}>
         {/* Left Arrow */}
         <Button
@@ -96,7 +103,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         {/* Character Display Area */}
         <Box style={{
           width: isMobile ? '300px' : '400px',
-          height: isMobile ? '400px' : '500px',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -109,14 +116,14 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             key={selectedCharacter}
             style={{
               width: '100%',
-              height: '70%',
+              height: '60%',
               backgroundColor: 'rgba(252, 63, 49, 0.1)',
               border: '3px solid #fc3f31',
               borderRadius: '20px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '20px',
+              marginBottom: '15px',
               boxShadow: `
                 0 0 30px rgba(252, 63, 49, 0.3),
                 inset 0 0 30px rgba(252, 63, 49, 0.1)
@@ -201,47 +208,22 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
       </Box>
 
       {/* Action buttons */}
-      <Group spacing="xl" style={{ marginTop: isMobile ? '30px' : '50px' }}>
-        {/* Select Button */}
-        <Button
-          variant="outline"
-          size="xl"
-          onClick={handleSelectCharacter}
-          className="fight-button"
-          style={{
-            fontSize: isMobile ? "28px" : "36px",
-            padding: isMobile ? "15px 40px" : "20px 60px",
-            minHeight: isMobile ? "70px" : "90px",
-            minWidth: isMobile ? "200px" : "280px",
-            animation: "selectButtonGlow 2s ease-in-out infinite"
-          }}
-          onMouseEnter={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1.05)";
-              e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1)";
-              e.target.style.backgroundColor = "transparent";
-            }
-          }}
-        >
-          SELECT
-        </Button>
-
+      <Group spacing="lg" position="center" style={{ 
+        marginTop: isVerySmall ? '15px' : isMobile ? '20px' : '30px',
+        width: '100%',
+        justifyContent: 'center'
+      }}>
         {/* Back Button */}
         <Button
           variant="outline"
           size="lg"
           onClick={onBackClick}
           style={{
-            fontSize: isMobile ? "18px" : "24px",
+            fontSize: isMobile ? "16px" : "20px",
             fontWeight: 700,
-            padding: isMobile ? "10px 25px" : "15px 35px",
-            minHeight: isMobile ? "50px" : "70px",
-            minWidth: isMobile ? "120px" : "160px",
+            padding: isMobile ? "12px 20px" : "15px 30px",
+            minHeight: isMobile ? "60px" : "70px",
+            minWidth: isMobile ? "100px" : "140px",
             backgroundColor: "transparent",
             borderColor: "#666",
             border: "3px solid #666",
@@ -269,6 +251,48 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
           }}
         >
           BACK
+        </Button>
+
+        {/* Select Button */}
+        <Button
+          variant="outline"
+          size="xl"
+          onClick={handleSelectCharacter}
+          className="fight-button"
+          style={{
+            fontSize: isMobile ? "20px" : "24px",
+            padding: isMobile ? "12px 20px" : "15px 30px",
+            minHeight: isMobile ? "60px" : "70px",
+            minWidth: isMobile ? "120px" : "160px",
+            backgroundImage: `url(${mainButtonImg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            textShadow: `
+              0 0 10px #000000,
+              0 0 20px #000000,
+              2px 2px 4px #000000
+            `,
+            animation: "selectButtonGlow 2s ease-in-out infinite"
+          }}
+          onMouseEnter={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = "scale(1.05)";
+              e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = "scale(1)";
+              e.target.style.backgroundColor = "transparent";
+            }
+          }}
+        >
+          SELECT
         </Button>
       </Group>
     </Box>
