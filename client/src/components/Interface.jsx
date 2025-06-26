@@ -46,6 +46,62 @@ const interfaceStyles = `
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
+  
+  @keyframes fightTransition {
+    0% {
+      transform: scale(1);
+      filter: brightness(1);
+    }
+    30% {
+      transform: scale(1.02);
+      filter: brightness(1.2) contrast(1.3);
+    }
+    60% {
+      transform: scale(0.98);
+      filter: brightness(0.8) contrast(1.1);
+    }
+    100% {
+      transform: scale(1);
+      filter: brightness(1);
+    }
+  }
+  
+  @keyframes impactShake {
+    0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+    10% { transform: translateX(-3px) translateY(-2px) rotate(0.5deg); }
+    20% { transform: translateX(3px) translateY(2px) rotate(-0.5deg); }
+    30% { transform: translateX(-2px) translateY(-1px) rotate(0.3deg); }
+    40% { transform: translateX(2px) translateY(1px) rotate(-0.3deg); }
+    50% { transform: translateX(-1px) translateY(-0.5px) rotate(0.1deg); }
+    60% { transform: translateX(1px) translateY(0.5px) rotate(-0.1deg); }
+    70% { transform: translateX(0) translateY(0) rotate(0deg); }
+  }
+  
+  @keyframes buttonPowerUp {
+    0% {
+      transform: scale(1);
+      box-shadow: 
+        0 0 20px #fc3f31,
+        0 0 40px rgba(252, 63, 49, 0.3),
+        inset 0 0 20px rgba(252, 63, 49, 0.1);
+    }
+    50% {
+      transform: scale(1.08);
+      box-shadow: 
+        0 0 40px #fc3f31,
+        0 0 80px rgba(252, 63, 49, 0.8),
+        0 0 120px rgba(252, 63, 49, 0.4),
+        inset 0 0 40px rgba(252, 63, 49, 0.3);
+    }
+    100% {
+      transform: scale(1.05);
+      box-shadow: 
+        0 0 30px #fc3f31,
+        0 0 60px rgba(252, 63, 49, 0.6),
+        0 0 90px rgba(252, 63, 49, 0.3),
+        inset 0 0 30px rgba(252, 63, 49, 0.2);
+    }
+  }
 `;
 
 const Interface = () => {
@@ -91,6 +147,9 @@ const Interface = () => {
 
   // Estado para mostrar/ocultar el reproductor de música
   const [showMusicPlayer, setShowMusicPlayer] = React.useState(false);
+  
+  // Estado para manejar la transición de pelea
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
 
   // Botones de ataque para modo combate - usando las animaciones reales de Pete
   const attackButtons = [
@@ -335,6 +394,37 @@ const Interface = () => {
     };
   }, []);
   
+  // Función mejorada para navegar al menú con efecto de impacto
+  const handleNavigateToMenu = () => {
+    setIsTransitioning(true);
+    
+    // Crear efecto de sacudida en toda la pantalla
+    document.body.style.animation = "impactShake 0.6s ease-out";
+    
+    // Agregar flash rojo temporal
+    const flashOverlay = document.createElement('div');
+    flashOverlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle, rgba(252, 63, 49, 0.3) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 9999;
+      animation: fightTransition 0.8s ease-out;
+    `;
+    document.body.appendChild(flashOverlay);
+    
+    // Limpiar efectos y navegar
+    setTimeout(() => {
+      document.body.style.animation = "";
+      document.body.removeChild(flashOverlay);
+      setIsTransitioning(false);
+      navigateToMenu();
+    }, 600);
+  };
+
   return (
     <>
       {/* Inject CSS animations */}
@@ -416,7 +506,8 @@ const Interface = () => {
             <Button
               variant="outline"
               size="xl"
-              onClick={navigateToMenu}
+              onClick={handleNavigateToMenu}
+              disabled={isTransitioning}
               style={{
                 fontSize: isMobile ? "36px" : "48px",
                 fontWeight: 700,
@@ -425,7 +516,7 @@ const Interface = () => {
                 minWidth: isMobile ? "280px" : "350px",
                 maxWidth: isMobile ? "calc(100vw - 40px)" : "350px",
                 margin: isMobile ? "0 20px" : "0",
-                backgroundColor: "transparent",
+                backgroundColor: isTransitioning ? "rgba(252, 63, 49, 0.2)" : "transparent",
                 borderColor: "#fc3f31",
                 border: "4px solid #fc3f31",
                 borderRadius: "15px",
@@ -433,28 +524,37 @@ const Interface = () => {
                 textTransform: "uppercase",
                 letterSpacing: "3px",
                 fontFamily: "Anton, sans-serif",
-                boxShadow: `
+                boxShadow: isTransitioning ? `
+                  0 0 40px #fc3f31,
+                  0 0 80px rgba(252, 63, 49, 0.8),
+                  0 0 120px rgba(252, 63, 49, 0.4),
+                  inset 0 0 40px rgba(252, 63, 49, 0.3)
+                ` : `
                   0 0 20px #fc3f31,
                   0 0 40px rgba(252, 63, 49, 0.3),
                   inset 0 0 20px rgba(252, 63, 49, 0.1)
                 `,
                 transition: "all 0.3s ease",
-                cursor: "pointer"
+                cursor: isTransitioning ? "not-allowed" : "pointer",
+                animation: isTransitioning ? "buttonPowerUp 0.6s ease-out" : "none",
+                opacity: isTransitioning ? 0.8 : 1
               }}
               onMouseEnter={(e) => {
-                if (!isMobile) {
+                if (!isMobile && !isTransitioning) {
                   e.target.style.transform = "scale(1.05)";
                   e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                  e.target.style.animation = "impactShake 0.3s ease-out";
                 }
               }}
               onMouseLeave={(e) => {
-                if (!isMobile) {
+                if (!isMobile && !isTransitioning) {
                   e.target.style.transform = "scale(1)";
                   e.target.style.backgroundColor = "transparent";
+                  e.target.style.animation = "none";
                 }
               }}
             >
-              ENTER FIGHT CLUB
+              {isTransitioning ? "ENTERING..." : "ENTER FIGHT CLUB"}
             </Button>
           </Affix>
         </>
