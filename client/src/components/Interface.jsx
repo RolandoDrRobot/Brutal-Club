@@ -580,19 +580,6 @@ const Interface = () => {
       {/* Modo de combate - currentScreen 'combat' */}
       {currentScreen === 'combat' && isCombatMode && (
         <>
-          <div 
-            className="fight-screen-background"
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '100vw',
-              height: '100vh',
-              zIndex: 50,
-              animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out"
-            }}
-          />
-          
           {/* Mensaje de Victoria - Overlay cuando termina el combate */}
           {isCombatOver && (
             <Affix position={{ 
