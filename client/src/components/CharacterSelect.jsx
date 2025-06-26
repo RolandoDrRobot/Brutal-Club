@@ -3,10 +3,12 @@ import { Button, Box, Text, Stack, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import mainButtonImg from '../assets/mainbutton.jpeg';
+import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 
 const CharacterSelect = ({ onSelectClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isVerySmall = useMediaQuery("(max-width: 480px)");
+  const { isExiting } = useCharacterAnimations();
   const [selectedCharacter, setSelectedCharacter] = useState(0);
 
   // Información de los personajes disponibles
@@ -41,7 +43,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: "screenEnterFromRight 1.2s ease-out",
+        animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out",
         padding: isMobile ? "20px" : "40px"
       }}
     >
@@ -49,7 +51,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
       <Box style={{ 
         textAlign: 'center', 
         marginBottom: isVerySmall ? '15px' : isMobile ? '20px' : '30px',
-        animation: "titlePunch 1.2s ease-out"
+        animation: "fadeInSpray 1.2s ease-out"
       }}>
         <Text className="fight-title" style={{ 
           fontSize: isMobile ? '32px' : '48px',

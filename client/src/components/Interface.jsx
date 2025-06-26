@@ -97,6 +97,7 @@ const Interface = () => {
     animationIndex, 
     setAnimationIndex,
     currentScreen,
+    isExiting,
     navigateToMenu,
     navigateToCombat,
     navigateBackToDance,
@@ -454,7 +455,7 @@ const Interface = () => {
           }}>
             <div style={{ 
               textAlign: "center",
-              animation: "titleSlam 1.5s ease-out 0.3s both"
+              animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.5s ease-out 0.3s both"
             }}>
               <div style={{ 
                 color: "#fc3f31",
@@ -552,7 +553,7 @@ const Interface = () => {
                 `,
                 transition: "all 0.3s ease",
                 cursor: isTransitioning ? "not-allowed" : "pointer",
-                animation: isTransitioning ? "buttonPowerUp 0.6s ease-out" : "buttonsPunchSequence 1s ease-out 0.8s both",
+                animation: isExiting ? "fadeOutSpray 0.8s ease-out" : (isTransitioning ? "buttonPowerUp 0.6s ease-out" : "fadeInSpray 1s ease-out 0.8s both"),
                 opacity: isTransitioning ? 0.8 : 1
               }}
               onMouseEnter={(e) => {
@@ -588,7 +589,7 @@ const Interface = () => {
               width: '100vw',
               height: '100vh',
               zIndex: 50,
-              animation: "screenEnterFromTop 1.2s ease-out"
+              animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out"
             }}
           />
           
@@ -608,13 +609,13 @@ const Interface = () => {
                 textAlign: "center",
                 width: isMobile ? "90vw" : "400px",
                 maxWidth: isMobile ? "90vw" : "400px",
-                animation: "fightPunchIn 1s ease-out",
+                animation: "fadeInSpray 1s ease-out",
                 zIndex: 1001
               }}>
                 <Stack spacing="lg" align="center">
                   <Text size={isMobile ? "xl" : "2xl"} weight={700} style={{ 
                     color: player1IsDead ? "#fc3f31" : "#F5F5DC",
-                    animation: "titleSlam 0.8s ease-out"
+                    animation: "fadeInSpray 0.8s ease-out"
                   }}>
                     🏆 {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"} 🏆
                   </Text>
@@ -622,7 +623,7 @@ const Interface = () => {
                   {/* Botones de acción */}
                   <Group spacing="xs" position="center" style={{ 
                     width: "100%",
-                    animation: "buttonsPunchSequence 1s ease-out 0.3s both"
+                    animation: "fadeInSpray 1s ease-out 0.3s both"
                   }}>
                     {/* Botón Modo Baile */}
                     <img 

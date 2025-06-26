@@ -132,6 +132,10 @@ export const CharacterAnimationsProvider = (props) => {
   // Posibles valores: 'dance', 'menu', 'combat', 'characterSelect'
   const [currentScreen, setCurrentScreen] = useState('dance');
   
+  // NUEVO: Estado para animaciones de salida
+  const [isExiting, setIsExiting] = useState(false);
+  const [nextScreen, setNextScreen] = useState(null);
+  
   // NUEVO: Sistema de selección de personajes
   const [selectedPlayer1Character, setSelectedPlayer1Character] = useState('pete');
   const [selectedPlayer2Character, setSelectedPlayer2Character] = useState('tyler');
@@ -1461,36 +1465,60 @@ export const CharacterAnimationsProvider = (props) => {
     }, timing.attack);
   };
 
-  // NUEVO: Funciones de navegación entre pantallas
+  // NUEVO: Funciones de navegación entre pantallas con animación de salida
+  const navigateWithExitAnimation = (targetScreen, additionalActions = null) => {
+    if (isExiting) return; // Prevenir múltiples transiciones
+    
+    setIsExiting(true);
+    setNextScreen(targetScreen);
+    
+    // Después de la animación de salida, cambiar la pantalla
+    setTimeout(() => {
+      setCurrentScreen(targetScreen);
+      setIsExiting(false);
+      setNextScreen(null);
+      
+      // Ejecutar acciones adicionales si se proporcionan
+      if (additionalActions) {
+        additionalActions();
+      }
+    }, 800); // Duración de fadeOutSpray
+  };
+
   const navigateToMenu = () => {
-    setCurrentScreen('menu');
+    navigateWithExitAnimation('menu');
   };
 
   const navigateToCombat = () => {
-    setCurrentScreen('combat');
-    setIsCombatMode(true);
-    initializeCombat();
+    navigateWithExitAnimation('combat', () => {
+      setIsCombatMode(true);
+      initializeCombat();
+    });
   };
 
   const navigateBackToDance = () => {
-    setCurrentScreen('dance');
-    setIsCombatMode(false);
+    navigateWithExitAnimation('dance', () => {
+      setIsCombatMode(false);
+    });
   };
 
   const navigateBackToMenu = () => {
-    setCurrentScreen('menu');
-    setIsCombatMode(false);
+    navigateWithExitAnimation('menu', () => {
+      setIsCombatMode(false);
+    });
   };
 
   // NUEVAS: Funciones de navegación para selección de personajes
   const navigateToCharacterSelect = () => {
-    setCurrentScreen('characterSelect');
-    setIsSelectingCharacter(true);
+    navigateWithExitAnimation('characterSelect', () => {
+      setIsSelectingCharacter(true);
+    });
   };
 
   const navigateBackFromCharacterSelect = () => {
-    setCurrentScreen('menu');
-    setIsSelectingCharacter(false);
+    navigateWithExitAnimation('menu', () => {
+      setIsSelectingCharacter(false);
+    });
   };
 
   const handleCharacterSelection = (character) => {
@@ -1514,6 +1542,8 @@ export const CharacterAnimationsProvider = (props) => {
         // NUEVO: Sistema de navegación de pantallas
         currentScreen,
         setCurrentScreen,
+        isExiting,
+        nextScreen,
         navigateToMenu,
         navigateToCombat,
         navigateBackToDance,

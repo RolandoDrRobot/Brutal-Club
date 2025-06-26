@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Box, Text, Stack } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
+import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 
 // Import button assets
 import button1 from '../assets/button1.png';
@@ -11,6 +12,7 @@ import button4 from '../assets/button4.png';
 
 const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const { isExiting } = useCharacterAnimations();
 
   const getMenuButtonStyle = (backgroundImage) => ({
     fontSize: isMobile ? "28px" : "36px",
@@ -76,7 +78,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: "screenEnterFromLeft 1.2s ease-out, backgroundImpact 1.5s ease-out"
+        animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out, backgroundImpact 1.5s ease-out"
       }}
     >
       {/* Main title */}
@@ -85,7 +87,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
           style={{ 
             textAlign: 'center', 
             marginBottom: isMobile ? '40px' : '60px',
-            animation: "titleSlam 1.2s ease-out"
+            animation: "fadeInSpray 1.2s ease-out"
           }}
         >
           <Text className="fight-title">
@@ -99,7 +101,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
               fontFamily: 'Arial, sans-serif',
               letterSpacing: '2px',
               marginTop: '10px',
-              animation: "fightPunchIn 1.5s ease-out 0.3s both"
+              animation: "fadeInSpray 1.5s ease-out 0.3s both"
             }}
           >
             You do not talk about fight club
@@ -111,7 +113,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
           spacing={isMobile ? "lg" : "xl"} 
           align="center"
           style={{
-            animation: "buttonsPunchSequence 1s ease-out 0.5s both"
+            animation: "fadeInSpray 1s ease-out 0.5s both"
           }}
         >
           <Button
