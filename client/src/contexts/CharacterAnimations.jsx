@@ -128,6 +128,10 @@ export const CharacterAnimationsProvider = (props) => {
   const [animationIndex, setAnimationIndex] = useState(0);
   const [animations, setAnimations] = useState([]);
   
+  // NUEVO: Sistema de navegación de pantallas
+  // Posibles valores: 'dance', 'menu', 'combat'
+  const [currentScreen, setCurrentScreen] = useState('dance');
+  
   // Sistema de combate
   const [player1AnimationIndex, setPlayer1AnimationIndex] = useState(0);
   const [player2AnimationIndex, setPlayer2AnimationIndex] = useState(0);
@@ -1452,6 +1456,35 @@ export const CharacterAnimationsProvider = (props) => {
     }, timing.attack);
   };
 
+  // NUEVO: Funciones de navegación entre pantallas
+  const navigateToMenu = () => {
+    console.log("Navigating from dance to main menu");
+    setCurrentScreen('menu');
+    // Pausar cualquier animación de baile en curso
+    setAnimationIndex(-1);
+  };
+
+  const navigateToCombat = () => {
+    console.log("Navigating from menu to combat");
+    setCurrentScreen('combat');
+    setIsCombatMode(true);
+    initializeCombat();
+  };
+
+  const navigateBackToDance = () => {
+    console.log("Navigating back to dance screen");
+    setCurrentScreen('dance');
+    setIsCombatMode(false);
+    cleanupCombatState();
+  };
+
+  const navigateBackToMenu = () => {
+    console.log("Navigating back to menu from combat");
+    setCurrentScreen('menu');
+    setIsCombatMode(false);
+    cleanupCombatState();
+  };
+
   return (
     <CharacterAnimationsContext.Provider
       value={{
@@ -1460,6 +1493,14 @@ export const CharacterAnimationsProvider = (props) => {
         setAnimationIndex,
         animations,
         setAnimations,
+        
+        // NUEVO: Sistema de navegación de pantallas
+        currentScreen,
+        setCurrentScreen,
+        navigateToMenu,
+        navigateToCombat,
+        navigateBackToDance,
+        navigateBackToMenu,
         
         // Sistema de combate
         player1AnimationIndex,
