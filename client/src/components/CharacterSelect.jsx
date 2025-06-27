@@ -152,10 +152,13 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               borderRadius: '20px',
               marginBottom: '15px',
               boxShadow: `
-                0 0 30px rgba(252, 63, 49, 0.3),
-                inset 0 0 30px rgba(252, 63, 49, 0.1)
+                0 0 30px #fc3f31,
+                0 0 60px rgba(252, 63, 49, 0.4),
+                0 0 90px rgba(252, 63, 49, 0.2),
+                inset 0 0 30px rgba(252, 63, 49, 0.1),
+                inset 0 0 60px rgba(252, 63, 49, 0.05)
               `,
-              animation: "characterSwitch 0.8s ease-out",
+              animation: "characterSwitch 0.8s ease-out, neonPulse 3s ease-in-out infinite",
               position: 'relative',
               overflow: 'hidden',
               padding: 0,
