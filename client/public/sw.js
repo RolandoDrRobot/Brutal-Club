@@ -3,7 +3,7 @@ const urlsToCache = [
   '/',
   '/static/js/bundle.js',
   '/static/css/main.css',
-  '/app.png',
+  '/logo.jpg',
   '/manifest.json'
 ];
 
@@ -60,8 +60,8 @@ self.addEventListener('message', (event) => {
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data ? event.data.text() : 'Nueva notificación de Fight Club',
-    icon: '/app.png',
-    badge: '/app.png',
+    icon: '/logo.jpg',
+    badge: '/logo.jpg',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -71,12 +71,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: 'Abrir App',
-        icon: '/app.png'
+        icon: '/logo.jpg'
       },
       {
         action: 'close',
         title: 'Cerrar',
-        icon: '/app.png'
+        icon: '/logo.jpg'
       }
     ]
   };
