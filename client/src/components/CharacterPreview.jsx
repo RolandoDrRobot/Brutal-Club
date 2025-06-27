@@ -10,7 +10,24 @@ function CharacterModel({ characterName, ...props }) {
   const [isReady, setIsReady] = useState(false);
   
   // Load the appropriate model based on character name
-  const modelPath = characterName === 'PETE' ? './models/pete.glb' : './models/Tyler.glb';
+  const getModelPath = (name) => {
+    const modelMap = {
+      'PETE': './models/pete.glb',
+      'TYLER': './models/Tyler.glb',
+      'VINCE': './models/Vince.glb',
+      'BOB': './models/Bob.glb',
+      'CHUCK': './models/Chuck.glb',
+      'EARL': './models/Earl.glb',
+      'LOU': './models/Lou.glb',
+      'TONY': './models/Tony.glb',
+      'LAWRENCE': './models/Lawrence.glb',
+      'WAYNE': './models/Wayne.glb',
+      'MARLA': './models/woman.gltf'
+    };
+    return modelMap[name] || './models/pete.glb';
+  };
+  
+  const modelPath = getModelPath(characterName);
   const { scene, animations } = useGLTF(modelPath);
   
   // Clone the scene to create independent instances
@@ -45,37 +62,56 @@ function CharacterModel({ characterName, ...props }) {
 
   useEffect(() => {
     if (actions && names.length > 0 && isReady) {
-      // Find idle fighting animation - prioritize idleFight for character selection
-      let idleAnimationName = names.find(name => 
-        name.toLowerCase().includes('idlefight') || 
-        name.toLowerCase().includes('idle_fight') ||
-        name.toLowerCase().includes('fighting_idle')
-      );
+      let animationName;
       
-      // If no fighting idle found, look for general idle
-      if (!idleAnimationName) {
-        idleAnimationName = names.find(name => 
-          name.toLowerCase().includes('idle') ||
-          name.toLowerCase().includes('stance')
+      // Pete and Tyler use idleFight animation
+      if (characterName === 'PETE' || characterName === 'TYLER') {
+        animationName = names.find(name => 
+          name.toLowerCase().includes('idlefight') || 
+          name.toLowerCase().includes('idle_fight') ||
+          name.toLowerCase().includes('fighting_idle')
         );
+        
+        // If no fighting idle found, look for general idle
+        if (!animationName) {
+          animationName = names.find(name => 
+            name.toLowerCase().includes('idle') ||
+            name.toLowerCase().includes('stance')
+          );
+        }
+      } else {
+        // Other characters use crowd animation
+        animationName = names.find(name => 
+          name.toLowerCase().includes('crowd') ||
+          name.toLowerCase().includes('cheer') ||
+          name.toLowerCase().includes('wave')
+        );
+        
+        // If no crowd animation found, look for idle
+        if (!animationName) {
+          animationName = names.find(name => 
+            name.toLowerCase().includes('idle') ||
+            name.toLowerCase().includes('stance')
+          );
+        }
       }
       
-      // If no idle animation found, use the first available animation
-      if (!idleAnimationName) {
-        idleAnimationName = names[0];
+      // If no specific animation found, use the first available animation
+      if (!animationName) {
+        animationName = names[0];
       }
       
-      if (actions[idleAnimationName]) {
+      if (actions[animationName]) {
         // Stop all other animations first
         Object.values(actions).forEach(action => action.stop());
         
-        // Play the idle animation in loop
-        actions[idleAnimationName].reset().fadeIn(0.5).play();
-        actions[idleAnimationName].setLoop(2201, Infinity); // Loop infinitely
+        // Play the animation in loop
+        actions[animationName].reset().fadeIn(0.5).play();
+        actions[animationName].setLoop(2201, Infinity); // Loop infinitely
         
         return () => {
-          if (actions[idleAnimationName]) {
-            actions[idleAnimationName].fadeOut(0.5);
+          if (actions[animationName]) {
+            actions[animationName].fadeOut(0.5);
           }
         };
       }
@@ -170,7 +206,9 @@ const CharacterPreview = ({ characterName, style }) => {
             padding: 0,
             border: 'none',
             outline: 'none',
-            display: 'block'
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
           dpr={[1, 2]}
           resize={{ scroll: false, debounce: { scroll: 50, resize: 0 } }}
@@ -213,5 +251,14 @@ const CharacterPreview = ({ characterName, style }) => {
 // Preload models
 useGLTF.preload('./models/pete.glb');
 useGLTF.preload('./models/Tyler.glb');
+useGLTF.preload('./models/Vince.glb');
+useGLTF.preload('./models/Bob.glb');
+useGLTF.preload('./models/Chuck.glb');
+useGLTF.preload('./models/Earl.glb');
+useGLTF.preload('./models/Lou.glb');
+useGLTF.preload('./models/Tony.glb');
+useGLTF.preload('./models/Lawrence.glb');
+useGLTF.preload('./models/Wayne.glb');
+useGLTF.preload('./models/woman.gltf');
 
 export default CharacterPreview; 

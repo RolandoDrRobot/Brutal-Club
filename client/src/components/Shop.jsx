@@ -4,49 +4,58 @@ import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import mainButtonImg from '../assets/mainbutton.jpeg';
+import CharacterPreview from './CharacterPreview';
 
 const Shop = ({ onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
   const [coins, setCoins] = useState(1000); // Monedas del jugador
 
   // Datos de los personajes en la tienda
   const shopCharacters = [
     {
-      id: 'pete_casual',
+      id: 'pete',
       name: 'PETE',
-      description: 'Casual Worker',
+      description: 'Construction Worker',
       price: null,
-      isLocked: true,
+      isLocked: false,
+      isPurchased: true,
       emoji: '👷‍♂️',
-      unlockCondition: 'Win 5 fights'
+      model: 'pete'
     },
     {
-      id: 'construction_worker',
-      name: 'BUILDER',
-      description: 'Construction Pro',
-      price: null,
-      isLocked: true,
-      emoji: '👷',
-      unlockCondition: 'Win 10 fights'
+      id: 'tyler',
+      name: 'TYLER',
+      description: 'Soap Maker',
+      price: 300,
+      isLocked: false,
+      isPurchased: false,
+      emoji: '🧔‍♂️',
+      model: 'Tyler',
+      canAfford: true
     },
     {
-      id: 'fire_fighter',
-      name: 'HERO',
+      id: 'vince',
+      name: 'VINCE',
       description: 'Fire Fighter',
-      price: 300,
-      isLocked: false,
+      price: 500,
+      isLocked: true,
+      isPurchased: false,
       emoji: '🧑‍🚒',
-      canAfford: true
+      model: 'Vince',
+      canAfford: false
     },
     {
-      id: 'business_man',
-      name: 'BOSS',
+      id: 'bob',
+      name: 'BOB',
       description: 'Business Man',
-      price: 300,
-      isLocked: false,
+      price: 500,
+      isLocked: true,
+      isPurchased: false,
       emoji: '👔',
-      canAfford: true
+      model: 'Bob',
+      canAfford: false
     }
   ];
 
@@ -58,65 +67,115 @@ const Shop = ({ onBackClick }) => {
     }
   };
 
-  const getCharacterCardStyle = (character) => ({
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    border: '3px solid #fc3f31',
-    borderRadius: '15px',
-    padding: isMobile ? '15px' : '20px',
-    height: isMobile ? '200px' : '250px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    position: 'relative',
-    cursor: character.isLocked ? 'not-allowed' : 'pointer',
-    opacity: character.isLocked ? 0.6 : 1,
-    transition: 'all 0.3s ease',
-    boxShadow: `
-      0 0 20px rgba(252, 63, 49, 0.3),
-      inset 0 0 20px rgba(252, 63, 49, 0.1)
-    `
-  });
+  const getCharacterCardStyle = (character) => {
+    if (character.isPurchased) {
+      return {
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        border: '3px solid #fc3f31',
+        borderRadius: '15px',
+        padding: isMobile ? '15px' : '20px',
+        height: '250px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        position: 'relative',
+        cursor: 'default',
+        opacity: 1,
+        transition: 'all 0.3s ease',
+        boxShadow: `
+          0 0 10px #fc3f31,
+          0 0 20px rgba(252, 63, 49, 0.2),
+          inset 0 0 10px rgba(252, 63, 49, 0.05)
+        `,
+        overflow: 'hidden'
+      };
+    }
+    
+    return {
+      backgroundColor: 'rgba(0, 0, 0, 0.9)',
+      border: '3px solid #fc3f31',
+      borderRadius: '15px',
+      padding: isMobile ? '15px' : '20px',
+      height: '250px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      position: 'relative',
+      cursor: character.isLocked ? 'not-allowed' : 'pointer',
+      opacity: character.isLocked ? 0.6 : 1,
+      transition: 'all 0.3s ease',
+      boxShadow: `
+        0 0 10px #fc3f31,
+        0 0 20px rgba(252, 63, 49, 0.2),
+        inset 0 0 10px rgba(252, 63, 49, 0.05)
+      `,
+      overflow: 'hidden'
+    };
+  };
 
   const getButtonStyle = (character) => {
-    if (character.isLocked) {
+    if (character.isPurchased) {
       return {
-        backgroundImage: `url(${mainButtonImg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundColor: 'rgba(100, 100, 100, 0.8)',
-        color: '#666',
-        border: '2px solid #666',
-        fontSize: isMobile ? '14px' : '16px',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        color: '#FFD700',
+        border: 'none',
+        fontSize: isMobile ? '24px' : '28px',
         fontWeight: 700,
-        padding: '8px 16px',
+        padding: '0px',
         borderRadius: '8px',
         textTransform: 'uppercase',
-        letterSpacing: '1px',
+        letterSpacing: '2px',
         fontFamily: 'Anton, sans-serif',
         textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-        cursor: 'not-allowed'
+        cursor: 'default',
+        boxShadow: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px'
+      };
+    }
+    
+    if (character.isLocked) {
+      return {
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        color: '#FFD700',
+        border: 'none',
+        fontSize: isMobile ? '24px' : '28px',
+        fontWeight: 700,
+        padding: '0px',
+        borderRadius: '8px',
+        textTransform: 'uppercase',
+        letterSpacing: '2px',
+        fontFamily: 'Anton, sans-serif',
+        textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+        cursor: 'not-allowed',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px'
       };
     } else {
       return {
-        backgroundImage: `url(${mainButtonImg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundColor: character.canAfford ? 'rgba(252, 63, 49, 0.8)' : 'rgba(100, 100, 100, 0.8)',
-        color: character.canAfford ? '#000' : '#666',
-        border: character.canAfford ? '2px solid #fc3f31' : '2px solid #666',
-        fontSize: isMobile ? '14px' : '16px',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        color: '#FFD700',
+        border: 'none',
+        fontSize: isMobile ? '24px' : '28px',
         fontWeight: 700,
-        padding: '8px 16px',
+        padding: '0px',
         borderRadius: '8px',
         textTransform: 'uppercase',
-        letterSpacing: '1px',
+        letterSpacing: '2px',
         fontFamily: 'Anton, sans-serif',
         textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
         cursor: character.canAfford ? 'pointer' : 'not-allowed',
-        boxShadow: character.canAfford ? '0 0 10px rgba(252, 63, 49, 0.5)' : 'none'
+        boxShadow: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px'
       };
     }
   };
@@ -180,136 +239,146 @@ const Shop = ({ onBackClick }) => {
         overflowY: "auto",
         overflowX: "hidden",
         paddingRight: isMobile ? "5px" : "10px",
-        animation: "fadeInSpray 1.5s ease-out 0.3s both"
+        animation: "fadeInSpray 1.5s ease-out 0.3s both",
+        minHeight: 0 // Ensure flex child can shrink
       }}>
-        <Box style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          width: '100%',
-          minHeight: "100%",
-          paddingBottom: isMobile ? "20px" : "30px"
-        }}>
-          <Grid 
-            gutter={isMobile ? "md" : "lg"}
-            style={{ 
-              width: '100%',
-              maxWidth: '800px'
-            }}
-          >
-            {shopCharacters.map((character, index) => (
-              <Grid.Col 
-                key={character.id} 
-                span={6}
-                style={{
-                  animation: `fadeInSpray 1s ease-out ${0.5 + index * 0.2}s both`
+        <Grid 
+          gutter={isMobile ? "md" : "lg"}
+          style={{ 
+            width: '100%',
+            maxWidth: '800px',
+            margin: '0 auto',
+            paddingBottom: isMobile ? "20px" : "30px"
+          }}
+        >
+          {shopCharacters.map((character, index) => (
+            <Grid.Col 
+              key={character.id} 
+              span={6}
+              style={{
+                animation: `fadeInSpray 1s ease-out ${0.5 + index * 0.2}s both`
+              }}
+            >
+              <Card
+                style={getCharacterCardStyle(character)}
+                onClick={() => !character.isLocked && !character.isPurchased && handlePurchase(character)}
+                onMouseEnter={(e) => {
+                  // No hover effects for clean appearance
+                }}
+                onMouseLeave={(e) => {
+                  // No hover effects for clean appearance
                 }}
               >
-                <Card
-                  style={getCharacterCardStyle(character)}
-                  onClick={() => !character.isLocked && handlePurchase(character)}
-                  onMouseEnter={(e) => {
-                    if (!isMobile && !character.isLocked) {
-                      e.currentTarget.style.transform = "scale(1.05)";
-                      e.currentTarget.style.boxShadow = `
-                        0 0 30px rgba(252, 63, 49, 0.5),
-                        inset 0 0 30px rgba(252, 63, 49, 0.2)
-                      `;
-                    }
+                {/* 3D Model as Background */}
+                {character.model && (
+                  <Box style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <CharacterPreview
+                      characterName={character.name}
+                      style={{
+                        position: 'relative',
+                        left: '-13%',
+                        width: '100%',
+                        height: '100%',
+                        transform: 'scale(1.2)',
+                        margin: '0px',
+                        padding: '0px',
+                        border: 'none',
+                        outline: 'none',
+                        boxSizing: 'border-box',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minWidth: '200px',
+                        minHeight: '200px'
+                      }}
+                    />
+                  </Box>
+                )}
+
+                {/* Character Info - Above the 3D model */}
+                <Stack spacing="xs" align="center" style={{ 
+                  flex: 0, 
+                  zIndex: 2, 
+                  position: 'relative',
+                  marginTop: 'auto'
+                }}>
+                  {/* Character name removed */}
+
+                  {/* Lock overlay for locked characters */}
+                  {character.isLocked && (
+                    <Box style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      zIndex: 10
+                    }}>
+                      <Text style={{
+                        fontSize: isMobile ? '30px' : '40px',
+                        marginBottom: '5px'
+                      }}>
+                        🔒
+                      </Text>
+                      <Text style={{
+                        fontSize: isMobile ? '14px' : '16px',
+                        fontWeight: 700,
+                        color: '#FFD700',
+                        fontFamily: 'Anton, sans-serif',
+                        letterSpacing: '1px',
+                        textAlign: 'center'
+                      }}>
+                        LOCKED
+                      </Text>
+                    </Box>
+                  )}
+                </Stack>
+
+                {/* Action Button - Above the 3D model */}
+                <Button
+                  style={{
+                    ...getButtonStyle(character),
+                    zIndex: 2,
+                    position: 'relative'
                   }}
-                  onMouseLeave={(e) => {
-                    if (!isMobile && !character.isLocked) {
-                      e.currentTarget.style.transform = "scale(1)";
-                      e.currentTarget.style.boxShadow = `
-                        0 0 20px rgba(252, 63, 49, 0.3),
-                        inset 0 0 20px rgba(252, 63, 49, 0.1)
-                      `;
+                  disabled={character.isLocked || character.isPurchased || (character.price && coins < character.price)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!character.isLocked && !character.isPurchased) {
+                      handlePurchase(character);
                     }
                   }}
                 >
-                  {/* Character Avatar */}
-                  <Box style={{
-                    fontSize: isMobile ? '40px' : '50px',
-                    marginBottom: '10px',
-                    filter: character.isLocked ? 'grayscale(100%)' : 'none'
-                  }}>
-                    {character.emoji}
-                  </Box>
-
-                  {/* Character Info */}
-                  <Stack spacing="xs" align="center" style={{ flex: 1 }}>
-                    <Text style={{
-                      fontSize: isMobile ? '16px' : '18px',
-                      fontWeight: 700,
-                      color: character.isLocked ? '#666' : '#fc3f31',
-                      fontFamily: 'Anton, sans-serif',
-                      letterSpacing: '1px',
-                      textAlign: 'center'
-                    }}>
-                      {character.name}
-                    </Text>
-                    <Text style={{
-                      fontSize: isMobile ? '12px' : '14px',
-                      color: character.isLocked ? '#555' : '#F5F5DC',
-                      fontFamily: 'Arial, sans-serif',
-                      textAlign: 'center'
-                    }}>
-                      {character.description}
-                    </Text>
-
-                    {/* Lock overlay for locked characters */}
-                    {character.isLocked && (
-                      <Box style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        zIndex: 10
-                      }}>
-                        <Text style={{
-                          fontSize: isMobile ? '30px' : '40px',
-                          marginBottom: '5px'
-                        }}>
-                          🔒
-                        </Text>
-                        <Text style={{
-                          fontSize: isMobile ? '14px' : '16px',
-                          fontWeight: 700,
-                          color: '#FFD700',
-                          fontFamily: 'Anton, sans-serif',
-                          letterSpacing: '1px',
-                          textAlign: 'center'
-                        }}>
-                          LOCKED
-                        </Text>
-                      </Box>
-                    )}
-                  </Stack>
-
-                  {/* Action Button */}
-                  <Button
-                    style={getButtonStyle(character)}
-                    disabled={character.isLocked || (character.price && coins < character.price)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (!character.isLocked) {
-                        handlePurchase(character);
-                      }
-                    }}
-                  >
-                    {character.isLocked 
-                      ? 'LOCKED' 
-                      : `BUY ${character.price}💰`
-                    }
-                  </Button>
-                </Card>
-              </Grid.Col>
-            ))}
-          </Grid>
-        </Box>
+                  {character.isPurchased ? (
+                    <>
+                      ✅
+                      <span>OWNED</span>
+                    </>
+                  ) : character.isLocked ? (
+                    <>
+                      🔒
+                      <span>LOCKED</span>
+                    </>
+                  ) : (
+                    `BUY ${character.price}💰`
+                  )}
+                </Button>
+              </Card>
+            </Grid.Col>
+          ))}
+        </Grid>
       </Box>
 
       {/* Back Button */}
@@ -378,4 +447,4 @@ const Shop = ({ onBackClick }) => {
   );
 };
 
-export default Shop; 
+export default Shop;
