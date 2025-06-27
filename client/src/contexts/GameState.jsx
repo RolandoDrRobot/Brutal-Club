@@ -53,7 +53,7 @@ const GAME_CONFIG = {
       name: 'TYLER',
       model: 'Tyler',
       description: 'Soap Maker',
-      price: 400,
+      price: 200,
       emoji: '🧔‍♂️'
     },
     {

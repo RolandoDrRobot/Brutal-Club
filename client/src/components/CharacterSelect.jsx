@@ -42,6 +42,64 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
     }
   };
 
+  // If no characters are available, show a message
+  if (characters.length === 0) {
+    return (
+      <Box
+        className="fight-screen-container fight-screen-background"
+        style={{
+          animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out",
+          padding: isMobile ? "20px" : "40px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh"
+        }}
+      >
+        <Text style={{
+          fontSize: isMobile ? '24px' : '32px',
+          fontWeight: 700,
+          color: '#fc3f31',
+          fontFamily: 'Anton, sans-serif',
+          letterSpacing: '2px',
+          textAlign: 'center',
+          marginBottom: '20px'
+        }}>
+          NO CHARACTERS AVAILABLE
+        </Text>
+        <Text style={{
+          fontSize: isMobile ? '16px' : '20px',
+          color: '#F5F5DC',
+          textAlign: 'center',
+          marginBottom: '30px'
+        }}>
+          Visit the shop to purchase characters
+        </Text>
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={onBackClick}
+          style={{
+            fontSize: isMobile ? "16px" : "20px",
+            fontWeight: 700,
+            padding: isMobile ? "12px 20px" : "15px 30px",
+            backgroundColor: "transparent",
+            borderColor: "#fc3f31",
+            border: "3px solid #fc3f31",
+            borderRadius: "10px",
+            color: "#fc3f31",
+            textTransform: "uppercase",
+            letterSpacing: "2px",
+            fontFamily: "Anton, sans-serif",
+          }}
+        >
+          BACK
+        </Button>
+      </Box>
+    );
+  }
+
   return (
     <Box
       className="fight-screen-container fight-screen-background"
