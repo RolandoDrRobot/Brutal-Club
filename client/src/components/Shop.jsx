@@ -186,41 +186,15 @@ const Shop = ({ onBackClick }) => {
         </Text>
         
         {/* Coins display */}
-        <Box style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          backgroundColor: 'rgba(255, 215, 0, 0.2)',
-          border: '2px solid #FFD700',
-          borderRadius: '20px',
-          padding: '8px 16px',
-          marginTop: '10px'
+        <Text style={{
+          fontSize: isMobile ? '20px' : '24px',
+          fontWeight: 700,
+          color: '#FFD700',
+          fontFamily: 'Anton, sans-serif',
+          letterSpacing: '1px'
         }}>
-          <Text style={{
-            fontSize: isMobile ? '16px' : '18px',
-            fontWeight: 700,
-            color: '#FFD700',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '1px'
-          }}>
-            💰 {coins} COINS
-          </Text>
-        </Box>
-        
-        {/* Debug button to clear saved data */}
-        <Button
-          onClick={clearSavedData}
-          size="xs"
-          variant="outline"
-          style={{
-            marginTop: '10px',
-            fontSize: '12px',
-            color: '#fc3f31',
-            borderColor: '#fc3f31',
-            backgroundColor: 'transparent'
-          }}
-        >
-          🧹 CLEAR DATA (START WITH 0 COINS)
-        </Button>
+          {coins} COINS
+        </Text>
       </Box>
 
       {/* Scrollable Character Grid Container */}
@@ -322,12 +296,6 @@ const Shop = ({ onBackClick }) => {
                       zIndex: 10
                     }}>
                       <Text style={{
-                        fontSize: isMobile ? '30px' : '40px',
-                        marginBottom: '5px'
-                      }}>
-                        🔒
-                      </Text>
-                      <Text style={{
                         fontSize: isMobile ? '14px' : '16px',
                         fontWeight: 700,
                         color: '#FFD700',
@@ -361,22 +329,13 @@ const Shop = ({ onBackClick }) => {
                   }}
                 >
                   {character.isPurchased ? (
-                    <>
-                      ✅
-                      <span>OWNED</span>
-                    </>
+                    <span>OWNED</span>
                   ) : (character.price !== null && !character.canAfford && !character.isPurchased) ? (
-                    <>
-                      🔒
-                      <span>LOCKED</span>
-                    </>
+                    <span>LOCKED</span>
                   ) : character.price === null ? (
-                    <>
-                      🆓
-                      <span>FREE</span>
-                    </>
+                    <span>FREE</span>
                   ) : (
-                    `BUY ${character.price}💰`
+                    `BUY ${character.price} COINS`
                   )}
                 </Button>
               </Card>

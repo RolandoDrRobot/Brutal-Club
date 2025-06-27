@@ -142,6 +142,9 @@ export const CharacterAnimationsProvider = (props) => {
   const [selectedPlayer2Character, setSelectedPlayer2Character] = useState('tyler');
   const [isSelectingCharacter, setIsSelectingCharacter] = useState(false);
   
+  // NUEVO: Sistema de oponentes seleccionados
+  const [selectedOpponent, setSelectedOpponent] = useState(null);
+  
   // Sistema de combate
   const [player1AnimationIndex, setPlayer1AnimationIndex] = useState(0);
   const [player2AnimationIndex, setPlayer2AnimationIndex] = useState(0);
@@ -1347,15 +1350,20 @@ export const CharacterAnimationsProvider = (props) => {
       } else if (player2IsDead && !player1IsDead) {
         // Player 1 (jugador) ganó
         console.log("🏆 PLAYER 1 WINS! Registering victory...");
-        // Necesitamos saber qué oponente fue derrotado
-        if (selectedPlayer2Character) {
+        // Usar el ID del oponente seleccionado en lugar del nombre del personaje
+        if (selectedOpponent) {
+          const opponentId = selectedOpponent.id;
+          console.log(`Victory against opponent: ${opponentId} (${selectedOpponent.name})`);
+          registerVictory(opponentId);
+        } else if (selectedPlayer2Character) {
+          // Fallback al sistema anterior si no hay oponente seleccionado
           const opponentId = selectedPlayer2Character.toLowerCase();
-          console.log(`Victory against opponent: ${opponentId}`);
+          console.log(`Victory against opponent (fallback): ${opponentId}`);
           registerVictory(opponentId);
         }
       }
     }
-  }, [player1IsDead, player2IsDead, selectedPlayer2Character, registerVictory, registerDefeat]);
+  }, [player1IsDead, player2IsDead, selectedOpponent, selectedPlayer2Character, registerVictory, registerDefeat]);
 
   // useEffect para manejar el sistema de contadores de victorias existente
   useEffect(() => {
@@ -1567,7 +1575,16 @@ export const CharacterAnimationsProvider = (props) => {
   };
 
   const handleOpponentChallenge = (opponent) => {
-    console.log(`Challenging opponent: ${opponent.name}`);
+    console.log(`Challenging opponent: ${opponent.name} (${opponent.model})`);
+    
+    // Guardar el oponente seleccionado
+    setSelectedOpponent(opponent);
+    
+    // Configurar el oponente como Player 2
+    setSelectedPlayer2Character(opponent.model || opponent.id);
+    
+    console.log(`Player 2 set to: ${opponent.model || opponent.id}`);
+    
     // Navegar directamente al combate
     navigateWithExitAnimation('combat', () => {
       setIsCombatMode(true);
@@ -1683,6 +1700,10 @@ export const CharacterAnimationsProvider = (props) => {
         navigateToOpponentSelect,
         navigateBackFromOpponentSelect,
         handleOpponentChallenge,
+        
+        // NUEVO: Sistema de oponentes
+        selectedOpponent,
+        setSelectedOpponent,
       }}
     >
       {props.children}
