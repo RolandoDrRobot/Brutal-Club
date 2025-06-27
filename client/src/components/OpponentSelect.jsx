@@ -18,7 +18,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
       number: '1.',
       name: 'TYLER',
       isLocked: false,
-      avatar: '🧔‍♂️',
+      avatar: '',
       model: 'Tyler',
       description: 'Soap maker with deadly skills'
     },
@@ -27,7 +27,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
       number: '2.',
       name: 'PETE',
       isLocked: true,
-      avatar: '👷‍♂️',
+      avatar: '',
       model: 'pete',
       description: 'Construction worker with heavy fists'
     },
@@ -36,7 +36,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
       number: '3.',
       name: 'VINCE',
       isLocked: true,
-      avatar: '🧑‍🚒',
+      avatar: '',
       model: 'Vince',
       description: 'Fire fighter with burning rage'
     },
@@ -45,7 +45,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
       number: '4.',
       name: 'BOB',
       isLocked: true,
-      avatar: '👔',
+      avatar: '',
       model: 'Bob',
       description: 'Business man with corporate fury'
     }
@@ -59,7 +59,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
   };
 
   const getOpponentCardStyle = (opponent) => ({
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    backgroundColor: 'transparent',
     border: '3px solid #fc3f31',
     borderRadius: '15px',
     padding: '0px',
@@ -72,21 +72,15 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
     opacity: opponent.isLocked ? 0.6 : 1,
     transition: 'all 0.3s ease',
     boxShadow: `
-      0 0 10px #fc3f31,
-      0 0 20px rgba(252, 63, 49, 0.2),
-      inset 0 0 10px rgba(252, 63, 49, 0.05)
+      0 0 10px rgba(252, 63, 49, 0.3)
     `,
     overflow: 'hidden'
   });
 
   const getButtonStyle = (opponent) => ({
-    backgroundImage: `url(${mainButtonImg})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
     color: '#FFD700',
-    border: opponent.isLocked ? 'none' : '3px solid #fc3f31',
+    border: 'none',
     fontSize: isMobile ? '18px' : '20px',
     fontWeight: 700,
     padding: '0px',
@@ -101,11 +95,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: opponent.isLocked ? 'none' : `
-      0 0 10px #fc3f31,
-      0 0 20px rgba(252, 63, 49, 0.5),
-      inset 0 0 10px rgba(252, 63, 49, 0.1)
-    `
+    boxShadow: 'none'
   });
 
   return (
@@ -113,7 +103,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
       className="fight-screen-container fight-screen-background"
       style={{
         animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out",
-        padding: isMobile ? "40px 20px 20px 20px" : "60px 40px 40px 40px",
+        padding: isMobile ? "40px 10px 20px 10px" : "60px 20px 40px 20px",
         height: "100vh",
         overflow: "hidden",
         display: "flex",
@@ -147,13 +137,17 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
         overflowX: "hidden",
         paddingRight: isMobile ? "5px" : "10px",
         animation: "fadeInSpray 1.5s ease-out 0.3s both",
-        minHeight: 0
+        minHeight: 0,
+        width: '100%',
+        maxWidth: '100%'
       }}>
         <Stack spacing={isMobile ? "lg" : "xl"} style={{ 
           width: '100%',
-          maxWidth: '900px',
+          maxWidth: '100%',
           margin: '0 auto',
-          paddingBottom: isMobile ? "20px" : "30px"
+          paddingBottom: isMobile ? "20px" : "30px",
+          paddingLeft: isMobile ? "0px" : "0px",
+          paddingRight: isMobile ? "0px" : "0px"
         }}>
           {opponents.map((opponent, index) => (
             <Card
@@ -167,9 +161,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 if (!isMobile && !opponent.isLocked) {
                   e.currentTarget.style.transform = "scale(1.02)";
                   e.currentTarget.style.boxShadow = `
-                    0 0 15px #fc3f31,
-                    0 0 30px rgba(252, 63, 49, 0.3),
-                    inset 0 0 15px rgba(252, 63, 49, 0.1)
+                    0 0 15px rgba(252, 63, 49, 0.5)
                   `;
                 }
               }}
@@ -177,9 +169,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 if (!isMobile && !opponent.isLocked) {
                   e.currentTarget.style.transform = "scale(1)";
                   e.currentTarget.style.boxShadow = `
-                    0 0 10px #fc3f31,
-                    0 0 20px rgba(252, 63, 49, 0.2),
-                    inset 0 0 10px rgba(252, 63, 49, 0.05)
+                    0 0 10px rgba(252, 63, 49, 0.3)
                   `;
                 }
               }}
@@ -200,8 +190,8 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: isMobile ? '80px' : '100px',
-                  height: isMobile ? '80px' : '100px',
+                  width: '100%',
+                  height: '100%',
                   position: 'relative',
                   overflow: 'hidden',
                   borderRadius: '10px',
@@ -212,10 +202,11 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                       characterName={opponent.name}
                       style={{
                         position: 'relative',
-                        top: '30%',
+                        left: '20%',
+                        top: '20%',
                         width: '100%',
                         height: '100%',
-                        transform: 'scale(1.2)',
+                        transform: 'scale(1.2) scaleX(-1)',
                         margin: '0px',
                         padding: '0px',
                         border: 'none',
@@ -234,45 +225,64 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 </Box>
               </Box>
 
-              {/* Right Column - Reward and Button */}
+              {/* Middle Column - Name */}
               <Box style={{ 
-                flex: 1, 
+                flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                gap: isMobile ? '10px' : '15px',
-                paddingLeft: isMobile ? '20px' : '30px'
+                paddingLeft: isMobile ? '10px' : '15px',
+                paddingRight: isMobile ? '10px' : '15px'
               }}>
-                {/* Reward/Lock Status */}
-                {opponent.isLocked ? (
-                  <Group spacing="sm" align="center">
-                    <Text style={{
-                      fontSize: isMobile ? '16px' : '18px',
-                      fontWeight: 700,
-                      color: '#FFD700',
-                      fontFamily: 'Anton, sans-serif',
-                      letterSpacing: '1px',
-                      textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)'
-                    }}>
-                      LOCKED
-                    </Text>
-                  </Group>
-                ) : (
-                  <Group spacing="sm" align="center">
-                    <Text style={{
-                      fontSize: isMobile ? '16px' : '18px',
-                      fontWeight: 700,
-                      color: '#FFD700',
-                      fontFamily: 'Anton, sans-serif',
-                      letterSpacing: '1px',
-                      textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)'
-                    }}>
-                      200
-                    </Text>
-                  </Group>
-                )}
+                <Text style={{
+                  fontSize: isMobile ? '24px' : '32px',
+                  fontWeight: 700,
+                  color: opponent.isLocked ? '#666' : '#FFF',
+                  fontFamily: 'Anton, sans-serif',
+                  letterSpacing: '2px',
+                  textShadow: opponent.isLocked ? '2px 2px 4px rgba(0, 0, 0, 0.9)' : `
+                    2px 2px 4px rgba(0, 0, 0, 0.9),
+                    0 0 10px #FFF,
+                    0 0 20px #FFF,
+                    0 0 30px #FFF
+                  `,
+                  textAlign: 'center',
+                  lineHeight: 1,
+                  marginBottom: '2px'
+                }}>
+                  {opponent.number}
+                </Text>
+                <Text style={{
+                  fontSize: isMobile ? '20px' : '26px',
+                  fontWeight: 700,
+                  color: opponent.isLocked ? '#666' : '#FFF',
+                  fontFamily: 'Anton, sans-serif',
+                  letterSpacing: '2px',
+                  textShadow: opponent.isLocked ? '2px 2px 4px rgba(0, 0, 0, 0.9)' : `
+                    2px 2px 4px rgba(0, 0, 0, 0.9),
+                    0 0 10px #FFF,
+                    0 0 20px #FFF,
+                    0 0 30px #FFF
+                  `,
+                  textAlign: 'center',
+                  lineHeight: 1
+                }}>
+                  {opponent.name}
+                </Text>
+              </Box>
 
+              {/* Right Column - Reward and Button */}
+              <Box style={{ 
+                width: '35%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: isMobile ? '8px' : '12px',
+                paddingLeft: isMobile ? '10px' : '15px',
+                paddingRight: isMobile ? '10px' : '15px'
+              }}>
                 {/* Action Button */}
                 <Button
                   style={getButtonStyle(opponent)}
@@ -286,6 +296,25 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 >
                   {opponent.isLocked ? 'LOCKED' : 'CHALLENGE'}
                 </Button>
+
+                {/* Reward/Lock Status */}
+                <Group spacing="sm" align="center">
+                  <Text style={{
+                    fontSize: isMobile ? '20px' : '24px',
+                    fontWeight: 700,
+                    color: '#FFD700',
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '1px',
+                    textShadow: `
+                      2px 2px 4px rgba(0, 0, 0, 0.9),
+                      0 0 10px #FFD700,
+                      0 0 20px #FFD700,
+                      0 0 30px #FFD700
+                    `
+                  }}>
+                    200 coins
+                  </Text>
+                </Group>
               </Box>
             </Card>
           ))}
