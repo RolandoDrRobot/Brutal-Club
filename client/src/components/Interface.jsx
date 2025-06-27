@@ -622,12 +622,34 @@ const Interface = () => {
                 zIndex: 1001
               }}>
                 <Stack spacing="lg" align="center">
-                  <Text size={isMobile ? "xl" : "2xl"} weight={700} style={{ 
-                    color: player1IsDead ? "#fc3f31" : "#F5F5DC",
-                    animation: "fadeInSpray 0.8s ease-out"
+                  <Text style={{
+                    fontSize: isMobile ? '28px' : '36px',
+                    fontWeight: 700,
+                    color: '#FFD700',
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '3px',
+                    textShadow: '3px 3px 6px rgba(0, 0, 0, 0.9)',
+                    textAlign: 'center',
+                    marginBottom: isMobile ? '20px' : '30px'
                   }}>
-                    🏆 {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"} 🏆
+                    {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"}
                   </Text>
+                  
+                  {/* Coins earned message - only show for Player 1 victory */}
+                  {!player1IsDead && (
+                    <Text style={{
+                      fontSize: isMobile ? '18px' : '24px',
+                      fontWeight: 600,
+                      color: '#FFD700',
+                      fontFamily: 'Anton, sans-serif',
+                      letterSpacing: '2px',
+                      textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)',
+                      textAlign: 'center',
+                      marginBottom: isMobile ? '15px' : '20px'
+                    }}>
+                      +200 COINS EARNED!
+                    </Text>
+                  )}
                   
                   {/* Botones de acción */}
                   <Group spacing="xs" position="center" style={{ 
@@ -646,6 +668,20 @@ const Interface = () => {
                         cursor: "pointer",
                         flex: 1,
                         transition: "all 0.3s ease"
+                      }}
+                      onTouchStart={(e) => {
+                        if (isMobile) {
+                          e.target.style.transform = "scale(0.95)";
+                          e.target.style.filter = "drop-shadow(0 0 10px #fc3f31) brightness(1.2)";
+                          e.target.style.animation = "impactShake 0.3s ease-out";
+                        }
+                      }}
+                      onTouchEnd={(e) => {
+                        if (isMobile) {
+                          e.target.style.transform = "scale(1)";
+                          e.target.style.filter = "none";
+                          e.target.style.animation = "none";
+                        }
                       }}
                       onMouseEnter={(e) => {
                         if (!isMobile) {
@@ -676,6 +712,20 @@ const Interface = () => {
                         cursor: "pointer",
                         flex: 1,
                         transition: "all 0.3s ease"
+                      }}
+                      onTouchStart={(e) => {
+                        if (isMobile) {
+                          e.target.style.transform = "scale(0.95)";
+                          e.target.style.filter = "drop-shadow(0 0 10px #fc3f31) brightness(1.2)";
+                          e.target.style.animation = "impactShake 0.3s ease-out";
+                        }
+                      }}
+                      onTouchEnd={(e) => {
+                        if (isMobile) {
+                          e.target.style.transform = "scale(1)";
+                          e.target.style.filter = "none";
+                          e.target.style.animation = "none";
+                        }
                       }}
                       onMouseEnter={(e) => {
                         if (!isMobile) {
@@ -1090,10 +1140,10 @@ const Interface = () => {
                                 minWidth: "100px",
                                 backgroundColor: "transparent",
                                 border: "none",
-                                borderRadius: "4px",
+                                borderRadius: "15px",
                                 cursor: canUseAttack ? "pointer" : "not-allowed",
                                 opacity: canUseAttack ? 1 : 0.5,
-                                transition: "all 0.2s ease",
+                                transition: "all 0.3s ease",
                                 overflow: "hidden",
                                 display: "inline-flex",
                                 alignItems: "center",
@@ -1103,23 +1153,29 @@ const Interface = () => {
                               onTouchStart={(e) => {
                                 if (canUseAttack && isMobile) {
                                   e.target.style.transform = "scale(0.95)";
+                                  e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                                  e.target.style.animation = "impactShake 0.3s ease-out";
                                 }
                               }}
                               onTouchEnd={(e) => {
                                 if (canUseAttack && isMobile) {
                                   e.target.style.transform = "scale(1)";
+                                  e.target.style.backgroundColor = "transparent";
+                                  e.target.style.animation = "none";
                                 }
                               }}
                               onMouseEnter={(e) => {
                                 if (canUseAttack && !isMobile) {
                                   e.target.style.transform = "scale(1.05)";
-                                  e.target.style.boxShadow = "none";
+                                  e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                                  e.target.style.animation = "impactShake 0.3s ease-out";
                                 }
                               }}
                               onMouseLeave={(e) => {
                                 if (canUseAttack && !isMobile) {
                                   e.target.style.transform = "scale(1)";
-                                  e.target.style.boxShadow = "none";
+                                  e.target.style.backgroundColor = "transparent";
+                                  e.target.style.animation = "none";
                                 }
                               }}
                             >
@@ -1163,13 +1219,41 @@ const Interface = () => {
                       height: isMobile ? "60px" : "100px",
                       backgroundColor: "transparent",
                       border: "none",
-                      borderRadius: isMobile ? "12px" : "15px",
+                      borderRadius: isMobile ? "15px" : "15px",
                       cursor: canBlock(player1Stamina, player1IsDead) ? "pointer" : "not-allowed",
                       opacity: canBlock(player1Stamina, player1IsDead) ? 1 : 0.5,
-                      transition: "all 0.2s ease",
+                      transition: "all 0.3s ease",
                       overflow: "hidden",
                       boxShadow: "none",
                       flexShrink: 0
+                    }}
+                    onTouchStart={(e) => {
+                      if (canBlock(player1Stamina, player1IsDead) && isMobile) {
+                        e.target.style.transform = "scale(0.95)";
+                        e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                        e.target.style.animation = "impactShake 0.3s ease-out";
+                      }
+                    }}
+                    onTouchEnd={(e) => {
+                      if (canBlock(player1Stamina, player1IsDead) && isMobile) {
+                        e.target.style.transform = "scale(1)";
+                        e.target.style.backgroundColor = "transparent";
+                        e.target.style.animation = "none";
+                      }
+                    }}
+                    onMouseEnter={(e) => {
+                      if (canBlock(player1Stamina, player1IsDead) && !isMobile) {
+                        e.target.style.transform = "scale(1.05)";
+                        e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                        e.target.style.animation = "impactShake 0.3s ease-out";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (canBlock(player1Stamina, player1IsDead) && !isMobile) {
+                        e.target.style.transform = "scale(1)";
+                        e.target.style.backgroundColor = "transparent";
+                        e.target.style.animation = "none";
+                      }
                     }}
                   >
                     <img 
@@ -1199,7 +1283,7 @@ const Interface = () => {
                       textShadow: "0 0 10px yellow",
                       fontSize: isMobile ? "10px" : "16px"
                     }}>
-                      {player1IsDead ? "💀" : "🏆"}
+                      {player1IsDead ? "DEFEAT" : "VICTORY"}
                       </Text>
                     )}
                     
