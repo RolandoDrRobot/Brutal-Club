@@ -5,6 +5,7 @@ import React from "react";
 import MusicPlayer from "./MusicPlayer";
 import MainMenu from "./MainMenu";
 import CharacterSelect from "./CharacterSelect";
+import Shop from "./Shop";
 import '../styles/fightAnimations.css';
 import punchImg from "../assets/punch.png";
 import kickImg from "../assets/kick.png";
@@ -105,6 +106,8 @@ const Interface = () => {
     navigateToCharacterSelect,
     navigateBackFromCharacterSelect,
     handleCharacterSelection,
+    navigateToShop,
+    navigateBackFromShop,
     selectedPlayer1Character,
     selectedPlayer2Character,
     isCombatMode,
@@ -431,7 +434,7 @@ const Interface = () => {
         <MainMenu 
           onStartClick={navigateToCombat}
           onFightersClick={navigateToCharacterSelect}
-          onShopClick={() => console.log("SHOP menu clicked")}
+          onShopClick={navigateToShop}
           onBackClick={navigateBackToDance}
         />
       )}
@@ -441,6 +444,13 @@ const Interface = () => {
         <CharacterSelect 
           onSelectClick={handleCharacterSelection}
           onBackClick={navigateBackFromCharacterSelect}
+        />
+      )}
+
+      {/* Mostrar pantalla de la tienda cuando currentScreen es 'shop' */}
+      {currentScreen === 'shop' && (
+        <Shop 
+          onBackClick={navigateBackFromShop}
         />
       )}
 

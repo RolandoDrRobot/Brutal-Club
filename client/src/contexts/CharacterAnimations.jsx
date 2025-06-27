@@ -1521,6 +1521,15 @@ export const CharacterAnimationsProvider = (props) => {
     });
   };
 
+  // NUEVAS: Funciones de navegación para la tienda
+  const navigateToShop = () => {
+    navigateWithExitAnimation('shop');
+  };
+
+  const navigateBackFromShop = () => {
+    navigateWithExitAnimation('menu');
+  };
+
   const handleCharacterSelection = (character) => {
     // Por ahora solo cambiamos el personaje del Player 1
     setSelectedPlayer1Character(character.model);
@@ -1620,6 +1629,10 @@ export const CharacterAnimationsProvider = (props) => {
         navigateToCharacterSelect,
         navigateBackFromCharacterSelect,
         handleCharacterSelection,
+        
+        // NUEVAS: Funciones de navegación para la tienda
+        navigateToShop,
+        navigateBackFromShop,
       }}
     >
       {props.children}
