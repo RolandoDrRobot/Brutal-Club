@@ -3,6 +3,7 @@ import { Button, Box, Text, Stack, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import mainButtonImg from '../assets/mainbutton.jpeg';
+import comboImg from '../assets/combo.png';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import CharacterPreview from './CharacterPreview';
 
@@ -81,27 +82,52 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
           variant="unstyled"
           onClick={handlePreviousCharacter}
           style={{
-            fontSize: isMobile ? '30px' : '45px',
-            color: '#fc3f31',
+            width: isMobile ? '60px' : '80px',
+            height: isMobile ? '60px' : '80px',
+            position: 'relative',
             cursor: 'pointer',
-            padding: '15px',
+            padding: 0,
             animation: "arrowPulse 2s ease-in-out infinite",
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            border: 'none',
+            backgroundColor: 'transparent'
           }}
           onMouseEnter={(e) => {
             if (!isMobile) {
-              e.target.style.transform = "scale(1.3)";
-              e.target.style.textShadow = "0 0 20px #fc3f31";
+              const bgElement = e.target.querySelector('.left-arrow-bg');
+              if (bgElement) {
+                bgElement.style.transform = "scaleX(-1) scale(1.1)";
+                bgElement.style.filter = "drop-shadow(0 0 10px #fc3f31)";
+              }
             }
           }}
           onMouseLeave={(e) => {
             if (!isMobile) {
-              e.target.style.transform = "scale(1)";
-              e.target.style.textShadow = "none";
+              const bgElement = e.target.querySelector('.left-arrow-bg');
+              if (bgElement) {
+                bgElement.style.transform = "scaleX(-1) scale(1)";
+                bgElement.style.filter = "none";
+              }
             }
           }}
         >
-          &#8249;
+          <div 
+            className="left-arrow-bg"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundImage: `url(${comboImg})`,
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              transform: 'scaleX(-1)',
+              transition: 'all 0.3s ease',
+              pointerEvents: 'none'
+            }}
+          />
         </Button>
 
         {/* Character Display Area */}
@@ -201,27 +227,32 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
           variant="unstyled"
           onClick={handleNextCharacter}
           style={{
-            fontSize: isMobile ? '30px' : '45px',
-            color: '#fc3f31',
+            width: isMobile ? '60px' : '80px',
+            height: isMobile ? '60px' : '80px',
+            backgroundImage: `url(${comboImg})`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             cursor: 'pointer',
-            padding: '15px',
+            padding: 0,
             animation: "arrowPulse 2s ease-in-out infinite 1s",
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            border: 'none',
+            backgroundColor: 'transparent'
           }}
           onMouseEnter={(e) => {
             if (!isMobile) {
-              e.target.style.transform = "scale(1.3)";
-              e.target.style.textShadow = "0 0 20px #fc3f31";
+              e.target.style.transform = "scale(1.1)";
+              e.target.style.filter = "drop-shadow(0 0 10px #fc3f31)";
             }
           }}
           onMouseLeave={(e) => {
             if (!isMobile) {
               e.target.style.transform = "scale(1)";
-              e.target.style.textShadow = "none";
+              e.target.style.filter = "none";
             }
           }}
         >
-          &#8250;
         </Button>
       </Box>
 
