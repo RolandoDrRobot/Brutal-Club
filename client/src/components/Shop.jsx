@@ -3,6 +3,7 @@ import { Button, Box, Text, Stack, Grid, Card, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
+import { useGameState } from '../contexts/GameState';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
 
@@ -10,60 +11,28 @@ const Shop = ({ onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
-  const [coins, setCoins] = useState(1000); // Monedas del jugador
+  
+  // Use GameState instead of local state
+  const { 
+    coins, 
+    purchaseCharacter, 
+    getShopCharactersStatus,
+    isCharacterPurchased,
+    canAffordCharacter,
+    clearSavedData
+  } = useGameState();
 
-  // Datos de los personajes en la tienda
-  const shopCharacters = [
-    {
-      id: 'pete',
-      name: 'PETE',
-      description: 'Construction Worker',
-      price: null,
-      isLocked: false,
-      isPurchased: true,
-      emoji: '👷‍♂️',
-      model: 'pete'
-    },
-    {
-      id: 'tyler',
-      name: 'TYLER',
-      description: 'Soap Maker',
-      price: 300,
-      isLocked: false,
-      isPurchased: false,
-      emoji: '🧔‍♂️',
-      model: 'Tyler',
-      canAfford: true
-    },
-    {
-      id: 'vince',
-      name: 'VINCE',
-      description: 'Fire Fighter',
-      price: 500,
-      isLocked: true,
-      isPurchased: false,
-      emoji: '🧑‍🚒',
-      model: 'Vince',
-      canAfford: false
-    },
-    {
-      id: 'bob',
-      name: 'BOB',
-      description: 'Business Man',
-      price: 500,
-      isLocked: true,
-      isPurchased: false,
-      emoji: '👔',
-      model: 'Bob',
-      canAfford: false
-    }
-  ];
+  // Get characters with their current status from GameState
+  const shopCharacters = getShopCharactersStatus();
 
   const handlePurchase = (character) => {
-    if (character.price && coins >= character.price) {
-      setCoins(prev => prev - character.price);
-      console.log(`Purchased ${character.name} for ${character.price} coins`);
-      // Aquí se implementaría la lógica para desbloquear el personaje
+    if (character.price && character.canAfford && !character.isPurchased) {
+      const success = purchaseCharacter(character.id);
+      if (success) {
+        console.log(`Successfully purchased ${character.name} for ${character.price} coins`);
+      } else {
+        console.log(`Failed to purchase ${character.name}`);
+      }
     }
   };
 
@@ -92,6 +61,9 @@ const Shop = ({ onBackClick }) => {
       };
     }
     
+    // Character is locked if price is not null and not affordable, or if it has no price and isn't purchased
+    const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
+    
     return {
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
       border: '3px solid #fc3f31',
@@ -103,8 +75,8 @@ const Shop = ({ onBackClick }) => {
       alignItems: 'center',
       justifyContent: 'space-between',
       position: 'relative',
-      cursor: character.isLocked ? 'not-allowed' : 'pointer',
-      opacity: character.isLocked ? 0.6 : 1,
+      cursor: isLocked ? 'not-allowed' : 'pointer',
+      opacity: isLocked ? 0.6 : 1,
       transition: 'all 0.3s ease',
       boxShadow: `
         0 0 10px #fc3f31,
@@ -138,7 +110,9 @@ const Shop = ({ onBackClick }) => {
       };
     }
     
-    if (character.isLocked) {
+    const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
+    
+    if (isLocked) {
       return {
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         color: '#FFD700',
@@ -170,7 +144,7 @@ const Shop = ({ onBackClick }) => {
         letterSpacing: '2px',
         fontFamily: 'Anton, sans-serif',
         textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-        cursor: character.canAfford ? 'pointer' : 'not-allowed',
+        cursor: 'pointer',
         boxShadow: 'none',
         display: 'flex',
         alignItems: 'center',
@@ -231,6 +205,22 @@ const Shop = ({ onBackClick }) => {
             💰 {coins} COINS
           </Text>
         </Box>
+        
+        {/* Debug button to clear saved data */}
+        <Button
+          onClick={clearSavedData}
+          size="xs"
+          variant="outline"
+          style={{
+            marginTop: '10px',
+            fontSize: '12px',
+            color: '#fc3f31',
+            borderColor: '#fc3f31',
+            backgroundColor: 'transparent'
+          }}
+        >
+          🧹 CLEAR DATA (START WITH 0 COINS)
+        </Button>
       </Box>
 
       {/* Scrollable Character Grid Container */}
@@ -261,7 +251,12 @@ const Shop = ({ onBackClick }) => {
             >
               <Card
                 style={getCharacterCardStyle(character)}
-                onClick={() => !character.isLocked && !character.isPurchased && handlePurchase(character)}
+                onClick={() => {
+                  const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
+                  if (!isLocked && !character.isPurchased) {
+                    handlePurchase(character);
+                  }
+                }}
                 onMouseEnter={(e) => {
                   // No hover effects for clean appearance
                 }}
@@ -315,7 +310,7 @@ const Shop = ({ onBackClick }) => {
                   {/* Character name removed */}
 
                   {/* Lock overlay for locked characters */}
-                  {character.isLocked && (
+                  {(character.price !== null && !character.canAfford && !character.isPurchased) && (
                     <Box style={{
                       position: 'absolute',
                       top: '50%',
@@ -353,10 +348,14 @@ const Shop = ({ onBackClick }) => {
                     zIndex: 2,
                     position: 'relative'
                   }}
-                  disabled={character.isLocked || character.isPurchased || (character.price && coins < character.price)}
+                  disabled={
+                    (character.price !== null && !character.canAfford && !character.isPurchased) || 
+                    character.isPurchased
+                  }
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (!character.isLocked && !character.isPurchased) {
+                    const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
+                    if (!isLocked && !character.isPurchased) {
                       handlePurchase(character);
                     }
                   }}
@@ -366,10 +365,15 @@ const Shop = ({ onBackClick }) => {
                       ✅
                       <span>OWNED</span>
                     </>
-                  ) : character.isLocked ? (
+                  ) : (character.price !== null && !character.canAfford && !character.isPurchased) ? (
                     <>
                       🔒
                       <span>LOCKED</span>
+                    </>
+                  ) : character.price === null ? (
+                    <>
+                      🆓
+                      <span>FREE</span>
                     </>
                   ) : (
                     `BUY ${character.price}💰`

@@ -3,6 +3,7 @@ import { Button, Box, Text, Stack, Card, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
+import { useGameState } from '../contexts/GameState';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
 
@@ -10,46 +11,18 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
+  
+  // Use GameState to get opponent status
+  const { getOpponentsStatus } = useGameState();
 
-  // Datos de los oponentes
-  const opponents = [
-    {
-      id: 'tyler',
-      number: '1.',
-      name: 'TYLER',
-      isLocked: false,
-      avatar: '',
-      model: 'Tyler',
-      description: 'Soap maker with deadly skills'
-    },
-    {
-      id: 'pete',
-      number: '2.',
-      name: 'PETE',
-      isLocked: true,
-      avatar: '',
-      model: 'pete',
-      description: 'Construction worker with heavy fists'
-    },
-    {
-      id: 'vince',
-      number: '3.',
-      name: 'VINCE',
-      isLocked: true,
-      avatar: '',
-      model: 'Vince',
-      description: 'Fire fighter with burning rage'
-    },
-    {
-      id: 'bob',
-      number: '4.',
-      name: 'BOB',
-      isLocked: true,
-      avatar: '',
-      model: 'Bob',
-      description: 'Business man with corporate fury'
-    }
-  ];
+  // Get opponents with their current unlock status
+  const opponents = getOpponentsStatus().map((opponent, index) => ({
+    ...opponent,
+    number: `${index + 1}.`,
+    avatar: '',
+    model: opponent.model,
+    isLocked: !opponent.isUnlocked
+  }));
 
   const handleOpponentSelect = (opponent) => {
     if (!opponent.isLocked) {

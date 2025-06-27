@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useRef, useEffect } from "react";
+import { createContext, useContext, useState, useRef, useEffect, useMemo } from "react";
+import { useGameState } from './GameState';
 
 const CharacterAnimationsContext = createContext({});
 
@@ -193,6 +194,9 @@ export const CharacterAnimationsProvider = (props) => {
   const player1BlockStaminaRef = useRef(null);
   const player2BlockStaminaRef = useRef(null);
   const aiActionTimeoutRef = useRef(null);
+
+  // Add GameState hook at the top after other hooks
+  const { registerVictory, registerDefeat, getOpponentsStatus } = useGameState();
 
   // Función para encontrar índice de animación por nombre exacto - funciona para ambos personajes
   const findAnimationIndex = (animationName, player = 1) => {
@@ -1330,7 +1334,30 @@ export const CharacterAnimationsProvider = (props) => {
     }
   }, [player1IsDead, player2IsDead]);
 
-  // useEffect para debuggear cambios en el contador de victorias
+  // useEffect para detectar fin de combate y registrar resultados
+  useEffect(() => {
+    if (player1IsDead || player2IsDead) {
+      console.log(`🎯 COMBAT ENDED - Player 1 Dead: ${player1IsDead}, Player 2 Dead: ${player2IsDead}`);
+      
+      // Registrar resultado del combate
+      if (player1IsDead && !player2IsDead) {
+        // Player 2 (oponente) ganó
+        console.log("🏆 PLAYER 2 WINS! Registering defeat...");
+        registerDefeat();
+      } else if (player2IsDead && !player1IsDead) {
+        // Player 1 (jugador) ganó
+        console.log("🏆 PLAYER 1 WINS! Registering victory...");
+        // Necesitamos saber qué oponente fue derrotado
+        if (selectedPlayer2Character) {
+          const opponentId = selectedPlayer2Character.toLowerCase();
+          console.log(`Victory against opponent: ${opponentId}`);
+          registerVictory(opponentId);
+        }
+      }
+    }
+  }, [player1IsDead, player2IsDead, selectedPlayer2Character, registerVictory, registerDefeat]);
+
+  // useEffect para manejar el sistema de contadores de victorias existente
   useEffect(() => {
     console.log(`🎯 PLAYER 1 WINS COUNTER CHANGED: ${player1Wins}`);
   }, [player1Wins]);

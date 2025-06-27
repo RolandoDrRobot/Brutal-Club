@@ -5,6 +5,7 @@ import '../styles/fightAnimations.css';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import comboImg from '../assets/combo.png';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
+import { useGameState } from '../contexts/GameState';
 import CharacterPreview from './CharacterPreview';
 
 const CharacterSelect = ({ onSelectClick, onBackClick }) => {
@@ -13,21 +14,19 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
   const { isExiting } = useCharacterAnimations();
   const [selectedCharacter, setSelectedCharacter] = useState(0);
 
-  // Información de los personajes disponibles
-  const characters = [
-    {
-      id: 0,
-      name: "PETE",
-      description: "Construction Worker",
-      model: "pete" // Este será el identificador para el modelo 3D
-    },
-    {
-      id: 1,
-      name: "TYLER",
-      description: "Soap Maker",
-      model: "tyler" // Este será el identificador para el modelo 3D
-    }
-  ];
+  // Use GameState to get purchased characters
+  const { getShopCharactersStatus } = useGameState();
+  
+  // Filter only purchased characters
+  const purchasedCharacters = getShopCharactersStatus().filter(char => char.isPurchased);
+  
+  // Map to the expected format for character selection
+  const characters = purchasedCharacters.map(char => ({
+    id: char.id,
+    name: char.name,
+    description: char.description,
+    model: char.model
+  }));
 
   const handlePreviousCharacter = () => {
     setSelectedCharacter((prev) => (prev === 0 ? characters.length - 1 : prev - 1));
@@ -38,7 +37,9 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
   };
 
   const handleSelectCharacter = () => {
-    onSelectClick(characters[selectedCharacter]);
+    if (characters.length > 0) {
+      onSelectClick(characters[selectedCharacter]);
+    }
   };
 
   return (
