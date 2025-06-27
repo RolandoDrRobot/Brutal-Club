@@ -4,6 +4,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
+import CharacterPreview from './CharacterPreview';
 
 const CharacterSelect = ({ onSelectClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -55,7 +56,8 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
       }}>
         <Text className="fight-title" style={{ 
           fontSize: isMobile ? '32px' : '48px',
-          marginBottom: isVerySmall ? '5px' : isMobile ? '10px' : '15px'
+          marginBottom: isVerySmall ? '10px' : isMobile ? '15px' : '20px',
+          border: '10px solid black'
         }}>
           FIGHT CLUB
         </Text>
@@ -79,10 +81,10 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
           variant="unstyled"
           onClick={handlePreviousCharacter}
           style={{
-            fontSize: isMobile ? '40px' : '60px',
+            fontSize: isMobile ? '30px' : '45px',
             color: '#fc3f31',
             cursor: 'pointer',
-            padding: '20px',
+            padding: '15px',
             animation: "arrowPulse 2s ease-in-out infinite",
             transition: 'all 0.3s ease'
           }}
@@ -104,27 +106,24 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
 
         {/* Character Display Area */}
         <Box style={{
-          width: isMobile ? '300px' : '400px',
+          width: isMobile ? '350px' : '450px',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          margin: '0 40px',
+          margin: '0 20px',
           position: 'relative'
         }}>
-          {/* Character Model Placeholder */}
+          {/* Character 3D Model Container */}
           <Box
             key={selectedCharacter}
             style={{
               width: '100%',
-              height: '60%',
-              backgroundColor: 'rgba(252, 63, 49, 0.1)',
+              height: '80%',
+              backgroundColor: 'rgba(252, 63, 49, 0.05)',
               border: '3px solid #fc3f31',
               borderRadius: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
               marginBottom: '15px',
               boxShadow: `
                 0 0 30px rgba(252, 63, 49, 0.3),
@@ -132,7 +131,12 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               `,
               animation: "characterSwitch 0.8s ease-out",
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              padding: 0,
+              margin: '0 0 15px 0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}
           >
             {/* Character spotlight effect */}
@@ -144,17 +148,29 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               width: '80%',
               height: '20px',
               background: 'radial-gradient(ellipse, rgba(252, 63, 49, 0.4) 0%, transparent 70%)',
-              borderRadius: '50%'
+              borderRadius: '50%',
+              zIndex: 1,
+              pointerEvents: 'none'
             }} />
             
-            {/* Character 3D Model will be rendered here */}
-            <Text style={{
-              fontSize: isMobile ? '60px' : '80px',
-              color: '#fc3f31',
-              textShadow: '0 0 20px #fc3f31'
-            }}>
-              {characters[selectedCharacter].name === 'PETE' ? '👷‍♂️' : '🧴'}
-            </Text>
+            {/* 3D Character Model */}
+            <CharacterPreview
+              characterName={characters[selectedCharacter].name}
+              style={{
+                width: '100%',
+                height: '100%',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 2,
+                margin: 0,
+                padding: 0,
+                border: 'none',
+                outline: 'none'
+              }}
+            />
           </Box>
 
           {/* Character Info */}
@@ -185,10 +201,10 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
           variant="unstyled"
           onClick={handleNextCharacter}
           style={{
-            fontSize: isMobile ? '40px' : '60px',
+            fontSize: isMobile ? '30px' : '45px',
             color: '#fc3f31',
             cursor: 'pointer',
-            padding: '20px',
+            padding: '15px',
             animation: "arrowPulse 2s ease-in-out infinite 1s",
             transition: 'all 0.3s ease'
           }}
