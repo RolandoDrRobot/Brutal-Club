@@ -1530,6 +1530,24 @@ export const CharacterAnimationsProvider = (props) => {
     navigateWithExitAnimation('menu');
   };
 
+  // NUEVAS: Funciones de navegación para selección de oponentes
+  const navigateToOpponentSelect = () => {
+    navigateWithExitAnimation('opponentSelect');
+  };
+
+  const navigateBackFromOpponentSelect = () => {
+    navigateWithExitAnimation('menu');
+  };
+
+  const handleOpponentChallenge = (opponent) => {
+    console.log(`Challenging opponent: ${opponent.name}`);
+    // Navegar directamente al combate
+    navigateWithExitAnimation('combat', () => {
+      setIsCombatMode(true);
+      initializeCombat();
+    });
+  };
+
   const handleCharacterSelection = (character) => {
     // Por ahora solo cambiamos el personaje del Player 1
     setSelectedPlayer1Character(character.model);
@@ -1633,6 +1651,11 @@ export const CharacterAnimationsProvider = (props) => {
         // NUEVAS: Funciones de navegación para la tienda
         navigateToShop,
         navigateBackFromShop,
+        
+        // NUEVAS: Funciones de navegación para selección de oponentes
+        navigateToOpponentSelect,
+        navigateBackFromOpponentSelect,
+        handleOpponentChallenge,
       }}
     >
       {props.children}

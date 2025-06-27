@@ -6,6 +6,7 @@ import MusicPlayer from "./MusicPlayer";
 import MainMenu from "./MainMenu";
 import CharacterSelect from "./CharacterSelect";
 import Shop from "./Shop";
+import OpponentSelect from "./OpponentSelect";
 import '../styles/fightAnimations.css';
 import punchImg from "../assets/punch.png";
 import kickImg from "../assets/kick.png";
@@ -108,6 +109,9 @@ const Interface = () => {
     handleCharacterSelection,
     navigateToShop,
     navigateBackFromShop,
+    navigateToOpponentSelect,
+    navigateBackFromOpponentSelect,
+    handleOpponentChallenge,
     selectedPlayer1Character,
     selectedPlayer2Character,
     isCombatMode,
@@ -432,7 +436,7 @@ const Interface = () => {
       {/* Mostrar componente de menú principal cuando currentScreen es 'menu' */}
       {currentScreen === 'menu' && (
         <MainMenu 
-          onStartClick={navigateToCombat}
+          onStartClick={navigateToOpponentSelect}
           onFightersClick={navigateToCharacterSelect}
           onShopClick={navigateToShop}
           onBackClick={navigateBackToDance}
@@ -451,6 +455,14 @@ const Interface = () => {
       {currentScreen === 'shop' && (
         <Shop 
           onBackClick={navigateBackFromShop}
+        />
+      )}
+
+      {/* Mostrar pantalla de selección de oponentes cuando currentScreen es 'opponentSelect' */}
+      {currentScreen === 'opponentSelect' && (
+        <OpponentSelect 
+          onChallengeClick={handleOpponentChallenge}
+          onBackClick={navigateBackFromOpponentSelect}
         />
       )}
 
