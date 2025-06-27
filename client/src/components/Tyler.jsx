@@ -72,12 +72,14 @@ function Tyler({ player = 2, ...props }) {
     return tylerIndex;
   };
 
-  // Determinar qué animación usar Tyler basándose en el índice de Player 2
+  // Determinar qué animación usar Tyler basándose en el índice del jugador correcto
   const currentTylerAnimationIndex = useMemo(() => {
-    const result = getTylerAnimationFromPeteIndex(player2AnimationIndex);
-    console.log(`🎯 Tyler current animation index: ${result} (from Pete index ${player2AnimationIndex})`);
+    // Usar el índice correcto según el jugador
+    const playerAnimationIndex = player === 1 ? player1AnimationIndex : player2AnimationIndex;
+    const result = getTylerAnimationFromPeteIndex(playerAnimationIndex);
+    console.log(`🎯 Tyler (Player ${player}) current animation index: ${result} (from Pete index ${playerAnimationIndex})`);
     return result;
-  }, [player2AnimationIndex, contextAnimations, names]);
+  }, [player, player1AnimationIndex, player2AnimationIndex, contextAnimations, names]);
 
   // Tyler no necesita establecer las animaciones del contexto, solo usar las suyas
   useEffect(() => {
@@ -96,13 +98,15 @@ function Tyler({ player = 2, ...props }) {
   useEffect(() => {
     if (actions && names[currentTylerAnimationIndex]) {
       const animationName = names[currentTylerAnimationIndex];
-      console.log(`🎬 Tyler playing animation: "${animationName}" (Tyler index: ${currentTylerAnimationIndex}, Pete index: ${player2AnimationIndex})`);
+      const playerAnimationIndex = player === 1 ? player1AnimationIndex : player2AnimationIndex;
+      
+      console.log(`🎬 Tyler (Player ${player}) playing animation: "${animationName}" (Tyler index: ${currentTylerAnimationIndex}, Pete index: ${playerAnimationIndex})`);
       
       // Verificación especial para idle fight
-      if (contextAnimations[player2AnimationIndex] === 'idleFight') {
-        console.log(`⚔️ Tyler should be in COMBAT IDLE. Playing: "${animationName}"`);
+      if (contextAnimations[playerAnimationIndex] === 'idleFight') {
+        console.log(`⚔️ Tyler (Player ${player}) should be in COMBAT IDLE. Playing: "${animationName}"`);
         if (animationName.toLowerCase().includes('hurt')) {
-          console.log(`❌ ERROR: Tyler is playing HURT animation instead of IDLE FIGHT!`);
+          console.log(`❌ ERROR: Tyler (Player ${player}) is playing HURT animation instead of IDLE FIGHT!`);
         }
       }
       
@@ -114,7 +118,7 @@ function Tyler({ player = 2, ...props }) {
       };
     } else if (actions && names.length > 0) {
       // Fallback: si el índice no existe, usar la primera animación
-      console.log(`🔄 Tyler fallback to first animation: "${names[0]}"`);
+      console.log(`🔄 Tyler (Player ${player}) fallback to first animation: "${names[0]}"`);
       actions[names[0]].reset().fadeIn(0.5).play();
       return () => {
         if (actions[names[0]]) {
@@ -122,7 +126,7 @@ function Tyler({ player = 2, ...props }) {
         }
       };
     }
-  }, [currentTylerAnimationIndex, actions, names, player2AnimationIndex, contextAnimations]);
+  }, [currentTylerAnimationIndex, actions, names, player, player1AnimationIndex, player2AnimationIndex, contextAnimations]);
 
   return (
     <group ref={group} {...props} dispose={null}>

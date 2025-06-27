@@ -8,7 +8,7 @@ import BarBasement from "./UrbanEnvironment";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 
 const Experience = () => {
-  const { isCombatMode } = useCharacterAnimations();
+  const { isCombatMode, selectedPlayer1Character, selectedPlayer2Character } = useCharacterAnimations();
 
   // Posiciones y rotaciones según el modo
   const getCharacterTransforms = () => {
@@ -36,6 +36,30 @@ const Experience = () => {
           rotation: [0, 0, 0] // Mirando al frente
         }
       };
+    }
+  };
+
+  // Función para renderizar el personaje correcto según la selección
+  const renderCharacter = (characterModel, player, position, rotation) => {
+    const props = { player, position, rotation };
+    
+    switch (characterModel.toLowerCase()) {
+      case 'pete':
+        return <Pete {...props} />;
+      case 'tyler':
+        return <Tyler {...props} />;
+      case 'vince':
+        // Por ahora usar Tyler como placeholder para Vince
+        console.log(`Using Tyler as placeholder for Vince (Player ${player})`);
+        return <Tyler {...props} />;
+      case 'bob':
+        // Por ahora usar Pete como placeholder para Bob
+        console.log(`Using Pete as placeholder for Bob (Player ${player})`);
+        return <Pete {...props} />;
+      default:
+        // Fallback a Pete si el personaje no se reconoce
+        console.warn(`Unknown character model: ${characterModel}, falling back to Pete`);
+        return <Pete {...props} />;
     }
   };
 
@@ -69,18 +93,11 @@ const Experience = () => {
       <Audience />
       
       <group position={[0, -1, 0]}>
-        {/* Player 1 - Pete */}
-        <Pete 
-          player={1} 
-          position={transforms.player1.position} 
-          rotation={transforms.player1.rotation} 
-        />
-        {/* Player 2 - Tyler */}
-        <Tyler 
-          player={2} 
-          position={transforms.player2.position} 
-          rotation={transforms.player2.rotation} 
-        />
+        {/* Player 1 - Personaje seleccionado */}
+        {renderCharacter(selectedPlayer1Character, 1, transforms.player1.position, transforms.player1.rotation)}
+        
+        {/* Player 2 - Personaje seleccionado (por ahora Tyler por defecto) */}
+        {renderCharacter(selectedPlayer2Character, 2, transforms.player2.position, transforms.player2.rotation)}
       </group>
     </>
   );
