@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button, Group, Text, Box } from '@mantine/core';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import musicIcon from '../assets/music.png';
+import danceIcon from '../assets/dance.png';
 
 const MusicPlayer = () => {
-  const { isCombatMode } = useCharacterAnimations();
+  const { isCombatMode, triggerSyncAnimation, animations } = useCharacterAnimations();
   
   // Lista de canciones (usando los archivos reales del directorio music)
   const songs = [
@@ -165,6 +166,30 @@ const MusicPlayer = () => {
     nextSong();
   };
 
+  // Función para activar baile aleatorio
+  const triggerRandomDance = () => {
+    if (!isCombatMode && animations.length > 0) {
+      // Filtrar animaciones de baile (evitar animaciones de combate, intro y celebración)
+      const danceAnimations = ['dance1', 'dance2', 'dance3', 'dance4', 'dance5', 'dance6'];
+      const availableDances = [];
+      
+      // Buscar qué animaciones de baile están disponibles
+      danceAnimations.forEach(danceName => {
+        const index = animations.findIndex(anim => anim.toLowerCase().includes(danceName.toLowerCase()));
+        if (index >= 0) {
+          availableDances.push(index);
+        }
+      });
+      
+      // Si hay animaciones de baile disponibles, seleccionar una aleatoria
+      if (availableDances.length > 0) {
+        const randomIndex = availableDances[Math.floor(Math.random() * availableDances.length)];
+        console.log(`Triggering random dance: ${animations[randomIndex]} (index ${randomIndex})`);
+        triggerSyncAnimation(randomIndex);
+      }
+    }
+  };
+
   const currentSong = songs[currentSongIndex];
   const isMobile = window.innerWidth <= 768;
 
@@ -240,8 +265,8 @@ const MusicPlayer = () => {
         />
       )}
 
-      {/* Solo el icono de música */}
-      <Group spacing="sm" position="center" style={{ alignItems: 'center' }}>
+      {/* Iconos de Música y Baile */}
+      <Group spacing="sm" position="center" style={{ alignItems: 'center', flexDirection: 'column' }}>
         {/* Icono de Música */}
         <Button
           variant="unstyled"
@@ -268,6 +293,35 @@ const MusicPlayer = () => {
             }} 
           />
         </Button>
+
+        {/* Icono de Baile - Solo en modo baile */}
+        {!isCombatMode && (
+          <Button
+            variant="unstyled"
+            size="xs"
+            onClick={triggerRandomDance}
+            style={{
+              backgroundColor: 'transparent',
+              border: 'none',
+              width: '35px',
+              height: '35px',
+              padding: '0',
+              minWidth: 'unset',
+              cursor: 'pointer'
+            }}
+          >
+            <img 
+              src={danceIcon} 
+              alt="Dance" 
+              style={{ 
+                width: "35px",
+                height: "35px",
+                objectFit: "cover",
+                pointerEvents: "none"
+              }} 
+            />
+          </Button>
+        )}
       </Group>
     </Box>
   );
