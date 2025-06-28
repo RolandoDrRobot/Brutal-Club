@@ -88,9 +88,7 @@ const HealthBars = () => {
           pointerEvents: "none", // Para que no interfiera con otros elementos
         }}
       >
-        <div className="fight-title" style={{
-          fontSize: isMobile ? "24px" : "30px"
-        }}>
+        <div className="fight-title">
           FIGHT CLUB
         </div>
       </Box>

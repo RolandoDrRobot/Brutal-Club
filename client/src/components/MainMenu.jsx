@@ -89,7 +89,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
         <Box 
           style={{ 
             textAlign: 'center', 
-            marginBottom: isMobile ? '40px' : '60px',
+            marginBottom: '20px',
             animation: "fadeInSpray 0.6s ease-out"
           }}
         >

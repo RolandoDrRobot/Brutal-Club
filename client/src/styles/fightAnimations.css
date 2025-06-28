@@ -317,7 +317,7 @@
 
 @keyframes screenEnterFromTop {
   0% {
-    transform: translateY(-100vh) scale(0.8);
+    transform: translateY(-100dvh) scale(0.8);
     opacity: 0;
   }
   70% {
@@ -332,7 +332,7 @@
 
 @keyframes screenEnterFromBottom {
   0% {
-    transform: translateY(100vh);
+    transform: translateY(100dvh);
     opacity: 0;
   }
   100% {
@@ -403,7 +403,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -429,7 +429,8 @@
   font-family: Anton, sans-serif;
   font-size: 14px;
   font-weight: 400;
-  margin-top: 8px;
+  margin-top: 15px;
+  margin-bottom: 0;
   letter-spacing: 1px;
   text-shadow: 
     rgb(245, 245, 220) 0px 0px 2px, 

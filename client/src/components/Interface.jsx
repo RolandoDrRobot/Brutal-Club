@@ -412,7 +412,7 @@ const Interface = () => {
       top: 0;
       left: 0;
       width: 100vw;
-      height: 100vh;
+      height: 100dvh;
       background: radial-gradient(circle, rgba(252, 63, 49, 0.3) 0%, transparent 70%);
       pointer-events: none;
       z-index: 9999;

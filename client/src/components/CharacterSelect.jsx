@@ -57,7 +57,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          height: "100vh"
+          height: "100dvh"
         }}
       >
         <Text style={{
@@ -111,20 +111,17 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
       className="fight-screen-container fight-screen-background"
       style={{
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
-        padding: isMobile ? "20px" : "40px"
+        padding: isMobile ? "40px 20px 20px 20px" : "60px 40px 40px 40px",
+        height: "100dvh"
       }}
     >
       {/* Main title */}
       <Box style={{ 
         textAlign: 'center', 
-        marginBottom: isVerySmall ? '15px' : isMobile ? '20px' : '30px',
+        marginBottom: '20px',
         animation: "fadeInSpray 0.6s ease-out"
       }}>
-        <Text className="fight-title" style={{ 
-          fontSize: isMobile ? '32px' : '48px',
-          marginBottom: isVerySmall ? '10px' : isMobile ? '15px' : '20px',
-          border: '10px solid black'
-        }}>
+        <Text className="fight-title">
           FIGHT CLUB
         </Text>
         <Text className="fight-subtitle">
@@ -139,7 +136,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         justifyContent: 'center',
         width: '100%',
         maxWidth: '800px',
-        height: isVerySmall ? '55vh' : isMobile ? '65vh' : '70vh',
+        height: isVerySmall ? '55dvh' : isMobile ? '65dvh' : '70dvh',
         margin: isVerySmall ? '10px 0' : isMobile ? '15px 0' : '25px 0'
       }}>
         {/* Left Arrow */}

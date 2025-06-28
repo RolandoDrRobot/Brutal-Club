@@ -58,44 +58,22 @@ const LoadingScreen = ({ progress = 0, status = 'Iniciando...' }) => {
         }}
       >
         {/* Título FIGHT CLUB centrado con animación */}
-        <div
+        <Box
           style={{
-            position: 'relative',
-            marginBottom: '40px',
+            textAlign: 'center',
+            marginBottom: '20px',
             animation: 'pulse 2s ease-in-out infinite'
           }}
         >
-          <div style={{
-            color: 'rgb(252, 63, 49)',
-            textShadow: 'rgb(252, 63, 49) 0px 0px 3px, rgb(252, 63, 49) 0px 0px 6px, rgba(0, 0, 0, 0.8) 2px 2px 4px',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-            fontFamily: 'Anton, sans-serif',
-            fontSize: '50px',
-            fontWeight: 700,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <span style={{ display: 'inline-block', margin: '0px' }}>F</span>
-            <span style={{ display: 'inline-block', margin: '0px' }}>I</span>
-            <span style={{ display: 'inline-block', margin: '0px' }}>G</span>
-            <span style={{ display: 'inline-block', margin: '0px' }}>H</span>
-            <span style={{ display: 'inline-block', margin: '0px' }}>T</span>
-            <span style={{ display: 'inline-block', margin: '0px 8px' }}>&nbsp;</span>
-            <span style={{ display: 'inline-block', margin: '0px' }}>C</span>
-            <span style={{ display: 'inline-block', margin: '0px' }}>L</span>
-            <span style={{ display: 'inline-block', margin: '0px' }}>U</span>
-            <span style={{ display: 'inline-block', margin: '0px' }}>B</span>
+          <div className="fight-title">
+            FIGHT CLUB
           </div>
-        </div>
+          <div className="fight-subtitle">
+            You do not talk about fight club
+          </div>
+        </Box>
         
         {/* Texto de carga principal con efecto neón */}
-        <div className="fight-subtitle">
-          You do not talk about fight club
-        </div>
-        
-        {/* Estado detallado de carga */}
         <Text 
           size="md" 
           style={{ 

@@ -162,7 +162,7 @@ const Shop = ({ onBackClick }) => {
       style={{
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
         padding: isMobile ? "40px 20px 20px 20px" : "60px 40px 40px 40px",
-        height: "100vh",
+        height: "100dvh",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column"
@@ -173,11 +173,9 @@ const Shop = ({ onBackClick }) => {
         textAlign: 'center',
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
-        marginBottom: isMobile ? "15px" : "20px"
+        marginBottom: "20px"
       }}>
-        <Text className="fight-title" style={{ 
-          marginBottom: '10px'
-        }}>
+        <Text className="fight-title">
           FIGHT CLUB
         </Text>
         <Text className="fight-subtitle">
