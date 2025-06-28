@@ -3,6 +3,8 @@ import { Button, Box, Text, Stack } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
+import { useButtonSound } from '../hooks/useButtonSound';
+import mainButtonImg from '../assets/mainbutton.jpeg';
 
 // Import button assets
 import button1 from '../assets/button1.png';
@@ -13,6 +15,7 @@ import button4 from '../assets/button4.png';
 const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { isExiting } = useCharacterAnimations();
+  const { playButtonSound } = useButtonSound();
 
   const getMenuButtonStyle = (backgroundImage) => ({
     fontSize: isMobile ? "28px" : "36px",
@@ -109,11 +112,11 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
           <Button
             variant="outline"
             size="xl"
-            onClick={onStartClick}
-            style={{
-              ...getMenuButtonStyle(button1),
-              animationDelay: "0.7s"
+            onClick={() => {
+              playButtonSound();
+              onStartClick();
             }}
+            style={getMenuButtonStyle(button1)}
             onMouseEnter={(e) => handleButtonHover(e, true)}
             onMouseLeave={(e) => handleButtonHover(e, false)}
           >
@@ -123,11 +126,11 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
           <Button
             variant="outline"
             size="xl"
-            onClick={onFightersClick}
-            style={{
-              ...getMenuButtonStyle(button2),
-              animationDelay: "0.9s"
+            onClick={() => {
+              playButtonSound();
+              onFightersClick();
             }}
+            style={getMenuButtonStyle(button2)}
             onMouseEnter={(e) => handleButtonHover(e, true)}
             onMouseLeave={(e) => handleButtonHover(e, false)}
           >
@@ -137,11 +140,11 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
           <Button
             variant="outline"
             size="xl"
-            onClick={onShopClick}
-            style={{
-              ...getMenuButtonStyle(button3),
-              animationDelay: "1.1s"
+            onClick={() => {
+              playButtonSound();
+              onShopClick();
             }}
+            style={getMenuButtonStyle(button3)}
             onMouseEnter={(e) => handleButtonHover(e, true)}
             onMouseLeave={(e) => handleButtonHover(e, false)}
           >
@@ -151,11 +154,11 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
           <Button
             variant="outline"
             size="xl"
-            onClick={onBackClick}
-            style={{
-              ...getMenuButtonStyle(button4),
-              animationDelay: "1.3s"
+            onClick={() => {
+              playButtonSound();
+              onBackClick();
             }}
+            style={getMenuButtonStyle(button4)}
             onMouseEnter={(e) => handleButtonHover(e, true)}
             onMouseLeave={(e) => handleButtonHover(e, false)}
           >

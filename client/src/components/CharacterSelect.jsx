@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import { Button, Box, Text, Stack, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
-import mainButtonImg from '../assets/mainbutton.jpeg';
-import comboImg from '../assets/combo.png';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
+import { useButtonSound } from '../hooks/useButtonSound';
+import mainButtonImg from '../assets/mainbutton.jpeg';
+import comboImg from '../assets/combo.png';
 import CharacterPreview from './CharacterPreview';
 
 const CharacterSelect = ({ onSelectClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isVerySmall = useMediaQuery("(max-width: 480px)");
   const { isExiting } = useCharacterAnimations();
+  const { playButtonSound } = useButtonSound();
   const [selectedCharacter, setSelectedCharacter] = useState(0);
 
   // Use GameState to get purchased characters
@@ -29,17 +31,18 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
   }));
 
   const handlePreviousCharacter = () => {
-    setSelectedCharacter((prev) => (prev === 0 ? characters.length - 1 : prev - 1));
+    playButtonSound();
+    setSelectedCharacter((prev) => (prev > 0 ? prev - 1 : characters.length - 1));
   };
 
   const handleNextCharacter = () => {
-    setSelectedCharacter((prev) => (prev === characters.length - 1 ? 0 : prev + 1));
+    playButtonSound();
+    setSelectedCharacter((prev) => (prev < characters.length - 1 ? prev + 1 : 0));
   };
 
   const handleSelectCharacter = () => {
-    if (characters.length > 0) {
-      onSelectClick(characters[selectedCharacter]);
-    }
+    playButtonSound();
+    onSelectClick(characters[selectedCharacter]);
   };
 
   // If no characters are available, show a message
@@ -79,7 +82,10 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         <Button
           variant="outline"
           size="lg"
-          onClick={onBackClick}
+          onClick={() => {
+            playButtonSound();
+            onBackClick();
+          }}
           style={{
             fontSize: isMobile ? "16px" : "20px",
             fontWeight: 700,
@@ -328,37 +334,22 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         <Button
           variant="outline"
           size="lg"
-          onClick={onBackClick}
+          onClick={() => {
+            playButtonSound();
+            onBackClick();
+          }}
           style={{
             fontSize: isMobile ? "16px" : "20px",
             fontWeight: 700,
             padding: isMobile ? "12px 20px" : "15px 30px",
-            minHeight: isMobile ? "60px" : "70px",
-            minWidth: isMobile ? "100px" : "140px",
             backgroundColor: "transparent",
-            borderColor: "#666",
-            border: "3px solid #666",
+            borderColor: "#fc3f31",
+            border: "3px solid #fc3f31",
             borderRadius: "10px",
-            color: "#666",
+            color: "#fc3f31",
             textTransform: "uppercase",
             letterSpacing: "2px",
             fontFamily: "Anton, sans-serif",
-            transition: "all 0.3s ease",
-            cursor: "pointer"
-          }}
-          onMouseEnter={(e) => {
-            if (!isMobile) {
-              e.target.style.borderColor = "#fc3f31";
-              e.target.style.color = "#fc3f31";
-              e.target.style.transform = "scale(1.05)";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isMobile) {
-              e.target.style.borderColor = "#666";
-              e.target.style.color = "#666";
-              e.target.style.transform = "scale(1)";
-            }
           }}
         >
           BACK

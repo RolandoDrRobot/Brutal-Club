@@ -21,22 +21,6 @@ const GAME_CONFIG = {
       description: 'Construction worker with heavy fists',
       unlockRequirement: 'tyler', // Se desbloquea al vencer a Tyler
       coinReward: 200
-    },
-    {
-      id: 'vince',
-      name: 'VINCE',
-      model: 'Vince',
-      description: 'Fire fighter with burning rage',
-      unlockRequirement: 'pete', // Se desbloquea al vencer a Pete
-      coinReward: 200
-    },
-    {
-      id: 'bob',
-      name: 'BOB',
-      model: 'Bob',
-      description: 'Business man with corporate fury',
-      unlockRequirement: 'vince', // Se desbloquea al vencer a Vince
-      coinReward: 200
     }
   ],
   CHARACTERS_FOR_PURCHASE: [

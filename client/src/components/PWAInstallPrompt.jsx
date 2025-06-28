@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Box, Text, Group } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import { useButtonSound } from '../hooks/useButtonSound';
 
 const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const { playButtonSound } = useButtonSound();
 
   useEffect(() => {
     // Check if already installed
@@ -119,7 +123,10 @@ const PWAInstallPrompt = () => {
           variant="subtle"
           size="xs"
           color="gray"
-          onClick={handleDismiss}
+          onClick={() => {
+            playButtonSound();
+            handleDismiss();
+          }}
           style={{ padding: '4px 8px', minHeight: 'auto' }}
         >
           ✕
@@ -128,7 +135,10 @@ const PWAInstallPrompt = () => {
       
       <Group spacing="xs">
         <Button
-          onClick={handleInstallClick}
+          onClick={() => {
+            playButtonSound();
+            handleInstallClick();
+          }}
           size="sm"
           style={{
             backgroundColor: '#fc3f31',
@@ -144,7 +154,10 @@ const PWAInstallPrompt = () => {
         <Button
           variant="outline"
           size="sm"
-          onClick={handleDismiss}
+          onClick={() => {
+            playButtonSound();
+            handleDismiss();
+          }}
           style={{
             color: '#F5F5DC',
             borderColor: '#666',

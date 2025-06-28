@@ -1,7 +1,7 @@
 import { Affix, Button, Group, Switch, Text, Stack, Box } from "@mantine/core";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import { useMediaQuery } from "@mantine/hooks";
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import MusicPlayer from "./MusicPlayer";
 import MainMenu from "./MainMenu";
 import CharacterSelect from "./CharacterSelect";
@@ -16,6 +16,9 @@ import resetImg from "../assets/reset.png";
 import danceImg from "../assets/dance.png";
 import fightImg from "../assets/fight.png";
 import mainButtonImg from "../assets/mainbutton.jpeg";
+import { useButtonSound } from '../hooks/useButtonSound';
+import LoadingScreen from './LoadingScreen';
+import PWAInstallPrompt from './PWAInstallPrompt';
 
 // CSS Animations for the interface
 const interfaceStyles = `
@@ -140,6 +143,8 @@ const Interface = () => {
     COMBAT_STATES,
     ATTACK_TIMINGS
   } = useCharacterAnimations();
+
+  const { playButtonSound } = useButtonSound();
 
   // Media queries para responsive design
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -499,7 +504,10 @@ const Interface = () => {
             <Button
               variant="outline"
               size="xl"
-              onClick={handleNavigateToMenu}
+              onClick={() => {
+                playButtonSound();
+                handleNavigateToMenu();
+              }}
               disabled={isTransitioning}
               style={{
                 fontSize: isMobile ? "24px" : "32px",
@@ -627,7 +635,10 @@ const Interface = () => {
                     <img 
                       src={danceImg}
                       alt="Dance"
-                      onClick={navigateBackToMenu}
+                      onClick={() => {
+                        playButtonSound();
+                        navigateBackToMenu();
+                      }}
                       style={{
                         width: "80px",
                         height: "80px",
@@ -669,6 +680,7 @@ const Interface = () => {
                       src={fightImg}
                       alt="Fight"
                       onClick={() => {
+                        playButtonSound();
                         resetHealth();
                         initializeCombat();
                       }}
@@ -752,6 +764,7 @@ const Interface = () => {
                     variant="outline"
                     size="xl"
                     onClick={() => {
+                      playButtonSound();
                       setIsCombatMode(true);
                       initializeCombat();
                     }}
@@ -798,6 +811,7 @@ const Interface = () => {
                     variant="outline"
                     size="xl"
                     onClick={() => {
+                      playButtonSound();
                       // Aquí se podría abrir un menú de selección de personajes
                       console.log("FIGHTERS menu clicked");
                     }}
@@ -844,6 +858,7 @@ const Interface = () => {
                     variant="outline"
                     size="xl"
                     onClick={() => {
+                      playButtonSound();
                       // Aquí se podría abrir una tienda
                       console.log("SHOP menu clicked");
                     }}
@@ -896,6 +911,7 @@ const Interface = () => {
                 <Button
                   variant="unstyled"
                   onClick={() => {
+                    playButtonSound();
                     setShowMusicPlayer(!showMusicPlayer);
                     console.log("Music player toggle");
                   }}
@@ -945,7 +961,10 @@ const Interface = () => {
                 {/* Icono de baile */}
                 <Button
                   variant="unstyled"
-                  onClick={toggleDanceCombination}
+                  onClick={() => {
+                    playButtonSound();
+                    toggleDanceCombination();
+                  }}
                   onContextMenu={(e) => {
                     e.preventDefault();
                     stopDanceCombo();
@@ -1226,7 +1245,10 @@ const Interface = () => {
                     <Button
                       variant="outline"
                       size={isMobile ? "xs" : "lg"}
-                      onClick={reviveLosingPlayer}
+                      onClick={() => {
+                        playButtonSound();
+                        reviveLosingPlayer();
+                      }}
                       style={{ 
                         padding: isMobile ? "4px 8px" : "8px 12px",
                         backgroundColor: "transparent",

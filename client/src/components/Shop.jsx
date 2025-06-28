@@ -4,6 +4,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
+import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
 
@@ -11,6 +12,7 @@ const Shop = ({ onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
+  const { playButtonSound } = useButtonSound();
   
   // Use GameState instead of local state
   const { 
@@ -225,6 +227,7 @@ const Shop = ({ onBackClick }) => {
                 onClick={() => {
                   const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
                   if (!isLocked && !character.isPurchased) {
+                    playButtonSound();
                     handlePurchase(character);
                   }
                 }}
@@ -279,31 +282,6 @@ const Shop = ({ onBackClick }) => {
                   marginTop: 'auto'
                 }}>
                   {/* Character name removed */}
-
-                  {/* Lock overlay for locked characters */}
-                  {(character.price !== null && !character.canAfford && !character.isPurchased) && (
-                    <Box style={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      zIndex: 10
-                    }}>
-                      <Text style={{
-                        fontSize: isMobile ? '14px' : '16px',
-                        fontWeight: 700,
-                        color: '#FFD700',
-                        fontFamily: 'Anton, sans-serif',
-                        letterSpacing: '1px',
-                        textAlign: 'center'
-                      }}>
-                        LOCKED
-                      </Text>
-                    </Box>
-                  )}
                 </Stack>
 
                 {/* Action Button - Above the 3D model */}
@@ -321,6 +299,7 @@ const Shop = ({ onBackClick }) => {
                     e.stopPropagation();
                     const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
                     if (!isLocked && !character.isPurchased) {
+                      playButtonSound();
                       handlePurchase(character);
                     }
                   }}
@@ -351,7 +330,10 @@ const Shop = ({ onBackClick }) => {
         <Button
           variant="outline"
           size="xl"
-          onClick={onBackClick}
+          onClick={() => {
+            playButtonSound();
+            onBackClick();
+          }}
           style={{
             fontSize: isMobile ? "20px" : "24px",
             fontWeight: 700,

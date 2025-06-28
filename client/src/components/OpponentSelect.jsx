@@ -4,6 +4,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
+import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
 
@@ -11,6 +12,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
+  const { playButtonSound } = useButtonSound();
   
   // Use GameState to get opponent status
   const { getOpponentsStatus } = useGameState();
@@ -126,7 +128,10 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 ...getOpponentCardStyle(opponent),
                 animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`
               }}
-              onClick={() => handleOpponentSelect(opponent)}
+              onClick={() => {
+                playButtonSound();
+                handleOpponentSelect(opponent);
+              }}
               onMouseEnter={(e) => {
                 if (!isMobile && !opponent.isLocked) {
                   e.currentTarget.style.transform = "scale(1.02)";
@@ -232,7 +237,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 </Text>
               </Box>
 
-              {/* Right Column - Reward and Button */}
+              {/* Right Column - Reward */}
               <Box style={{ 
                 width: '35%',
                 display: 'flex',
@@ -243,21 +248,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 paddingLeft: isMobile ? '10px' : '15px',
                 paddingRight: isMobile ? '10px' : '15px'
               }}>
-                {/* Action Button */}
-                <Button
-                  style={getButtonStyle(opponent)}
-                  disabled={opponent.isLocked}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!opponent.isLocked) {
-                      handleOpponentSelect(opponent);
-                    }
-                  }}
-                >
-                  {opponent.isLocked ? 'LOCKED' : 'CHALLENGE'}
-                </Button>
-
-                {/* Reward/Lock Status */}
+                {/* Reward */}
                 <Group spacing="sm" align="center">
                   <Text style={{
                     fontSize: isMobile ? '20px' : '24px',
@@ -287,17 +278,20 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
         <Button
           variant="outline"
           size="xl"
-          onClick={onBackClick}
+          onClick={() => {
+            playButtonSound();
+            onBackClick();
+          }}
           style={{
-            backgroundImage: `url(${mainButtonImg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
             fontSize: isMobile ? "20px" : "24px",
             fontWeight: 700,
             padding: isMobile ? "15px 40px" : "20px 60px",
             minHeight: isMobile ? "60px" : "80px",
             minWidth: isMobile ? "200px" : "250px",
+            backgroundImage: `url(${mainButtonImg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
             backgroundColor: "transparent",
             borderColor: "#fc3f31",
             border: "4px solid #fc3f31",
