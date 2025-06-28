@@ -5,7 +5,6 @@ import HealthBars from "./components/HealthBars";
 import CrowdSound from "./components/CrowdSound";
 import PunchSound from "./components/PunchSound";
 import LoadingScreen from "./components/LoadingScreen";
-import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import { useCharacterAnimations } from "./contexts/CharacterAnimations";
 import { useModelLoader } from "./hooks/useModelLoader";
 
@@ -39,7 +38,6 @@ function App() {
       <HealthBars />
       <CrowdSound />
       <PunchSound />
-      <PWAInstallPrompt />
     </>
   );
 }

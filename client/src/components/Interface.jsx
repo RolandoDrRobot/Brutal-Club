@@ -18,7 +18,6 @@ import fightImg from "../assets/fight.png";
 import mainButtonImg from "../assets/mainbutton.jpeg";
 import { useButtonSound } from '../hooks/useButtonSound';
 import LoadingScreen from './LoadingScreen';
-import PWAInstallPrompt from './PWAInstallPrompt';
 
 // CSS Animations for the interface
 const interfaceStyles = `
@@ -813,7 +812,6 @@ const Interface = () => {
                     onClick={() => {
                       playButtonSound();
                       // Aquí se podría abrir un menú de selección de personajes
-                      console.log("FIGHTERS menu clicked");
                     }}
                     style={{
                       fontSize: isMobile ? "36px" : "48px",
@@ -860,7 +858,6 @@ const Interface = () => {
                     onClick={() => {
                       playButtonSound();
                       // Aquí se podría abrir una tienda
-                      console.log("SHOP menu clicked");
                     }}
                     style={{
                       fontSize: isMobile ? "36px" : "48px",

@@ -5,35 +5,35 @@ import * as THREE from 'three';
 const BloodFloor = () => {
   const meshRef = useRef();
   
-  // Crear charcos de sangre en el piso
+  // Create blood puddles on the floor with reduced count for better performance
   const bloodPuddles = useMemo(() => {
-    const puddleCount = 25; // Más charcos
+    const puddleCount = 15; // Reduced from 25
     const positions = new Float32Array(puddleCount * 3);
     const scales = new Float32Array(puddleCount);
     const opacities = new Float32Array(puddleCount);
     
     for (let i = 0; i < puddleCount; i++) {
-      // Posiciones aleatorias en el piso
-      positions[i * 3] = (Math.random() - 0.5) * 14; // x - área más amplia
-      positions[i * 3 + 1] = -0.99; // y - justo sobre el piso
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 14; // z - área más amplia
+      // Random positions on the floor
+      positions[i * 3] = (Math.random() - 0.5) * 14; // x - wider area
+      positions[i * 3 + 1] = -0.99; // y - just above the floor
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 14; // z - wider area
       
-      // Tamaños más pequeños
-      scales[i] = Math.random() * 0.6 + 0.2; // 0.2 a 0.8 - más pequeños
+      // Smaller sizes
+      scales[i] = Math.random() * 0.6 + 0.2; // 0.2 to 0.8 - smaller
       
-      // Opacidades aleatorias
-      opacities[i] = Math.random() * 0.5 + 0.4; // 0.4 a 0.9 - más visibles
+      // Random opacities
+      opacities[i] = Math.random() * 0.5 + 0.4; // 0.4 to 0.9 - more visible
     }
     
     return { positions, scales, opacities, puddleCount };
   }, []);
   
-  // Animación sutil de las manchas
+  // Subtle animation of the stains
   useFrame((state) => {
     if (meshRef.current) {
       const time = state.clock.elapsedTime;
       
-      // Efecto sutil de pulsación en las manchas
+      // Subtle pulsing effect on the stains
       meshRef.current.children.forEach((puddle, index) => {
         if (puddle.material) {
           puddle.material.opacity = bloodPuddles.opacities[index] + 
@@ -58,7 +58,7 @@ const BloodFloor = () => {
         >
           <circleGeometry args={[1, 16]} />
           <meshBasicMaterial
-            color="#4A0000" // Rojo sangre muy oscuro - RESTAURADO
+            color="#4A0000" // Dark blood red
             transparent={true}
             opacity={bloodPuddles.opacities[index]}
             side={THREE.DoubleSide}
@@ -66,8 +66,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-      {/* Manchas adicionales más pequeñas - MÁS CANTIDAD */}
-      {Array.from({ length: 50 }).map((_, index) => (
+      {/* Additional smaller stains - REDUCED QUANTITY */}
+      {Array.from({ length: 15 }).map((_, index) => (
         <mesh
           key={`splatter-${index}`}
           position={[
@@ -76,11 +76,11 @@ const BloodFloor = () => {
             (Math.random() - 0.5) * 12
           ]}
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
-          scale={[Math.random() * 0.25 + 0.05, Math.random() * 0.25 + 0.05, 1]} // Más pequeñas
+          scale={[Math.random() * 0.25 + 0.05, Math.random() * 0.25 + 0.05, 1]} // Smaller
         >
           <circleGeometry args={[0.5, 8]} />
           <meshBasicMaterial
-            color="#2D0000" // Rojo sangre más oscuro aún - RESTAURADO
+            color="#2D0000" // Even darker blood red
             transparent={true}
             opacity={Math.random() * 0.7 + 0.3}
             side={THREE.DoubleSide}
