@@ -7,40 +7,39 @@ import danceIcon from '../assets/dance.png';
 const MusicPlayer = () => {
   const { isCombatMode, triggerSyncAnimation, animations } = useCharacterAnimations();
   
-  // Lista de canciones (usando los archivos reales del directorio music)
+  // Song list (using actual files from the music directory)
   const songs = [
-    { id: 0, name: "Sin Música", artist: "", file: null },
+    { id: 0, name: "No Music", artist: "", file: null },
     { id: 1, name: "Now That We're Dead", artist: "Metallica", file: "/music/Metallica Now That We're Dead (official audio).mp3" },
     { id: 2, name: "Lights Out", artist: "Max Styler", file: "/music/Max Styler - Lights Out (Extended Mix).mp3" },
-    { id: 3, name: "Garden Of Groove", artist: "Michael Bibi", file: "/music/Michael Bibi - Garden Of Groove (Original Mix).mp3" },
-    { id: 4, name: "Bow Down", artist: "Ice Cube", file: "/music/Ice Cube - Bow Down (West side connection).mp3" },
-    { id: 5, name: "Nine Thou", artist: "Styles Of Beyond", file: "/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3" },
-    { id: 6, name: "Another", artist: "Full On The Mouth", file: "/music/Full On The Mouth - Another.mp3" }
+    { id: 3, name: "Bow Down", artist: "Ice Cube", file: "/music/Ice Cube - Bow Down (West side connection).mp3" },
+    { id: 4, name: "Nine Thou", artist: "Styles Of Beyond", file: "/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3" },
+    { id: 5, name: "Another", artist: "Full On The Mouth", file: "/music/Full On The Mouth - Another.mp3" }
   ];
 
   const [currentSongIndex, setCurrentSongIndex] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
-  // Configurar volumen según el modo - CORREGIDO
+  // Configure volume according to mode - CORRECTED
   useEffect(() => {
     if (audioRef.current && songs[currentSongIndex].file) {
-      // Balancear volumen con el crowd sound
+      // Balance volume with the crowd sound
       const targetVolume = isCombatMode ? 0.6 : 0.5;
       
-      console.log(`Cambiando volumen de música a ${targetVolume} (Modo: ${isCombatMode ? 'Combate' : 'Baile'})`);
+      console.log(`Changing music volume to ${targetVolume} (Mode: ${isCombatMode ? 'Combat' : 'Dance'})`);
       
-      // Aplicar volumen inmediatamente
+      // Apply volume immediately
       audioRef.current.volume = targetVolume;
       
-      // Asegurar que esté reproduciéndose si no es "Sin Música"
+      // Ensure it's playing if it's not "No Music"
       if (audioRef.current.paused && isPlaying) {
         audioRef.current.play()
           .then(() => setIsPlaying(true))
           .catch(console.error);
       }
       
-      // También hacer transición suave
+      // Also make smooth transition
       const currentVolume = audioRef.current.volume;
       const volumeStep = (targetVolume - currentVolume) / 10;
       
@@ -53,16 +52,16 @@ const MusicPlayer = () => {
         } else {
           clearInterval(volumeInterval);
           if (audioRef.current) {
-            audioRef.current.volume = targetVolume; // Asegurar volumen final
+            audioRef.current.volume = targetVolume; // Ensure final volume
           }
         }
       }, 50);
       
       return () => clearInterval(volumeInterval);
     }
-  }, [isCombatMode]); // Remover currentSongIndex de las dependencias
+  }, [isCombatMode]); // Remove currentSongIndex from dependencies
 
-  // Función para siguiente canción
+  // Function to go to the next song
   const nextSong = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -73,11 +72,11 @@ const MusicPlayer = () => {
     setCurrentSongIndex(nextIndex);
     setIsPlaying(false);
     
-    // Si no es "Sin Música", reproducir automáticamente
+    // If not "No Music", automatically play
     if (songs[nextIndex].file) {
       setTimeout(() => {
         if (audioRef.current) {
-          // Configurar volumen inicial
+          // Set initial volume
           audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
           
           const playPromise = audioRef.current.play();
@@ -87,7 +86,7 @@ const MusicPlayer = () => {
                 setIsPlaying(true);
               })
               .catch(error => {
-                console.log('Auto-play bloqueado:', error);
+                console.log('Auto-play blocked:', error);
                 setIsPlaying(false);
               });
           }
@@ -96,15 +95,15 @@ const MusicPlayer = () => {
     }
   };
 
-  // Auto-reproducir cuando cambia la canción
+  // Auto-play when the song changes
   useEffect(() => {
     if (songs[currentSongIndex].file && audioRef.current) {
       audioRef.current.load();
       
-      // Auto-reproducir cualquier canción que tenga archivo
+      // Auto-play any song that has a file
       setTimeout(() => {
         if (audioRef.current) {
-          // Configurar volumen inicial
+          // Set initial volume
           audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
           
           const playPromise = audioRef.current.play();
@@ -112,30 +111,32 @@ const MusicPlayer = () => {
             playPromise
               .then(() => {
                 setIsPlaying(true);
-                console.log(`Auto-reproduciendo: ${songs[currentSongIndex].name}`);
+                console.log(`Auto-playing: ${songs[currentSongIndex].name}`);
               })
               .catch(error => {
-                console.log('Auto-play bloqueado:', error);
+                console.log('Auto-play blocked:', error);
                 setIsPlaying(false);
               });
           }
         }
       }, 300);
     }
-  }, [currentSongIndex]); // Remover isCombatMode de las dependencias
+  }, [currentSongIndex]); // Remove isCombatMode from dependencies
 
-  // Auto-reproducir al montar el componente - MEJORADO
+  // Auto-play when component mounts - IMPROVED
   useEffect(() => {
-    // Reproducir la primera canción automáticamente al cargar
-    const timer = setTimeout(() => {
-      if (audioRef.current && songs[1].file && currentSongIndex === 1) {
-        // Configurar volumen inicial
+    // Listener for the startMusic event from the loader
+    const handleStartMusic = () => {
+      console.log('🎵 Received startMusic event, starting automatic playback...');
+      
+      // Ensure we're on the first song with a file
+      if (currentSongIndex === 1 && audioRef.current && songs[1].file) {
+        // Set initial volume
         audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
         
-        // Intentar múltiples veces si es necesario
         const attemptPlay = (attempts = 0) => {
-          if (attempts >= 3) {
-            console.log('Auto-play falló después de 3 intentos');
+          if (attempts >= 5) {
+            console.log('Auto-play failed after 5 attempts');
             return;
           }
           
@@ -144,36 +145,78 @@ const MusicPlayer = () => {
             playPromise
               .then(() => {
                 setIsPlaying(true);
-                console.log('Auto-play inicial exitoso');
+                console.log('✅ Auto-play from startMusic event successful');
               })
               .catch(error => {
-                console.log(`Auto-play intento ${attempts + 1} falló:`, error);
-                // Reintentar después de un breve delay
-                setTimeout(() => attemptPlay(attempts + 1), 500);
+                console.log(`Auto-play attempt ${attempts + 1} failed:`, error);
+                // Retry after a brief delay
+                setTimeout(() => attemptPlay(attempts + 1), 1000);
+              });
+          }
+        };
+        
+        // Small delay to ensure the audio is ready
+        setTimeout(() => {
+          attemptPlay();
+        }, 500);
+      }
+    };
+    
+    // Add listener for the custom event
+    window.addEventListener('startMusic', handleStartMusic);
+    
+    // Automatically play the first song when loading (fallback)
+    const timer = setTimeout(() => {
+      if (audioRef.current && songs[1].file && currentSongIndex === 1 && !isPlaying) {
+        console.log('🎵 Fallback auto-play attempt...');
+        // Set initial volume
+        audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
+        
+        // Try multiple times if necessary
+        const attemptPlay = (attempts = 0) => {
+          if (attempts >= 3) {
+            console.log('Fallback auto-play failed after 3 attempts');
+            return;
+          }
+          
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                setIsPlaying(true);
+                console.log('✅ Fallback auto-play initial successful');
+              })
+              .catch(error => {
+                console.log(`Fallback auto-play attempt ${attempts + 1} failed:`, error);
+                // Retry after a brief delay
+                setTimeout(() => attemptPlay(attempts + 1), 1000);
               });
           }
         };
         
         attemptPlay();
       }
-    }, 1500); // Aumentar delay inicial para asegurar que todo esté cargado
+    }, 3000); // Longer delay for fallback
 
-    return () => clearTimeout(timer);
-  }, []); // Solo al montar, sin dependencias de modo
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('startMusic', handleStartMusic);
+    };
+  }, []); // Only on mount, no mode dependencies
 
-  // Manejar cuando termina una canción (pasar a la siguiente)
+  // Handle when a song ends (move to the next one)
   const handleSongEnd = () => {
     nextSong();
   };
 
-  // Función para activar baile aleatorio
+  // Function to trigger random dance
   const triggerRandomDance = () => {
     if (!isCombatMode && animations.length > 0) {
-      // Filtrar animaciones de baile (evitar animaciones de combate, intro y celebración)
+      // Filter dance animations (avoid combat, intro, and celebration animations)
       const danceAnimations = ['dance1', 'dance2', 'dance3', 'dance4', 'dance5', 'dance6'];
       const availableDances = [];
       
-      // Buscar qué animaciones de baile están disponibles
+      // Find which dance animations are available
       danceAnimations.forEach(danceName => {
         const index = animations.findIndex(anim => anim.toLowerCase().includes(danceName.toLowerCase()));
         if (index >= 0) {
@@ -181,7 +224,7 @@ const MusicPlayer = () => {
         }
       });
       
-      // Si hay animaciones de baile disponibles, seleccionar una aleatoria
+      // If there are dance animations available, select a random one
       if (availableDances.length > 0) {
         const randomIndex = availableDances[Math.floor(Math.random() * availableDances.length)];
         console.log(`Triggering random dance: ${animations[randomIndex]} (index ${randomIndex})`);
@@ -217,11 +260,11 @@ const MusicPlayer = () => {
           muted={false}
           onPlay={() => {
             setIsPlaying(true);
-            console.log(`Reproduciendo: ${currentSong.name}`);
+            console.log(`Playing: ${currentSong.name}`);
           }}
           onPause={() => setIsPlaying(false)}
           onCanPlay={() => {
-            // Intentar reproducir cuando el audio esté listo
+            // Try to play when the audio is ready
             if (audioRef.current && !isPlaying) {
               audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
               
@@ -230,18 +273,18 @@ const MusicPlayer = () => {
                 playPromise
                   .then(() => {
                     setIsPlaying(true);
-                    console.log('Auto-play desde onCanPlay exitoso');
+                    console.log('Auto-play from onCanPlay successful');
                   })
                   .catch(error => {
-                    console.log('Auto-play desde onCanPlay falló:', error);
+                    console.log('Auto-play from onCanPlay failed:', error);
                   });
               }
             }
           }}
           onLoadedData={() => {
-            // Intentar reproducir cuando los datos estén cargados
+            // Try to play when the data is loaded
             if (audioRef.current) {
-              // Configurar volumen inicial
+              // Set initial volume
               audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
               
               const playPromise = audioRef.current.play();
@@ -249,25 +292,25 @@ const MusicPlayer = () => {
                 playPromise
                   .then(() => {
                     setIsPlaying(true);
-                    console.log('Auto-play desde onLoadedData exitoso');
+                    console.log('Auto-play from onLoadedData successful');
                   })
                   .catch(error => {
-                    console.log('Auto-play desde onLoadedData falló:', error);
+                    console.log('Auto-play from onLoadedData failed:', error);
                     setIsPlaying(false);
                   });
               }
             }
           }}
           onError={(e) => {
-            console.error('Error cargando audio:', e);
+            console.error('Error loading audio:', e);
             setIsPlaying(false);
           }}
         />
       )}
 
-      {/* Iconos de Música y Baile */}
+      {/* Music and Dance Icons */}
       <Group spacing="sm" position="center" style={{ alignItems: 'center', flexDirection: 'column' }}>
-        {/* Icono de Música */}
+        {/* Music Icon */}
         <Button
           variant="unstyled"
           size="xs"
@@ -294,7 +337,7 @@ const MusicPlayer = () => {
           />
         </Button>
 
-        {/* Icono de Baile - Solo en modo baile */}
+        {/* Dance Icon - Only in dance mode */}
         {!isCombatMode && (
           <Button
             variant="unstyled"

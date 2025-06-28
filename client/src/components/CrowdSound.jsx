@@ -12,7 +12,7 @@ const CrowdSound = () => {
     if (audioRef.current) {
       // Configurar el audio para loop
       audioRef.current.loop = true;
-      audioRef.current.volume = 0.15; // Volumen inicial reducido
+      audioRef.current.volume = 0.15; // Reduced initial volume
       audioRef.current.preload = 'auto';
       
       // Función para intentar reproducir
@@ -58,22 +58,15 @@ const CrowdSound = () => {
     }
   }, [isLoaded, isPlaying]);
 
-  // Ajustar volumen cuando cambia el modo - CORREGIDO
+  // Adjust volume when mode changes - CORRECTED
   useEffect(() => {
     if (audioRef.current) {
-      // Asegurar que el audio esté reproduciéndose
-      if (!isPlaying && audioRef.current.paused) {
-        audioRef.current.play()
-          .then(() => setIsPlaying(true))
-          .catch(console.error);
-      }
-
-      // Volúmenes balanceados con la música principal
-      const targetVolume = isCombatMode ? 0.15 : 0.2;
+      // Volumes balanced with the main music
+      const targetVolume = isCombatMode ? 0.25 : 0.1;
       
-      console.log(`Cambiando volumen de crowd a ${targetVolume} (Modo: ${isCombatMode ? 'Combate' : 'Baile'})`);
+      console.log(`Changing crowd volume to ${targetVolume} (Mode: ${isCombatMode ? 'Combat' : 'Dance'})`);
       
-      // Aplicar el volumen inmediatamente
+      // Apply the volume immediately
       audioRef.current.volume = targetVolume;
       
       // También hacer transición suave
@@ -89,7 +82,7 @@ const CrowdSound = () => {
         } else {
           clearInterval(volumeInterval);
           if (audioRef.current) {
-            audioRef.current.volume = targetVolume; // Asegurar volumen final
+            audioRef.current.volume = targetVolume; // Ensure final volume
           }
         }
       }, 50);

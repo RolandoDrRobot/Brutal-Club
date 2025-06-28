@@ -113,7 +113,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
         width: '100%',
         maxWidth: '100%'
       }}>
-        <Stack spacing={isMobile ? "lg" : "xl"} style={{ 
+        <Stack spacing={isMobile ? "xl" : "xxl"} style={{ 
           width: '100%',
           maxWidth: '100%',
           margin: '0 auto',
@@ -126,7 +126,14 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
               key={opponent.id}
               style={{
                 ...getOpponentCardStyle(opponent),
-                animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`
+                animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`,
+                marginBottom: isMobile ? "20px" : "30px",
+                boxShadow: `
+                  0 0 15px #fc3f31,
+                  0 0 30px rgba(252, 63, 49, 0.4),
+                  0 0 45px rgba(252, 63, 49, 0.2),
+                  inset 0 0 15px rgba(252, 63, 49, 0.1)
+                `
               }}
               onClick={() => {
                 playButtonSound();
@@ -136,7 +143,10 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 if (!isMobile && !opponent.isLocked) {
                   e.currentTarget.style.transform = "scale(1.02)";
                   e.currentTarget.style.boxShadow = `
-                    0 0 15px rgba(252, 63, 49, 0.5)
+                    0 0 25px #fc3f31,
+                    0 0 50px rgba(252, 63, 49, 0.6),
+                    0 0 75px rgba(252, 63, 49, 0.3),
+                    inset 0 0 25px rgba(252, 63, 49, 0.2)
                   `;
                 }
               }}
@@ -144,7 +154,10 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 if (!isMobile && !opponent.isLocked) {
                   e.currentTarget.style.transform = "scale(1)";
                   e.currentTarget.style.boxShadow = `
-                    0 0 10px rgba(252, 63, 49, 0.3)
+                    0 0 15px #fc3f31,
+                    0 0 30px rgba(252, 63, 49, 0.4),
+                    0 0 45px rgba(252, 63, 49, 0.2),
+                    inset 0 0 15px rgba(252, 63, 49, 0.1)
                   `;
                 }
               }}

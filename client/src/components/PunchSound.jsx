@@ -16,7 +16,7 @@ const PunchSound = () => {
     if (audioRef.current) {
       // Reiniciar el audio para permitir múltiples golpes rápidos
       audioRef.current.currentTime = 0;
-      audioRef.current.volume = 0.7; // Volumen apropiado para efectos de sonido
+      audioRef.current.volume = 0.7; // Appropriate volume for sound effects
       
       const playPromise = audioRef.current.play();
       if (playPromise !== undefined) {

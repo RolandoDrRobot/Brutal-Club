@@ -1,17 +1,17 @@
-// Utilidades para PWA
+// PWA Utilities
 
-// Verificar si la app está instalada
+// Check if the app is installed
 export const isPWAInstalled = () => {
   return window.matchMedia('(display-mode: standalone)').matches || 
          window.navigator.standalone === true;
 };
 
-// Verificar si el dispositivo es móvil
+// Check if the device is mobile
 export const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 };
 
-// Registrar service worker manualmente si es necesario
+// Register service worker manually if necessary
 export const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     try {
@@ -27,7 +27,7 @@ export const registerServiceWorker = async () => {
   }
 };
 
-// Desregistrar service worker
+// Unregister service worker
 export const unregisterServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     const registrations = await navigator.serviceWorker.getRegistrations();
@@ -38,7 +38,7 @@ export const unregisterServiceWorker = async () => {
   }
 };
 
-// Limpiar cache de la PWA
+// Clear PWA cache
 export const clearPWACache = async () => {
   if ('caches' in window) {
     const cacheNames = await caches.keys();
@@ -49,7 +49,7 @@ export const clearPWACache = async () => {
   }
 };
 
-// Solicitar permisos de notificación
+// Request notification permissions
 export const requestNotificationPermission = async () => {
   if ('Notification' in window) {
     const permission = await Notification.requestPermission();
@@ -59,7 +59,7 @@ export const requestNotificationPermission = async () => {
   return 'denied';
 };
 
-// Mostrar notificación local
+// Show local notification
 export const showNotification = (title, options = {}) => {
   if ('Notification' in window && Notification.permission === 'granted') {
     const notification = new Notification(title, {
@@ -78,12 +78,12 @@ export const showNotification = (title, options = {}) => {
   return null;
 };
 
-// Detectar si la app se está ejecutando en modo offline
+// Detect if the app is running in offline mode
 export const isOffline = () => {
   return !navigator.onLine;
 };
 
-// Escuchar cambios de conectividad
+// Listen for connectivity changes
 export const addConnectivityListeners = (onOnline, onOffline) => {
   window.addEventListener('online', onOnline);
   window.addEventListener('offline', onOffline);
@@ -94,7 +94,7 @@ export const addConnectivityListeners = (onOnline, onOffline) => {
   };
 };
 
-// Obtener información de la instalación
+// Get installation information
 export const getPWADisplayMode = () => {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
   if (document.referrer.startsWith('android-app://')) {
@@ -105,7 +105,7 @@ export const getPWADisplayMode = () => {
   return 'browser';
 };
 
-// Función para actualizar la PWA
+// Function to update the PWA
 export const updatePWA = async () => {
   if ('serviceWorker' in navigator) {
     const registration = await navigator.serviceWorker.getRegistration();
@@ -116,7 +116,7 @@ export const updatePWA = async () => {
   }
 };
 
-// Verificar si hay actualizaciones disponibles
+// Check if updates are available
 export const checkForUpdates = async () => {
   if ('serviceWorker' in navigator) {
     const registration = await navigator.serviceWorker.getRegistration();
@@ -126,10 +126,10 @@ export const checkForUpdates = async () => {
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // Nueva versión disponible
+              // New version available
               console.log('New version available');
-              showNotification('Nueva versión disponible', {
-                body: 'Hay una nueva versión de Fight Club disponible. Recarga la página para actualizar.',
+              showNotification('New version available', {
+                body: 'A new version of Fight Club is available. Reload the page to update.',
                 tag: 'update-available'
               });
             }

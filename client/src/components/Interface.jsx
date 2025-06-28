@@ -150,8 +150,8 @@ const Interface = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(max-width: 1024px)");
 
-  // Estado para mostrar/ocultar el reproductor de música
-  const [showMusicPlayer, setShowMusicPlayer] = React.useState(false);
+  // State to show/hide the music player
+  const [showMusicPlayer, setShowMusicPlayer] = useState(true);
   
   // Estado para manejar la transición de pelea
   const [isTransitioning, setIsTransitioning] = React.useState(false);
@@ -435,8 +435,8 @@ const Interface = () => {
       {/* Inject CSS animations */}
       <style dangerouslySetInnerHTML={{ __html: interfaceStyles }} />
 
-      {/* Reproductor de música - visible en cualquier modo */}
-      <MusicPlayer showPlayer={showMusicPlayer} />
+      {/* Music player - visible in any mode */}
+      {showMusicPlayer && <MusicPlayer />}
 
       {/* Mostrar componente de menú principal cuando currentScreen es 'menu' */}
       {currentScreen === 'menu' && (
@@ -902,56 +902,27 @@ const Interface = () => {
                 </div>
               </Affix>
 
-              {/* Botón de Música - ESQUINA INFERIOR IZQUIERDA */}
-              <Affix position={{ 
-                bottom: isMobile ? 30 : 40, 
-                left: isMobile ? 30 : 40 
-              }}>
-                {/* Icono de música */}
-                <Button
-                  variant="unstyled"
-                  onClick={() => {
-                    playButtonSound();
-                    setShowMusicPlayer(!showMusicPlayer);
-                    console.log("Music player toggle");
-                  }}
-                  style={{
-                    width: isMobile ? "80px" : "100px",
-                    height: isMobile ? "80px" : "100px",
-                    borderRadius: "50%",
-                    backgroundColor: showMusicPlayer ? "rgba(252, 63, 49, 0.4)" : "rgba(252, 63, 49, 0.2)",
-                    border: "3px solid #fc3f31",
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    transition: "all 0.3s ease",
-                    boxShadow: `
-                      0 0 15px #fc3f31,
-                      0 0 25px rgba(252, 63, 49, 0.3)
-                    `
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isMobile) {
-                      e.target.style.transform = "scale(1.1)";
-                      e.target.style.backgroundColor = "rgba(252, 63, 49, 0.4)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isMobile) {
-                      e.target.style.transform = "scale(1)";
-                      e.target.style.backgroundColor = showMusicPlayer ? "rgba(252, 63, 49, 0.4)" : "rgba(252, 63, 49, 0.2)";
-                    }
-                  }}
-                >
-                  <div style={{
-                    fontSize: isMobile ? "32px" : "40px",
-                    color: "#fc3f31"
-                  }}>
-                    🎵
-                  </div>
-                </Button>
-              </Affix>
+              {/* Music Button - BOTTOM LEFT CORNER */}
+              <Button
+                variant="unstyled"
+                size="xs"
+                onClick={() => setShowMusicPlayer(!showMusicPlayer)}
+                style={{
+                  position: 'absolute',
+                  bottom: '20px',
+                  left: '20px',
+                  zIndex: 200,
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  width: '40px',
+                  height: '40px',
+                  padding: '0',
+                  minWidth: 'unset',
+                  cursor: 'pointer'
+                }}
+              >
+                {/* Music icon */}
+              </Button>
 
               {/* Botón de Baile - ESQUINA INFERIOR DERECHA */}
               <Affix position={{ 
