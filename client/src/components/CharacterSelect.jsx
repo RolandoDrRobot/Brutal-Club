@@ -121,7 +121,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         }}>
           FIGHT CLUB
         </Text>
-        <Text className="fight-subtitle" style={{ fontSize: isMobile ? '14px' : '18px' }}>
+        <Text className="fight-subtitle">
           SELECT CHARACTER
         </Text>
       </Box>

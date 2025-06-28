@@ -93,19 +93,9 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
           <Text className="fight-title">
             FIGHT CLUB
           </Text>
-          <Text
-            style={{
-              fontSize: isMobile ? '18px' : '24px',
-              fontWeight: 400,
-              color: '#ffffff',
-              fontFamily: 'Arial, sans-serif',
-              letterSpacing: '2px',
-              marginTop: '10px',
-              animation: "fadeInSpray 0.7s ease-out 0.2s both"
-            }}
-          >
+          <div className="fight-subtitle">
             You do not talk about fight club
-          </Text>
+          </div>
         </Box>
 
         {/* Menu buttons */}

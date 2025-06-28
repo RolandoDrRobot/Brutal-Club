@@ -95,10 +95,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
         }}>
           FIGHT CLUB
         </Text>
-        <Text className="fight-subtitle" style={{ 
-          fontSize: isMobile ? '18px' : '24px',
-          marginBottom: '0px'
-        }}>
+        <Text className="fight-subtitle">
           OPPONENTS
         </Text>
       </Box>
@@ -211,15 +208,10 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 <Text style={{
                   fontSize: isMobile ? '24px' : '32px',
                   fontWeight: 700,
-                  color: opponent.isLocked ? '#666' : '#FFF',
+                  color: opponent.isLocked ? '#666' : '#F5F5DC',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '2px',
-                  textShadow: opponent.isLocked ? '2px 2px 4px rgba(0, 0, 0, 0.9)' : `
-                    2px 2px 4px rgba(0, 0, 0, 0.9),
-                    0 0 10px #FFF,
-                    0 0 20px #FFF,
-                    0 0 30px #FFF
-                  `,
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)',
                   textAlign: 'center',
                   lineHeight: 1,
                   marginBottom: '2px'
@@ -229,15 +221,10 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 <Text style={{
                   fontSize: isMobile ? '20px' : '26px',
                   fontWeight: 700,
-                  color: opponent.isLocked ? '#666' : '#FFF',
+                  color: opponent.isLocked ? '#666' : '#F5F5DC',
                   fontFamily: 'Anton, sans-serif',
-                  letterSpacing: '2px',
-                  textShadow: opponent.isLocked ? '2px 2px 4px rgba(0, 0, 0, 0.9)' : `
-                    2px 2px 4px rgba(0, 0, 0, 0.9),
-                    0 0 10px #FFF,
-                    0 0 20px #FFF,
-                    0 0 30px #FFF
-                  `,
+                  letterSpacing: '1px',
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)',
                   textAlign: 'center',
                   lineHeight: 1
                 }}>
@@ -278,12 +265,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                     color: '#FFD700',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '1px',
-                    textShadow: `
-                      2px 2px 4px rgba(0, 0, 0, 0.9),
-                      0 0 10px #FFD700,
-                      0 0 20px #FFD700,
-                      0 0 30px #FFD700
-                    `
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)'
                   }}>
                     200 coins
                   </Text>

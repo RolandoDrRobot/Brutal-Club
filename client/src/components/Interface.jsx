@@ -479,45 +479,12 @@ const Interface = () => {
               textAlign: "center",
               animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.5s ease-out 0.2s both"
             }}>
-              <div style={{ 
-                color: "#fc3f31",
-                textTransform: "uppercase",
-                letterSpacing: "2px",
-                fontFamily: "Anton, sans-serif",
-                fontSize: "50px",
-                fontWeight: 700,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textShadow: "2px 2px 4px rgba(0,0,0,0.8)"
-              }}>
-                {"FIGHT CLUB".split("").map((letter, index) => (
-                  <span 
-                    key={index}
-                    style={{
-                      display: "inline-block",
-                      margin: letter === " " ? "0 8px" : "0"
-                    }}
-                  >
-                    {letter === " " ? "\u00A0" : letter}
-                  </span>
-                ))}
+              <div className="fight-title">
+                FIGHT CLUB
               </div>
               
               {/* Subtítulo con la primera regla */}
-              <div style={{
-                color: "#F5F5DC",
-                fontFamily: "Anton, sans-serif",
-                fontSize: "14px",
-                fontWeight: 400,
-                marginTop: "8px",
-                letterSpacing: "1px",
-                textShadow: `
-                  0 0 2px #F5F5DC,
-                  0 0 4px rgba(245, 245, 220, 0.6),
-                  1px 1px 2px rgba(0,0,0,0.8)
-                `
-              }}>
+              <div className="fight-subtitle">
                 You do not talk about fight club
               </div>
             </div>
@@ -757,45 +724,12 @@ const Interface = () => {
                 transform: "translateX(-50%)"
               }}>
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ 
-                    color: "#fc3f31",
-                    textTransform: "uppercase",
-                    letterSpacing: "2px",
-                    fontFamily: "Anton, sans-serif",
-                    fontSize: "50px",
-                    fontWeight: 700,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    textShadow: "2px 2px 4px rgba(0,0,0,0.8)"
-                  }}>
-                    {"FIGHT CLUB".split("").map((letter, index) => (
-                      <span 
-                        key={index}
-                        style={{
-                          display: "inline-block",
-                          margin: letter === " " ? "0 8px" : "0"
-                        }}
-                      >
-                        {letter === " " ? "\u00A0" : letter}
-                      </span>
-                    ))}
+                  <div className="fight-title">
+                    FIGHT CLUB
                   </div>
                   
                   {/* Subtítulo con la primera regla */}
-                  <div style={{
-                    color: "#F5F5DC",
-                    fontFamily: "Anton, sans-serif",
-                    fontSize: "14px",
-                    fontWeight: 400,
-                    marginTop: "8px",
-                    letterSpacing: "1px",
-                    textShadow: `
-                      0 0 2px #F5F5DC,
-                      0 0 4px rgba(245, 245, 220, 0.6),
-                      1px 1px 2px rgba(0,0,0,0.8)
-                    `
-                  }}>
+                  <div className="fight-subtitle">
                     You do not talk about fight club
                   </div>
                 </div>

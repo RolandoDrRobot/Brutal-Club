@@ -88,56 +88,10 @@ const HealthBars = () => {
           pointerEvents: "none", // Para que no interfiera con otros elementos
         }}
       >
-        <div style={{
-          color: "#fc3f31",
-          textShadow: `
-            0 0 2px #fc3f31,
-            0 0 4px rgba(252, 63, 49, 0.6),
-            2px 2px 4px rgba(0,0,0,0.8)
-          `,
-          textTransform: "uppercase",
-          letterSpacing: isMobile ? "1px" : "3px",
-          fontFamily: "Anton, Impact, sans-serif",
-          fontSize: "30px",
-          fontWeight: 900,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative"
+        <div className="fight-title" style={{
+          fontSize: isMobile ? "24px" : "30px"
         }}>
-          {/* Efecto de fondo sutil */}
-          <div style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "110%",
-            height: "110%",
-            background: `radial-gradient(ellipse, 
-              rgba(252, 63, 49, 0.05) 0%, 
-              transparent 60%
-            )`,
-            borderRadius: "50%",
-            zIndex: -1
-          }} />
-          
-          {/* Letras individuales con efectos sutiles */}
-          {"FIGHT CLUB".split("").map((letter, index) => (
-            <span 
-              key={index}
-              style={{
-                display: "inline-block",
-                margin: letter === " " ? (isMobile ? "0 4px" : "0 8px") : "0",
-                textShadow: `
-                  0 0 3px #fc3f31,
-                  0 0 6px rgba(252, 63, 49, 0.4),
-                  1px 1px 2px rgba(0,0,0,0.8)
-                `
-              }}
-            >
-              {letter === " " ? "\u00A0" : letter}
-            </span>
-          ))}
+          FIGHT CLUB
         </div>
       </Box>
 
@@ -182,15 +136,15 @@ const HealthBars = () => {
         <Box mb={6}>
           <Group position="apart" mb={2} spacing={4}>
             <Group spacing={4} align="center">
-              <Text size="xs" color="white" weight={700}>HP</Text>
-              <Text size="xs" color="white" weight={700}>PLAYER 1</Text>
+              <Text size="xs" color="#F5F5DC" weight={700}>HP</Text>
+              <Text size="xs" color="#F5F5DC" weight={700}>PLAYER 1</Text>
               {player1IsBlocking && (
                 <div style={{ display: 'flex', alignItems: 'center', marginLeft: '4px' }}>
                   <ShieldIcon color="#F5F5DC" size={14} />
                 </div>
               )}
             </Group>
-            <Text size="xs" color="white" weight={700}>{player1Health}</Text>
+            <Text size="xs" color="#F5F5DC" weight={700}>{player1Health}</Text>
           </Group>
           <Progress
             value={(player1Health / maxHealth) * 100}

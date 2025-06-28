@@ -178,10 +178,7 @@ const Shop = ({ onBackClick }) => {
         }}>
           FIGHT CLUB
         </Text>
-        <Text className="fight-subtitle" style={{ 
-          fontSize: isMobile ? '18px' : '24px',
-          marginBottom: '15px'
-        }}>
+        <Text className="fight-subtitle">
           STORE
         </Text>
         

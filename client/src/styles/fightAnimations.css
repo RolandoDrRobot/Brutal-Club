@@ -418,23 +418,23 @@
   color: #fc3f31;
   font-family: 'Anton', sans-serif;
   letter-spacing: 8px;
-  text-shadow: 
-    0 0 20px #fc3f31,
-    0 0 40px rgba(252, 63, 49, 0.5),
-    0 4px 20px rgba(252, 63, 49, 0.3);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
   line-height: 0.9;
   text-align: center;
+  min-width: 250px;
 }
 
 .fight-subtitle {
-  font-size: clamp(18px, 3vw, 32px);
-  font-weight: 700;
-  color: #F5F5DC;
-  font-family: 'Anton', sans-serif;
-  letter-spacing: 3px;
+  color: rgb(245, 245, 220);
+  font-family: Anton, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 8px;
+  letter-spacing: 1px;
   text-shadow: 
-    0 0 10px #F5F5DC,
-    0 0 20px rgba(245, 245, 220, 0.3);
+    rgb(245, 245, 220) 0px 0px 2px, 
+    rgba(245, 245, 220, 0.6) 0px 0px 4px, 
+    rgba(0, 0, 0, 0.8) 1px 1px 2px;
   text-align: center;
 }
 

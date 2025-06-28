@@ -111,8 +111,8 @@ const PWAInstallPrompt = () => {
           >
             Install Fight Club!
           </Text>
-          <Text size="xs" color="white" mt={4}>
-            Install the app for a complete offline experience
+          <Text size="xs" color="#F5F5DC" mt={4}>
+            Install for better performance
           </Text>
         </Box>
         <Button
@@ -132,7 +132,7 @@ const PWAInstallPrompt = () => {
           size="sm"
           style={{
             backgroundColor: '#fc3f31',
-            color: 'white',
+            color: '#F5F5DC',
             border: 'none',
             '&:hover': {
               backgroundColor: '#d63326'
@@ -146,7 +146,7 @@ const PWAInstallPrompt = () => {
           size="sm"
           onClick={handleDismiss}
           style={{
-            color: 'white',
+            color: '#F5F5DC',
             borderColor: '#666',
             '&:hover': {
               backgroundColor: 'rgba(255, 255, 255, 0.1)'

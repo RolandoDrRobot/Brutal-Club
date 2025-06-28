@@ -91,21 +91,9 @@ const LoadingScreen = ({ progress = 0, status = 'Iniciando...' }) => {
         </div>
         
         {/* Texto de carga principal con efecto neón */}
-        <Text 
-          size="lg" 
-          weight={500} 
-          style={{ 
-            color: '#F5F5DC',
-            marginBottom: '15px',
-            textAlign: 'center',
-            textShadow: '0 0 15px rgba(245, 245, 220, 0.8)',
-            fontSize: '18px',
-            letterSpacing: '1px',
-            animation: 'glow 1.5s ease-in-out infinite alternate'
-          }}
-        >
+        <div className="fight-subtitle">
           You do not talk about fight club
-        </Text>
+        </div>
         
         {/* Estado detallado de carga */}
         <Text 
