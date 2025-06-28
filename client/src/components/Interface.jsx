@@ -477,7 +477,7 @@ const Interface = () => {
           }}>
             <div style={{ 
               textAlign: "center",
-              animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.5s ease-out 0.3s both"
+              animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.5s ease-out 0.2s both"
             }}>
               <div style={{ 
                 color: "#fc3f31",
@@ -575,7 +575,7 @@ const Interface = () => {
                 `,
                 transition: "all 0.3s ease",
                 cursor: isTransitioning ? "not-allowed" : "pointer",
-                animation: isExiting ? "fadeOutSpray 0.8s ease-out" : (isTransitioning ? "buttonPowerUp 0.6s ease-out" : "fadeInSpray 1s ease-out 0.8s both"),
+                animation: isExiting ? "fadeOutSpray 0.4s ease-out" : (isTransitioning ? "buttonPowerUp 0.6s ease-out" : "fadeInSpray 0.5s ease-out 0.4s both"),
                 opacity: isTransitioning ? 0.8 : 1
               }}
               onMouseEnter={(e) => {
@@ -654,7 +654,7 @@ const Interface = () => {
                   {/* Botones de acción */}
                   <Group spacing="xs" position="center" style={{ 
                     width: "100%",
-                    animation: "fadeInSpray 1s ease-out 0.3s both"
+                    animation: "fadeInSpray 0.5s ease-out 0.2s both"
                   }}>
                     {/* Botón Modo Baile */}
                     <img 

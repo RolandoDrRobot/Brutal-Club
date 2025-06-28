@@ -158,7 +158,7 @@ const Shop = ({ onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out",
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
         padding: isMobile ? "40px 20px 20px 20px" : "60px 40px 40px 40px",
         height: "100vh",
         overflow: "hidden",
@@ -169,7 +169,7 @@ const Shop = ({ onBackClick }) => {
       {/* Header with title and coins */}
       <Box style={{ 
         textAlign: 'center',
-        animation: "fadeInSpray 1.2s ease-out",
+        animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
         marginBottom: isMobile ? "15px" : "20px"
       }}>
@@ -203,7 +203,7 @@ const Shop = ({ onBackClick }) => {
         overflowY: "auto",
         overflowX: "hidden",
         paddingRight: isMobile ? "5px" : "10px",
-        animation: "fadeInSpray 1.5s ease-out 0.3s both",
+        animation: "fadeInSpray 0.7s ease-out 0.2s both",
         minHeight: 0 // Ensure flex child can shrink
       }}>
         <Grid 
@@ -220,7 +220,7 @@ const Shop = ({ onBackClick }) => {
               key={character.id} 
               span={6}
               style={{
-                animation: `fadeInSpray 1s ease-out ${0.5 + index * 0.2}s both`
+                animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`
               }}
             >
               <Card
@@ -346,7 +346,7 @@ const Shop = ({ onBackClick }) => {
 
       {/* Back Button */}
       <Box style={{
-        animation: "fadeInSpray 1s ease-out 0.8s both",
+        animation: "fadeInSpray 0.5s ease-out 0.4s both",
         flexShrink: 0,
         paddingTop: isMobile ? "15px" : "20px",
         textAlign: "center"

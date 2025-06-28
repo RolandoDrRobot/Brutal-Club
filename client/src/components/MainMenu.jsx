@@ -78,7 +78,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out, backgroundImpact 1.5s ease-out"
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out, backgroundImpact 0.8s ease-out"
       }}
     >
       {/* Main title */}
@@ -87,7 +87,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
           style={{ 
             textAlign: 'center', 
             marginBottom: isMobile ? '40px' : '60px',
-            animation: "fadeInSpray 1.2s ease-out"
+            animation: "fadeInSpray 0.6s ease-out"
           }}
         >
           <Text className="fight-title">
@@ -101,7 +101,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
               fontFamily: 'Arial, sans-serif',
               letterSpacing: '2px',
               marginTop: '10px',
-              animation: "fadeInSpray 1.5s ease-out 0.3s both"
+              animation: "fadeInSpray 0.7s ease-out 0.2s both"
             }}
           >
             You do not talk about fight club
@@ -113,7 +113,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
           spacing={isMobile ? "lg" : "xl"} 
           align="center"
           style={{
-            animation: "fadeInSpray 1s ease-out 0.5s both"
+            animation: "fadeInSpray 0.7s ease-out 0.2s both"
           }}
         >
           <Button

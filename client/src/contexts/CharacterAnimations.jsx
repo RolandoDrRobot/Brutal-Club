@@ -1517,7 +1517,7 @@ export const CharacterAnimationsProvider = (props) => {
       if (additionalActions) {
         additionalActions();
       }
-    }, 800); // Duración de fadeOutSpray
+    }, 400); // Duración reducida de fadeOutSpray para transiciones más rápidas
   };
 
   const navigateToMenu = () => {

@@ -75,7 +75,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out",
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
         padding: isMobile ? "40px 10px 20px 10px" : "60px 20px 40px 20px",
         height: "100vh",
         overflow: "hidden",
@@ -86,7 +86,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
       {/* Header */}
       <Box style={{ 
         textAlign: 'center',
-        animation: "fadeInSpray 1.2s ease-out",
+        animation: "fadeInSpray 0.6s ease-out",
         flexShrink: 0,
         marginBottom: isMobile ? "20px" : "30px"
       }}>
@@ -109,7 +109,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
         overflowY: "auto",
         overflowX: "hidden",
         paddingRight: isMobile ? "5px" : "10px",
-        animation: "fadeInSpray 1.5s ease-out 0.3s both",
+        animation: "fadeInSpray 0.7s ease-out 0.2s both",
         minHeight: 0,
         width: '100%',
         maxWidth: '100%'
@@ -127,7 +127,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
               key={opponent.id}
               style={{
                 ...getOpponentCardStyle(opponent),
-                animation: `fadeInSpray 1s ease-out ${0.5 + index * 0.2}s both`
+                animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`
               }}
               onClick={() => handleOpponentSelect(opponent)}
               onMouseEnter={(e) => {
@@ -299,7 +299,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
         flexShrink: 0,
         paddingTop: isMobile ? "15px" : "20px",
         textAlign: "center",
-        animation: "fadeInSpray 1s ease-out 0.8s both"
+        animation: "fadeInSpray 0.5s ease-out 0.4s both"
       }}>
         {/* Back Button */}
         <Button

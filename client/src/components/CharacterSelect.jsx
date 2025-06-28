@@ -48,7 +48,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
       <Box
         className="fight-screen-container fight-screen-background"
         style={{
-          animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out",
+          animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
           padding: isMobile ? "20px" : "40px",
           display: "flex",
           flexDirection: "column",
@@ -104,7 +104,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: isExiting ? "fadeOutSpray 0.8s ease-out" : "fadeInSpray 1.2s ease-out",
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
         padding: isMobile ? "20px" : "40px"
       }}
     >
@@ -112,7 +112,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
       <Box style={{ 
         textAlign: 'center', 
         marginBottom: isVerySmall ? '15px' : isMobile ? '20px' : '30px',
-        animation: "fadeInSpray 1.2s ease-out"
+        animation: "fadeInSpray 0.6s ease-out"
       }}>
         <Text className="fight-title" style={{ 
           fontSize: isMobile ? '32px' : '48px',
