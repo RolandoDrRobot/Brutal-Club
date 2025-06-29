@@ -248,17 +248,18 @@ const CharacterPreview = ({ characterName, style }) => {
   );
 };
 
-// Preload models
-useGLTF.preload('./models/pete.glb');
-useGLTF.preload('./models/Tyler.glb');
-useGLTF.preload('./models/Vince.glb');
-useGLTF.preload('./models/Bob.glb');
-useGLTF.preload('./models/Chuck.glb');
-useGLTF.preload('./models/Earl.glb');
-useGLTF.preload('./models/Lou.glb');
-useGLTF.preload('./models/Tony.glb');
-useGLTF.preload('./models/Lawrence.glb');
-useGLTF.preload('./models/Wayne.glb');
-useGLTF.preload('./models/woman.gltf');
+// Preload the models that are actually being used in the current game
+useGLTF.preload('./models/pete.glb');      // Main character + opponent
+useGLTF.preload('./models/Tyler.glb');     // Main opponent + purchasable character
+useGLTF.preload('./models/Vince.glb');     // Purchasable character in shop
+useGLTF.preload('./models/Bob.glb');       // Purchasable character in shop
+useGLTF.preload('./models/Chuck.glb');     // Audience member
+useGLTF.preload('./models/Earl.glb');      // Audience member
+useGLTF.preload('./models/Wayne.glb');     // Audience member
+
+// Models available but not currently used in game (loaded on-demand)
+// useGLTF.preload('./models/Lou.glb');
+// useGLTF.preload('./models/Tony.glb');
+// useGLTF.preload('./models/Lawrence.glb');
 
 export default CharacterPreview; 

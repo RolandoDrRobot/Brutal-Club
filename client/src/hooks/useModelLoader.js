@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 
-// List of all models that need to be loaded
+// List of models that are actually being used in the application
 const modelPaths = [
-  './models/pete.glb',
-  './models/Tyler.glb',
-  './models/Chuck.glb',
-  './models/Earl.glb',
-  './models/Wayne.glb',
-  './models/Vince.glb',
-  './models/Lou.glb',
-  './models/Tony.glb',
-  './models/Bob.glb',
-  './models/Lawrence.glb'
+  // Core fighting characters (used in GameState.jsx)
+  './models/pete.glb',      // Main character + opponent
+  './models/Tyler.glb',     // Main opponent + purchasable character
+  './models/Vince.glb',     // Purchasable character in shop
+  './models/Bob.glb',       // Purchasable character in shop
+  
+  // Audience characters (used in Audience.jsx)
+  './models/Chuck.glb',     // Audience member
+  './models/Earl.glb',      // Audience member
+  './models/Wayne.glb',     // Audience member
 ];
 
 // List of all music files that need to be preloaded
