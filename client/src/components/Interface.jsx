@@ -574,6 +574,200 @@ const Interface = () => {
       {/* Modo de combate - currentScreen 'combat' */}
       {currentScreen === 'combat' && isCombatMode && (
         <>
+          {/* Victory Screen - Full Screen Overlay */}
+          {isCombatOver && (
+            <div style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+              backgroundImage: `
+                radial-gradient(circle at 20% 20%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 69, 19, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%)
+              `,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 2000,
+              animation: 'fadeInSpray 1s ease-out',
+              backdropFilter: 'blur(2px)',
+              padding: isMobile ? '10px' : '20px',
+              boxSizing: 'border-box'
+            }}>
+              {/* Winner Title */}
+              <div style={{
+                fontSize: isMobile ? '32px' : '72px',
+                fontWeight: 900,
+                color: '#fc3f31',
+                fontFamily: 'Anton, sans-serif',
+                letterSpacing: isMobile ? '4px' : '8px',
+                textAlign: 'center',
+                marginBottom: isMobile ? '10px' : '40px',
+                textShadow: '4px 4px 8px rgba(0, 0, 0, 0.9)',
+                textTransform: 'uppercase',
+                lineHeight: isMobile ? '1.1' : '1.2'
+              }}>
+                {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"}
+              </div>
+
+              {/* Character Display Area - Optimized for mobile */}
+              <div style={{
+                width: isMobile ? '200px' : '400px',
+                height: isMobile ? '180px' : '450px',
+                backgroundColor: 'transparent',
+                border: 'none',
+                borderRadius: '20px',
+                marginBottom: isMobile ? '10px' : '30px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                overflow: 'visible'
+              }}>
+                {/* Character area - empty for now */}
+              </div>
+
+              {/* Coins Reward - Only show for Player 1 victory */}
+              {!player1IsDead && (
+                <div style={{
+                  backgroundColor: 'rgba(252, 63, 49, 0.2)',
+                  border: '2px solid #fc3f31',
+                  borderRadius: '15px',
+                  padding: isMobile ? '10px 20px' : '20px 40px',
+                  marginBottom: isMobile ? '15px' : '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: isMobile ? '8px' : '15px',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)'
+                }}>
+                  {/* Coin Icon */}
+                  <div style={{
+                    width: isMobile ? '30px' : '60px',
+                    height: isMobile ? '30px' : '60px',
+                    backgroundColor: '#FFD700',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: isMobile ? '16px' : '30px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+                  }}>
+                    ⭐
+                  </div>
+                  
+                  {/* Coins Text */}
+                  <div style={{
+                    fontSize: isMobile ? '20px' : '36px',
+                    fontWeight: 900,
+                    color: '#FFD700',
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '2px',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
+                  }}>
+                    +200
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div style={{
+                display: 'flex',
+                gap: isMobile ? '15px' : '40px',
+                marginTop: isMobile ? '10px' : '30px',
+                width: '100%',
+                justifyContent: 'center',
+                flexWrap: 'wrap'
+              }}>
+                {/* REMATCH Button */}
+                <button
+                  onClick={() => {
+                    playButtonSound();
+                    resetHealth();
+                    initializeCombat();
+                  }}
+                  style={{
+                    fontSize: isMobile ? '16px' : '24px',
+                    fontWeight: 700,
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '2px',
+                    textTransform: 'uppercase',
+                    color: '#fc3f31',
+                    backgroundColor: 'transparent',
+                    border: '3px solid #fc3f31',
+                    borderRadius: '15px',
+                    padding: isMobile ? '12px 24px' : '20px 40px',
+                    minWidth: isMobile ? '110px' : '160px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = 'scale(1.05)';
+                      e.target.style.backgroundColor = 'rgba(252, 63, 49, 0.2)';
+                      e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = 'scale(1)';
+                      e.target.style.backgroundColor = 'transparent';
+                      e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+                    }
+                  }}
+                >
+                  REMATCH
+                </button>
+
+                {/* MENU Button */}
+                <button
+                  onClick={() => {
+                    playButtonSound();
+                    navigateBackToMenu();
+                  }}
+                  style={{
+                    fontSize: isMobile ? '16px' : '24px',
+                    fontWeight: 700,
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '2px',
+                    textTransform: 'uppercase',
+                    color: '#fc3f31',
+                    backgroundColor: 'transparent',
+                    border: '3px solid #fc3f31',
+                    borderRadius: '15px',
+                    padding: isMobile ? '12px 24px' : '20px 40px',
+                    minWidth: isMobile ? '110px' : '160px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = 'scale(1.05)';
+                      e.target.style.backgroundColor = 'rgba(252, 63, 49, 0.2)';
+                      e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = 'scale(1)';
+                      e.target.style.backgroundColor = 'transparent';
+                      e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+                    }
+                  }}
+                >
+                  MENU
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Controles de animación de baile - Solo en modo sincronizado - CENTRO ARRIBA */}
           {!isCombatMode && (
             <>
