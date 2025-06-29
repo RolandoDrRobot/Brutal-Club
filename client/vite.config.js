@@ -1,119 +1,76 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import mkcert from 'vite-plugin-mkcert'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
-    mkcert()
+    react()
   ],
+  base: './',
   build: {
-    // Advanced code splitting
-    rollupOptions: {
-      output: {
-        // Optimized chunk naming for better caching
-        chunkFileNames: (chunkInfo) => {
-          const facadeModuleId = chunkInfo.facadeModuleId ? 
-            chunkInfo.facadeModuleId.split('/').pop().replace(/\.(jsx?|tsx?)$/, '') : 'chunk';
-          return `assets/js/${facadeModuleId}-[hash].js`;
-        },
-        // Organized asset naming
-        assetFileNames: (assetInfo) => {
-          const info = assetInfo.name.split('.');
-          const ext = info[info.length - 1];
-          
-          // Images
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
-            return `assets/images/[name]-[hash][extname]`;
-          }
-          // Fonts
-          if (/woff2?|eot|ttf|otf/i.test(ext)) {
-            return `assets/fonts/[name]-[hash][extname]`;
-          }
-          // 3D Models
-          if (/glb|gltf/i.test(ext)) {
-            return `assets/models/[name]-[hash][extname]`;
-          }
-          // Audio
-          if (/mp3|wav|ogg|m4a/i.test(ext)) {
-            return `assets/audio/[name]-[hash][extname]`;
-          }
-          // Everything else
-          return `assets/misc/[name]-[hash][extname]`;
-        }
-      },
-      // Tree-shaking optimizations
-      treeshake: {
-        moduleSideEffects: false,
-        propertyReadSideEffects: false,
-        unknownGlobalSideEffects: false
-      }
-    },
-    // Advanced minification
+    outDir: 'dist',
+    assetsDir: 'assets',
+    // CRITICAL: Disable inlining for all assets to avoid MIME type issues
+    assetsInlineLimit: 0,
+    sourcemap: false, // Disable sourcemaps in production
     minify: 'terser',
     terserOptions: {
       compress: {
-        // Remove console logs in production
-        drop_console: process.env.NODE_ENV === 'production',
+        drop_console: true, // Remove console.logs in production
         drop_debugger: true,
-        // Remove specific debugging functions
-        pure_funcs: process.env.NODE_ENV === 'production' ? [
-          'console.log', 
-          'console.info', 
-          'console.debug',
-          'console.trace'
-        ] : [],
-        // Basic optimizations
-        passes: 2,
-        // Remove unused code
-        dead_code: true,
-        // Optimize comparisons
-        comparisons: true,
-        // Reduce variable names
-        keep_fnames: false,
-        keep_classnames: false
       },
-      mangle: {
-        safari10: true
-      },
-      format: {
-        comments: false
-      }
     },
-    // Optimize chunk sizes
-    chunkSizeWarningLimit: 800,
-    // Production sourcemaps only for debugging
-    sourcemap: process.env.NODE_ENV === 'development' ? true : 'hidden',
-    // Report compression
-    reportCompressedSize: true,
-    // Modern target for better optimization
-    target: ['es2020', 'chrome80', 'firefox78', 'safari14'],
-    // CSS optimization
-    cssCodeSplit: true,
-    // Asset inlining threshold
-    assetsInlineLimit: 4096
+    rollupOptions: {
+      output: {
+        // Organize assets by type
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name.split('.');
+          const extType = info[info.length - 1];
+          
+          if (/\.(mp3|wav|ogg|flac)$/i.test(assetInfo.name)) {
+            return `assets/audio/[name]-[hash][extname]`;
+          }
+          if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(assetInfo.name)) {
+            return `assets/images/[name]-[hash][extname]`;
+          }
+          if (/\.(woff2?|eot|ttf|otf)$/i.test(assetInfo.name)) {
+            return `assets/fonts/[name]-[hash][extname]`;
+          }
+          if (/\.(glb|gltf)$/i.test(assetInfo.name)) {
+            return `assets/models/[name]-[hash][extname]`;
+          }
+          
+          return `assets/[name]-[hash][extname]`;
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+      },
+    },
+    target: 'es2020', // Modern target for smaller bundles
+    
+    // Optimize dependencies
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        '@mantine/core',
+        '@react-three/fiber',
+        '@react-three/drei',
+        'three'
+      ],
+    },
   },
-  // Enhanced dependency optimization
-  optimizeDeps: {
-    // Pre-bundle critical dependencies
-    include: [
-      'react', 
-      'react-dom',
-      'react/jsx-runtime',
-      'three',
-      '@react-three/fiber',
-      '@react-three/drei',
-      '@mantine/core',
-      '@mantine/hooks',
-      '@emotion/react'
-    ],
-    // Exclude problematic packages
-    exclude: [
-      'three/examples/jsm/loaders/GLTFLoader'
-    ],
-    // Force optimization of specific packages
-    force: process.env.NODE_ENV === 'production'
+  
+  // Performance optimizations
+  esbuild: {
+    target: 'es2020',
+    // Tree-shaking optimization
+    treeShaking: true,
+  },
+  
+  // Optimize CSS
+  css: {
+    devSourcemap: false,
   },
   // Development server optimizations
   server: {
@@ -143,10 +100,6 @@ export default defineConfig({
     '**/*.mp3',
     '**/*.wav'
   ],
-  // CSS optimizations
-  css: {
-    devSourcemap: false
-  },
   // Environment variables and build optimizations
   define: {
     __DEV__: process.env.NODE_ENV === 'development',

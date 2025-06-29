@@ -18,6 +18,7 @@ import mainButtonImg from "../assets/mainbutton.jpeg";
 import { useButtonSound } from '../hooks/useButtonSound';
 import LoadingScreen from './LoadingScreen';
 import { useModelLoader } from '../hooks/useModelLoader';
+import { useGameState } from '../contexts/GameState';
 
 // CSS Animations for the interface
 const interfaceStyles = `
@@ -573,6 +574,59 @@ const Interface = () => {
       {/* Modo de combate - currentScreen 'combat' */}
       {currentScreen === 'combat' && isCombatMode && (
         <>
+          {/* Back Button - Moved to TOP */}
+          <Affix position={{ 
+            top: isMobile ? 20 : 30, 
+            left: isMobile ? 20 : 30
+          }}>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => {
+                playButtonSound();
+                navigateBackToMenu();
+              }}
+              style={{
+                fontSize: isMobile ? "16px" : "20px",
+                fontWeight: 700,
+                padding: isMobile ? "8px 16px" : "10px 20px",
+                backgroundColor: "rgba(0, 0, 0, 0.8)",
+                borderColor: "#fc3f31",
+                border: "2px solid #fc3f31",
+                borderRadius: "8px",
+                color: "#fc3f31",
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                fontFamily: "Anton, sans-serif",
+                backdropFilter: "blur(10px)",
+                boxShadow: `
+                  0 0 10px rgba(252, 63, 49, 0.3)
+                `,
+                transition: "all 0.3s ease",
+                zIndex: 1002
+              }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.target.style.transform = "scale(1.05)";
+                  e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.target.style.transform = "scale(1)";
+                  e.target.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+                }
+              }}
+            >
+              BACK
+            </Button>
+          </Affix>
+
+          {/* Character Selector - Bottom of Combat Screen */}
+          {!isCombatOver && (
+            <CharacterSelectorCombat />
+          )}
+
           {/* Mensaje de Victoria - Overlay cuando termina el combate */}
           {isCombatOver && (
             <Affix position={{ 
@@ -1204,6 +1258,310 @@ const Interface = () => {
         </>
       )}
     </>
+  );
+};
+
+// Character Selector Component for Combat Screen
+const CharacterSelectorCombat = () => {
+  const { 
+    selectedPlayer1Character, 
+    setSelectedPlayer1Character,
+    selectedPlayer2Character,
+    setSelectedPlayer2Character
+  } = useCharacterAnimations();
+  
+  const { getShopCharactersStatus } = useGameState();
+  const { playButtonSound } = useButtonSound();
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
+  // Get purchased characters for Player 1
+  const purchasedCharacters = getShopCharactersStatus().filter(char => char.isPurchased);
+  const characters = purchasedCharacters.map(char => ({
+    id: char.id,
+    name: char.name,
+    model: char.model
+  }));
+  
+  // Find current character indices
+  const currentPlayer1Index = characters.findIndex(char => char.model === selectedPlayer1Character);
+  const currentPlayer2Index = characters.findIndex(char => char.model === selectedPlayer2Character);
+  
+  const handlePreviousPlayer1 = () => {
+    playButtonSound();
+    const newIndex = currentPlayer1Index > 0 ? currentPlayer1Index - 1 : characters.length - 1;
+    setSelectedPlayer1Character(characters[newIndex].model);
+  };
+  
+  const handleNextPlayer1 = () => {
+    playButtonSound();
+    const newIndex = currentPlayer1Index < characters.length - 1 ? currentPlayer1Index + 1 : 0;
+    setSelectedPlayer1Character(characters[newIndex].model);
+  };
+  
+  const handlePreviousPlayer2 = () => {
+    playButtonSound();
+    const newIndex = currentPlayer2Index > 0 ? currentPlayer2Index - 1 : characters.length - 1;
+    setSelectedPlayer2Character(characters[newIndex].model);
+  };
+  
+  const handleNextPlayer2 = () => {
+    playButtonSound();
+    const newIndex = currentPlayer2Index < characters.length - 1 ? currentPlayer2Index + 1 : 0;
+    setSelectedPlayer2Character(characters[newIndex].model);
+  };
+  
+  // If no characters available, don't show selector
+  if (characters.length === 0) return null;
+  
+  return (
+    <Affix position={{ 
+      bottom: isMobile ? 140 : 180, 
+      left: "50%",
+      transform: "translateX(-50%)"
+    }}>
+      <Box style={{
+        backgroundColor: "rgba(0, 0, 0, 0.9)",
+        border: "2px solid #fc3f31",
+        borderRadius: "15px",
+        padding: isMobile ? "8px 12px" : "12px 16px",
+        backdropFilter: "blur(10px)",
+        boxShadow: `
+          0 0 15px rgba(252, 63, 49, 0.4),
+          inset 0 0 15px rgba(252, 63, 49, 0.1)
+        `,
+        display: "flex",
+        alignItems: "center",
+        gap: isMobile ? "8px" : "12px",
+        maxWidth: isMobile ? "90vw" : "600px",
+        animation: "fadeInSpray 0.6s ease-out"
+      }}>
+        {/* Player 1 Selector */}
+        <Box style={{
+          display: "flex",
+          alignItems: "center",
+          gap: isMobile ? "6px" : "8px",
+          flex: 1
+        }}>
+          <Text style={{
+            fontSize: isMobile ? "10px" : "12px",
+            color: "#fc3f31",
+            fontFamily: "Anton, sans-serif",
+            fontWeight: 700,
+            letterSpacing: "1px",
+            minWidth: isMobile ? "20px" : "25px"
+          }}>
+            P1
+          </Text>
+          
+          <Button
+            variant="unstyled"
+            size="xs"
+            onClick={handlePreviousPlayer1}
+            style={{
+              width: isMobile ? "20px" : "25px",
+              height: isMobile ? "20px" : "25px",
+              minHeight: isMobile ? "20px" : "25px",
+              padding: 0,
+              color: "#fc3f31",
+              fontSize: isMobile ? "12px" : "16px",
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 0.2s ease",
+              backgroundColor: "transparent"
+            }}
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1.2)";
+                e.target.style.color = "#FFD700";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1)";
+                e.target.style.color = "#fc3f31";
+              }
+            }}
+          >
+            ◀
+          </Button>
+          
+          <Box style={{
+            backgroundColor: "rgba(252, 63, 49, 0.1)",
+            border: "1px solid #fc3f31",
+            borderRadius: "8px",
+            padding: isMobile ? "4px 8px" : "6px 10px",
+            minWidth: isMobile ? "60px" : "80px",
+            textAlign: "center"
+          }}>
+            <Text style={{
+              fontSize: isMobile ? "8px" : "10px",
+              color: "#F5F5DC",
+              fontFamily: "Anton, sans-serif",
+              fontWeight: 700,
+              letterSpacing: "0.5px",
+              textTransform: "uppercase"
+            }}>
+              {characters[currentPlayer1Index]?.name || "PETE"}
+            </Text>
+          </Box>
+          
+          <Button
+            variant="unstyled"
+            size="xs"
+            onClick={handleNextPlayer1}
+            style={{
+              width: isMobile ? "20px" : "25px",
+              height: isMobile ? "20px" : "25px",
+              minHeight: isMobile ? "20px" : "25px",
+              padding: 0,
+              color: "#fc3f31",
+              fontSize: isMobile ? "12px" : "16px",
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 0.2s ease",
+              backgroundColor: "transparent"
+            }}
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1.2)";
+                e.target.style.color = "#FFD700";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1)";
+                e.target.style.color = "#fc3f31";
+              }
+            }}
+          >
+            ▶
+          </Button>
+        </Box>
+        
+        {/* VS Separator */}
+        <Text style={{
+          fontSize: isMobile ? "12px" : "16px",
+          color: "#FFD700",
+          fontFamily: "Anton, sans-serif",
+          fontWeight: 700,
+          letterSpacing: "1px",
+          margin: isMobile ? "0 4px" : "0 8px"
+        }}>
+          VS
+        </Text>
+        
+        {/* Player 2 Selector */}
+        <Box style={{
+          display: "flex",
+          alignItems: "center",
+          gap: isMobile ? "6px" : "8px",
+          flex: 1
+        }}>
+          <Text style={{
+            fontSize: isMobile ? "10px" : "12px",
+            color: "#fc3f31",
+            fontFamily: "Anton, sans-serif",
+            fontWeight: 700,
+            letterSpacing: "1px",
+            minWidth: isMobile ? "20px" : "25px"
+          }}>
+            P2
+          </Text>
+          
+          <Button
+            variant="unstyled"
+            size="xs"
+            onClick={handlePreviousPlayer2}
+            style={{
+              width: isMobile ? "20px" : "25px",
+              height: isMobile ? "20px" : "25px",
+              minHeight: isMobile ? "20px" : "25px",
+              padding: 0,
+              color: "#fc3f31",
+              fontSize: isMobile ? "12px" : "16px",
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 0.2s ease",
+              backgroundColor: "transparent"
+            }}
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1.2)";
+                e.target.style.color = "#FFD700";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1)";
+                e.target.style.color = "#fc3f31";
+              }
+            }}
+          >
+            ◀
+          </Button>
+          
+          <Box style={{
+            backgroundColor: "rgba(252, 63, 49, 0.1)",
+            border: "1px solid #fc3f31",
+            borderRadius: "8px",
+            padding: isMobile ? "4px 8px" : "6px 10px",
+            minWidth: isMobile ? "60px" : "80px",
+            textAlign: "center"
+          }}>
+            <Text style={{
+              fontSize: isMobile ? "8px" : "10px",
+              color: "#F5F5DC",
+              fontFamily: "Anton, sans-serif",
+              fontWeight: 700,
+              letterSpacing: "0.5px",
+              textTransform: "uppercase"
+            }}>
+              {characters[currentPlayer2Index]?.name || "TYLER"}
+            </Text>
+          </Box>
+          
+          <Button
+            variant="unstyled"
+            size="xs"
+            onClick={handleNextPlayer2}
+            style={{
+              width: isMobile ? "20px" : "25px",
+              height: isMobile ? "20px" : "25px",
+              minHeight: isMobile ? "20px" : "25px",
+              padding: 0,
+              color: "#fc3f31",
+              fontSize: isMobile ? "12px" : "16px",
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 0.2s ease",
+              backgroundColor: "transparent"
+            }}
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1.2)";
+                e.target.style.color = "#FFD700";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1)";
+                e.target.style.color = "#fc3f31";
+              }
+            }}
+          >
+            ▶
+          </Button>
+        </Box>
+      </Box>
+    </Affix>
   );
 };
 
