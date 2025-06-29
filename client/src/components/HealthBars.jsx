@@ -1,6 +1,6 @@
 import { Box, Progress, Text, Group } from "@mantine/core";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
-import { useMediaQuery } from "@mantine/hooks";
+import { useState, useEffect } from "react";
 
 const HealthBars = () => {
   const { 
@@ -22,9 +22,20 @@ const HealthBars = () => {
   console.log(`HealthBars - Player 1 Wins: ${player1Wins}`);
   console.log(`HealthBars - Combat Mode: ${isCombatMode}, Players Dead: P1=${player1IsDead}, P2=${player2IsDead}`);
 
-  // Media queries para responsive design
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const isTablet = useMediaQuery("(max-width: 1024px)");
+  // Manual responsive design to avoid hook conflicts
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      setIsTablet(window.innerWidth <= 1024);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   // No mostrar si no estamos en modo combate
   if (!isCombatMode) return null;

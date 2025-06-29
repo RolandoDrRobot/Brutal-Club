@@ -12,7 +12,7 @@ import button2 from '../assets/button2.png';
 import button3 from '../assets/button3.png';
 import button4 from '../assets/button4.png';
 
-const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) => {
+const MainMenu = ({ onStartClick, onFightersClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { isExiting } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
@@ -135,20 +135,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onShopClick, onBackClick }) =
             onMouseLeave={(e) => handleButtonHover(e, false)}
           >
             CLUB
-          </Button>
-
-          <Button
-            variant="outline"
-            size="xl"
-            onClick={() => {
-              playButtonSound();
-              onShopClick();
-            }}
-            style={getMenuButtonStyle(button3)}
-            onMouseEnter={(e) => handleButtonHover(e, true)}
-            onMouseLeave={(e) => handleButtonHover(e, false)}
-          >
-            SHOP
           </Button>
 
           <Button

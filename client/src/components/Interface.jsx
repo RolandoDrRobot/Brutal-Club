@@ -5,8 +5,7 @@ import React, { useState, useEffect } from 'react';
 import MusicPlayer from "./MusicPlayer";
 import MainMenu from "./MainMenu";
 import CharacterSelect from "./CharacterSelect";
-import Shop from "./Shop";
-import OpponentSelect from "./OpponentSelect";
+import CombinedShopOpponents from "./CombinedShopOpponents";
 import '../styles/fightAnimations.css';
 import punchImg from "../assets/punch.png";
 import kickImg from "../assets/kick.png";
@@ -110,8 +109,6 @@ const Interface = () => {
     navigateToCharacterSelect,
     navigateBackFromCharacterSelect,
     handleCharacterSelection,
-    navigateToShop,
-    navigateBackFromShop,
     navigateToOpponentSelect,
     navigateBackFromOpponentSelect,
     handleOpponentChallenge,
@@ -424,15 +421,6 @@ const Interface = () => {
     setIsLoading(false);
   };
 
-  // Lazy load models when entering shop
-  const handleEnterShop = () => {
-    console.log('🏪 Entering shop - lazy loading shop models');
-    // Pre-load shop character models
-    lazyLoadModel('Vince');
-    lazyLoadModel('Bob');
-    setCurrentScreen('shop');
-  };
-
   if (isLoading) {
     return (
       <LoadingScreen 
@@ -457,7 +445,6 @@ const Interface = () => {
         <MainMenu 
           onStartClick={navigateToOpponentSelect}
           onFightersClick={navigateToCharacterSelect}
-          onShopClick={navigateToShop}
           onBackClick={navigateBackToDance}
         />
       )}
@@ -470,16 +457,9 @@ const Interface = () => {
         />
       )}
 
-      {/* Mostrar pantalla de la tienda cuando currentScreen es 'shop' */}
-      {currentScreen === 'shop' && (
-        <Shop 
-          onBackClick={navigateBackFromShop}
-        />
-      )}
-
-      {/* Mostrar pantalla de selección de oponentes cuando currentScreen es 'opponentSelect' */}
+      {/* Mostrar pantalla combinada de oponentes y tienda cuando currentScreen es 'opponentSelect' */}
       {currentScreen === 'opponentSelect' && (
-        <OpponentSelect 
+        <CombinedShopOpponents 
           onChallengeClick={handleOpponentChallenge}
           onBackClick={navigateBackFromOpponentSelect}
         />
@@ -866,52 +846,6 @@ const Interface = () => {
                     }}
                   >
                     FIGHTERS
-                  </Button>
-
-                  {/* Botón SHOP */}
-                  <Button
-                    variant="outline"
-                    size="xl"
-                    onClick={() => {
-                      playButtonSound();
-                      handleEnterShop();
-                    }}
-                    style={{
-                      fontSize: isMobile ? "36px" : "48px",
-                      fontWeight: 700,
-                      padding: isMobile ? "15px 40px" : "20px 60px",
-                      minHeight: isMobile ? "80px" : "100px",
-                      minWidth: isMobile ? "280px" : "350px",
-                      backgroundColor: "transparent",
-                      borderColor: "#fc3f31",
-                      border: "4px solid #fc3f31",
-                      borderRadius: "15px",
-                      color: "#fc3f31",
-                      textTransform: "uppercase",
-                      letterSpacing: "3px",
-                      fontFamily: "Anton, sans-serif",
-                      boxShadow: `
-                        0 0 20px #fc3f31,
-                        0 0 40px rgba(252, 63, 49, 0.3),
-                        inset 0 0 20px rgba(252, 63, 49, 0.1)
-                      `,
-                      transition: "all 0.3s ease",
-                      cursor: "pointer"
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isMobile) {
-                        e.target.style.transform = "scale(1.05)";
-                        e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isMobile) {
-                        e.target.style.transform = "scale(1)";
-                        e.target.style.backgroundColor = "transparent";
-                      }
-                    }}
-                  >
-                    SHOP
                   </Button>
                 </div>
               </Affix>

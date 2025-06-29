@@ -128,29 +128,62 @@
         const skeleton = document.getElementById('app-skeleton');
         const root = document.getElementById('root');
         
+        let hasRemoved = false;
+        
+        const removeSkeleton = () => {
+          if (hasRemoved || !skeleton.parentNode) return;
+          hasRemoved = true;
+          skeleton.style.opacity = '0';
+          skeleton.style.transition = 'opacity 0.3s ease-out';
+          setTimeout(() => {
+            if (skeleton.parentNode) skeleton.remove();
+          }, 300);
+        };
+        
         // Observer para detectar cuando React renderiza
-        const observer = new MutationObserver(() => {
+        const observer = new MutationObserver((mutations) => {
+          for (const mutation of mutations) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+              // Check if any added node is a React component (has data-reactroot or children)
+              for (const node of mutation.addedNodes) {
+                if (node.nodeType === Node.ELEMENT_NODE && 
+                    (node.hasAttribute('data-reactroot') || node.children.length > 0)) {
+                  console.log('React app detected, removing skeleton');
+                  removeSkeleton();
+                  observer.disconnect();
+                  return;
+                }
+              }
+            }
+          }
+          
+          // Fallback: if root has any children, assume React has rendered
           if (root.children.length > 0) {
-            skeleton.style.opacity = '0';
-            skeleton.style.transition = 'opacity 0.3s ease-out';
-            setTimeout(() => skeleton.remove(), 300);
+            console.log('React content detected, removing skeleton');
+            removeSkeleton();
             observer.disconnect();
           }
         });
         
         observer.observe(root, { childList: true, subtree: true });
         
-        // Fallback timeout
+        // Fallback timeout más corto
         setTimeout(() => {
-          if (skeleton.parentNode) {
-            skeleton.remove();
-          }
-        }, 5000);
+          console.log('Timeout reached, removing skeleton');
+          removeSkeleton();
+        }, 2000);
+        
+        // Additional check for immediate content
+        if (root.children.length > 0) {
+          console.log('Immediate React content detected');
+          removeSkeleton();
+        }
       });
     </script>
     
     <!-- PWA Service Worker Registration optimizado -->
     <script>
+      /*
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js', {
@@ -169,6 +202,7 @@
             });
         });
       }
+      */
     </script>
   </body>
 </html>

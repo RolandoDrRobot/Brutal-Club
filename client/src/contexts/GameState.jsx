@@ -62,6 +62,7 @@ const GAME_CONFIG = {
 export const GameStateProvider = ({ children }) => {
   // Persistent game state
   const [gameState, setGameState] = useState(() => {
+    console.log('🎮 GameStateProvider initializing...');
     const savedState = localStorage.getItem('fightClubGameState');
     if (savedState) {
       const parsed = JSON.parse(savedState);
@@ -81,6 +82,8 @@ export const GameStateProvider = ({ children }) => {
     console.log('🎮 Creating new game state with 0 coins:', initialState);
     return initialState;
   });
+
+  console.log('🎮 GameStateProvider rendering with gameState:', gameState);
 
   // Save state to localStorage when it changes
   useEffect(() => {

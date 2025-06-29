@@ -170,6 +170,15 @@ export const useModelLoader = () => {
   useEffect(() => {
     console.log('🚀 Starting optimized asset loading...');
     
+    // Emergency timeout to ensure app always loads
+    const emergencyTimeout = setTimeout(() => {
+      console.warn('⚠️ Emergency timeout reached - forcing app to load');
+      setLoadingProgress(100);
+      setLoadingStatus('Ready to play!');
+      setIsLoading(false);
+      setIsPlayable(true);
+    }, 15000); // 15 seconds max
+    
     const loadAssets = async () => {
       try {
         let progress = 0;
@@ -183,14 +192,14 @@ export const useModelLoader = () => {
         
         // PHASE 2: CRITICAL IMAGES (30-45%) - Essential UI elements
         setLoadingStatus('Loading essential UI...');
-        const criticalImagePromises = CRITICAL_IMAGES.map(path => preloadImage(path, 1500));
+        const criticalImagePromises = CRITICAL_IMAGES.map(path => preloadImage(path, 1000)); // Reduced timeout
         await Promise.allSettled(criticalImagePromises);
         progress = 45;
         setLoadingProgress(progress);
         
         // PHASE 3: ESSENTIAL AUDIO (45-60%) - Core sound effects
         setLoadingStatus('Loading essential audio...');
-        const essentialAudioPromises = ESSENTIAL_AUDIO.map(path => preloadAudio(path, 2000));
+        const essentialAudioPromises = ESSENTIAL_AUDIO.map(path => preloadAudio(path, 1500)); // Reduced timeout
         await Promise.allSettled(essentialAudioPromises);
         progress = 60;
         setLoadingProgress(progress);
@@ -208,25 +217,28 @@ export const useModelLoader = () => {
         
         // PHASE 5: OPTIONAL IMAGES (75-85%) - Non-critical UI
         setLoadingStatus('Loading additional UI...');
-        const optionalImagePromises = OPTIONAL_IMAGES.map(path => preloadImage(path, 1000));
+        const optionalImagePromises = OPTIONAL_IMAGES.map(path => preloadImage(path, 800)); // Reduced timeout
         await Promise.allSettled(optionalImagePromises);
         progress = 85;
         setLoadingProgress(progress);
         
         // PHASE 6: OPTIONAL AUDIO (85-95%) - Music tracks
         setLoadingStatus('Loading music tracks...');
-        const optionalAudioPromises = OPTIONAL_AUDIO.map(path => preloadAudio(path, 4000));
+        const optionalAudioPromises = OPTIONAL_AUDIO.map(path => preloadAudio(path, 2000)); // Reduced timeout
         await Promise.allSettled(optionalAudioPromises);
         progress = 95;
         setLoadingProgress(progress);
         
         // PHASE 7: FINALIZATION (95-100%)
         setLoadingStatus('Optimizing experience...');
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise(resolve => setTimeout(resolve, 200)); // Reduced delay
         
         setLoadingProgress(100);
         setLoadingStatus('All assets loaded!');
         console.log('✅ Complete optimized loading finished');
+        
+        // Clear emergency timeout since we completed successfully
+        clearTimeout(emergencyTimeout);
         
         // Start the game
         setTimeout(() => {
@@ -237,11 +249,14 @@ export const useModelLoader = () => {
           setTimeout(() => {
             window.dispatchEvent(new CustomEvent('startMusic'));
           }, 500);
-        }, 400);
+        }, 300); // Reduced delay
         
       } catch (error) {
         console.error('❌ Loading error:', error);
         setLoadingStatus('Loading completed with some issues');
+        
+        // Clear emergency timeout
+        clearTimeout(emergencyTimeout);
         
         // Still start the game even with errors
         setTimeout(() => {
@@ -255,6 +270,7 @@ export const useModelLoader = () => {
 
     return () => {
       console.log('🧹 Cleaning up optimized loader');
+      clearTimeout(emergencyTimeout);
     };
   }, []);
 

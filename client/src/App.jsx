@@ -2,11 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import React, { Suspense } from "react";
 import Experience from "./components/Experience";
 import LoadingScreen from "./components/LoadingScreen";
-import { useCharacterAnimations } from "./contexts/CharacterAnimations";
 import { useModelLoader } from "./hooks/useModelLoader";
-import { MantineProvider } from '@mantine/core';
-import { CharacterAnimationsProvider } from './contexts/CharacterAnimations';
-import { GameStateProvider } from './contexts/GameState';
 
 // Lazy loading for heavy non-critical components
 const Interface = React.lazy(() => import("./components/Interface"));
@@ -30,8 +26,9 @@ const ComponentFallback = () => (
 );
 
 function App() {
-  const { isCombatMode } = useCharacterAnimations();
+  console.log('🚀 App component rendering...');
   const { isLoading, loadingProgress, loadingStatus } = useModelLoader();
+  console.log('🚀 App - isLoading:', isLoading, 'progress:', loadingProgress, 'status:', loadingStatus);
 
   return (
     <>
@@ -60,7 +57,7 @@ function App() {
       {/* Cargar UI componentes de forma lazy solo después de que el 3D esté listo */}
       <Suspense fallback={<ComponentFallback />}>
         <Interface />
-        {isCombatMode && <HealthBars />}
+        <HealthBars />
         <CrowdSound />
         <PunchSound />
       </Suspense>
