@@ -25,7 +25,7 @@ const ComponentFallback = () => (
     fontSize: '14px',
     opacity: 0.7
   }}>
-    Cargando...
+    Loading...
   </div>
 );
 

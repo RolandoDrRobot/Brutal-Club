@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Box, Text, Stack, Grid, Card, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
@@ -7,22 +7,49 @@ import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
+import { useModelLoader } from '../hooks/useModelLoader';
 
 const Shop = ({ onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
-  
-  // Use GameState instead of local state
-  const { 
-    coins, 
-    purchaseCharacter, 
-    getShopCharactersStatus,
-    isCharacterPurchased,
-    canAffordCharacter,
-    clearSavedData
-  } = useGameState();
+  const { gameState, purchaseCharacter, getShopCharactersStatus, isCharacterPurchased, canAffordCharacter, clearSavedData } = useGameState();
+  const { setSelectedPlayer1Character } = useCharacterAnimations();
+  const { lazyLoadModel } = useModelLoader();
+  const [loadingModels, setLoadingModels] = useState(new Set());
+  const [loadedModels, setLoadedModels] = useState(new Set());
+
+  // Lazy load shop models when component mounts
+  useEffect(() => {
+    const loadShopModels = async () => {
+      console.log('🏪 Loading shop character models...');
+      setLoadingModels(new Set(['Vince', 'Bob']));
+      
+      const promises = [
+        lazyLoadModel('Vince'),
+        lazyLoadModel('Bob')
+      ];
+      
+      const results = await Promise.allSettled(promises);
+      const successful = new Set();
+      
+      results.forEach((result, index) => {
+        const modelName = ['Vince', 'Bob'][index];
+        if (result.status === 'fulfilled' && result.value) {
+          successful.add(modelName);
+          console.log(`✅ Shop model loaded: ${modelName}`);
+        } else {
+          console.warn(`⚠️ Shop model failed: ${modelName}`);
+        }
+      });
+      
+      setLoadedModels(successful);
+      setLoadingModels(new Set());
+    };
+
+    loadShopModels();
+  }, [lazyLoadModel]);
 
   // Get characters with their current status from GameState
   const shopCharacters = getShopCharactersStatus();
@@ -156,6 +183,14 @@ const Shop = ({ onBackClick }) => {
     }
   };
 
+  const isModelLoading = (characterName) => {
+    return loadingModels.has(characterName);
+  };
+
+  const isModelLoaded = (characterName) => {
+    return loadedModels.has(characterName);
+  };
+
   return (
     <Box
       className="fight-screen-container fight-screen-background"
@@ -190,7 +225,7 @@ const Shop = ({ onBackClick }) => {
           fontFamily: 'Anton, sans-serif',
           letterSpacing: '1px'
         }}>
-          {coins} COINS
+          {gameState.coins} COINS
         </Text>
       </Box>
 

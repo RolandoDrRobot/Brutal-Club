@@ -9,96 +9,169 @@ export default defineConfig({
     mkcert()
   ],
   build: {
-    // Habilitar code splitting agresivo
+    // Advanced code splitting
     rollupOptions: {
       output: {
-        // Separar dependencias grandes en chunks propios
-        manualChunks: {
-          // React y React DOM en su propio chunk
-          'react-vendor': ['react', 'react-dom'],
-          // Three.js y R3F en su propio chunk (son las librerías más pesadas)
-          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
-          // Mantine UI en su propio chunk
-          'mantine-vendor': ['@mantine/core', '@mantine/hooks', '@emotion/react']
-        },
-        // Nombres descriptivos para mejor caching
+        // Optimized chunk naming for better caching
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId ? 
-            chunkInfo.facadeModuleId.split('/').pop().replace('.jsx', '') : 'chunk';
-          return `assets/${facadeModuleId}-[hash].js`;
+            chunkInfo.facadeModuleId.split('/').pop().replace(/\.(jsx?|tsx?)$/, '') : 'chunk';
+          return `assets/js/${facadeModuleId}-[hash].js`;
         },
-        // Nombres para assets
+        // Organized asset naming
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');
           const ext = info[info.length - 1];
+          
+          // Images
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
             return `assets/images/[name]-[hash][extname]`;
           }
+          // Fonts
           if (/woff2?|eot|ttf|otf/i.test(ext)) {
             return `assets/fonts/[name]-[hash][extname]`;
           }
-          return `assets/[name]-[hash][extname]`;
+          // 3D Models
+          if (/glb|gltf/i.test(ext)) {
+            return `assets/models/[name]-[hash][extname]`;
+          }
+          // Audio
+          if (/mp3|wav|ogg|m4a/i.test(ext)) {
+            return `assets/audio/[name]-[hash][extname]`;
+          }
+          // Everything else
+          return `assets/misc/[name]-[hash][extname]`;
         }
+      },
+      // Tree-shaking optimizations
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        unknownGlobalSideEffects: false
       }
     },
-    // Optimizaciones de tamaño
+    // Advanced minification
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true, // Remover console.logs en producción
+        // Remove console logs in production
+        drop_console: process.env.NODE_ENV === 'production',
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug'], // Remover funciones específicas
-        passes: 2 // Múltiples pasadas de optimización
+        // Remove specific debugging functions
+        pure_funcs: process.env.NODE_ENV === 'production' ? [
+          'console.log', 
+          'console.info', 
+          'console.debug',
+          'console.trace'
+        ] : [],
+        // Basic optimizations
+        passes: 2,
+        // Remove unused code
+        dead_code: true,
+        // Optimize comparisons
+        comparisons: true,
+        // Reduce variable names
+        keep_fnames: false,
+        keep_classnames: false
       },
       mangle: {
-        safari10: true // Compatibilidad con Safari 10
+        safari10: true
       },
       format: {
-        comments: false // Remover comentarios
+        comments: false
       }
     },
-    // Chunks más pequeños para mejor caching
-    chunkSizeWarningLimit: 1000,
-    // Habilitar sourcemaps solo en desarrollo
-    sourcemap: process.env.NODE_ENV === 'development',
-    // Reportar compresión de archivos
+    // Optimize chunk sizes
+    chunkSizeWarningLimit: 800,
+    // Production sourcemaps only for debugging
+    sourcemap: process.env.NODE_ENV === 'development' ? true : 'hidden',
+    // Report compression
     reportCompressedSize: true,
-    // Target para compatibilidad
-    target: 'es2020'
+    // Modern target for better optimization
+    target: ['es2020', 'chrome80', 'firefox78', 'safari14'],
+    // CSS optimization
+    cssCodeSplit: true,
+    // Asset inlining threshold
+    assetsInlineLimit: 4096
   },
-  // Optimizaciones de dependencias
+  // Enhanced dependency optimization
   optimizeDeps: {
-    // Pre-bundle estas dependencias críticas
+    // Pre-bundle critical dependencies
     include: [
       'react', 
       'react-dom',
+      'react/jsx-runtime',
       'three',
       '@react-three/fiber',
       '@react-three/drei',
       '@mantine/core',
-      '@mantine/hooks'
+      '@mantine/hooks',
+      '@emotion/react'
     ],
-    // Excluir dependencias que pueden causar problemas
-    exclude: []
+    // Exclude problematic packages
+    exclude: [
+      'three/examples/jsm/loaders/GLTFLoader'
+    ],
+    // Force optimization of specific packages
+    force: process.env.NODE_ENV === 'production'
   },
-  // Configuración del servidor de desarrollo
+  // Development server optimizations
   server: {
-    // Habilitar compresión gzip
+    // Enable gzip compression
     middlewareMode: false,
     hmr: {
-      overlay: false // Reducir overhead en desarrollo
+      overlay: false,
+      port: 24678
+    },
+    // Warm up frequently used files
+    warmup: {
+      clientFiles: [
+        './src/App.jsx',
+        './src/components/Interface.jsx',
+        './src/contexts/CharacterAnimations.jsx',
+        './src/contexts/GameState.jsx',
+        './src/hooks/useModelLoader.js'
+      ]
     }
   },
-  // Configuración de assets
-  assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.hdr', '**/*.exr'],
-  // Configuración de preprocessing
+  // Asset handling
+  assetsInclude: [
+    '**/*.gltf', 
+    '**/*.glb', 
+    '**/*.hdr', 
+    '**/*.exr',
+    '**/*.mp3',
+    '**/*.wav'
+  ],
+  // CSS optimizations
   css: {
-    devSourcemap: false // Desactivar sourcemaps CSS en producción
+    devSourcemap: false
   },
-  // Configuración para mejor tree-shaking
+  // Environment variables and build optimizations
   define: {
-    // Eliminar checks de desarrollo en producción
     __DEV__: process.env.NODE_ENV === 'development',
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    // Remove React DevTools in production
+    __REACT_DEVTOOLS_GLOBAL_HOOK__: process.env.NODE_ENV === 'production' ? '({ isDisabled: true })' : undefined
+  },
+  // Resolve optimizations
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
+  },
+  // Experimental features for better performance
+  experimental: {
+    renderBuiltUrl(filename, { hostType, type }) {
+      if (type === 'asset' && /\.(glb|gltf)$/.test(filename)) {
+        return `./models/${filename}`;
+      }
+      return filename;
+    }
+  },
+  // Worker optimizations
+  worker: {
+    format: 'es',
+    plugins: [react()]
   }
 })

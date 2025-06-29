@@ -11,7 +11,9 @@
     "preview": "vite preview",
     "preview:prod": "vite preview --port 3000",
     "serve": "vite preview --port 3000 --host",
-    "check-size": "du -sh dist/*"
+    "check-size": "du -sh dist/*",
+    "analyze": "yarn build:prod && npx vite-bundle-analyzer dist",
+    "lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html --view"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",

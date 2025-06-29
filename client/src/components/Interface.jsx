@@ -18,6 +18,7 @@ import fightImg from "../assets/fight.png";
 import mainButtonImg from "../assets/mainbutton.jpeg";
 import { useButtonSound } from '../hooks/useButtonSound';
 import LoadingScreen from './LoadingScreen';
+import { useModelLoader } from '../hooks/useModelLoader';
 
 // CSS Animations for the interface
 const interfaceStyles = `
@@ -412,6 +413,36 @@ const Interface = () => {
       navigateToMenu();
     }, 600);
   };
+
+  // Import the optimized model loader
+  const { isLoading, loadingProgress, loadingStatus, isPlayable, lazyLoadModel } = useModelLoader();
+
+  // Function to handle skip to play
+  const handleSkipToPlay = () => {
+    console.log('🎮 User chose to skip to play - starting game early');
+    // Force end loading screen
+    setIsLoading(false);
+  };
+
+  // Lazy load models when entering shop
+  const handleEnterShop = () => {
+    console.log('🏪 Entering shop - lazy loading shop models');
+    // Pre-load shop character models
+    lazyLoadModel('Vince');
+    lazyLoadModel('Bob');
+    setCurrentScreen('shop');
+  };
+
+  if (isLoading) {
+    return (
+      <LoadingScreen 
+        progress={loadingProgress} 
+        status={loadingStatus}
+        isPlayable={isPlayable}
+        onSkipToPlay={handleSkipToPlay}
+      />
+    );
+  }
 
   return (
     <>
@@ -843,7 +874,7 @@ const Interface = () => {
                     size="xl"
                     onClick={() => {
                       playButtonSound();
-                      // Aquí se podría abrir una tienda
+                      handleEnterShop();
                     }}
                     style={{
                       fontSize: isMobile ? "36px" : "48px",
