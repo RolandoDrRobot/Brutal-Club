@@ -414,22 +414,13 @@ const Interface = () => {
   };
 
   // Import the optimized model loader
-  const { isLoading, loadingProgress, loadingStatus, isPlayable, lazyLoadModel } = useModelLoader();
-
-  // Function to handle skip to play
-  const handleSkipToPlay = () => {
-    console.log('🎮 User chose to skip to play - starting game early');
-    // Force end loading screen
-    setIsLoading(false);
-  };
+  const { isLoading, loadingProgress, loadingStatus, lazyLoadModel } = useModelLoader();
 
   if (isLoading) {
     return (
       <LoadingScreen 
         progress={loadingProgress} 
         status={loadingStatus}
-        isPlayable={isPlayable}
-        onSkipToPlay={handleSkipToPlay}
       />
     );
   }
@@ -506,7 +497,7 @@ const Interface = () => {
               }}
               disabled={fightTransition}
               style={{
-                fontSize: isMobile ? "24px" : "32px",
+                fontSize: isMobile ? "32px" : "42px",
                 fontWeight: 700,
                 padding: isMobile ? "15px 40px" : "20px 60px",
                 minHeight: isMobile ? "80px" : "100px",
@@ -525,9 +516,9 @@ const Interface = () => {
                 textTransform: "uppercase",
                 letterSpacing: "3px",
                 fontFamily: "Anton, sans-serif",
-                textAlign: "left",
+                textAlign: "center",
                 display: "flex",
-                justifyContent: "flex-start",
+                justifyContent: "center",
                 alignItems: "center",
                 textShadow: `
                   0 0 10px #000000,

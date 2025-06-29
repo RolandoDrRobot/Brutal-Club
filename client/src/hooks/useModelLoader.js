@@ -165,7 +165,6 @@ export const useModelLoader = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingStatus, setLoadingStatus] = useState('Initializing...');
-  const [isPlayable, setIsPlayable] = useState(false);
 
   useEffect(() => {
     console.log('🚀 Starting optimized asset loading...');
@@ -176,7 +175,6 @@ export const useModelLoader = () => {
       setLoadingProgress(100);
       setLoadingStatus('Ready to play!');
       setIsLoading(false);
-      setIsPlayable(true);
     }, 15000); // 15 seconds max
     
     const loadAssets = async () => {
@@ -206,7 +204,6 @@ export const useModelLoader = () => {
         
         // GAME IS NOW PLAYABLE! 
         setLoadingStatus('Ready to play!');
-        setIsPlayable(true);
         
         // PHASE 4: SECONDARY MODELS (60-75%) - Background/audience
         setLoadingStatus('Loading background elements...');
@@ -261,7 +258,6 @@ export const useModelLoader = () => {
         // Still start the game even with errors
         setTimeout(() => {
           setIsLoading(false);
-          setIsPlayable(true);
         }, 500);
       }
     };
@@ -288,7 +284,6 @@ export const useModelLoader = () => {
     isLoading,
     loadingProgress,
     loadingStatus,
-    isPlayable, // New: indicates when game is minimally playable
     lazyLoadModel // New: function to load additional models on demand
   };
 }; 

@@ -258,7 +258,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           </Text>
           
           <Text style={{
-            fontSize: isMobile ? '12px' : '14px',
+            fontSize: isMobile ? '16px' : '18px',
             fontWeight: 400,
             color: '#F5F5DC',
             fontFamily: 'Anton, sans-serif',
@@ -266,7 +266,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             marginTop: '4px',
             lineHeight: 1.2
           }}>
-            Fight all the opponents, earn coins and buy them to use them
+            Defeat opponents to earn coins, then unlock new fighters in the store
           </Text>
         </Box>
 

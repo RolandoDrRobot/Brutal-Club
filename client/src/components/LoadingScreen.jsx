@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from '@mantine/core';
 
-const LoadingScreen = ({ progress = 0, status = 'Starting...', isPlayable = false, onSkipToPlay }) => {
+const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
   // Definir las animaciones como estilos CSS en string
   const keyframes = `
     @keyframes pulse {
@@ -148,66 +148,11 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...', isPlayable = fals
             fontWeight: 700,
             fontSize: '18px',
             textShadow: '0 0 10px rgba(252, 63, 49, 0.6)',
-            transition: 'color 0.3s ease-in-out, text-shadow 0.3s ease-in-out',
-            marginBottom: isPlayable ? '20px' : '0'
+            transition: 'color 0.3s ease-in-out, text-shadow 0.3s ease-in-out'
           }}
         >
           {Math.round(progress)}%
         </Text>
-        
-        {/* Botón Skip to Play - aparece cuando el juego es playable */}
-        {isPlayable && (
-          <Box
-            style={{
-              animation: 'slideUp 0.5s ease-out'
-            }}
-          >
-            <button
-              onClick={onSkipToPlay}
-              style={{
-                background: 'linear-gradient(135deg, #fc3f31, #ff6b53)',
-                border: '2px solid rgba(252, 63, 49, 0.8)',
-                borderRadius: '8px',
-                color: '#ffffff',
-                fontSize: '16px',
-                fontWeight: 700,
-                padding: '12px 24px',
-                cursor: 'pointer',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                transition: 'all 0.3s ease',
-                animation: 'buttonPulse 2s ease-in-out infinite',
-                outline: 'none',
-                fontFamily: 'inherit'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'linear-gradient(135deg, #ff6b53, #fc3f31)';
-                e.target.style.transform = 'scale(1.05)';
-                e.target.style.boxShadow = '0 0 30px rgba(252, 63, 49, 1)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'linear-gradient(135deg, #fc3f31, #ff6b53)';
-                e.target.style.transform = 'scale(1)';
-                e.target.style.boxShadow = '0 0 15px rgba(252, 63, 49, 0.6)';
-              }}
-            >
-              🎮 SKIP TO PLAY
-            </button>
-            
-            <Text 
-              size="sm" 
-              style={{ 
-                color: 'rgba(245, 245, 220, 0.8)',
-                textAlign: 'center',
-                fontSize: '12px',
-                marginTop: '8px',
-                textShadow: '0 0 5px rgba(245, 245, 220, 0.3)'
-              }}
-            >
-              Game is ready! Other assets will load in background
-            </Text>
-          </Box>
-        )}
       </Box>
     </>
   );
