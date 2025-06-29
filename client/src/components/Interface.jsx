@@ -567,7 +567,9 @@ const Interface = () => {
                 }
               }}
             >
-              {isTransitioning ? "ENTERING..." : "ENTER FIGHT CLUB"}
+              <span className="fight-button-text">
+                {isTransitioning ? "ENTERING..." : "ENTER FIGHT CLUB"}
+              </span>
             </Button>
           </Affix>
         </>
