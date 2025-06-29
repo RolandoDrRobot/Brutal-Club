@@ -271,8 +271,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               fontWeight: 700,
               color: '#fc3f31',
               fontFamily: 'Anton, sans-serif',
-              letterSpacing: '2px',
-              textShadow: '0 0 10px #fc3f31'
+              letterSpacing: '2px'
             }}>
               {characters[selectedCharacter].name}
             </Text>
