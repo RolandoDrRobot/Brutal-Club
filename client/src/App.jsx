@@ -1,12 +1,30 @@
 import { Canvas } from "@react-three/fiber";
+import React, { Suspense } from "react";
 import Experience from "./components/Experience";
-import Interface from "./components/Interface";
-import HealthBars from "./components/HealthBars";
-import CrowdSound from "./components/CrowdSound";
-import PunchSound from "./components/PunchSound";
 import LoadingScreen from "./components/LoadingScreen";
 import { useCharacterAnimations } from "./contexts/CharacterAnimations";
 import { useModelLoader } from "./hooks/useModelLoader";
+
+// Lazy loading para componentes pesados no críticos
+const Interface = React.lazy(() => import("./components/Interface"));
+const HealthBars = React.lazy(() => import("./components/HealthBars"));
+const CrowdSound = React.lazy(() => import("./components/CrowdSound"));
+const PunchSound = React.lazy(() => import("./components/PunchSound"));
+
+// Componente de fallback ligero para Suspense
+const ComponentFallback = () => (
+  <div style={{ 
+    position: 'fixed', 
+    top: '50%', 
+    left: '50%', 
+    transform: 'translate(-50%, -50%)',
+    color: '#F5F5DC',
+    fontSize: '14px',
+    opacity: 0.7
+  }}>
+    Cargando...
+  </div>
+);
 
 function App() {
   const { isCombatMode } = useCharacterAnimations();
@@ -26,6 +44,7 @@ function App() {
         background: '#000000',
         zIndex: -1
       }} />
+      
       <Canvas
         camera={{ position: [0, 1.5, 4], fov: 60 }}
         shadows
@@ -34,10 +53,14 @@ function App() {
       >
         <Experience />
       </Canvas>
-      <Interface />
-      <HealthBars />
-      <CrowdSound />
-      <PunchSound />
+      
+      {/* Cargar UI componentes de forma lazy solo después de que el 3D esté listo */}
+      <Suspense fallback={<ComponentFallback />}>
+        <Interface />
+        {isCombatMode && <HealthBars />}
+        <CrowdSound />
+        <PunchSound />
+      </Suspense>
     </>
   );
 }
