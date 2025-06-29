@@ -1521,7 +1521,11 @@ export const CharacterAnimationsProvider = (props) => {
   };
 
   const navigateToMenu = () => {
-    navigateWithExitAnimation('menu');
+    navigateWithExitAnimation('menu', () => {
+      setIsCombatMode(false);
+      // Reset combat state when going to menu
+      cleanupCombatState();
+    });
   };
 
   const navigateToCombat = () => {

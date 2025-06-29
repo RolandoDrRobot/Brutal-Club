@@ -19,6 +19,7 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import LoadingScreen from './LoadingScreen';
 import { useModelLoader } from '../hooks/useModelLoader';
 import { useGameState } from '../contexts/GameState';
+import CharacterPreview from "./CharacterPreview";
 
 // CSS Animations for the interface
 const interfaceStyles = `
@@ -572,7 +573,7 @@ const Interface = () => {
       )}
 
       {/* Modo de combate - currentScreen 'combat' */}
-      {currentScreen === 'combat' && isCombatMode && (
+      {currentScreen === 'combat' && (
         <>
           {/* Victory Screen - Full Screen Overlay */}
           {isCombatOver && (
@@ -594,6 +595,23 @@ const Interface = () => {
                 padding: isMobile ? '10px' : '20px',
                 boxSizing: 'border-box'
               }}>
+              
+              {/* 3D Model of winning character - Large background */}
+              <CharacterPreview
+                characterName={player1IsDead ? selectedPlayer2Character?.name : selectedPlayer1Character?.name}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: isMobile ? '120vw' : '80vw',
+                  height: isMobile ? '120vh' : '100vh',
+                  zIndex: 1,
+                  opacity: 1,
+                  pointerEvents: 'none'
+                }}
+              />
+              
               {/* Winner Title */}
               <div style={{
                 fontSize: isMobile ? '32px' : '72px',
@@ -605,26 +623,11 @@ const Interface = () => {
                 marginBottom: isMobile ? '10px' : '40px',
                 textShadow: '4px 4px 8px rgba(0, 0, 0, 0.9)',
                 textTransform: 'uppercase',
-                lineHeight: isMobile ? '1.1' : '1.2'
+                lineHeight: isMobile ? '1.1' : '1.2',
+                zIndex: 10,
+                position: 'relative'
               }}>
                 {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"}
-              </div>
-
-              {/* Character Display Area - Optimized for mobile */}
-              <div style={{
-                width: isMobile ? '200px' : '400px',
-                height: isMobile ? '180px' : '450px',
-                backgroundColor: 'transparent',
-                border: 'none',
-                borderRadius: '20px',
-                marginBottom: isMobile ? '10px' : '30px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                overflow: 'visible'
-              }}>
-                {/* Character area - empty for now */}
               </div>
 
               {/* Coins Reward - Only show for Player 1 victory */}
@@ -642,7 +645,9 @@ const Interface = () => {
                     0 0 20px rgba(252, 63, 49, 0.4),
                     inset 0 0 20px rgba(252, 63, 49, 0.1)
                   `,
-                  animation: 'neonPulse 2s ease-in-out infinite'
+                  animation: 'neonPulse 2s ease-in-out infinite',
+                  zIndex: 10,
+                  position: 'relative'
                 }}>
                   {/* Coin Icon */}
                   <div style={{
@@ -681,7 +686,9 @@ const Interface = () => {
                 marginTop: isMobile ? '10px' : '30px',
                 width: '100%',
                 justifyContent: 'center',
-                flexWrap: 'wrap'
+                flexWrap: 'wrap',
+                zIndex: 10,
+                position: 'relative'
               }}>
                 {/* REMATCH Button */}
                 <button
@@ -732,6 +739,7 @@ const Interface = () => {
                 {/* MENU Button */}
                 <button
                   onClick={() => {
+                    console.log('🎮 MENU button clicked - navigating to main menu');
                     playButtonSound();
                     navigateToMenu();
                   }}

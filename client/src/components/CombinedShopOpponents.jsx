@@ -123,6 +123,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       borderRadius: '15px',
       padding: isMobile ? '10px' : '15px',
       height: isMobile ? '200px' : '250px',
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -171,7 +172,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     const baseStyle = {
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
       border: 'none',
-      fontSize: isMobile ? '14px' : '16px',
+      fontSize: isMobile ? '16px' : '18px',
       fontWeight: 700,
       padding: '8px 12px',
       borderRadius: '8px',
@@ -345,66 +346,88 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                   animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`
                 }}
               >
-                <Card
-                  style={getCharacterCardStyle(opponent, true)}
-                  onClick={() => handleOpponentSelect(opponent)}
-                >
-                  {/* 3D Model */}
-                  {opponent.model && (
+                <Box style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <Card
+                    style={getCharacterCardStyle(opponent, true)}
+                    onClick={() => handleOpponentSelect(opponent)}
+                  >
+                    {/* 3D Model */}
+                    {opponent.model && (
+                      <Box style={{
+                        position: 'absolute',
+                        top: '55%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '90%',
+                        height: '55%',
+                        zIndex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <CharacterPreview
+                          characterName={opponent.name}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            transform: 'scale(1.4)',
+                            filter: opponent.isLocked ? 'grayscale(100%)' : 'none'
+                          }}
+                        />
+                      </Box>
+                    )}
+
+                    {/* Action Button - Moved to bottom */}
                     <Box style={{
                       position: 'absolute',
-                      top: '5%',
-                      left: 0,
-                      right: 0,
-                      bottom: '20%',
-                      zIndex: 1,
+                      bottom: '8px',
+                      left: '8px',
+                      right: '8px',
+                      zIndex: 2,
                       display: 'flex',
-                      alignItems: 'center',
                       justifyContent: 'center'
                     }}>
-                      <CharacterPreview
-                        characterName={opponent.name}
+                      <Button
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          transform: 'scale(1.2)',
-                          filter: opponent.isLocked ? 'grayscale(100%)' : 'none'
+                          ...getButtonStyle(opponent, true),
+                          width: '100%'
                         }}
-                      />
+                        disabled={opponent.isLocked}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpponentSelect(opponent);
+                        }}
+                      >
+                        {opponent.isLocked ? (
+                          <span>{opponent.price}</span>
+                        ) : opponent.isDefeated ? (
+                          <span>DEFEATED</span>
+                        ) : (
+                          <span>{opponent.price}</span>
+                        )}
+                      </Button>
                     </Box>
-                  )}
-
-                  {/* Action Button - Moved to bottom */}
-                  <Box style={{
-                    position: 'absolute',
-                    bottom: '8px',
-                    left: '8px',
-                    right: '8px',
-                    zIndex: 2,
-                    display: 'flex',
-                    justifyContent: 'center'
+                  </Card>
+                  
+                  {/* Fighter Name */}
+                  <Text style={{
+                    fontSize: isMobile ? '16px' : '18px',
+                    fontWeight: 700,
+                    color: opponent.isLocked ? '#666' : '#F5F5DC',
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '1px',
+                    textAlign: 'center',
+                    textTransform: 'uppercase',
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                   }}>
-                    <Button
-                      style={{
-                        ...getButtonStyle(opponent, true),
-                        width: '100%'
-                      }}
-                      disabled={opponent.isLocked}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpponentSelect(opponent);
-                      }}
-                    >
-                      {opponent.isLocked ? (
-                        <span>{opponent.price}</span>
-                      ) : opponent.isDefeated ? (
-                        <span>DEFEATED</span>
-                      ) : (
-                        <span>{opponent.price}</span>
-                      )}
-                    </Button>
-                  </Box>
-                </Card>
+                    {opponent.name}
+                  </Text>
+                </Box>
               </Grid.Col>
             ))}
           </Grid>
@@ -441,78 +464,100 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                   animation: `fadeInSpray 0.5s ease-out ${0.5 + index * 0.1}s both`
                 }}
               >
-                <Card
-                  style={getCharacterCardStyle(character, false)}
-                  onClick={() => {
-                    const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
-                    if (!isLocked && !character.isPurchased) {
-                      handlePurchase(character);
-                    }
-                  }}
-                >
-                  {/* 3D Model as Background */}
-                  {character.model && (
+                <Box style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <Card
+                    style={getCharacterCardStyle(character, false)}
+                    onClick={() => {
+                      const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
+                      if (!isLocked && !character.isPurchased) {
+                        handlePurchase(character);
+                      }
+                    }}
+                  >
+                    {/* 3D Model as Background */}
+                    {character.model && (
+                      <Box style={{
+                        position: 'absolute',
+                        top: '55%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '90%',
+                        height: '55%',
+                        zIndex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <CharacterPreview
+                          characterName={character.name}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            transform: 'scale(1.4)'
+                          }}
+                        />
+                      </Box>
+                    )}
+
+                    {/* Action Button - Moved to bottom */}
                     <Box style={{
                       position: 'absolute',
-                      top: '5%',
-                      left: 0,
-                      right: 0,
-                      bottom: '20%',
-                      zIndex: 1,
+                      bottom: '8px',
+                      left: '8px',
+                      right: '8px',
+                      zIndex: 2,
                       display: 'flex',
-                      alignItems: 'center',
                       justifyContent: 'center'
                     }}>
-                      <CharacterPreview
-                        characterName={character.name}
+                      <Button
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          transform: 'scale(1.2)'
+                          ...getButtonStyle(character, false),
+                          width: '100%'
                         }}
-                      />
-                    </Box>
-                  )}
-
-                  {/* Action Button - Moved to bottom */}
-                  <Box style={{
-                    position: 'absolute',
-                    bottom: '8px',
-                    left: '8px',
-                    right: '8px',
-                    zIndex: 2,
-                    display: 'flex',
-                    justifyContent: 'center'
-                  }}>
-                    <Button
-                      style={{
-                        ...getButtonStyle(character, false),
-                        width: '100%'
-                      }}
-                      disabled={
-                        (character.price !== null && !character.canAfford && !character.isPurchased) || 
-                        character.isPurchased
-                      }
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
-                        if (!isLocked && !character.isPurchased) {
-                          handlePurchase(character);
+                        disabled={
+                          (character.price !== null && !character.canAfford && !character.isPurchased) || 
+                          character.isPurchased
                         }
-                      }}
-                    >
-                      {character.isPurchased ? (
-                        <span>OWNED</span>
-                      ) : (character.price !== null && !character.canAfford && !character.isPurchased) ? (
-                        <span>LOCKED</span>
-                      ) : character.price === null ? (
-                        <span>FREE</span>
-                      ) : (
-                        <span>{character.price}</span>
-                      )}
-                    </Button>
-                  </Box>
-                </Card>
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
+                          if (!isLocked && !character.isPurchased) {
+                            handlePurchase(character);
+                          }
+                        }}
+                      >
+                        {character.isPurchased ? (
+                          <span>OWNED</span>
+                        ) : (character.price !== null && !character.canAfford && !character.isPurchased) ? (
+                          <span>LOCKED</span>
+                        ) : character.price === null ? (
+                          <span>FREE</span>
+                        ) : (
+                          <span>{character.price}</span>
+                        )}
+                      </Button>
+                    </Box>
+                  </Card>
+                  
+                  {/* Fighter Name */}
+                  <Text style={{
+                    fontSize: isMobile ? '16px' : '18px',
+                    fontWeight: 700,
+                    color: (character.price !== null && !character.canAfford && !character.isPurchased) ? '#666' : '#F5F5DC',
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '1px',
+                    textAlign: 'center',
+                    textTransform: 'uppercase',
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                  }}>
+                    {character.name}
+                  </Text>
+                </Box>
               </Grid.Col>
             ))}
           </Grid>
