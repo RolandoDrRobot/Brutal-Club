@@ -1013,7 +1013,7 @@ const Interface = () => {
             <>
               {/* PAD DE PELEA PRINCIPAL - Diseño Arcade Profesional */}
               <Affix position={{ 
-                bottom: isMobile ? 10 : 30, 
+                bottom: isMobile ? 5 : 15, 
                 left: "50%",
                 transform: "translateX(-50%)"
               }}>
@@ -1021,103 +1021,107 @@ const Interface = () => {
                   textAlign: "center",
                   backgroundColor: "transparent",
                   borderRadius: isMobile ? "15px" : "20px",
-                  padding: isMobile ? "15px" : "30px",
+                  padding: isMobile ? "10px" : "20px",
                   border: "none",
                   boxShadow: "none",
                   backdropFilter: "blur(10px)",
-                  maxWidth: isMobile ? "95vw" : "auto",
-                  width: isMobile ? "95vw" : "auto"
+                  maxWidth: isMobile ? "100vw" : "auto",
+                  width: isMobile ? "100vw" : "auto"
                 }}>
-                  <Stack spacing={isMobile ? "md" : "lg"} align="center">
-                    {/* Fila de Botones de Ataque - Optimizado para móvil */}
-                    <Group spacing={isMobile ? "xs" : "xl"} position="center" style={{
-                      width: "100%",
-                      justifyContent: "space-around"
-                    }}>
-                      {attackButtons.map((attack, index) => {
-                        const canUseAttack = canAttack(player1CombatState, attack.name, player1Stamina, player1IsDead, player1IsBlocking);
-                        const staminaCost = staminaCosts[attack.name] || 0;
-                        
-                        return (
-                          <Box
-                            key={`p1-${attack.name}`}
+                  {/* Fila de Botones de Ataque - Optimizado para fila inferior */}
+                  <Group spacing={isMobile ? "lg" : "xl"} position="center" style={{
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                    display: "flex",
+                    flexDirection: "row"
+                  }}>
+                    {attackButtons.map((attack, index) => {
+                      const canUseAttack = canAttack(player1CombatState, attack.name, player1Stamina, player1IsDead, player1IsBlocking);
+                      const staminaCost = staminaCosts[attack.name] || 0;
+                      
+                      return (
+                        <Box
+                          key={`p1-${attack.name}`}
+                          style={{
+                            position: "relative",
+                            transform: canUseAttack ? "scale(1)" : "scale(0.95)",
+                            transition: "all 0.2s ease",
+                            flex: isMobile ? "1" : "0 0 auto",
+                            maxWidth: isMobile ? "30%" : "140px",
+                            display: "flex",
+                            justifyContent: "center"
+                          }}
+                        >
+                          <Button
+                            variant="outline"
+                            size={isMobile ? "lg" : "xl"}
+                            disabled={!canUseAttack}
+                            onClick={() => triggerPlayer1Attack(attack.name)}
                             style={{
                               position: "relative",
-                              transform: canUseAttack ? "scale(1)" : "scale(0.95)",
-                              transition: "all 0.2s ease",
-                              flex: isMobile ? "1" : "none"
+                              zIndex: 1,
+                              padding: "0",
+                              minHeight: isMobile ? "100px" : "120px",
+                              minWidth: isMobile ? "90px" : "120px",
+                              backgroundColor: "transparent",
+                              border: "none",
+                              borderRadius: "15px",
+                              cursor: canUseAttack ? "pointer" : "not-allowed",
+                              opacity: canUseAttack ? 1 : 0.5,
+                              transition: "all 0.3s ease",
+                              overflow: "hidden",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              boxShadow: "none"
+                            }}
+                            onTouchStart={(e) => {
+                              if (canUseAttack && isMobile) {
+                                e.target.style.transform = "scale(0.95)";
+                                e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                                e.target.style.animation = "impactShake 0.3s ease-out";
+                              }
+                            }}
+                            onTouchEnd={(e) => {
+                              if (canUseAttack && isMobile) {
+                                e.target.style.transform = "scale(1)";
+                                e.target.style.backgroundColor = "transparent";
+                                e.target.style.animation = "none";
+                              }
+                            }}
+                            onMouseEnter={(e) => {
+                              if (canUseAttack && !isMobile) {
+                                e.target.style.transform = "scale(1.05)";
+                                e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                                e.target.style.animation = "impactShake 0.3s ease-out";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (canUseAttack && !isMobile) {
+                                e.target.style.transform = "scale(1)";
+                                e.target.style.backgroundColor = "transparent";
+                                e.target.style.animation = "none";
+                              }
                             }}
                           >
-                            <Button
-                              variant="outline"
-                              size={isMobile ? "md" : "xl"}
-                              disabled={!canUseAttack}
-                              onClick={() => triggerPlayer1Attack(attack.name)}
+                            <img 
+                              src={attack.image}
+                              alt={attack.label}
                               style={{
-                                position: "relative",
-                                zIndex: 1,
-                                padding: "0",
-                                minHeight: "120px",
-                                minWidth: "100px",
-                                backgroundColor: "transparent",
-                                border: "none",
-                                borderRadius: "15px",
-                                cursor: canUseAttack ? "pointer" : "not-allowed",
-                                opacity: canUseAttack ? 1 : 0.5,
-                                transition: "all 0.3s ease",
-                                overflow: "hidden",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                boxShadow: "none"
+                                width: "90%",
+                                height: "90%",
+                                objectFit: "contain",
+                                filter: canUseAttack ? "none" : "grayscale(1)",
+                                pointerEvents: "none",
+                                borderRadius: "4px"
                               }}
-                              onTouchStart={(e) => {
-                                if (canUseAttack && isMobile) {
-                                  e.target.style.transform = "scale(0.95)";
-                                  e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
-                                  e.target.style.animation = "impactShake 0.3s ease-out";
-                                }
-                              }}
-                              onTouchEnd={(e) => {
-                                if (canUseAttack && isMobile) {
-                                  e.target.style.transform = "scale(1)";
-                                  e.target.style.backgroundColor = "transparent";
-                                  e.target.style.animation = "none";
-                                }
-                              }}
-                              onMouseEnter={(e) => {
-                                if (canUseAttack && !isMobile) {
-                                  e.target.style.transform = "scale(1.05)";
-                                  e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
-                                  e.target.style.animation = "impactShake 0.3s ease-out";
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                if (canUseAttack && !isMobile) {
-                                  e.target.style.transform = "scale(1)";
-                                  e.target.style.backgroundColor = "transparent";
-                                  e.target.style.animation = "none";
-                                }
-                              }}
-                            >
-                              <img 
-                                src={attack.image}
-                                alt={attack.label}
-                                style={{
-                                  width: "90%",
-                                  height: "90%",
-                                  objectFit: "contain",
-                                  filter: canUseAttack ? "none" : "grayscale(1)",
-                                  pointerEvents: "none",
-                                  borderRadius: "4px"
-                                }}
-                              />
-                            </Button>
-                          </Box>
-                        );
-                      })}
-                    </Group>
-                  </Stack>
+                            />
+                          </Button>
+                        </Box>
+                      );
+                    })}
+                  </Group>
                 </Box>
               </Affix>
 
