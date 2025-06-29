@@ -225,29 +225,79 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         flexDirection: "column"
       }}
     >
-      {/* Header with title and coins */}
+      {/* Header with coins and back button */}
       <Box style={{ 
-        textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
         marginBottom: isMobile ? "20px" : "25px",
-        paddingTop: isMobile ? "10px" : "15px"
+        paddingTop: isMobile ? "10px" : "15px",
+        flexWrap: 'wrap',
+        gap: isMobile ? '10px' : '15px',
+        width: '100%'
       }}>
-        <Text className="fight-title">
-          FIGHT CLUB
-        </Text>
-        
-        {/* Coins display */}
-        <Text style={{
-          fontSize: isMobile ? '18px' : '22px',
-          fontWeight: 700,
-          color: '#FFD700',
-          fontFamily: 'Anton, sans-serif',
-          letterSpacing: '1px',
-          marginTop: '12px'
+        {/* Left side: Coins and description text */}
+        <Box style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          flex: 1
         }}>
-          {coins} COINS
-        </Text>
+          <Text style={{
+            fontSize: isMobile ? '24px' : '28px',
+            fontWeight: 700,
+            color: '#FFD700',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '1px',
+            whiteSpace: 'nowrap'
+          }}>
+            {coins} COINS
+          </Text>
+          
+          <Text style={{
+            fontSize: isMobile ? '12px' : '14px',
+            fontWeight: 400,
+            color: '#F5F5DC',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '0.5px',
+            marginTop: '4px',
+            lineHeight: 1.2
+          }}>
+            Fight all the opponents, earn coins and buy them to use them
+          </Text>
+        </Box>
+
+        {/* Right side: Back Button */}
+        <Box style={{
+          flexShrink: 0
+        }}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              playButtonSound();
+              onBackClick();
+            }}
+            style={{
+              fontSize: "16px",
+              fontWeight: 700,
+              padding: "12px 20px",
+              backgroundColor: "transparent",
+              borderColor: "#fc3f31",
+              border: "3px solid #fc3f31",
+              borderRadius: "10px",
+              color: "#fc3f31",
+              textTransform: "uppercase",
+              letterSpacing: "2px",
+              fontFamily: "Anton, sans-serif",
+              height: "55px"
+            }}
+          >
+            <span className="fight-button-text">BACK</span>
+          </Button>
+        </Box>
       </Box>
 
       {/* Scrollable Content Container */}
@@ -256,6 +306,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         overflowY: "auto",
         overflowX: "hidden",
         paddingRight: isMobile ? "5px" : "10px",
+        paddingTop: isMobile ? "15px" : "20px",
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         minHeight: 0,
         maxWidth: "400px",
@@ -466,39 +517,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             ))}
           </Grid>
         </Box>
-      </Box>
-
-      {/* Back Button */}
-      <Box style={{
-        animation: "fadeInSpray 0.5s ease-out 0.4s both",
-        flexShrink: 0,
-        paddingTop: isMobile ? "20px" : "25px",
-        paddingBottom: isMobile ? "15px" : "20px",
-        textAlign: "center"
-      }}>
-        <Button
-          variant="outline"
-          size="lg"
-          onClick={() => {
-            playButtonSound();
-            onBackClick();
-          }}
-          style={{
-            fontSize: isMobile ? "16px" : "20px",
-            fontWeight: 700,
-            padding: isMobile ? "12px 20px" : "15px 30px",
-            backgroundColor: "transparent",
-            borderColor: "#fc3f31",
-            border: "3px solid #fc3f31",
-            borderRadius: "10px",
-            color: "#fc3f31",
-            textTransform: "uppercase",
-            letterSpacing: "2px",
-            fontFamily: "Anton, sans-serif",
-          }}
-        >
-          <span className="fight-button-text">BACK</span>
-        </Button>
       </Box>
     </Box>
   );
