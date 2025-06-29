@@ -576,28 +576,24 @@ const Interface = () => {
         <>
           {/* Victory Screen - Full Screen Overlay */}
           {isCombatOver && (
-            <div style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '100vw',
-              height: '100vh',
-              backgroundColor: 'rgba(0, 0, 0, 0.9)',
-              backgroundImage: `
-                radial-gradient(circle at 20% 20%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(139, 69, 19, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%)
-              `,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 2000,
-              animation: 'fadeInSpray 1s ease-out',
-              backdropFilter: 'blur(2px)',
-              padding: isMobile ? '10px' : '20px',
-              boxSizing: 'border-box'
-            }}>
+            <div 
+              className="fight-screen-background"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100dvh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 2000,
+                animation: 'fadeInSpray 1s ease-out',
+                backdropFilter: 'blur(2px)',
+                padding: isMobile ? '10px' : '20px',
+                boxSizing: 'border-box'
+              }}>
               {/* Winner Title */}
               <div style={{
                 fontSize: isMobile ? '32px' : '72px',
@@ -642,7 +638,11 @@ const Interface = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: isMobile ? '8px' : '15px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)'
+                  boxShadow: `
+                    0 0 20px rgba(252, 63, 49, 0.4),
+                    inset 0 0 20px rgba(252, 63, 49, 0.1)
+                  `,
+                  animation: 'neonPulse 2s ease-in-out infinite'
                 }}>
                   {/* Coin Icon */}
                   <div style={{
@@ -654,7 +654,8 @@ const Interface = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: isMobile ? '16px' : '30px',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+                    boxShadow: '0 0 15px rgba(255, 215, 0, 0.6)',
+                    animation: 'rotate 3s linear infinite'
                   }}>
                     ⭐
                   </div>
@@ -697,6 +698,10 @@ const Interface = () => {
                     textTransform: 'uppercase',
                     color: '#fc3f31',
                     backgroundColor: 'transparent',
+                    backgroundImage: `url(${mainButtonImg})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
                     border: '3px solid #fc3f31',
                     borderRadius: '15px',
                     padding: isMobile ? '12px 24px' : '20px 40px',
@@ -728,7 +733,7 @@ const Interface = () => {
                 <button
                   onClick={() => {
                     playButtonSound();
-                    navigateBackToMenu();
+                    navigateToMenu();
                   }}
                   style={{
                     fontSize: isMobile ? '16px' : '24px',
@@ -738,6 +743,10 @@ const Interface = () => {
                     textTransform: 'uppercase',
                     color: '#fc3f31',
                     backgroundColor: 'transparent',
+                    backgroundImage: `url(${mainButtonImg})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
                     border: '3px solid #fc3f31',
                     borderRadius: '15px',
                     padding: isMobile ? '12px 24px' : '20px 40px',
