@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from '@mantine/core';
 
-const LoadingScreen = ({ progress = 0, status = 'Iniciando...' }) => {
+const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
   // Definir las animaciones como estilos CSS en string
   const keyframes = `
     @keyframes pulse {

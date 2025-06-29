@@ -413,11 +413,11 @@
 
 /* Common title styles */
 .fight-title {
-  font-size: clamp(32px, 5vw, 80px);
+  font-size: clamp(48px, 8vw, 120px);
   font-weight: 900;
   color: #fc3f31;
   font-family: 'Anton', sans-serif;
-  letter-spacing: clamp(4px, 1vw, 8px);
+  letter-spacing: clamp(6px, 1.5vw, 12px);
   text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
   line-height: 0.9;
   text-align: center;
@@ -433,8 +433,8 @@
 /* Force single line on very small devices */
 @media (max-width: 480px) {
   .fight-title {
-    font-size: clamp(24px, 6vw, 40px);
-    letter-spacing: clamp(2px, 1.5vw, 6px);
+    font-size: clamp(36px, 8vw, 60px);
+    letter-spacing: clamp(3px, 2vw, 8px);
     min-width: 200px;
     max-width: 90vw;
   }
@@ -443,8 +443,8 @@
 /* Force single line on extra small devices */
 @media (max-width: 360px) {
   .fight-title {
-    font-size: clamp(20px, 7vw, 32px);
-    letter-spacing: clamp(1px, 2vw, 4px);
+    font-size: clamp(32px, 9vw, 48px);
+    letter-spacing: clamp(2px, 2.5vw, 6px);
     min-width: 180px;
     max-width: 95vw;
   }
@@ -453,8 +453,8 @@
 /* Force single line on micro devices */
 @media (max-width: 320px) {
   .fight-title {
-    font-size: clamp(18px, 8vw, 28px);
-    letter-spacing: clamp(0.5px, 2.5vw, 3px);
+    font-size: clamp(28px, 10vw, 40px);
+    letter-spacing: clamp(1px, 3vw, 4px);
     min-width: 160px;
     max-width: 98vw;
   }

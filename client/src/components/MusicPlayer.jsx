@@ -10,11 +10,16 @@ const MusicPlayer = () => {
   // Song list (using actual files from the music directory)
   const songs = [
     { id: 0, name: "No Music", artist: "", file: null },
-    { id: 1, name: "Now That We're Dead", artist: "Metallica", file: "/music/Metallica Now That We're Dead (official audio).mp3" },
-    { id: 2, name: "Lights Out", artist: "Max Styler", file: "/music/Max Styler - Lights Out (Extended Mix).mp3" },
-    { id: 3, name: "Bow Down", artist: "Ice Cube", file: "/music/Ice Cube - Bow Down (West side connection).mp3" },
-    { id: 4, name: "Nine Thou", artist: "Styles Of Beyond", file: "/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3" },
-    { id: 5, name: "Another", artist: "Full On The Mouth", file: "/music/Full On The Mouth - Another.mp3" }
+    { id: 1, name: "Nine Thou", artist: "Styles Of Beyond", file: "/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3" },
+    { id: 2, name: "Another", artist: "Full On The Mouth", file: "/music/Full On The Mouth - Another.mp3" },
+    { id: 3, name: "Fight Club Theme", artist: "The Dust Brothers", file: "/music/fight-club-theme.mp3" },
+    { id: 4, name: "Where Is My Mind", artist: "Pixies", file: "/music/pixies-where-is-my-mind.mp3" },
+    { id: 5, name: "This Is Your Life", artist: "The Dust Brothers", file: "/music/this-is-your-life.mp3" },
+    { id: 6, name: "Marla's Theme", artist: "The Dust Brothers", file: "/music/marlas-theme.mp3" },
+    { id: 7, name: "Corporate Sponsorship", artist: "The Dust Brothers", file: "/music/corporate-sponsorship.mp3" },
+    { id: 8, name: "What Is Fight Club", artist: "The Dust Brothers", file: "/music/what-is-fight-club.mp3" },
+    { id: 9, name: "Medulla Oblongata", artist: "The Dust Brothers", file: "/music/medulla-oblongata.mp3" },
+    { id: 10, name: "His Apartment", artist: "The Dust Brothers", file: "/music/his-apartment.mp3" }
   ];
 
   const [currentSongIndex, setCurrentSongIndex] = useState(1);

@@ -1,35 +1,37 @@
 # Fight Club Title Optimizations
 
 ## Resumen
-Se han implementado optimizaciones CSS para asegurar que todos los títulos "FIGHT CLUB" se mantengan en una sola línea en todas las pantallas y dispositivos, incluyendo dispositivos móviles muy pequeños.
+Se han implementado optimizaciones CSS para asegurar que todos los títulos "FIGHT CLUB" se mantengan en una sola línea en todas las pantallas y dispositivos, incluyendo dispositivos móviles muy pequeños. Los títulos ahora tienen un tamaño significativamente más grande para mayor impacto visual.
 
 ## Cambios Implementados
 
 ### 1. Modificación de la clase `.fight-title`
 **Archivo:** `client/src/styles/fightAnimations.css`
 
+- **Tamaño base aumentado**: `clamp(48px, 8vw, 120px)` (anteriormente 32px-80px)
+- **Espaciado de letras aumentado**: `clamp(6px, 1.5vw, 12px)` (anteriormente 4px-8px)
 - **`white-space: nowrap`**: Fuerza el texto a permanecer en una línea
 - **`overflow: visible`**: Permite que el texto se extienda fuera del contenedor si es necesario
 - **`text-overflow: clip`**: Evita puntos suspensivos innecesarios
 - **`width: fit-content`**: Ajusta el ancho al contenido
 - **`margin: 0 auto`**: Centra el título horizontalmente
 
-### 2. Media Queries Responsivas
-Se agregaron media queries específicas para diferentes tamaños de pantalla:
+### 2. Media Queries Responsivas (Tamaños Aumentados)
+Se agregaron media queries específicas para diferentes tamaños de pantalla con títulos más grandes:
 
 #### Dispositivos pequeños (≤480px)
-- Tamaño de fuente: `clamp(24px, 6vw, 40px)`
-- Espaciado de letras: `clamp(2px, 1.5vw, 6px)`
+- Tamaño de fuente: `clamp(36px, 8vw, 60px)` (50% más grande)
+- Espaciado de letras: `clamp(3px, 2vw, 8px)`
 - Ancho máximo: `90vw`
 
 #### Dispositivos extra pequeños (≤360px)
-- Tamaño de fuente: `clamp(20px, 7vw, 32px)`
-- Espaciado de letras: `clamp(1px, 2vw, 4px)`
+- Tamaño de fuente: `clamp(32px, 9vw, 48px)` (60% más grande)
+- Espaciado de letras: `clamp(2px, 2.5vw, 6px)`
 - Ancho máximo: `95vw`
 
 #### Dispositivos micro (≤320px)
-- Tamaño de fuente: `clamp(18px, 8vw, 28px)`
-- Espaciado de letras: `clamp(0.5px, 2.5vw, 3px)`
+- Tamaño de fuente: `clamp(28px, 10vw, 40px)` (56% más grande)
+- Espaciado de letras: `clamp(1px, 3vw, 4px)`
 - Ancho máximo: `98vw`
 
 ### 3. Nueva clase `.fight-button-text`

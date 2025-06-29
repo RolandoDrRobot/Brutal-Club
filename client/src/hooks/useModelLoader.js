@@ -17,9 +17,6 @@ const modelPaths = [
 
 // List of all music files that need to be preloaded
 const musicPaths = [
-  '/music/Metallica Now That We\'re Dead (official audio).mp3',
-  '/music/Max Styler - Lights Out (Extended Mix).mp3',
-  '/music/Ice Cube - Bow Down (West side connection).mp3',
   '/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3',
   '/music/Full On The Mouth - Another.mp3',
   '/music/crowd.mp3',

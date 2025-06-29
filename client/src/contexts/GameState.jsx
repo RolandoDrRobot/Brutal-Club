@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const GameStateContext = createContext({});
 
-// Configuración del juego
+// Game configuration
 const GAME_CONFIG = {
   COINS_PER_WIN: 200,
   OPPONENTS: [
@@ -11,7 +11,7 @@ const GAME_CONFIG = {
       name: 'TYLER',
       model: 'Tyler',
       description: 'Soap maker with deadly skills',
-      unlockRequirement: null, // Disponible desde el inicio
+      unlockRequirement: null, // Available from the start
       coinReward: 200
     },
     {
@@ -19,7 +19,7 @@ const GAME_CONFIG = {
       name: 'PETE',
       model: 'pete',
       description: 'Construction worker with heavy fists',
-      unlockRequirement: 'tyler', // Se desbloquea al vencer a Tyler
+      unlockRequirement: 'tyler', // Unlocked by defeating Tyler
       coinReward: 200
     }
   ],
@@ -29,7 +29,7 @@ const GAME_CONFIG = {
       name: 'PETE',
       model: 'pete',
       description: 'Construction Worker',
-      price: null, // Personaje inicial gratuito
+      price: null, // Free initial character
       emoji: '👷‍♂️'
     },
     {
@@ -60,7 +60,7 @@ const GAME_CONFIG = {
 };
 
 export const GameStateProvider = ({ children }) => {
-  // Estado persistente del juego
+  // Persistent game state
   const [gameState, setGameState] = useState(() => {
     const savedState = localStorage.getItem('fightClubGameState');
     if (savedState) {
@@ -71,9 +71,9 @@ export const GameStateProvider = ({ children }) => {
     
     const initialState = {
       coins: 0,
-      defeatedOpponents: [], // IDs de oponentes derrotados
-      purchasedCharacters: ['pete'], // Pete es gratuito inicialmente
-      unlockedOpponents: ['tyler'], // Solo Tyler está disponible al inicio
+      defeatedOpponents: [], // IDs of defeated opponents
+      purchasedCharacters: ['pete'], // Pete is free initially
+      unlockedOpponents: ['tyler'], // Only Tyler is available at the start
       totalWins: 0,
       totalFights: 0
     };
@@ -82,13 +82,13 @@ export const GameStateProvider = ({ children }) => {
     return initialState;
   });
 
-  // Guardar estado en localStorage cuando cambie
+  // Save state to localStorage when it changes
   useEffect(() => {
     localStorage.setItem('fightClubGameState', JSON.stringify(gameState));
     console.log('💾 Game state saved:', gameState);
   }, [gameState]);
 
-  // Función para añadir monedas
+  // Function to add coins
   const addCoins = (amount) => {
     setGameState(prev => ({
       ...prev,
@@ -96,7 +96,7 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  // Función para gastar monedas
+  // Function to spend coins
   const spendCoins = (amount) => {
     setGameState(prev => ({
       ...prev,
@@ -104,8 +104,8 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  // Función para registrar una victoria
-  const registerVictory = (opponentId) => {
+  // Function to register a victory
+  const registerVictory = useCallback((opponentId) => {
     setGameState(prev => {
       const newState = {
         ...prev,
@@ -113,44 +113,44 @@ export const GameStateProvider = ({ children }) => {
         totalFights: prev.totalFights + 1,
       };
 
-      // Solo otorgar monedas si es la primera vez que derrotas a este oponente
+      // Only award coins if it's the first time defeating this opponent
       const isFirstTimeDefeating = !prev.defeatedOpponents.includes(opponentId);
       
       if (isFirstTimeDefeating) {
-        // Primera victoria contra este oponente - otorgar monedas
+        // First victory against this opponent - award coins
         newState.coins = prev.coins + GAME_CONFIG.COINS_PER_WIN;
         newState.defeatedOpponents = [...prev.defeatedOpponents, opponentId];
         
         console.log(`🎉 First victory against ${opponentId}! Earned ${GAME_CONFIG.COINS_PER_WIN} coins`);
         
-        // Desbloquear el siguiente oponente
+        // Unlock the next opponent
         const nextOpponent = getNextOpponentToUnlock(opponentId);
         if (nextOpponent && !prev.unlockedOpponents.includes(nextOpponent.id)) {
           newState.unlockedOpponents = [...prev.unlockedOpponents, nextOpponent.id];
           console.log(`🔓 Unlocked new opponent: ${nextOpponent.name}`);
         }
       } else {
-        // Victoria repetida - no otorgar monedas
-        newState.coins = prev.coins; // Mantener las monedas actuales
-        newState.defeatedOpponents = prev.defeatedOpponents; // Mantener la lista actual
-        newState.unlockedOpponents = prev.unlockedOpponents; // Mantener oponentes desbloqueados
+        // Repeat victory - no coins awarded
+        newState.coins = prev.coins; // Keep current coins
+        newState.defeatedOpponents = prev.defeatedOpponents; // Keep current list
+        newState.unlockedOpponents = prev.unlockedOpponents; // Keep unlocked opponents
         
         console.log(`🔄 Repeat victory against ${opponentId} - no coins awarded`);
       }
 
       return newState;
     });
-  };
+  }, []);
 
-  // Función para registrar una derrota
-  const registerDefeat = () => {
+  // Function to register a defeat
+  const registerDefeat = useCallback(() => {
     setGameState(prev => ({
       ...prev,
       totalFights: prev.totalFights + 1
     }));
-  };
+  }, []);
 
-  // Función para comprar un personaje
+  // Function to purchase a character
   const purchaseCharacter = (characterId) => {
     const character = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.find(c => c.id === characterId);
     if (!character || character.price === null) return false;
@@ -166,31 +166,31 @@ export const GameStateProvider = ({ children }) => {
     return false;
   };
 
-  // Función para obtener el siguiente oponente a desbloquear
+  // Function to get the next opponent to unlock
   const getNextOpponentToUnlock = (defeatedOpponentId) => {
     return GAME_CONFIG.OPPONENTS.find(opponent => 
       opponent.unlockRequirement === defeatedOpponentId
     );
   };
 
-  // Función para verificar si un oponente está desbloqueado
+  // Function to check if an opponent is unlocked
   const isOpponentUnlocked = (opponentId) => {
     return gameState.unlockedOpponents.includes(opponentId);
   };
 
-  // Función para verificar si un personaje está comprado
+  // Function to check if a character is purchased
   const isCharacterPurchased = (characterId) => {
     return gameState.purchasedCharacters.includes(characterId);
   };
 
-  // Función para verificar si puedes permitirte un personaje
+  // Function to check if you can afford a character
   const canAffordCharacter = (characterId) => {
     const character = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.find(c => c.id === characterId);
     if (!character || character.price === null) return false;
     return gameState.coins >= character.price;
   };
 
-  // Función para obtener oponentes disponibles con su estado
+  // Function to get available opponents with their status
   const getOpponentsStatus = () => {
     return GAME_CONFIG.OPPONENTS.map(opponent => ({
       ...opponent,
@@ -199,7 +199,7 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  // Función para obtener personajes de la tienda con su estado
+  // Function to get shop characters with their status
   const getShopCharactersStatus = () => {
     return GAME_CONFIG.CHARACTERS_FOR_PURCHASE.map(character => ({
       ...character,
@@ -208,7 +208,7 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  // Función para resetear el juego (para desarrollo/testing)
+  // Function to reset the game (for development/testing)
   const resetGameState = () => {
     const initialState = {
       coins: 0,
@@ -222,12 +222,12 @@ export const GameStateProvider = ({ children }) => {
     localStorage.setItem('fightClubGameState', JSON.stringify(initialState));
   };
 
-  // Función para añadir monedas (para desarrollo/testing)
+  // Function to add coins (for development/testing)
   const addDebugCoins = (amount = 1000) => {
     addCoins(amount);
   };
 
-  // Función para limpiar completamente el localStorage y reiniciar
+  // Function to completely clear localStorage and restart
   const clearSavedData = () => {
     localStorage.removeItem('fightClubGameState');
     const initialState = {
@@ -243,7 +243,7 @@ export const GameStateProvider = ({ children }) => {
   };
 
   const contextValue = {
-    // Estado del juego
+    // Game state
     coins: gameState.coins,
     defeatedOpponents: gameState.defeatedOpponents,
     purchasedCharacters: gameState.purchasedCharacters,
@@ -251,28 +251,28 @@ export const GameStateProvider = ({ children }) => {
     totalWins: gameState.totalWins,
     totalFights: gameState.totalFights,
 
-    // Funciones de gestión de monedas
+    // Coin management functions
     addCoins,
     spendCoins,
 
-    // Funciones de combate
+    // Combat functions
     registerVictory,
     registerDefeat,
 
-    // Funciones de tienda
+    // Shop functions
     purchaseCharacter,
     isCharacterPurchased,
     canAffordCharacter,
 
-    // Funciones de oponentes
+    // Opponent functions
     isOpponentUnlocked,
     getOpponentsStatus,
     getShopCharactersStatus,
 
-    // Configuración del juego
+    // Game configuration
     GAME_CONFIG,
 
-    // Funciones de desarrollo/testing
+    // Development/testing functions
     resetGameState,
     addDebugCoins,
     clearSavedData,

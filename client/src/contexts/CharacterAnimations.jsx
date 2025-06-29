@@ -1344,19 +1344,19 @@ export const CharacterAnimationsProvider = (props) => {
       
       // Registrar resultado del combate
       if (player1IsDead && !player2IsDead) {
-        // Player 2 (oponente) ganó
+        // Player 2 (opponent) won
         console.log("🏆 PLAYER 2 WINS! Registering defeat...");
         registerDefeat();
       } else if (player2IsDead && !player1IsDead) {
-        // Player 1 (jugador) ganó
+        // Player 1 (player) won
         console.log("🏆 PLAYER 1 WINS! Registering victory...");
-        // Usar el ID del oponente seleccionado en lugar del nombre del personaje
+        // Use the selected opponent's ID instead of the character name
         if (selectedOpponent) {
           const opponentId = selectedOpponent.id;
           console.log(`Victory against opponent: ${opponentId} (${selectedOpponent.name})`);
           registerVictory(opponentId);
         } else if (selectedPlayer2Character) {
-          // Fallback al sistema anterior si no hay oponente seleccionado
+          // Fallback to the previous system if no opponent is selected
           const opponentId = selectedPlayer2Character.toLowerCase();
           console.log(`Victory against opponent (fallback): ${opponentId}`);
           registerVictory(opponentId);

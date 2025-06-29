@@ -152,8 +152,8 @@ const Interface = () => {
   // State to show/hide the music player
   const [showMusicPlayer, setShowMusicPlayer] = useState(true);
   
-  // Estado para manejar la transición de pelea
-  const [isTransitioning, setIsTransitioning] = React.useState(false);
+  // State to handle fight transition
+  const [fightTransition, setFightTransition] = useState(false);
 
   // Botones de ataque para modo combate - usando las animaciones reales de Pete
   const attackButtons = [
@@ -187,53 +187,39 @@ const Interface = () => {
   const [currentDanceInCombo, setCurrentDanceInCombo] = React.useState(0);
   const [isPlayingCombo, setIsPlayingCombo] = React.useState(false);
 
-  // Función para alternar entre combinaciones de bailes
-  const toggleDanceCombination = () => {
-    if (!isPlayingCombo) {
-      // Iniciar combo
-      setIsPlayingCombo(true);
-      setCurrentDanceInCombo(0);
-      const currentCombo = danceCombinations[currentComboIndex];
-      const firstDance = currentCombo.dances[0];
-      const danceIndex = animations.findIndex(anim => anim === firstDance);
-      if (danceIndex !== -1) {
-        triggerSyncAnimation(danceIndex);
-      }
+  // Function to toggle between dance combinations
+  const toggleDanceCombo = () => {
+    if (isCombatMode) return; // No dance combos in combat mode
+    
+    if (currentComboIndex < danceCombinations.length - 1) {
+      setCurrentComboIndex(currentComboIndex + 1);
     } else {
-      // Continuar con el siguiente baile en el combo o siguiente combo
-      const currentCombo = danceCombinations[currentComboIndex];
-      const nextDanceIndex = (currentDanceInCombo + 1) % currentCombo.dances.length;
-      
-      if (nextDanceIndex === 0) {
-        // Terminó el combo actual, pasar al siguiente
-        const nextComboIndex = (currentComboIndex + 1) % danceCombinations.length;
-        setCurrentComboIndex(nextComboIndex);
-        setCurrentDanceInCombo(0);
-        
-        const nextCombo = danceCombinations[nextComboIndex];
-        const nextDance = nextCombo.dances[0];
-        const danceIndex = animations.findIndex(anim => anim === nextDance);
-        if (danceIndex !== -1) {
-          triggerSyncAnimation(danceIndex);
-        }
+      // Finished current combo, move to next
+      setCurrentComboIndex(0);
+      if (currentDanceInCombo < danceCombinations[currentComboIndex].dances.length - 1) {
+        setCurrentDanceInCombo(currentDanceInCombo + 1);
       } else {
-        // Siguiente baile en el mismo combo
-        setCurrentDanceInCombo(nextDanceIndex);
-        const nextDance = currentCombo.dances[nextDanceIndex];
-        const danceIndex = animations.findIndex(anim => anim === nextDance);
-        if (danceIndex !== -1) {
-          triggerSyncAnimation(danceIndex);
-        }
+        setCurrentDanceInCombo(0);
       }
     }
   };
 
-  // Función para detener el combo (click derecho o botón secundario)
-  const stopDanceCombo = () => {
-    setIsPlayingCombo(false);
-    setAnimationIndex(-1);
+  // Function to stop combo (right click or secondary button)
+  const stopCombo = () => {
+    if (isCombatMode) return;
+    
     setCurrentComboIndex(0);
     setCurrentDanceInCombo(0);
+    setAnimationIndex(-1);
+    
+    const idleIndex = animations.findIndex(anim => 
+      anim.toLowerCase().includes('idle') && 
+      !anim.toLowerCase().includes('fight')
+    );
+    
+    if (idleIndex >= 0) {
+      triggerSyncAnimation(idleIndex);
+    }
   };
 
   // Manejar cambio de modo
@@ -250,22 +236,20 @@ const Interface = () => {
   // Determinar si el combate ha terminado
   const isCombatOver = player1IsDead || player2IsDead;
 
-  // NUEVA: Función para verificar si un ataque está disponible con sistema de turnos
-  const canAttack = (player, attackName, playerStamina, isPlayerDead, isPlayerBlocking) => {
-    // Verificaciones básicas
-    if (isPlayerDead || isPlayerBlocking || isCombatOver) return false;
+  // NEW: Function to check if an attack is available with turn system
+  const isAttackAvailable = (attackType) => {
+    // Basic checks
+    if (!isCombatMode || player1IsDead || player2IsDead) {
+      return false;
+    }
     
-    // Verificar stamina
-    const cost = staminaCosts[attackName] || 0;
-    if (playerStamina < cost) return false;
-    
-    // NUEVA LÓGICA: Usar el sistema de turnos realista
-    return canPlayerAttack(player);
+    // NEW LOGIC: Use the realistic turn system
+    return canPlayerAttack(1);
   };
 
-  // Función para verificar si se puede bloquear
-  const canBlock = (playerStamina, isPlayerDead) => {
-    return !isPlayerDead && playerStamina > 0;
+  // Function to check if blocking is possible
+  const isBlockAvailable = () => {
+    return isCombatMode && !player1IsDead && !player2IsDead && player1Stamina > 0;
   };
   
   // CSS para la animación de countdown y efectos del pad de pelea
@@ -400,7 +384,7 @@ const Interface = () => {
   
   // Función mejorada para navegar al menú con efecto de impacto
   const handleNavigateToMenu = () => {
-    setIsTransitioning(true);
+    setFightTransition(true);
     
     // Crear efecto de sacudida en toda la pantalla
     document.body.style.animation = "impactShake 0.6s ease-out";
@@ -424,7 +408,7 @@ const Interface = () => {
     setTimeout(() => {
       document.body.style.animation = "";
       document.body.removeChild(flashOverlay);
-      setIsTransitioning(false);
+      setFightTransition(false);
       navigateToMenu();
     }, 600);
   };
@@ -507,7 +491,7 @@ const Interface = () => {
                 playButtonSound();
                 handleNavigateToMenu();
               }}
-              disabled={isTransitioning}
+              disabled={fightTransition}
               style={{
                 fontSize: isMobile ? "24px" : "32px",
                 fontWeight: 700,
@@ -516,7 +500,7 @@ const Interface = () => {
                 minWidth: isMobile ? "280px" : "350px",
                 maxWidth: isMobile ? "calc(100vw - 40px)" : "350px",
                 margin: isMobile ? "0 20px" : "0",
-                backgroundColor: isTransitioning ? "rgba(252, 63, 49, 0.2)" : "transparent",
+                backgroundColor: fightTransition ? "rgba(252, 63, 49, 0.2)" : "transparent",
                 backgroundImage: `url(${mainButtonImg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -537,7 +521,7 @@ const Interface = () => {
                   0 0 20px #000000,
                   2px 2px 4px #000000
                 `,
-                boxShadow: isTransitioning ? `
+                boxShadow: fightTransition ? `
                   0 0 40px #fc3f31,
                   0 0 80px rgba(252, 63, 49, 0.8),
                   0 0 120px rgba(252, 63, 49, 0.4),
@@ -548,19 +532,19 @@ const Interface = () => {
                   inset 0 0 20px rgba(252, 63, 49, 0.1)
                 `,
                 transition: "all 0.3s ease",
-                cursor: isTransitioning ? "not-allowed" : "pointer",
-                animation: isExiting ? "fadeOutSpray 0.4s ease-out" : (isTransitioning ? "buttonPowerUp 0.6s ease-out" : "fadeInSpray 0.5s ease-out 0.4s both"),
-                opacity: isTransitioning ? 0.8 : 1
+                cursor: fightTransition ? "not-allowed" : "pointer",
+                animation: isExiting ? "fadeOutSpray 0.4s ease-out" : (fightTransition ? "buttonPowerUp 0.6s ease-out" : "fadeInSpray 0.5s ease-out 0.4s both"),
+                opacity: fightTransition ? 0.8 : 1
               }}
               onMouseEnter={(e) => {
-                if (!isMobile && !isTransitioning) {
+                if (!isMobile && !fightTransition) {
                   e.target.style.transform = "scale(1.05)";
                   e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
                   e.target.style.animation = "impactShake 0.3s ease-out";
                 }
               }}
               onMouseLeave={(e) => {
-                if (!isMobile && !isTransitioning) {
+                if (!isMobile && !fightTransition) {
                   e.target.style.transform = "scale(1)";
                   e.target.style.backgroundColor = "transparent";
                   e.target.style.animation = "none";
@@ -568,7 +552,7 @@ const Interface = () => {
               }}
             >
               <span className="fight-button-text">
-                {isTransitioning ? "ENTERING..." : "ENTER FIGHT CLUB"}
+                {fightTransition ? "ENTERING..." : "ENTER FIGHT CLUB"}
               </span>
             </Button>
           </Affix>
@@ -933,11 +917,11 @@ const Interface = () => {
                   variant="unstyled"
                   onClick={() => {
                     playButtonSound();
-                    toggleDanceCombination();
+                    toggleDanceCombo();
                   }}
                   onContextMenu={(e) => {
                     e.preventDefault();
-                    stopDanceCombo();
+                    stopCombo();
                   }}
                   style={{
                     width: isMobile ? "80px" : "100px",
@@ -1039,7 +1023,7 @@ const Interface = () => {
                     flexDirection: "row"
                   }}>
                     {attackButtons.map((attack, index) => {
-                      const canUseAttack = canAttack(player1CombatState, attack.name, player1Stamina, player1IsDead, player1IsBlocking);
+                      const canUseAttack = isAttackAvailable(attack.name);
                       const staminaCost = staminaCosts[attack.name] || 0;
                       
                       return (
@@ -1136,7 +1120,7 @@ const Interface = () => {
                     <Button
                     variant="outline"
                     size={isMobile ? "sm" : "xl"}
-                    disabled={!canBlock(player1Stamina, player1IsDead)}
+                    disabled={!isBlockAvailable()}
                     onClick={togglePlayer1Block}
                     style={{
                       position: "relative",
@@ -1147,36 +1131,36 @@ const Interface = () => {
                       backgroundColor: "transparent",
                       border: "none",
                       borderRadius: isMobile ? "15px" : "15px",
-                      cursor: canBlock(player1Stamina, player1IsDead) ? "pointer" : "not-allowed",
-                      opacity: canBlock(player1Stamina, player1IsDead) ? 1 : 0.5,
+                      cursor: isBlockAvailable() ? "pointer" : "not-allowed",
+                      opacity: isBlockAvailable() ? 1 : 0.5,
                       transition: "all 0.3s ease",
                       overflow: "hidden",
                       boxShadow: "none",
                       flexShrink: 0
                     }}
                     onTouchStart={(e) => {
-                      if (canBlock(player1Stamina, player1IsDead) && isMobile) {
+                      if (isBlockAvailable() && isMobile) {
                         e.target.style.transform = "scale(0.95)";
                         e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
                         e.target.style.animation = "impactShake 0.3s ease-out";
                       }
                     }}
                     onTouchEnd={(e) => {
-                      if (canBlock(player1Stamina, player1IsDead) && isMobile) {
+                      if (isBlockAvailable() && isMobile) {
                         e.target.style.transform = "scale(1)";
                         e.target.style.backgroundColor = "transparent";
                         e.target.style.animation = "none";
                       }
                     }}
                     onMouseEnter={(e) => {
-                      if (canBlock(player1Stamina, player1IsDead) && !isMobile) {
+                      if (isBlockAvailable() && !isMobile) {
                         e.target.style.transform = "scale(1.05)";
                         e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
                         e.target.style.animation = "impactShake 0.3s ease-out";
                       }
                     }}
                     onMouseLeave={(e) => {
-                      if (canBlock(player1Stamina, player1IsDead) && !isMobile) {
+                      if (isBlockAvailable() && !isMobile) {
                         e.target.style.transform = "scale(1)";
                         e.target.style.backgroundColor = "transparent";
                         e.target.style.animation = "none";
@@ -1190,7 +1174,7 @@ const Interface = () => {
                         width: "100%",
                         height: "100%",
                         objectFit: "contain",
-                        filter: canBlock(player1Stamina, player1IsDead) ? "none" : "grayscale(1)",
+                        filter: isBlockAvailable() ? "none" : "grayscale(1)",
                         pointerEvents: "none"
                       }}
                     />

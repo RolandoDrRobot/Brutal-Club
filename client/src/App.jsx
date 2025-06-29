@@ -4,8 +4,11 @@ import Experience from "./components/Experience";
 import LoadingScreen from "./components/LoadingScreen";
 import { useCharacterAnimations } from "./contexts/CharacterAnimations";
 import { useModelLoader } from "./hooks/useModelLoader";
+import { MantineProvider } from '@mantine/core';
+import { CharacterAnimationsProvider } from './contexts/CharacterAnimations';
+import { GameStateProvider } from './contexts/GameState';
 
-// Lazy loading para componentes pesados no críticos
+// Lazy loading for heavy non-critical components
 const Interface = React.lazy(() => import("./components/Interface"));
 const HealthBars = React.lazy(() => import("./components/HealthBars"));
 const CrowdSound = React.lazy(() => import("./components/CrowdSound"));
