@@ -209,7 +209,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             style={{
               width: '100%',
               height: '80%',
-              backgroundColor: 'rgba(252, 63, 49, 0.05)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
               border: '3px solid #fc3f31',
               borderRadius: '20px',
               marginBottom: '15px',
@@ -248,13 +248,12 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             <CharacterPreview
               characterName={characters[selectedCharacter].name}
               style={{
-                width: '100%',
-                height: '100%',
+                width: '120%',
+                height: '120%',
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
+                top: '55%',
+                left: '50%',
+                transform: 'translate(-50%, -50%) scale(1.2)',
                 zIndex: 2,
                 margin: 0,
                 padding: 0,
@@ -269,19 +268,11 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             <Text style={{
               fontSize: isMobile ? '24px' : '32px',
               fontWeight: 700,
-              color: '#fc3f31',
+              color: '#F5F5DC',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '2px'
             }}>
               {characters[selectedCharacter].name}
-            </Text>
-            <Text style={{
-              fontSize: isMobile ? '14px' : '18px',
-              color: '#F5F5DC',
-              fontFamily: 'Arial, sans-serif',
-              textAlign: 'center'
-            }}>
-              {characters[selectedCharacter].description}
             </Text>
           </Stack>
         </Box>

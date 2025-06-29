@@ -187,7 +187,7 @@ const CharacterPreview = ({ characterName, style }) => {
         <Canvas
           key={`${characterName}-${dimensions.width}-${dimensions.height}`}
           camera={{ 
-            position: [0, 1.2, 2.8], 
+            position: [0, 1.0, 2.5], 
             fov: 45,
             near: 0.1,
             far: 100
@@ -233,8 +233,8 @@ const CharacterPreview = ({ characterName, style }) => {
             color="#fc3f31"
           />
           
-          {/* Character model - perfectly centered */}
-          <group position={[0, -1, 0]}>
+          {/* Character model - positioned lower and facing forward */}
+          <group position={[0, -1.2, 0]}>
             <CharacterModel 
               characterName={characterName}
               position={[0, 0, 0]}

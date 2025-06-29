@@ -598,7 +598,15 @@ const Interface = () => {
               
               {/* 3D Model of winning character - Large background */}
               <CharacterPreview
-                characterName={player1IsDead ? selectedPlayer2Character?.name : selectedPlayer1Character?.name}
+                characterName={(() => {
+                  const winnerCharacter = player1IsDead ? selectedPlayer2Character?.name || selectedPlayer2Character : selectedPlayer1Character?.name || selectedPlayer1Character;
+                  console.log('🏆 Victory Screen Debug:');
+                  console.log('- player1IsDead:', player1IsDead);
+                  console.log('- selectedPlayer1Character:', selectedPlayer1Character);
+                  console.log('- selectedPlayer2Character:', selectedPlayer2Character);
+                  console.log('- Winner character to display:', winnerCharacter);
+                  return winnerCharacter;
+                })()}
                 style={{
                   position: 'absolute',
                   top: '50%',
