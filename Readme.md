@@ -1,5 +1,7 @@
 # Fight Club
 
+![fight](https://github.com/user-attachments/assets/d69cf8ba-e012-4dfa-9fa8-fb90376aba15)
+
 ### Submission Track
 > Indicate which track your project is submitting to.
 Full Game
