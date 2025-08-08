@@ -1,18 +1,22 @@
 import { useCallback } from 'react';
 
 export const useButtonSound = () => {
-  const playButtonSound = useCallback(() => {
+  const playButtonSound = () => {
     try {
       const audio = new Audio('/music/button.mp3');
-      audio.volume = 0.7; // Set volume to 70%
-      audio.currentTime = 0; // Restart from the beginning
-      audio.play().catch(error => {
-        console.log('Error playing button sound:', error);
-      });
+      audio.volume = 0.3;
+      audio.play();
     } catch (error) {
-      console.log('Error creating button sound:', error);
+      // Silent error handling
     }
-  }, []);
+  };
 
   return { playButtonSound };
-}; 
+};
+
+try {
+  // Preload button sound
+  new Audio('/music/button.mp3');
+} catch (error) {
+  // Silent error handling
+} 

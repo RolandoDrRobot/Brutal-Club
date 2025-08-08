@@ -62,11 +62,9 @@ const GAME_CONFIG = {
 export const GameStateProvider = ({ children }) => {
   // Persistent game state
   const [gameState, setGameState] = useState(() => {
-    console.log('🎮 GameStateProvider initializing...');
     const savedState = localStorage.getItem('fightClubGameState');
     if (savedState) {
       const parsed = JSON.parse(savedState);
-      console.log('🎮 Loading saved game state:', parsed);
       return parsed;
     }
     
@@ -79,16 +77,12 @@ export const GameStateProvider = ({ children }) => {
       totalFights: 0
     };
     
-    console.log('🎮 Creating new game state with 0 coins:', initialState);
     return initialState;
   });
-
-  console.log('🎮 GameStateProvider rendering with gameState:', gameState);
 
   // Save state to localStorage when it changes
   useEffect(() => {
     localStorage.setItem('fightClubGameState', JSON.stringify(gameState));
-    console.log('💾 Game state saved:', gameState);
   }, [gameState]);
 
   // Function to add coins
@@ -124,21 +118,16 @@ export const GameStateProvider = ({ children }) => {
         newState.coins = prev.coins + GAME_CONFIG.COINS_PER_WIN;
         newState.defeatedOpponents = [...prev.defeatedOpponents, opponentId];
         
-        console.log(`🎉 First victory against ${opponentId}! Earned ${GAME_CONFIG.COINS_PER_WIN} coins`);
-        
         // Unlock the next opponent
         const nextOpponent = getNextOpponentToUnlock(opponentId);
         if (nextOpponent && !prev.unlockedOpponents.includes(nextOpponent.id)) {
           newState.unlockedOpponents = [...prev.unlockedOpponents, nextOpponent.id];
-          console.log(`🔓 Unlocked new opponent: ${nextOpponent.name}`);
         }
       } else {
         // Repeat victory - no coins awarded
         newState.coins = prev.coins; // Keep current coins
         newState.defeatedOpponents = prev.defeatedOpponents; // Keep current list
         newState.unlockedOpponents = prev.unlockedOpponents; // Keep unlocked opponents
-        
-        console.log(`🔄 Repeat victory against ${opponentId} - no coins awarded`);
       }
 
       return newState;
@@ -242,7 +231,6 @@ export const GameStateProvider = ({ children }) => {
       totalFights: 0
     };
     setGameState(initialState);
-    console.log('🧹 Game data cleared, restarting with 0 coins:', initialState);
   };
 
   const contextValue = {

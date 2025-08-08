@@ -58,17 +58,14 @@ function Pete({ player = 1, ...props }) {
       const animationName = names[currentAnimationIndex];
       const action = actions[animationName];
       
-      console.log(`🎬 Pete (Player ${player}) playing animation: "${animationName}" (Dead: ${isPlayerDead}, Death Anim: ${isDeathAnimation})`);
       
       // Si ya está reproduciendo la misma animación de muerte, no hacer nada
       if (isDeathAnimation && currentActionRef.current === animationName && isPlayerDead) {
-        console.log(`💀 Pete (Player ${player}) already playing death animation, keeping it`);
         return;
       }
       
       // Detener suavemente la animación anterior si existe
       if (currentActionRef.current && actions[currentActionRef.current] && currentActionRef.current !== animationName) {
-        console.log(`🔄 Pete (Player ${player}) transitioning from "${currentActionRef.current}" to "${animationName}"`);
         actions[currentActionRef.current].fadeOut(0.3);
       }
       
@@ -77,7 +74,6 @@ function Pete({ player = 1, ...props }) {
       
       if (isDeathAnimation) {
         // Para animaciones de muerte: reproducir solo una vez y quedarse en el último frame
-        console.log(`💀 Pete (Player ${player}) playing DEATH animation - will play ONCE and stay at final frame`);
         
         // Configurar la animación para que se reproduzca solo una vez
         action.reset();
@@ -90,7 +86,6 @@ function Pete({ player = 1, ...props }) {
         
         // Agregar listener para confirmar que la animación terminó
         const onFinished = () => {
-          console.log(`💀 Pete (Player ${player}) death animation FINISHED - staying at final frame`);
           action.paused = true; // Pausar en el último frame
         };
         

@@ -10,7 +10,6 @@ import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
 
 const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
-  console.log('🏪 CombinedShopOpponents rendering...');
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
@@ -23,14 +22,12 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     isCharacterPurchased, 
     canAffordCharacter 
   } = useGameState();
-  console.log('🏪 CombinedShopOpponents - coins:', coins);
   const { lazyLoadModel } = useModelLoader();
   const [loadingModels, setLoadingModels] = useState(new Set());
   const [loadedModels, setLoadedModels] = useState(new Set());
 
   // Safety check - if coins is undefined, context is not ready yet
   if (coins === undefined) {
-    console.log('🏪 CombinedShopOpponents - coins undefined, showing loading...');
     return (
       <Box
         className="fight-screen-container fight-screen-background"
@@ -52,12 +49,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     );
   }
 
-  console.log('🏪 CombinedShopOpponents - rendering main content');
-
   // Lazy load shop models when component mounts
   useEffect(() => {
     const loadShopModels = async () => {
-      console.log('🏪 Loading shop character models...');
       setLoadingModels(new Set(['Vince', 'Bob']));
       
       const promises = [
@@ -72,7 +66,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         const modelName = ['Vince', 'Bob'][index];
         if (result.status === 'fulfilled' && result.value) {
           successful.add(modelName);
-          console.log(`✅ Shop model loaded: ${modelName}`);
         } else {
           console.warn(`⚠️ Shop model failed: ${modelName}`);
         }
@@ -100,17 +93,15 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     if (character.price && character.canAfford && !character.isPurchased) {
       const success = purchaseCharacter(character.id);
       if (success) {
-        console.log(`Successfully purchased ${character.name} for ${character.price} coins`);
         playButtonSound();
       } else {
-        console.log(`Failed to purchase ${character.name}`);
+        // Purchase failed
       }
     }
   };
 
   const handleOpponentSelect = (opponent) => {
     if (!opponent.isLocked) {
-      console.log(`Selected opponent: ${opponent.name}`);
       playButtonSound();
       onChallengeClick(opponent);
     }

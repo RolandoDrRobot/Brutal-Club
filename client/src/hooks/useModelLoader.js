@@ -70,7 +70,6 @@ const preloadAudio = (src, timeout = 3000) => {
     
     const handleSuccess = () => {
       cleanup();
-      console.log(`🎵 Audio loaded: ${src.split('/').pop()}`);
       resolve(audio);
     };
     
@@ -116,14 +115,12 @@ const preloadImage = (src, timeout = 2000) => {
     
     const handleSuccess = () => {
       cleanup();
-      console.log(`🖼️ Image loaded: ${src.split('/').pop()}`);
       resolve(img);
     };
     
     const handleError = () => {
       cleanup();
-      console.warn(`⚠️ Image failed: ${src.split('/').pop()}`);
-      resolve(null);
+      resolve(null); // Continue without this image
     };
     
     img.addEventListener('load', handleSuccess);
@@ -133,7 +130,7 @@ const preloadImage = (src, timeout = 2000) => {
     setTimeout(() => {
       if (!resolved) {
         cleanup();
-        resolve(img.complete ? img : null);
+        resolve(null);
       }
     }, timeout);
     
@@ -141,21 +138,18 @@ const preloadImage = (src, timeout = 2000) => {
   });
 };
 
-// Fast model preloader with priority
+// Optimized model preloader using useGLTF.preload
 const preloadModel = (path, priority = 'normal') => {
   return new Promise((resolve) => {
     try {
-      console.log(`📦 Preloading ${priority} model: ${path}`);
       useGLTF.preload(path);
       
-      // Faster resolution for critical models
-      const delay = priority === 'critical' ? 100 : 200;
       setTimeout(() => {
-        console.log(`✅ Model preloaded: ${path}`);
         resolve(true);
-      }, delay + Math.random() * 100);
+      }, priority === 'critical' ? 100 : priority === 'secondary' ? 200 : 50);
+
     } catch (error) {
-      console.error(`❌ Model error: ${path}`, error);
+      console.error(`Failed to preload model: ${path}`, error);
       resolve(false);
     }
   });
@@ -167,7 +161,6 @@ export const useModelLoader = () => {
   const [loadingStatus, setLoadingStatus] = useState('Initializing...');
 
   useEffect(() => {
-    console.log('🚀 Starting optimized asset loading...');
     
     // Emergency timeout to ensure app always loads
     const emergencyTimeout = setTimeout(() => {
@@ -212,39 +205,34 @@ export const useModelLoader = () => {
         progress = 75;
         setLoadingProgress(progress);
         
-        // PHASE 5: OPTIONAL IMAGES (75-85%) - Non-critical UI
+        // PHASE 5: OPTIONAL UI (75-85%) - Additional interface elements
         setLoadingStatus('Loading additional UI...');
-        const optionalImagePromises = OPTIONAL_IMAGES.map(path => preloadImage(path, 800)); // Reduced timeout
+        const optionalImagePromises = OPTIONAL_IMAGES.map(path => preloadImage(path, 800)); // Very short timeout
         await Promise.allSettled(optionalImagePromises);
         progress = 85;
         setLoadingProgress(progress);
         
         // PHASE 6: OPTIONAL AUDIO (85-95%) - Music tracks
         setLoadingStatus('Loading music tracks...');
-        const optionalAudioPromises = OPTIONAL_AUDIO.map(path => preloadAudio(path, 2000)); // Reduced timeout
+        const optionalAudioPromises = OPTIONAL_AUDIO.map(path => preloadAudio(path, 1000)); // Very short timeout
         await Promise.allSettled(optionalAudioPromises);
         progress = 95;
         setLoadingProgress(progress);
         
         // PHASE 7: FINALIZATION (95-100%)
-        setLoadingStatus('Optimizing experience...');
-        await new Promise(resolve => setTimeout(resolve, 200)); // Reduced delay
+        setLoadingStatus('Final preparations...');
+        progress = 100;
+        setLoadingProgress(progress);
         
-        setLoadingProgress(100);
-        setLoadingStatus('All assets loaded!');
-        console.log('✅ Complete optimized loading finished');
-        
-        // Clear emergency timeout since we completed successfully
+        // Clear emergency timeout
         clearTimeout(emergencyTimeout);
         
-        // Start the game
+        // Add small delay for smooth UX transition then end loading
         setTimeout(() => {
           setIsLoading(false);
-          console.log('🎮 Game ready with optimized loading');
           
-          // Auto-start music after everything is loaded
           setTimeout(() => {
-            window.dispatchEvent(new CustomEvent('startMusic'));
+            setLoadingStatus('Game ready!');
           }, 500);
         }, 300); // Reduced delay
         
@@ -265,7 +253,6 @@ export const useModelLoader = () => {
     loadAssets();
 
     return () => {
-      console.log('🧹 Cleaning up optimized loader');
       clearTimeout(emergencyTimeout);
     };
   }, []);
@@ -274,7 +261,6 @@ export const useModelLoader = () => {
   const lazyLoadModel = async (modelName) => {
     const modelPath = LAZY_MODELS.find(path => path.includes(modelName));
     if (modelPath) {
-      console.log(`🔄 Lazy loading: ${modelPath}`);
       return preloadModel(modelPath, 'lazy');
     }
     return false;

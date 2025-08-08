@@ -28,7 +28,6 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
 
   const handleOpponentSelect = (opponent) => {
     if (!opponent.isLocked) {
-      console.log(`Selected opponent: ${opponent.name}`);
       onChallengeClick(opponent);
     }
   };

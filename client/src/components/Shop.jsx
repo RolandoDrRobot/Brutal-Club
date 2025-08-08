@@ -23,7 +23,6 @@ const Shop = ({ onBackClick }) => {
   // Lazy load shop models when component mounts
   useEffect(() => {
     const loadShopModels = async () => {
-      console.log('🏪 Loading shop character models...');
       setLoadingModels(new Set(['Vince', 'Bob']));
       
       const promises = [
@@ -38,7 +37,6 @@ const Shop = ({ onBackClick }) => {
         const modelName = ['Vince', 'Bob'][index];
         if (result.status === 'fulfilled' && result.value) {
           successful.add(modelName);
-          console.log(`✅ Shop model loaded: ${modelName}`);
         } else {
           console.warn(`⚠️ Shop model failed: ${modelName}`);
         }
@@ -58,9 +56,9 @@ const Shop = ({ onBackClick }) => {
     if (character.price && character.canAfford && !character.isPurchased) {
       const success = purchaseCharacter(character.id);
       if (success) {
-        console.log(`Successfully purchased ${character.name} for ${character.price} coins`);
+        // Purchase successful
       } else {
-        console.log(`Failed to purchase ${character.name}`);
+        // Purchase failed
       }
     }
   };

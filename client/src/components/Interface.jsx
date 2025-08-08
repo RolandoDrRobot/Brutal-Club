@@ -591,11 +591,6 @@ const Interface = () => {
               <CharacterPreview
                 characterName={(() => {
                   const winnerCharacter = player1IsDead ? selectedPlayer2Character?.name || selectedPlayer2Character : selectedPlayer1Character?.name || selectedPlayer1Character;
-                  console.log('🏆 Victory Screen Debug:');
-                  console.log('- player1IsDead:', player1IsDead);
-                  console.log('- selectedPlayer1Character:', selectedPlayer1Character);
-                  console.log('- selectedPlayer2Character:', selectedPlayer2Character);
-                  console.log('- Winner character to display:', winnerCharacter);
                   return winnerCharacter;
                 })()}
                 style={{
@@ -738,7 +733,6 @@ const Interface = () => {
                 {/* MENU Button */}
                 <button
                   onClick={() => {
-                    console.log('🎮 MENU button clicked - navigating to main menu');
                     playButtonSound();
                     navigateToMenu();
                   }}

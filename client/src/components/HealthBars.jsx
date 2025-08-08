@@ -19,8 +19,6 @@ const HealthBars = () => {
   } = useCharacterAnimations();
 
   // Log para debug del contador
-  console.log(`HealthBars - Player 1 Wins: ${player1Wins}`);
-  console.log(`HealthBars - Combat Mode: ${isCombatMode}, Players Dead: P1=${player1IsDead}, P2=${player2IsDead}`);
 
   // Manual responsive design to avoid hook conflicts
   const [isMobile, setIsMobile] = useState(false);

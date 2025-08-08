@@ -25,12 +25,9 @@ function Tyler({ player = 2, ...props }) {
 
   // Función para encontrar animación de Tyler por nombre
   const findTylerAnimationIndex = (animationName) => {
-    console.log(`🔍 Tyler searching for animation: "${animationName}"`);
-    console.log(`🎭 Tyler available animations:`, names);
     
     const index = names.findIndex(anim => anim === animationName);
     if (index >= 0) {
-      console.log(`✅ Tyler found exact match: "${animationName}" at index ${index}`);
       return index;
     }
     
@@ -40,9 +37,7 @@ function Tyler({ player = 2, ...props }) {
     );
     
     if (fallbackIndex >= 0) {
-      console.log(`⚠️ Tyler found similar match: "${names[fallbackIndex]}" (index ${fallbackIndex}) for "${animationName}"`);
     } else {
-      console.log(`❌ Tyler no match found for "${animationName}", using first animation: "${names[0]}" (index 0)`);
     }
     
     return fallbackIndex >= 0 ? fallbackIndex : 0; // Fallback a la primera animación
@@ -51,23 +46,19 @@ function Tyler({ player = 2, ...props }) {
   // Mapear el índice de Pete a la animación correspondiente de Tyler
   const getTylerAnimationFromPeteIndex = (peteIndex) => {
     if (!contextAnimations || contextAnimations.length === 0 || !names || names.length === 0) {
-      console.log(`⚠️ Tyler: Missing data - contextAnimations: ${contextAnimations?.length || 0}, names: ${names?.length || 0}`);
       return 0;
     }
 
     // Obtener el nombre de la animación de Pete
     const peteAnimationName = contextAnimations[peteIndex];
     if (!peteAnimationName) {
-      console.log(`❌ Tyler: No Pete animation found for index ${peteIndex}`);
       return 0;
     }
 
-    console.log(`🔄 Tyler: Mapping Pete animation "${peteAnimationName}" (Pete index ${peteIndex})`);
 
     // Buscar la animación correspondiente en Tyler
     const tylerIndex = findTylerAnimationIndex(peteAnimationName);
     
-    console.log(`✅ Tyler: Final mapping - Pete "${peteAnimationName}" (${peteIndex}) → Tyler "${names[tylerIndex]}" (${tylerIndex})`);
     
     return tylerIndex;
   };
@@ -77,20 +68,17 @@ function Tyler({ player = 2, ...props }) {
     // Usar el índice correcto según el jugador
     const playerAnimationIndex = player === 1 ? player1AnimationIndex : player2AnimationIndex;
     const result = getTylerAnimationFromPeteIndex(playerAnimationIndex);
-    console.log(`🎯 Tyler (Player ${player}) current animation index: ${result} (from Pete index ${playerAnimationIndex})`);
     return result;
   }, [player, player1AnimationIndex, player2AnimationIndex, contextAnimations, names]);
 
   // Tyler no necesita establecer las animaciones del contexto, solo usar las suyas
   useEffect(() => {
     if (names.length > 0) {
-      console.log("🎭 Tyler animations loaded:", names);
       
       // Verificar si Tyler tiene las animaciones críticas de combate
       const criticalAnimations = ['idleFight', 'hurt', 'kick', 'punch', 'die', 'cover'];
       criticalAnimations.forEach(anim => {
         const hasAnim = names.some(name => name.toLowerCase().includes(anim.toLowerCase()));
-        console.log(`🔍 Tyler has "${anim}": ${hasAnim ? '✅' : '❌'}`);
       });
     }
   }, [names]);
@@ -100,13 +88,10 @@ function Tyler({ player = 2, ...props }) {
       const animationName = names[currentTylerAnimationIndex];
       const playerAnimationIndex = player === 1 ? player1AnimationIndex : player2AnimationIndex;
       
-      console.log(`🎬 Tyler (Player ${player}) playing animation: "${animationName}" (Tyler index: ${currentTylerAnimationIndex}, Pete index: ${playerAnimationIndex})`);
       
       // Verificación especial para idle fight
       if (contextAnimations[playerAnimationIndex] === 'idleFight') {
-        console.log(`⚔️ Tyler (Player ${player}) should be in COMBAT IDLE. Playing: "${animationName}"`);
         if (animationName.toLowerCase().includes('hurt')) {
-          console.log(`❌ ERROR: Tyler (Player ${player}) is playing HURT animation instead of IDLE FIGHT!`);
         }
       }
       
@@ -118,7 +103,6 @@ function Tyler({ player = 2, ...props }) {
       };
     } else if (actions && names.length > 0) {
       // Fallback: si el índice no existe, usar la primera animación
-      console.log(`🔄 Tyler (Player ${player}) fallback to first animation: "${names[0]}"`);
       actions[names[0]].reset().fadeIn(0.5).play();
       return () => {
         if (actions[names[0]]) {

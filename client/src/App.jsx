@@ -26,9 +26,7 @@ const ComponentFallback = () => (
 );
 
 function App() {
-  console.log('🚀 App component rendering...');
   const { isLoading, loadingProgress, loadingStatus } = useModelLoader();
-  console.log('🚀 App - isLoading:', isLoading, 'progress:', loadingProgress, 'status:', loadingStatus);
 
   return (
     <>
