@@ -13,7 +13,11 @@
     "serve": "vite preview --port 3000 --host",
     "check-size": "du -sh dist/*",
     "analyze": "yarn build:prod && npx vite-bundle-analyzer dist",
-    "lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html --view"
+    "lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html --view",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:watch": "vitest watch",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -27,13 +31,19 @@
     "three": "^0.146.0"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
+    "jsdom": "^26.1.0",
     "tailwindcss": "^4.1.10",
     "terser": "^5.16.1",
     "vite": "^3.2.3",
-    "vite-plugin-mkcert": "^1.17.8"
+    "vite-plugin-mkcert": "^1.17.8",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=16.0.0",
