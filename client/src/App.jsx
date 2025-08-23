@@ -49,8 +49,8 @@ function App() {
         gl={{ preserveDrawingBuffer: true, alpha: true }}
         style={{ background: 'transparent' }}
       >
-        {/* Atmospheric fog for dark tavern basement (darker, less sepia) */}
-        <fog attach="fog" args={['#161412', 5, 16]} />
+        {/* Atmospheric fog for dark tavern basement - Enhanced */}
+        <fog attach="fog" args={['#1a1610', 3, 12]} />
         <Experience />
       </Canvas>
       

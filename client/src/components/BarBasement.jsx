@@ -39,7 +39,14 @@ const BarBasement = () => {
     brick: new THREE.BoxGeometry(0.3, 0.15, 0.2),
     crate: new THREE.BoxGeometry(1, 0.8, 1),
     dartboard: new THREE.CylinderGeometry(0.4, 0.4, 0.1),
-    poster: new THREE.PlaneGeometry(1, 1.4)
+    poster: new THREE.PlaneGeometry(1, 1.4),
+    // Basement stairs
+    stairStep: new THREE.BoxGeometry(1.2, 0.15, 0.3),
+    stairRailing: new THREE.BoxGeometry(0.05, 0.8, 0.05),
+    stairSupport: new THREE.BoxGeometry(1.2, 0.1, 0.05),
+    // Floor bottles (scattered drinking bottles)
+    beerBottleFloor: new THREE.CylinderGeometry(0.04, 0.04, 0.25),
+    whiskeyBottleFloor: new THREE.CylinderGeometry(0.06, 0.06, 0.3)
   }), []);
 
   const materials = useMemo(() => ({
@@ -133,6 +140,27 @@ const BarBasement = () => {
       roughness: 0.8,
       metalness: 0.1
     }),
+    // Stairs materials
+    stairWood: new THREE.MeshStandardMaterial({
+      color: '#4a3426',
+      roughness: 0.7,
+      metalness: 0.1
+    }),
+    // Floor bottles materials (used/empty bottles)
+    beerBottleEmpty: new THREE.MeshStandardMaterial({
+      color: '#2a1f0f',
+      roughness: 0.3,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.8
+    }),
+    whiskeyBottleEmpty: new THREE.MeshStandardMaterial({
+      color: '#1a1a0f',
+      roughness: 0.2,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.9
+    }),
     // Extended bar materials
     barTop: new THREE.MeshStandardMaterial({
       color: '#3d2a1f',
@@ -202,8 +230,7 @@ const BarBasement = () => {
       backPanel: [11, 2.5, -0.85],
       shelves: [
         [11, 1.8, -0.4], // Top shelf
-        [11, 2.5, -0.4], // Middle shelf  
-        [11, 3.2, -0.4]  // High shelf
+        [11, 2.5, -0.4]  // Middle shelf
       ],
       mirror: [11, 3, -0.9],
       stools: [
@@ -214,11 +241,7 @@ const BarBasement = () => {
     
     // Extensive bottle collection on main bar
     barBottles: [
-      // Top shelf - Premium liquors
-      [10.4, 3.4, -2.8], [10.4, 3.4, -2.4], [10.4, 3.4, -2.0], [10.4, 3.4, -1.6],
-      [10.4, 3.4, -1.2], [10.4, 3.4, -0.8], [10.4, 3.4, -0.4], [10.4, 3.4, 0.0],
-      [10.4, 3.4, 0.4], [10.4, 3.4, 0.8], [10.4, 3.4, 1.2], [10.4, 3.4, 1.6],
-      [10.4, 3.4, 2.0], [10.4, 3.4, 2.4], [10.4, 3.4, 2.8],
+      // High shelf removed - no more bottles at Y: 3.4
       
       // Middle shelf - Wine and spirits
       [10.4, 2.7, -2.6], [10.4, 2.7, -2.2], [10.4, 2.7, -1.8], [10.4, 2.7, -1.4],
@@ -295,6 +318,58 @@ const BarBasement = () => {
       { pos: [-12, 2, 5], rot: [0, Math.PI / 2, 0] },
       { pos: [12, 2, -5], rot: [0, -Math.PI / 2, 0] },
       { pos: [12, 2, 5], rot: [0, -Math.PI / 2, 0] }
+    ],
+    
+    // Basement stairs to main bar (corner stairs)
+    stairs: {
+      position: [-10, 0, -10], // Back corner
+      steps: [
+        { pos: [-10, -0.85, -10], rot: [0, 0, 0] },    // Step 1 (bottom)
+        { pos: [-10, -0.70, -9.7], rot: [0, 0, 0] },   // Step 2
+        { pos: [-10, -0.55, -9.4], rot: [0, 0, 0] },   // Step 3
+        { pos: [-10, -0.40, -9.1], rot: [0, 0, 0] },   // Step 4
+        { pos: [-10, -0.25, -8.8], rot: [0, 0, 0] },   // Step 5
+        { pos: [-10, -0.10, -8.5], rot: [0, 0, 0] },   // Step 6
+        { pos: [-10, 0.05, -8.2], rot: [0, 0, 0] },    // Step 7
+        { pos: [-10, 0.20, -7.9], rot: [0, 0, 0] },    // Step 8 (top)
+      ],
+      railingPosts: [
+        [-10.6, -0.4, -10], [-10.6, -0.4, -9.5], [-10.6, -0.4, -9], [-10.6, -0.4, -8.5], [-10.6, -0.4, -8]
+      ],
+      railingSupports: [
+        { pos: [-10.6, -0.4, -9.25], rot: [0, 0, 0] },
+        { pos: [-10.6, -0.4, -8.75], rot: [0, 0, 0] }
+      ]
+    },
+    
+    // Floor bottles scattered around corners (people drinking evidence)
+    floorBottles: [
+      // Corner 1 (back left)
+      { pos: [-11, -0.87, -11], rot: [Math.PI/2, 0, Math.PI/4], type: 'beer' },
+      { pos: [-10.2, -0.83, -10.8], rot: [0, 0, Math.PI/6], type: 'whiskey' },
+      { pos: [-11.5, -0.85, -9.8], rot: [Math.PI/2, 0, -Math.PI/8], type: 'beer' },
+      { pos: [-9.8, -0.84, -11.2], rot: [Math.PI/2, Math.PI/3, 0], type: 'beer' },
+      
+      // Corner 2 (back right) 
+      { pos: [11, -0.86, -11], rot: [Math.PI/2, 0, -Math.PI/4], type: 'whiskey' },
+      { pos: [10.3, -0.82, -10.5], rot: [0, 0, Math.PI/5], type: 'beer' },
+      { pos: [11.8, -0.88, -9.9], rot: [Math.PI/2, 0, Math.PI/6], type: 'beer' },
+      
+      // Corner 3 (front left)
+      { pos: [-10.8, -0.85, 11], rot: [Math.PI/2, Math.PI/4, 0], type: 'beer' },
+      { pos: [-11.5, -0.83, 10.2], rot: [0, 0, -Math.PI/8], type: 'whiskey' },
+      { pos: [-9.5, -0.87, 11.3], rot: [Math.PI/2, 0, Math.PI/3], type: 'beer' },
+      
+      // Corner 4 (front right)
+      { pos: [10.5, -0.84, 10.8], rot: [Math.PI/2, 0, Math.PI/7], type: 'beer' },
+      { pos: [11.2, -0.86, 11.5], rot: [0, Math.PI/6, 0], type: 'whiskey' },
+      { pos: [9.8, -0.82, 10.1], rot: [Math.PI/2, -Math.PI/4, 0], type: 'beer' },
+      
+      // Some in the middle areas (near walls)
+      { pos: [-8.5, -0.85, -8.2], rot: [Math.PI/2, 0, Math.PI/12], type: 'beer' },
+      { pos: [8.8, -0.83, -8.7], rot: [0, 0, -Math.PI/10], type: 'whiskey' },
+      { pos: [-9.2, -0.87, 8.5], rot: [Math.PI/2, Math.PI/8, 0], type: 'beer' },
+      { pos: [9.1, -0.84, 9.3], rot: [Math.PI/2, 0, -Math.PI/6], type: 'beer' }
     ]
   }), []);
 
@@ -546,6 +621,60 @@ const BarBasement = () => {
           receiveShadow
         />
       ))}
+
+      {/* Basement Stairs */}
+      {elementPositions.stairs.steps.map((step, index) => (
+        <mesh
+          key={`stair-step-${index}`}
+          geometry={geometries.stairStep}
+          material={materials.stairWood}
+          position={step.pos}
+          rotation={step.rot}
+          castShadow
+          receiveShadow
+        />
+      ))}
+
+      {/* Stair Railing Posts */}
+      {elementPositions.stairs.railingPosts.map((post, index) => (
+        <mesh
+          key={`railing-post-${index}`}
+          geometry={geometries.stairRailing}
+          material={materials.stairWood}
+          position={post}
+          castShadow
+          receiveShadow
+        />
+      ))}
+
+      {/* Stair Railing Supports */}
+      {elementPositions.stairs.railingSupports.map((support, index) => (
+        <mesh
+          key={`railing-support-${index}`}
+          geometry={geometries.stairSupport}
+          material={materials.stairWood}
+          position={support.pos}
+          rotation={support.rot}
+          castShadow
+          receiveShadow
+        />
+      ))}
+
+      {/* Floor Bottles (Evidence of drinking) */}
+      {elementPositions.floorBottles.map((bottle, index) => (
+        <mesh
+          key={`floor-bottle-${index}`}
+          geometry={bottle.type === 'beer' ? geometries.beerBottleFloor : geometries.whiskeyBottleFloor}
+          material={bottle.type === 'beer' ? materials.beerBottleEmpty : materials.whiskeyBottleEmpty}
+          position={bottle.pos}
+          rotation={bottle.rot}
+          castShadow
+          receiveShadow
+        />
+      ))}
+
+      {/* ATMOSPHERIC FOG INSIDE BASEMENT */}
+      <fog attach="fog" args={['#2a2318', 1.5, 8]} />
 
       {/* DARK TAVERN BASEMENT LIGHTING SYSTEM */}
       {/* Dark ambient light (less sepia) - INCREASED */}
