@@ -32,7 +32,10 @@ Onlydust - will be added shortly
 ### Play
 > Provide instructions on how to play your game. It could be a URL, a README, or a link to a binary to install.
 
-**Live Demo**: [fightclub-pi.vercel.app](fightclub-pi.vercel.app)
+**Live Demo**: [[fightclub-pi.vercel.app](https://fightclub-pi.vercel.app/)] 
+**It takes a bit to load the first time, please be patient
+**PWA is the best experience, you can download the game in your iphone desktop
+**Make sure to turn on the volume in your device, music + fight is the complete experience
 
 **Install:**
 ```bash
@@ -58,3 +61,8 @@ The plan was to create the game as a demo first. Controller and dojo backend wil
 ---
 
 *Fight Club: You do not talk about fight club.* 
+
+<img width="369" alt="Captura de pantalla 2025-06-23 a la(s) 1 28 24 a  m" src="https://github.com/user-attachments/assets/22e861a0-082d-4df8-a867-4ac02bf64626" />
+<img width="369" alt="Captura de pantalla 2025-06-23 a la(s) 1 27 49 a  m" src="https://github.com/user-attachments/assets/7adbc7f6-cffe-47dc-89ba-80f8a9b783e6" />
+<img width="369" alt="Captura de pantalla 2025-06-23 a la(s) 1 26 50 a  m" src="https://github.com/user-attachments/assets/412d0656-b7f1-4cf6-8069-183c84ef690c" />
+<img width="369" alt="Captura de pantalla 2025-06-23 a la(s) 1 26 39 a  m" src="https://github.com/user-attachments/assets/533d7f40-6cc5-42fb-b474-fd90a87b2e74" />
