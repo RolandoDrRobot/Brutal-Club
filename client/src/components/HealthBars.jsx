@@ -1,6 +1,6 @@
 import { Box, Progress, Text, Group } from "@mantine/core";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
-import { useMediaQuery } from "@mantine/hooks";
+import { useState, useEffect } from "react";
 
 const HealthBars = () => {
   const { 
@@ -19,12 +19,21 @@ const HealthBars = () => {
   } = useCharacterAnimations();
 
   // Log para debug del contador
-  console.log(`HealthBars - Player 1 Wins: ${player1Wins}`);
-  console.log(`HealthBars - Combat Mode: ${isCombatMode}, Players Dead: P1=${player1IsDead}, P2=${player2IsDead}`);
 
-  // Media queries para responsive design
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const isTablet = useMediaQuery("(max-width: 1024px)");
+  // Manual responsive design to avoid hook conflicts
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      setIsTablet(window.innerWidth <= 1024);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   // No mostrar si no estamos en modo combate
   if (!isCombatMode) return null;
@@ -76,76 +85,13 @@ const HealthBars = () => {
 
   return (
     <>
-      {/* TÍTULO FIGHT CLUB - CENTRO SUPERIOR SUPERPUESTO */}
-      <Box
-        style={{
-          position: "fixed",
-          top: 25,
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 1001, // Más alto que las barras para estar superpuesto
-          textAlign: "center",
-          pointerEvents: "none", // Para que no interfiera con otros elementos
-        }}
-      >
-        <div style={{
-          color: "#fc3f31",
-          textShadow: `
-            0 0 2px #fc3f31,
-            0 0 4px rgba(252, 63, 49, 0.6),
-            2px 2px 4px rgba(0,0,0,0.8)
-          `,
-          textTransform: "uppercase",
-          letterSpacing: isMobile ? "1px" : "3px",
-          fontFamily: "Anton, Impact, sans-serif",
-          fontSize: "30px",
-          fontWeight: 900,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative"
-        }}>
-          {/* Efecto de fondo sutil */}
-          <div style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "110%",
-            height: "110%",
-            background: `radial-gradient(ellipse, 
-              rgba(252, 63, 49, 0.05) 0%, 
-              transparent 60%
-            )`,
-            borderRadius: "50%",
-            zIndex: -1
-          }} />
-          
-          {/* Letras individuales con efectos sutiles */}
-          {"FIGHT CLUB".split("").map((letter, index) => (
-            <span 
-              key={index}
-              style={{
-                display: "inline-block",
-                margin: letter === " " ? (isMobile ? "0 4px" : "0 8px") : "0",
-                textShadow: `
-                  0 0 3px #fc3f31,
-                  0 0 6px rgba(252, 63, 49, 0.4),
-                  1px 1px 2px rgba(0,0,0,0.8)
-                `
-              }}
-            >
-              {letter === " " ? "\u00A0" : letter}
-            </span>
-          ))}
-        </div>
-      </Box>
 
-      {/* CONTADOR DE VICTORIAS - Debajo del título */}
+
+      {/* CONTADOR DE VICTORIAS - CENTRO SUPERIOR */}
       <Box
         style={{
           position: "absolute",
-          top: 70,
+          top: 28,
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 1001,
@@ -174,7 +120,7 @@ const HealthBars = () => {
       <Box
         style={{
           ...barStyle,
-          top: 65,
+          top: 15,
           left: isMobile ? 20 : 30,
         }}
       >
@@ -182,15 +128,15 @@ const HealthBars = () => {
         <Box mb={6}>
           <Group position="apart" mb={2} spacing={4}>
             <Group spacing={4} align="center">
-              <Text size="xs" color="white" weight={700}>HP</Text>
-              <Text size="xs" color="white" weight={700}>PLAYER 1</Text>
+              <Text size="xs" color="#F5F5DC" weight={700}>HP</Text>
+              <Text size="xs" color="#F5F5DC" weight={700}>PLAYER 1</Text>
               {player1IsBlocking && (
                 <div style={{ display: 'flex', alignItems: 'center', marginLeft: '4px' }}>
                   <ShieldIcon color="#F5F5DC" size={14} />
                 </div>
               )}
             </Group>
-            <Text size="xs" color="white" weight={700}>{player1Health}</Text>
+            <Text size="xs" color="#F5F5DC" weight={700}>{player1Health}</Text>
           </Group>
           <Progress
             value={(player1Health / maxHealth) * 100}
@@ -241,22 +187,22 @@ const HealthBars = () => {
       <Box
         style={{
           ...barStyle,
-          top: 65,
+          top: 15,
           right: isMobile ? 20 : 30,
         }}
       >
         {/* Barra de vida */}
         <Box mb={6}>
           <Group position="apart" mb={2} spacing={4}>
-            <Text size="xs" weight={700} style={{ color: "#fc3f31" }}>{player2Health}</Text>
+            <Text size="xs" weight={700} style={{ color: "#f32210" }}>{player2Health}</Text>
             <Group spacing={4} align="center">
               {player2IsBlocking && (
                 <div style={{ display: 'flex', alignItems: 'center', marginRight: '4px' }}>
-                  <ShieldIcon color="#fc3f31" size={14} />
+                  <ShieldIcon color="#f32210" size={14} />
                 </div>
               )}
-              <Text size="xs" weight={700} style={{ color: "#fc3f31" }}>PLAYER 2</Text>
-              <Text size="xs" weight={700} style={{ color: "#fc3f31" }}>HP</Text>
+              <Text size="xs" weight={700} style={{ color: "#f32210" }}>PLAYER 2</Text>
+              <Text size="xs" weight={700} style={{ color: "#f32210" }}>HP</Text>
             </Group>
           </Group>
           <Progress
@@ -270,8 +216,8 @@ const HealthBars = () => {
                 border: '2px solid rgba(255, 255, 255, 0.2)',
               },
               bar: {
-                background: `linear-gradient(90deg, #fc3f31 0%, rgba(252, 63, 49, 0.8) 100%)`,
-                boxShadow: '0 0 10px rgba(252, 63, 49, 0.5)',
+                background: `linear-gradient(90deg, #f32210 0%, rgba(243, 34, 16, 0.8) 100%)`,
+                boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)',
               }
             }}
           />
@@ -280,9 +226,9 @@ const HealthBars = () => {
         {/* Barra de stamina */}
         <Box>
           <Group position="apart" mb={2} spacing={4}>
-            <Text size="xs" weight={700} style={{ color: "#fc3f31" }}>{Math.round(player2Stamina)}</Text>
+            <Text size="xs" weight={700} style={{ color: "#f32210" }}>{Math.round(player2Stamina)}</Text>
             <Group spacing={4} align="center">
-              <Text size="xs" weight={700} style={{ color: "#fc3f31" }}>SP</Text>
+              <Text size="xs" weight={700} style={{ color: "#f32210" }}>SP</Text>
             </Group>
           </Group>
           <Progress
@@ -296,8 +242,8 @@ const HealthBars = () => {
                 border: '2px solid rgba(255, 255, 255, 0.2)',
               },
               bar: {
-                background: `linear-gradient(90deg, #fc3f31 0%, rgba(252, 63, 49, 0.8) 100%)`,
-                boxShadow: '0 0 10px rgba(252, 63, 49, 0.5)',
+                background: `linear-gradient(90deg, #f32210 0%, rgba(243, 34, 16, 0.8) 100%)`,
+                boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)',
               }
             }}
           />

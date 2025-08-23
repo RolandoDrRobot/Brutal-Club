@@ -1,163 +1,275 @@
 import { useState, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 
-// Lista de todos los modelos que necesitan ser cargados
-const modelPaths = [
-  './models/pete.glb',
-  './models/Tyler.glb',
-  './models/Chuck.glb',
-  './models/Earl.glb',
-  './models/Wayne.glb',
-  './models/Vince.glb',
-  './models/Lou.glb',
-  './models/Tony.glb',
-  './models/Bob.glb',
-  './models/Lawrence.glb'
+// PRIORITY LOADING: Core models needed immediately
+const CRITICAL_MODELS = [
+  './models/pete.glb',      // Main character (always visible)
+  './models/Tyler.glb',     // Default opponent
 ];
 
-// Lista de todos los archivos de música que necesitan ser precargados
-const musicPaths = [
-  '/music/Metallica Now That We\'re Dead (official audio).mp3',
-  '/music/Max Styler - Lights Out (Extended Mix).mp3',
-  '/music/Michael Bibi - Garden Of Groove (Original Mix).mp3',
-  '/music/Ice Cube - Bow Down (West side connection).mp3',
+// SECONDARY LOADING: Models loaded after critical ones (audience restored)
+const SECONDARY_MODELS = [
+  './models/Chuck.glb',      // Audience member
+  './models/Earl.glb',       // Audience member
+  './models/Wayne.glb',      // Audience member
+  './models/Vince.glb',      // Audience member
+];
+
+// LAZY LOADING: Models loaded only when needed
+const LAZY_MODELS = [
+  './models/Bob.glb',       // Shop character (Vince moved to secondary for audience)
+];
+
+// ESSENTIAL AUDIO: Only critical sounds for initial experience
+const ESSENTIAL_AUDIO = [
+  '/music/crowd.mp3',       // Background ambience
+  '/music/punch.mp3',       // Combat feedback
+];
+
+// OPTIONAL AUDIO: Loaded in background after essential assets
+const OPTIONAL_AUDIO = [
   '/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3',
   '/music/Full On The Mouth - Another.mp3',
-  '/music/crowd.mp3',
-  '/music/punch.mp3'
+  '/music/button.mp3'
 ];
 
-// Función para precargar un archivo de audio
-const preloadAudio = (src) => {
-  return new Promise((resolve, reject) => {
+// CRITICAL IMAGES: Only essential UI elements
+const CRITICAL_IMAGES = [
+  '/src/assets/punch.png',
+  '/src/assets/kick.png',
+  '/src/assets/combo.png',
+  '/src/assets/cover.png',
+];
+
+// OPTIONAL IMAGES: Loaded after critical assets
+const OPTIONAL_IMAGES = [
+  '/src/assets/reset.png',
+  '/src/assets/dance.png',
+  '/src/assets/fight.png',
+  '/src/assets/mainbutton.jpeg',
+  '/src/assets/button1.png',
+  '/src/assets/button2.png',
+  '/src/assets/button3.png',
+  '/src/assets/button4.png',
+  '/src/assets/music.png'
+];
+
+// Optimized audio preloader with better error handling
+const preloadAudio = (src, timeout = 3000) => {
+  return new Promise((resolve) => {
     const audio = new Audio();
+    let resolved = false;
     
-    const handleLoad = () => {
-      console.log(`🎵 Audio loaded: ${src.split('/').pop()}`);
-      audio.removeEventListener('canplaythrough', handleLoad);
+    const cleanup = () => {
+      if (resolved) return;
+      resolved = true;
+      audio.removeEventListener('canplaythrough', handleSuccess);
+      audio.removeEventListener('loadeddata', handleSuccess);
       audio.removeEventListener('error', handleError);
+    };
+    
+    const handleSuccess = () => {
+      cleanup();
       resolve(audio);
     };
     
-    const handleError = (error) => {
-      console.error(`❌ Error loading audio: ${src}`, error);
-      audio.removeEventListener('canplaythrough', handleLoad);
-      audio.removeEventListener('error', handleError);
-      resolve(null); // Resolver con null para continuar aunque falle
+    const handleError = () => {
+      cleanup();
+      console.warn(`⚠️ Audio failed: ${src.split('/').pop()}`);
+      resolve(null); // Continue without this audio
     };
     
-    audio.addEventListener('canplaythrough', handleLoad);
+    // Set up listeners
+    audio.addEventListener('canplaythrough', handleSuccess);
+    audio.addEventListener('loadeddata', handleSuccess);
     audio.addEventListener('error', handleError);
+    
+    // Timeout fallback
+    setTimeout(() => {
+      if (!resolved) {
+        cleanup();
+        console.warn(`⏰ Audio timeout: ${src.split('/').pop()}`);
+        resolve(audio.readyState >= 2 ? audio : null);
+      }
+    }, timeout);
+    
+    // Start loading
     audio.preload = 'auto';
     audio.src = src;
     audio.load();
   });
 };
 
+// Optimized image preloader
+const preloadImage = (src, timeout = 2000) => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    let resolved = false;
+    
+    const cleanup = () => {
+      if (resolved) return;
+      resolved = true;
+      img.removeEventListener('load', handleSuccess);
+      img.removeEventListener('error', handleError);
+    };
+    
+    const handleSuccess = () => {
+      cleanup();
+      resolve(img);
+    };
+    
+    const handleError = () => {
+      cleanup();
+      resolve(null); // Continue without this image
+    };
+    
+    img.addEventListener('load', handleSuccess);
+    img.addEventListener('error', handleError);
+    
+    // Timeout fallback
+    setTimeout(() => {
+      if (!resolved) {
+        cleanup();
+        resolve(null);
+      }
+    }, timeout);
+    
+    img.src = src;
+  });
+};
+
+// Optimized model preloader using useGLTF.preload
+const preloadModel = (path, priority = 'normal') => {
+  return new Promise((resolve) => {
+    try {
+      useGLTF.preload(path);
+      
+      setTimeout(() => {
+        resolve(true);
+      }, priority === 'critical' ? 100 : priority === 'secondary' ? 200 : 50);
+
+    } catch (error) {
+      console.error(`Failed to preload model: ${path}`, error);
+      resolve(false);
+    }
+  });
+};
+
 export const useModelLoader = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadingStatus, setLoadingStatus] = useState('Starting...');
+  const [loadingStatus, setLoadingStatus] = useState('Initializing...');
 
   useEffect(() => {
-    console.log('🎮 Starting complete asset loading...');
     
-    const loadAllAssets = async () => {
+    // Emergency timeout to ensure app always loads
+    const emergencyTimeout = setTimeout(() => {
+      console.warn('⚠️ Emergency timeout reached - forcing app to load');
+      setLoadingProgress(100);
+      setLoadingStatus('Ready to play!');
+      setIsLoading(false);
+    }, 15000); // 15 seconds max
+    
+    const loadAssets = async () => {
       try {
-        // Phase 1: Preload GLB models (0-60%)
-        setLoadingStatus('Loading 3D models...');
-        modelPaths.forEach((path, index) => {
-          console.log(`📦 Preloading model ${index + 1}/${modelPaths.length}: ${path}`);
-          useGLTF.preload(path);
-        });
+        let progress = 0;
         
-        // Simulate model progress
-        const modelSteps = [
-          { progress: 10, delay: 400, status: 'Loading main characters...' },
-          { progress: 25, delay: 500, status: 'Loading audience...' },
-          { progress: 40, delay: 600, status: 'Optimizing models...' },
-          { progress: 60, delay: 400, status: 'Models ready!' }
-        ];
+        // PHASE 1: CRITICAL MODELS (0-30%) - Must have for basic functionality
+        setLoadingStatus('Loading essential models...');
+        const criticalPromises = CRITICAL_MODELS.map(path => preloadModel(path, 'critical'));
+        await Promise.allSettled(criticalPromises);
+        progress = 30;
+        setLoadingProgress(progress);
         
-        for (const step of modelSteps) {
-          await new Promise(resolve => setTimeout(resolve, step.delay));
-          setLoadingProgress(step.progress);
-          setLoadingStatus(step.status);
-          console.log(`⏳ ${step.status} (${step.progress}%)`);
-        }
+        // PHASE 2: CRITICAL IMAGES (30-45%) - Essential UI elements
+        setLoadingStatus('Loading essential UI...');
+        const criticalImagePromises = CRITICAL_IMAGES.map(path => preloadImage(path, 1000)); // Reduced timeout
+        await Promise.allSettled(criticalImagePromises);
+        progress = 45;
+        setLoadingProgress(progress);
         
-        // Phase 2: Preload music files (60-95%)
-        setLoadingStatus('Loading music and sound effects...');
-        console.log('🎵 Starting audio file preload...');
+        // PHASE 3: ESSENTIAL AUDIO (45-60%) - Core sound effects
+        setLoadingStatus('Loading essential audio...');
+        const essentialAudioPromises = ESSENTIAL_AUDIO.map(path => preloadAudio(path, 1500)); // Reduced timeout
+        await Promise.allSettled(essentialAudioPromises);
+        progress = 60;
+        setLoadingProgress(progress);
         
-        const audioPromises = musicPaths.map((path, index) => {
-          console.log(`🎶 Preparing audio ${index + 1}/${musicPaths.length}: ${path.split('/').pop()}`);
-          return preloadAudio(path);
-        });
+        // GAME IS NOW PLAYABLE! 
+        setLoadingStatus('Ready to play!');
         
-        // Simulate audio progress while loading
-        const audioSteps = [
-          { progress: 70, delay: 600, status: 'Loading combat music...' },
-          { progress: 80, delay: 700, status: 'Loading sound effects...' },
-          { progress: 90, delay: 500, status: 'Loading crowd sounds...' },
-          { progress: 95, delay: 400, status: 'Audio ready!' }
-        ];
+        // PHASE 4: SECONDARY MODELS (60-75%) - Background/audience
+        setLoadingStatus('Loading background elements...');
+        const secondaryPromises = SECONDARY_MODELS.map(path => preloadModel(path, 'secondary'));
+        await Promise.allSettled(secondaryPromises);
+        progress = 75;
+        setLoadingProgress(progress);
         
-        let audioStepIndex = 0;
-        const audioProgressInterval = setInterval(() => {
-          if (audioStepIndex < audioSteps.length) {
-            const step = audioSteps[audioStepIndex];
-            setLoadingProgress(step.progress);
-            setLoadingStatus(step.status);
-            console.log(`⏳ ${step.status} (${step.progress}%)`);
-            audioStepIndex++;
-          } else {
-            clearInterval(audioProgressInterval);
-          }
-        }, 600);
+        // PHASE 5: OPTIONAL UI (75-85%) - Additional interface elements
+        setLoadingStatus('Loading additional UI...');
+        const optionalImagePromises = OPTIONAL_IMAGES.map(path => preloadImage(path, 800)); // Very short timeout
+        await Promise.allSettled(optionalImagePromises);
+        progress = 85;
+        setLoadingProgress(progress);
         
-        // Wait for all audios to load
-        const loadedAudios = await Promise.all(audioPromises);
-        clearInterval(audioProgressInterval);
+        // PHASE 6: OPTIONAL AUDIO (85-95%) - Music tracks
+        setLoadingStatus('Loading music tracks...');
+        const optionalAudioPromises = OPTIONAL_AUDIO.map(path => preloadAudio(path, 1000)); // Very short timeout
+        await Promise.allSettled(optionalAudioPromises);
+        progress = 95;
+        setLoadingProgress(progress);
         
-        const successfulAudios = loadedAudios.filter(audio => audio !== null);
-        console.log(`✅ ${successfulAudios.length}/${musicPaths.length} audio files loaded successfully`);
+        // PHASE 7: FINALIZATION (95-100%)
+        setLoadingStatus('Final preparations...');
+        progress = 100;
+        setLoadingProgress(progress);
         
-        // Phase 3: Finalization (95-100%)
-        setLoadingProgress(98);
-        setLoadingStatus('Preparing experience...');
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Clear emergency timeout
+        clearTimeout(emergencyTimeout);
         
-        setLoadingProgress(100);
-        setLoadingStatus('Ready to fight!');
-        console.log('✅ Complete loading of all assets');
-        
-        // Final delay before starting the game
+        // Add small delay for smooth UX transition then end loading
         setTimeout(() => {
           setIsLoading(false);
-          console.log('🚀 Starting game with all assets preloaded');
-        }, 800);
+          
+          setTimeout(() => {
+            setLoadingStatus('Game ready!');
+          }, 500);
+        }, 300); // Reduced delay
         
       } catch (error) {
-        console.error('❌ Error during asset loading:', error);
-        setLoadingStatus('Loading error, starting anyway...');
+        console.error('❌ Loading error:', error);
+        setLoadingStatus('Loading completed with some issues');
+        
+        // Clear emergency timeout
+        clearTimeout(emergencyTimeout);
+        
+        // Still start the game even with errors
         setTimeout(() => {
           setIsLoading(false);
-        }, 1000);
+        }, 500);
       }
     };
 
-    loadAllAssets();
+    loadAssets();
 
-    // Cleanup function
     return () => {
-      console.log('🧹 Cleaning up complete loading hook');
+      clearTimeout(emergencyTimeout);
     };
   }, []);
+
+  // Lazy load function for on-demand assets
+  const lazyLoadModel = async (modelName) => {
+    const modelPath = LAZY_MODELS.find(path => path.includes(modelName));
+    if (modelPath) {
+      return preloadModel(modelPath, 'lazy');
+    }
+    return false;
+  };
 
   return {
     isLoading,
     loadingProgress,
-    loadingStatus
+    loadingStatus,
+    lazyLoadModel // New: function to load additional models on demand
   };
 }; 

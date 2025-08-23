@@ -7,35 +7,28 @@ const CrowdSound = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { isCombatMode } = useCharacterAnimations();
 
-  // Inicializar el audio cuando se carga
+  // Initialize audio when loaded
   useEffect(() => {
     if (audioRef.current) {
-      // Configurar el audio para loop
       audioRef.current.loop = true;
-      audioRef.current.volume = 0.15; // Volumen inicial reducido
+      audioRef.current.volume = 0.15;
       audioRef.current.preload = 'auto';
       
-      // Función para intentar reproducir
       const playAudio = async () => {
         try {
           await audioRef.current.play();
           setIsPlaying(true);
-          console.log('Sonido de audiencia iniciado');
         } catch (error) {
-          console.log('Auto-play de sonido de audiencia bloqueado:', error);
           setIsPlaying(false);
           
-          // Intentar reproducir cuando el usuario interactúe con la página
           const enableAudioOnInteraction = () => {
             if (audioRef.current && !isPlaying) {
               audioRef.current.play()
                 .then(() => {
                   setIsPlaying(true);
-                  console.log('Sonido de audiencia iniciado tras interacción');
                 })
-                .catch(console.error);
+                .catch(() => {});
             }
-            // Remover el listener después del primer uso
             document.removeEventListener('click', enableAudioOnInteraction);
             document.removeEventListener('touchstart', enableAudioOnInteraction);
           };
@@ -45,7 +38,6 @@ const CrowdSound = () => {
         }
       };
 
-      // Pequeño delay para asegurar que el audio esté listo
       const timer = setTimeout(() => {
         if (isLoaded) {
           playAudio();
@@ -58,25 +50,13 @@ const CrowdSound = () => {
     }
   }, [isLoaded, isPlaying]);
 
-  // Ajustar volumen cuando cambia el modo - CORREGIDO
+  // Adjust volume when mode changes
   useEffect(() => {
     if (audioRef.current) {
-      // Asegurar que el audio esté reproduciéndose
-      if (!isPlaying && audioRef.current.paused) {
-        audioRef.current.play()
-          .then(() => setIsPlaying(true))
-          .catch(console.error);
-      }
-
-      // Volúmenes balanceados con la música principal
-      const targetVolume = isCombatMode ? 0.15 : 0.2;
+      const targetVolume = isCombatMode ? 0.25 : 0.1;
       
-      console.log(`Cambiando volumen de crowd a ${targetVolume} (Modo: ${isCombatMode ? 'Combate' : 'Baile'})`);
-      
-      // Aplicar el volumen inmediatamente
       audioRef.current.volume = targetVolume;
       
-      // También hacer transición suave
       const currentVolume = audioRef.current.volume;
       const volumeStep = (targetVolume - currentVolume) / 10;
       
@@ -89,22 +69,20 @@ const CrowdSound = () => {
         } else {
           clearInterval(volumeInterval);
           if (audioRef.current) {
-            audioRef.current.volume = targetVolume; // Asegurar volumen final
+            audioRef.current.volume = targetVolume;
           }
         }
       }, 50);
       
       return () => clearInterval(volumeInterval);
     }
-  }, [isCombatMode]); // Remover dependencia de isPlaying para que siempre se ejecute
+  }, [isCombatMode]);
 
   const handleLoadedData = () => {
     setIsLoaded(true);
-    console.log('Sonido de audiencia cargado');
   };
 
-  const handleError = (e) => {
-    console.error('Error cargando sonido de audiencia:', e);
+  const handleError = () => {
     setIsLoaded(false);
     setIsPlaying(false);
   };

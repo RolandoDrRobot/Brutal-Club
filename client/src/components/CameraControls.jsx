@@ -18,52 +18,43 @@ export const CameraControls = () => {
     }
   }, [camera]);
 
-  // Auto-orbit camera in sync mode with diagonal movement
+  // Cámara cinematográfica de pelea para capturar luchadores de perfil
   useFrame((state, delta) => {
     if (!isCombatMode && orbitControlsRef.current) {
       timeRef.current += delta;
       
-      // Camera orbits around the characters with diagonal movement
-      const baseRadius = 4; // Base distance from center (reduced from 6 to 4)
-      const speed = 0.2; // Horizontal rotation speed
-      const verticalSpeed = 0.15; // Vertical oscillation speed
-      const diagonalSpeed = 0.25; // Diagonal movement speed
+              // CÁMARA ORBITAL MUY CERCA DE LOS MODELOS
+        const orbitSpeed = 0.3; // Velocidad del giro orbital
+        const orbitAngle = timeRef.current * orbitSpeed; // Ángulo que incrementa continuamente
+        const baseDistance = 3.0; // Distancia alejada para mejor vista general
+        const baseHeight = 1.5; // Altura elevada para ver mejor los peleadores
+
+        // Variaciones sutiles para movimiento más natural
+        const heightVariation = Math.sin(timeRef.current * 0.4) * 0.15; // Ligera variación de altura
+        const distanceVariation = Math.cos(timeRef.current * 0.6) * 0.2; // Ligera variación de distancia
+        const heightOffset = Math.cos(orbitAngle * 1.3) * 0.1; // Altura que varía con el orbit
       
-      // Horizontal circular movement
-      const horizontalAngle = timeRef.current * speed;
+              // POSICIÓN ORBITAL ALREDEDOR DE LOS MODELOS
+        const finalDistance = baseDistance + distanceVariation;
+        const x = finalDistance * Math.cos(orbitAngle);
+        const z = finalDistance * Math.sin(orbitAngle);
+        const y = baseHeight + heightVariation + heightOffset;
       
-      // Vertical oscillation (up and down movement)
-      const baseHeight = 2.5;
-      const heightVariation = 1.5;
-      const height = baseHeight + Math.sin(timeRef.current * verticalSpeed) * heightVariation;
-      
-      // Diagonal radius variation (closer and farther)
-      const radiusVariation = 1; // Reduced from 1.5 to 1 for closer movement
-      const radius = baseRadius + Math.cos(timeRef.current * diagonalSpeed) * radiusVariation;
-      
-      // Additional diagonal tilt
-      const tiltAngle = Math.sin(timeRef.current * diagonalSpeed * 0.7) * 0.3;
-      
-      // Calculate new camera position with diagonal movement
-      const x = Math.cos(horizontalAngle) * radius;
-      const z = Math.sin(horizontalAngle) * radius;
-      const y = height + Math.sin(horizontalAngle * 2) * 0.5; // Additional height variation
-      
-      // Set camera position
+      // Posicionar cámara lateralmente
       camera.position.x = x;
-      camera.position.y = y;
+      camera.position.y = y; 
       camera.position.z = z;
       
-      // Dynamic look-at target with slight movement
-      const targetX = Math.sin(timeRef.current * 0.1) * 0.2;
-      const targetY = Math.cos(timeRef.current * 0.08) * 0.3;
-      const targetZ = Math.cos(timeRef.current * 0.12) * 0.2;
+      // SIEMPRE APUNTAR AL CENTRO DONDE ESTÁN LOS MODELOS
+      const targetX = 0; // Centro exacto donde están los luchadores
+      const targetY = -0.5; // Apuntando a la parte media de los personajes
+      const targetZ = 0; // Centro exacto
       
-      // Make camera look at the center with slight movement
+      // Enfocar directamente a los luchadores
       camera.lookAt(targetX, targetY, targetZ);
       
-      // Add subtle camera roll for more dynamic effect
-      camera.rotation.z = tiltAngle;
+      // Sin roll, queremos una toma limpia y profesional
+      camera.rotation.z = 0;
       
       // Update orbit controls target
       orbitControlsRef.current.target.set(targetX, targetY, targetZ);
@@ -74,13 +65,15 @@ export const CameraControls = () => {
   // Reset camera when switching modes
   useEffect(() => {
     if (isCombatMode && initialCameraPosition.current) {
-      // Reset to initial position for combat mode
-      camera.position.copy(initialCameraPosition.current);
+      // Perfect fighting game camera position (side profile view showing both fighters)
+      camera.position.set(0, 0.2, 2.8); // Side view from Z-axis, closer to fighters
       camera.rotation.z = 0; // Reset roll
       if (orbitControlsRef.current) {
-        orbitControlsRef.current.target.set(0, 0, 0);
+        orbitControlsRef.current.target.set(0, -0.3, 0); // Look at fighter upper torso level
         orbitControlsRef.current.update();
       }
+      // Ensure camera looks at the center between both fighters at torso level
+      camera.lookAt(0, -0.3, 0);
     }
   }, [isCombatMode, camera]);
 
@@ -89,13 +82,14 @@ export const CameraControls = () => {
       <OrbitControls 
         ref={orbitControlsRef}
         enabled={isCombatMode} // Only enable manual controls in combat mode
-        enablePan={true}
+        enablePan={true} // Allow panning for full camera freedom
         enableZoom={true}
         enableRotate={isCombatMode}
-        minDistance={3}
-        maxDistance={5}
-        minPolarAngle={0}
-        maxPolarAngle={Math.PI / 2}
+        minDistance={1.5} // Allow getting very close to the action
+        maxDistance={10} // Allow wider shots for full scene view
+        minPolarAngle={0} // Full vertical range
+        maxPolarAngle={Math.PI} // Full vertical range
+        // No azimuth angle limits - full 360° rotation freedom
       />
     </>
   );

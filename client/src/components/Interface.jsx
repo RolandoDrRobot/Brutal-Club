@@ -1,8 +1,13 @@
 import { Affix, Button, Group, Switch, Text, Stack, Box } from "@mantine/core";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import { useMediaQuery } from "@mantine/hooks";
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import MusicPlayer from "./MusicPlayer";
+import MainMenu from "./MainMenu";
+import CharacterSkillTree from "./CharacterSkillTree";
+import CombinedShopOpponents from "./CombinedShopOpponents";
+import Shop from "./Shop";
+import '../styles/fightAnimations.css';
 import punchImg from "../assets/punch.png";
 import kickImg from "../assets/kick.png";
 import comboImg from "../assets/combo.png";
@@ -10,12 +15,108 @@ import coverImg from "../assets/cover.png";
 import resetImg from "../assets/reset.png";
 import danceImg from "../assets/dance.png";
 import fightImg from "../assets/fight.png";
+import mainButtonImg from "../assets/mainbutton.jpeg";
+import { useButtonSound } from '../hooks/useButtonSound';
+import LoadingScreen from './LoadingScreen';
+import { useModelLoader } from '../hooks/useModelLoader';
+import { useGameState } from '../contexts/GameState';
+import CharacterPreview from "./CharacterPreview";
+
+// CSS Animations for the interface
+const interfaceStyles = `
+  @keyframes pulse {
+    0%, 100% { 
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% { 
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+  }
+  
+  @keyframes neonPulse {
+    0%, 100% {
+      box-shadow: 
+        0 0 15px #f32210,
+        0 0 30px rgba(243, 34, 16, 0.5),
+        0 4px 12px rgba(243, 34, 16, 0.3),
+        inset 0 0 15px rgba(243, 34, 16, 0.1);
+    }
+    50% {
+      box-shadow: 
+        0 0 25px #f32210,
+        0 0 50px rgba(243, 34, 16, 0.8),
+        0 4px 20px rgba(243, 34, 16, 0.6),
+        inset 0 0 25px rgba(243, 34, 16, 0.2);
+    }
+  }
+  
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes fightTransition {
+    0% {
+      transform: scale(1);
+      filter: brightness(1);
+    }
+    30% {
+      transform: scale(1.02);
+      filter: brightness(1.2) contrast(1.3);
+    }
+    60% {
+      transform: scale(0.98);
+      filter: brightness(0.8) contrast(1.1);
+    }
+    100% {
+      transform: scale(1);
+      filter: brightness(1);
+    }
+  }
+  
+  @keyframes impactShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px) rotate(1deg); }
+    75% { transform: translateX(3px) rotate(-1deg); }
+  }
+  
+  @keyframes buttonPowerUp {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(243, 34, 16, 0.3);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(243, 34, 16, 0.8);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(243, 34, 16, 0.3);
+    }
+  }
+`;
 
 const Interface = () => {
   const { 
     animations, 
     animationIndex, 
     setAnimationIndex,
+    currentScreen,
+    isExiting,
+    navigateToMenu,
+    navigateToCombat,
+    navigateBackToDance,
+    navigateBackToMenu,
+    navigateToCharacterSelect,
+    navigateBackFromCharacterSelect,
+    handleCharacterSelection,
+    navigateToOpponentSelect,
+    navigateBackFromOpponentSelect,
+    handleOpponentChallenge,
+    selectedPlayer1Character,
+    selectedPlayer2Character,
     isCombatMode,
     setIsCombatMode,
     triggerPlayer1Attack,
@@ -35,12 +136,27 @@ const Interface = () => {
     player2IsBlocking,
     togglePlayer1Block,
     togglePlayer2Block,
-    staminaCosts
+    staminaCosts,
+    player1CombatState,
+    player2CombatState,
+    canPlayerAttack,
+    COMBAT_STATES,
+    ATTACK_TIMINGS,
+    navigateToShop,
+    navigateBackFromShop
   } = useCharacterAnimations();
+
+  const { playButtonSound } = useButtonSound();
 
   // Media queries para responsive design
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(max-width: 1024px)");
+
+  // State to show/hide the music player
+  const [showMusicPlayer, setShowMusicPlayer] = useState(true);
+  
+  // State to handle fight transition
+  const [fightTransition, setFightTransition] = useState(false);
 
   // Botones de ataque para modo combate - usando las animaciones reales de Pete
   const attackButtons = [
@@ -74,53 +190,39 @@ const Interface = () => {
   const [currentDanceInCombo, setCurrentDanceInCombo] = React.useState(0);
   const [isPlayingCombo, setIsPlayingCombo] = React.useState(false);
 
-  // Función para alternar entre combinaciones de bailes
-  const toggleDanceCombination = () => {
-    if (!isPlayingCombo) {
-      // Iniciar combo
-      setIsPlayingCombo(true);
-      setCurrentDanceInCombo(0);
-      const currentCombo = danceCombinations[currentComboIndex];
-      const firstDance = currentCombo.dances[0];
-      const danceIndex = animations.findIndex(anim => anim === firstDance);
-      if (danceIndex !== -1) {
-        triggerSyncAnimation(danceIndex);
-      }
+  // Function to toggle between dance combinations
+  const toggleDanceCombo = () => {
+    if (isCombatMode) return; // No dance combos in combat mode
+    
+    if (currentComboIndex < danceCombinations.length - 1) {
+      setCurrentComboIndex(currentComboIndex + 1);
     } else {
-      // Continuar con el siguiente baile en el combo o siguiente combo
-      const currentCombo = danceCombinations[currentComboIndex];
-      const nextDanceIndex = (currentDanceInCombo + 1) % currentCombo.dances.length;
-      
-      if (nextDanceIndex === 0) {
-        // Terminó el combo actual, pasar al siguiente
-        const nextComboIndex = (currentComboIndex + 1) % danceCombinations.length;
-        setCurrentComboIndex(nextComboIndex);
-        setCurrentDanceInCombo(0);
-        
-        const nextCombo = danceCombinations[nextComboIndex];
-        const nextDance = nextCombo.dances[0];
-        const danceIndex = animations.findIndex(anim => anim === nextDance);
-        if (danceIndex !== -1) {
-          triggerSyncAnimation(danceIndex);
-        }
+      // Finished current combo, move to next
+      setCurrentComboIndex(0);
+      if (currentDanceInCombo < danceCombinations[currentComboIndex].dances.length - 1) {
+        setCurrentDanceInCombo(currentDanceInCombo + 1);
       } else {
-        // Siguiente baile en el mismo combo
-        setCurrentDanceInCombo(nextDanceIndex);
-        const nextDance = currentCombo.dances[nextDanceIndex];
-        const danceIndex = animations.findIndex(anim => anim === nextDance);
-        if (danceIndex !== -1) {
-          triggerSyncAnimation(danceIndex);
-        }
+        setCurrentDanceInCombo(0);
       }
     }
   };
 
-  // Función para detener el combo (click derecho o botón secundario)
-  const stopDanceCombo = () => {
-    setIsPlayingCombo(false);
-    setAnimationIndex(-1);
+  // Function to stop combo (right click or secondary button)
+  const stopCombo = () => {
+    if (isCombatMode) return;
+    
     setCurrentComboIndex(0);
     setCurrentDanceInCombo(0);
+    setAnimationIndex(-1);
+    
+    const idleIndex = animations.findIndex(anim => 
+      anim.toLowerCase().includes('idle') && 
+      !anim.toLowerCase().includes('fight')
+    );
+    
+    if (idleIndex >= 0) {
+      triggerSyncAnimation(idleIndex);
+    }
   };
 
   // Manejar cambio de modo
@@ -137,16 +239,20 @@ const Interface = () => {
   // Determinar si el combate ha terminado
   const isCombatOver = player1IsDead || player2IsDead;
 
-  // Función para verificar si un ataque está disponible
-  const canAttack = (playerStamina, attackName, isPlayerDead, isPlayerBlocking) => {
-    if (isPlayerDead || isPlayerBlocking || isCombatOver) return false;
-    const cost = staminaCosts[attackName] || 0;
-    return playerStamina >= cost;
+  // NEW: Function to check if an attack is available with turn system
+  const isAttackAvailable = (attackType) => {
+    // Basic checks
+    if (!isCombatMode || player1IsDead || player2IsDead) {
+      return false;
+    }
+    
+    // NEW LOGIC: Use the realistic turn system
+    return canPlayerAttack(1);
   };
 
-  // Función para verificar si se puede bloquear
-  const canBlock = (playerStamina, isPlayerDead) => {
-    return !isPlayerDead && playerStamina > 0;
+  // Function to check if blocking is possible
+  const isBlockAvailable = () => {
+    return isCombatMode && !player1IsDead && !player2IsDead && player1Stamina > 0;
   };
   
   // CSS para la animación de countdown y efectos del pad de pelea
@@ -192,48 +298,48 @@ const Interface = () => {
       @keyframes neonPulse {
         0% {
           box-shadow: 
-            0 0 10px #fc3f31,
-            0 0 20px rgba(252, 63, 49, 0.3),
-            0 4px 8px rgba(252, 63, 49, 0.2),
-            inset 0 0 10px rgba(252, 63, 49, 0.05);
+            0 0 10px #f32210,
+            0 0 20px rgba(243, 34, 16, 0.3),
+            0 4px 8px rgba(243, 34, 16, 0.2),
+            inset 0 0 10px rgba(243, 34, 16, 0.05);
         }
         50% {
           box-shadow: 
-            0 0 25px #fc3f31,
-            0 0 50px rgba(252, 63, 49, 0.8),
-            0 4px 20px rgba(252, 63, 49, 0.5),
-            inset 0 0 25px rgba(252, 63, 49, 0.2);
+            0 0 25px #f32210,
+            0 0 50px rgba(243, 34, 16, 0.8),
+            0 4px 20px rgba(243, 34, 16, 0.5),
+            inset 0 0 25px rgba(243, 34, 16, 0.2);
         }
         100% {
           box-shadow: 
-            0 0 10px #fc3f31,
-            0 0 20px rgba(252, 63, 49, 0.3),
-            0 4px 8px rgba(252, 63, 49, 0.2),
-            inset 0 0 10px rgba(252, 63, 49, 0.05);
+            0 0 10px #f32210,
+            0 0 20px rgba(243, 34, 16, 0.3),
+            0 4px 8px rgba(243, 34, 16, 0.2),
+            inset 0 0 10px rgba(243, 34, 16, 0.05);
         }
       }
       
       @keyframes redNeonText {
         0% {
           text-shadow: 
-            0 0 3px #fc3f31,
-            0 0 6px #fc3f31,
-            0 0 9px rgba(252, 63, 49, 0.4),
+            0 0 3px #f32210,
+            0 0 6px #f32210,
+            0 0 9px rgba(243, 34, 16, 0.4),
             2px 2px 4px rgba(0,0,0,0.8);
         }
         50% {
           text-shadow: 
-            0 0 5px #fc3f31,
-            0 0 10px #fc3f31,
-            0 0 15px rgba(252, 63, 49, 0.6),
-            0 0 20px rgba(252, 63, 49, 0.3),
+            0 0 5px #f32210,
+            0 0 10px #f32210,
+            0 0 15px rgba(243, 34, 16, 0.6),
+            0 0 20px rgba(243, 34, 16, 0.3),
             2px 2px 4px rgba(0,0,0,0.8);
         }
         100% {
           text-shadow: 
-            0 0 3px #fc3f31,
-            0 0 6px #fc3f31,
-            0 0 9px rgba(252, 63, 49, 0.4),
+            0 0 3px #f32210,
+            0 0 6px #f32210,
+            0 0 9px rgba(243, 34, 16, 0.4),
             2px 2px 4px rgba(0,0,0,0.8);
         }
       }
@@ -279,76 +385,100 @@ const Interface = () => {
     };
   }, []);
   
+  // Función mejorada para navegar al menú con efecto de impacto y ataques dobles
+  const handleNavigateToMenu = () => {
+    // 🥊 PRIMERO: Ejecutar primer ataque del Player 1
+    triggerPlayer1Attack('punch'); // Primer golpe
+    
+    // 🥊 SEGUNDO: Ejecutar segundo ataque después de un delay
+    setTimeout(() => {
+      triggerPlayer1Attack('kick'); // Segundo golpe (patada)
+    }, 1200); // Esperar 1.2 segundos para que termine el primer ataque
+    
+    setFightTransition(true);
+    
+    // Crear efecto de sacudida en toda la pantalla
+    document.body.style.animation = "impactShake 0.6s ease-out";
+    
+    // Agregar flash rojo temporal
+    const flashOverlay = document.createElement('div');
+    flashOverlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      background: radial-gradient(circle, rgba(243, 34, 16, 0.3) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 9999;
+      animation: fightTransition 0.8s ease-out;
+    `;
+    document.body.appendChild(flashOverlay);
+    
+    // Limpiar efectos y navegar
+    setTimeout(() => {
+      document.body.style.animation = "";
+      document.body.removeChild(flashOverlay);
+      setFightTransition(false);
+      navigateToMenu();
+    }, 600);
+  };
+
+  // Import the optimized model loader
+  const { isLoading, loadingProgress, loadingStatus, lazyLoadModel } = useModelLoader();
+
+  if (isLoading) {
+    return (
+      <LoadingScreen 
+        progress={loadingProgress} 
+        status={loadingStatus}
+      />
+    );
+  }
+
   return (
     <>
-      {/* Reproductor de Música - Siempre visible en esquina superior derecha */}
-      <MusicPlayer />
+      {/* Inject CSS animations */}
+      <style dangerouslySetInnerHTML={{ __html: interfaceStyles }} />
 
-      {/* Mensaje de Victoria - Overlay cuando termina el combate */}
-      {isCombatOver && isCombatMode && (
-        <Affix position={{ 
-          top: "75%", 
-          left: "50%",
-          transform: "translate(-50%, -50%)"
-        }}>
-          <Box style={{
-            backgroundColor: "transparent",
-            padding: isMobile ? "30px 60px" : "50px 80px",
-            borderRadius: "20px",
-            border: "none",
-            boxShadow: "none",
-            textAlign: "center",
-            width: isMobile ? "90vw" : "400px",
-            maxWidth: isMobile ? "90vw" : "400px"
-          }}>
-            <Stack spacing="lg" align="center">
-              <Text size={isMobile ? "xl" : "2xl"} weight={700} style={{ 
-                color: player1IsDead ? "#fc3f31" : "#F5F5DC"
-              }}>
-                🏆 {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"} 🏆
-              </Text>
-              
-              {/* Botones de acción */}
-              <Group spacing="xs" position="center" style={{ width: "100%" }}>
-                {/* Botón Modo Baile */}
-                <img 
-                  src={danceImg}
-                  alt="Dance"
-                  onClick={() => setIsCombatMode(false)}
-                  style={{
-                    width: "80px",
-                    height: "80px",
-                    objectFit: "contain",
-                    cursor: "pointer",
-                    flex: 1
-                  }}
-                />
+      {/* Music player - visible in any mode */}
+      {showMusicPlayer && <MusicPlayer />}
 
-                {/* Botón Volver a Pelear */}
-                <img 
-                  src={fightImg}
-                  alt="Fight"
-                  onClick={() => {
-                    resetHealth();
-                    initializeCombat();
-                  }}
-                  style={{
-                    width: "80px",
-                    height: "80px",
-                    objectFit: "contain",
-                    cursor: "pointer",
-                    flex: 1
-                  }}
-                />
-              </Group>
-
-            </Stack>
-          </Box>
-        </Affix>
+      {/* Mostrar componente de menú principal cuando currentScreen es 'menu' */}
+      {currentScreen === 'menu' && (
+        <MainMenu 
+          onStartClick={navigateToOpponentSelect}
+          onFightersClick={navigateToCharacterSelect}
+          onStoreClick={navigateToShop}
+          onBackClick={navigateBackToDance}
+        />
       )}
 
-      {/* Controles de animación de baile - Solo en modo sincronizado - CENTRO ARRIBA */}
-      {!isCombatMode && (
+      {/* Mostrar pantalla de árbol de habilidades cuando currentScreen es 'characterSelect' */}
+      {currentScreen === 'characterSelect' && (
+        <CharacterSkillTree 
+          onSelectClick={handleCharacterSelection}
+          onBackClick={navigateBackFromCharacterSelect}
+        />
+      )}
+
+      {/* Mostrar pantalla combinada de oponentes y tienda cuando currentScreen es 'opponentSelect' */}
+      {currentScreen === 'opponentSelect' && (
+        <CombinedShopOpponents 
+          onChallengeClick={handleOpponentChallenge}
+          onBackClick={navigateBackFromOpponentSelect}
+        />
+      )}
+
+      {/* Mostrar pantalla de tienda cuando currentScreen es 'shop' */}
+      {currentScreen === 'shop' && (
+        <Shop 
+          onBackClick={navigateBackFromShop}
+        />
+      )}
+
+      {/* Pantalla de baile - currentScreen 'dance' */}
+      {currentScreen === 'dance' && (
         <>
           {/* Título Fight Club - ARRIBA CENTRO */}
           <Affix position={{ 
@@ -356,384 +486,791 @@ const Interface = () => {
             left: "50%",
             transform: "translateX(-50%)"
           }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ 
-                color: "#fc3f31",
-                textTransform: "uppercase",
-                letterSpacing: "2px",
-                fontFamily: "Anton, sans-serif",
-                fontSize: "50px",
-                fontWeight: 700,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textShadow: "2px 2px 4px rgba(0,0,0,0.8)"
-              }}>
-                {"FIGHT CLUB".split("").map((letter, index) => (
-                  <span 
-                    key={index}
-                    style={{
-                      display: "inline-block",
-                      margin: letter === " " ? "0 8px" : "0"
-                    }}
-                  >
-                    {letter === " " ? "\u00A0" : letter}
-                  </span>
-                ))}
+            <div style={{ 
+              textAlign: "center",
+              animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.5s ease-out 0.2s both"
+            }}>
+              <div className="fight-title">
+                FIGHT CLUB
               </div>
               
-              {/* Subtítulo con la primera regla */}
-              <div style={{
-                color: "#F5F5DC",
-                fontFamily: "Anton, sans-serif",
-                fontSize: "14px",
-                fontWeight: 400,
-                marginTop: "8px",
-                letterSpacing: "1px",
-                textShadow: `
-                  0 0 2px #F5F5DC,
-                  0 0 4px rgba(245, 245, 220, 0.6),
-                  1px 1px 2px rgba(0,0,0,0.8)
-                `
-              }}>
-                You do not talk about fight club
-              </div>
+
             </div>
           </Affix>
 
-          {/* Botones de baile - ABAJO CENTRO */}
+          {/* Botón para ir al menú principal - ABAJO CENTRO */}
           <Affix position={{ 
-            bottom: isMobile ? 35 : 45, 
+            bottom: isMobile ? 50 : 70,
             left: "50%",
             transform: "translateX(-50%)"
           }}>
-            <Box style={{ 
-              maxWidth: isMobile ? "100%" : "400px",
-              width: isMobile ? "100%" : "400px",
-              textAlign: "center",
-              padding: isMobile ? "0 10px" : "0",
-              margin: "0 auto"
-            }}>
-              <Stack spacing="xs">
-                {/* Botón único para combinaciones de bailes */}
-                <Stack spacing="xs" style={{ width: "100vw", margin: "auto", padding: "15px 15px 0 15px" }}>
-                  <Group spacing="md" position="right" style={{ width: "100%" }}>
-                    <Button
-                      variant="unstyled"
-                      size="lg"
-                      onClick={toggleDanceCombination}
-                      onContextMenu={(e) => {
-                        e.preventDefault();
-                        stopDanceCombo();
-                      }}
-                      style={{
-                        padding: "0",
-                        backgroundColor: "transparent",
-                        border: "none",
-                        width: isMobile ? "60px" : "80px",
-                        height: isMobile ? "60px" : "80px",
-                        cursor: "pointer",
-                        transition: "all 0.2s ease",
-                        borderRadius: "10px"
-                      }}
-                      styles={{
-                        label: {
-                          borderRadius: "10px"
-                        }
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isMobile) {
-                          e.target.style.transform = "scale(1.1)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isMobile) {
-                          e.target.style.transform = "scale(1)";
-                        }
-                      }}
-                    >
-                      <img 
-                        src={danceImg}
-                        alt="Dance"
-                        style={{
-                          width: "100%",
-                          objectFit: "contain",
-                          pointerEvents: "none"
-                        }}
-                      />
-                    </Button>
-                  </Group>
-                </Stack>
-
-                {/* Botón para iniciar combate - ABAJO DE LOS BOTONES DE BAILE */}
-                <Button
-                  variant="outline"
-                  size={isMobile ? "md" : "lg"}
-                  onClick={() => {
-                    setIsCombatMode(true);
-                    initializeCombat();
-                  }}
-                  style={{
-                    fontSize: "28px",
-                    fontWeight: 700,
-                    padding: "10px",
-                    minHeight: "80px",
-                    boxShadow: `
-                      0 0 15px #fc3f31,
-                      0 0 30px rgba(252, 63, 49, 0.5),
-                      0 4px 12px rgba(252, 63, 49, 0.3),
-                      inset 0 0 15px rgba(252, 63, 49, 0.1)
-                    `,
-                    width: "90%",
-                    margin: "auto",
-                    marginTop: "12px",
-                    backgroundColor: "transparent",
-                    borderColor: "#fc3f31",
-                    border: "3px solid #fc3f31",
-                    borderRadius: "15px",
-                    color: "#fc3f31",
-                    textTransform: "uppercase",
-                    animation: "neonPulse 2s ease-in-out infinite"
-                  }}
-                >
-                  START COMBAT
-                </Button>
-              </Stack>
-            </Box>
+            <Button
+              variant="outline"
+              size="xl"
+              onClick={() => {
+                playButtonSound();
+                handleNavigateToMenu();
+              }}
+              disabled={fightTransition}
+              style={{
+                fontSize: isMobile ? "36px" : "48px",
+                fontWeight: 700,
+                padding: isMobile ? "20px 50px" : "25px 70px",
+                minHeight: isMobile ? "100px" : "120px",
+                minWidth: isMobile ? "280px" : "350px",
+                maxWidth: isMobile ? "calc(100vw - 40px)" : "350px",
+                margin: "0",
+                width: "100%",
+                backgroundColor: fightTransition ? "rgba(243, 34, 16, 0.2)" : "transparent",
+                backgroundImage: `url(${mainButtonImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                borderColor: "#f32210",
+                border: "4px solid #f32210",
+                borderRadius: "15px",
+                color: "#f32210",
+                textTransform: "uppercase",
+                letterSpacing: "3px",
+                fontFamily: "Anton, sans-serif",
+                textAlign: "center",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                textShadow: `
+                  0 0 10px #000000,
+                  0 0 20px #000000,
+                  2px 2px 4px #000000
+                `,
+                boxShadow: fightTransition ? `
+                  0 0 40px #f32210,
+                  0 0 80px rgba(243, 34, 16, 0.8),
+                  0 0 120px rgba(243, 34, 16, 0.4),
+                  inset 0 0 40px rgba(243, 34, 16, 0.3)
+                ` : `
+                  0 0 20px #f32210,
+                  0 0 40px rgba(243, 34, 16, 0.3),
+                  inset 0 0 20px rgba(243, 34, 16, 0.1)
+                `,
+                transition: "all 0.3s ease",
+                cursor: fightTransition ? "not-allowed" : "pointer",
+                animation: isExiting ? "fadeOutSpray 0.4s ease-out" : (fightTransition ? "buttonPowerUp 0.6s ease-out" : "fadeInSpray 0.5s ease-out 0.4s both"),
+                opacity: fightTransition ? 0.8 : 1
+              }}
+              onMouseEnter={(e) => {
+                if (!isMobile && !fightTransition) {
+                  e.target.style.transform = "scale(1.05)";
+                  e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
+                  e.target.style.animation = "impactShake 0.3s ease-out";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile && !fightTransition) {
+                  e.target.style.transform = "scale(1)";
+                  e.target.style.backgroundColor = "transparent";
+                  e.target.style.animation = "none";
+                }
+              }}
+            >
+              <span className="fight-button-text">
+                {fightTransition ? "ENTERING..." : "ENTER FIGHT CLUB"}
+              </span>
+            </Button>
           </Affix>
         </>
       )}
 
-      {/* Controles de combate - PAD DE PELEA MEJORADO */}
-      {isCombatMode && !isCombatOver && (
+      {/* Modo de combate - currentScreen 'combat' */}
+      {currentScreen === 'combat' && (
         <>
-          {/* PAD DE PELEA PRINCIPAL - Diseño Arcade Profesional */}
-          <Affix position={{ 
-            bottom: isMobile ? 10 : 30, 
-            left: "50%",
-            transform: "translateX(-50%)"
-          }}>
-            <Box style={{ 
-              textAlign: "center",
-              backgroundColor: "transparent",
-              borderRadius: isMobile ? "15px" : "20px",
-              padding: isMobile ? "15px" : "30px",
-              border: "none",
-              boxShadow: "none",
-              backdropFilter: "blur(10px)",
-              maxWidth: isMobile ? "95vw" : "auto",
-              width: isMobile ? "95vw" : "auto"
-            }}>
-              <Stack spacing={isMobile ? "md" : "lg"} align="center">
-                {/* Fila de Botones de Ataque - Optimizado para móvil */}
-                <Group spacing={isMobile ? "xs" : "xl"} position="center" style={{
-                  width: "100%",
-                  justifyContent: "space-around"
-                }}>
-                  {attackButtons.map((attack, index) => {
-                    const canUseAttack = canAttack(player1Stamina, attack.name, player1IsDead, player1IsBlocking);
-                    const staminaCost = staminaCosts[attack.name] || 0;
-                    
-                    return (
-                      <Box
-                        key={`p1-${attack.name}`}
-                        style={{
-                          position: "relative",
-                          transform: canUseAttack ? "scale(1)" : "scale(0.95)",
-                          transition: "all 0.2s ease",
-                          flex: isMobile ? "1" : "none"
-                        }}
-                      >
-                        <Button
-                          variant="outline"
-                          size={isMobile ? "md" : "xl"}
-                          disabled={!canUseAttack}
-                          onClick={() => triggerPlayer1Attack(attack.name)}
-                          style={{
-                            position: "relative",
-                            zIndex: 1,
-                            padding: "0",
-                            minHeight: "120px",
-                            minWidth: "100px",
-                            backgroundColor: "transparent",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: canUseAttack ? "pointer" : "not-allowed",
-                            opacity: canUseAttack ? 1 : 0.5,
-                            transition: "all 0.2s ease",
-                            overflow: "hidden",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            boxShadow: "none"
-                          }}
-                          onTouchStart={(e) => {
-                            if (canUseAttack && isMobile) {
-                              e.target.style.transform = "scale(0.95)";
-                            }
-                          }}
-                          onTouchEnd={(e) => {
-                            if (canUseAttack && isMobile) {
-                              e.target.style.transform = "scale(1)";
-                            }
-                          }}
-                          onMouseEnter={(e) => {
-                            if (canUseAttack && !isMobile) {
-                              e.target.style.transform = "scale(1.05)";
-                              e.target.style.boxShadow = "none";
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (canUseAttack && !isMobile) {
-                              e.target.style.transform = "scale(1)";
-                              e.target.style.boxShadow = "none";
-                            }
-                          }}
-                        >
-                          <img 
-                            src={attack.image}
-                            alt={attack.label}
-                            style={{
-                              width: "90%",
-                              height: "90%",
-                              objectFit: "contain",
-                              filter: canUseAttack ? "none" : "grayscale(1)",
-                              pointerEvents: "none",
-                              borderRadius: "4px"
-                            }}
-                          />
-                        </Button>
-                      </Box>
-                    );
-                  })}
-                </Group>
-              </Stack>
-            </Box>
-          </Affix>
-
-          {/* Botón de Bloqueo - Estilo Arcade Mejorado */}
-          <Affix position={{ 
-            bottom: isMobile ? 135 : 220, 
-            left: isMobile ? 10 : 40
-          }}>
-            <Box style={{ position: "relative" }}>
-                <Button
-                variant="outline"
-                size={isMobile ? "sm" : "xl"}
-                disabled={!canBlock(player1Stamina, player1IsDead)}
-                onClick={togglePlayer1Block}
-                style={{
-                  position: "relative",
-                  zIndex: 1,
-                  padding: "0",
-                  width: isMobile ? "70px" : "120px",
-                  height: isMobile ? "60px" : "100px",
-                  backgroundColor: "transparent",
-                  border: "none",
-                  borderRadius: isMobile ? "12px" : "15px",
-                  cursor: canBlock(player1Stamina, player1IsDead) ? "pointer" : "not-allowed",
-                  opacity: canBlock(player1Stamina, player1IsDead) ? 1 : 0.5,
-                  transition: "all 0.2s ease",
-                  overflow: "hidden",
-                  boxShadow: "none",
-                  flexShrink: 0
-                }}
-              >
-                <img 
-                  src={coverImg}
-                  alt="Block"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                    filter: canBlock(player1Stamina, player1IsDead) ? "none" : "grayscale(1)",
-                    pointerEvents: "none"
-                  }}
-                />
-                      </Button>
-            </Box>
-          </Affix>
-
-          {/* Panel de Control - Derecha */}
-          <Affix position={{ 
-            bottom: isMobile ? 145 : 220, 
-            right: isMobile ? 10 : 40
-          }}>
-            <Stack spacing={isMobile ? "xs" : "md"} align="center">
-                {/* Estado del combate */}
-                {isCombatOver && (
-                <Text size={isMobile ? "xs" : "md"} color="yellow" weight={700} align="center" style={{
-                  textShadow: "0 0 10px yellow",
-                  fontSize: isMobile ? "10px" : "16px"
-                }}>
-                  {player1IsDead ? "💀" : "🏆"}
-                  </Text>
-                )}
-                
-              {/* Botón de Reset mejorado */}
-              <Button
-                variant="outline"
-                size={isMobile ? "xs" : "lg"}
-                onClick={resetHealth}
-                style={{ 
-                  padding: "0",
-                  backgroundColor: "transparent",
-                  border: `2px solid #42cf52`,
-                  borderRadius: isMobile ? "10px" : "15px",
-                  transition: "all 0.2s ease",
-                  width: isMobile ? "60px" : "120px",
-                  height: isMobile ? "50px" : "100px",
-                  cursor: "pointer",
-                  overflow: "hidden",
-                  boxShadow: "none",
-                  flexShrink: 0
-                }}
-              >
-                <img 
-                  src={resetImg}
-                  alt="Reset"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                    pointerEvents: "none"
-                  }}
-                />
-              </Button>
+          {/* Victory Screen - Full Screen Overlay */}
+          {isCombatOver && (
+            <div 
+              className="fight-screen-background"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100dvh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 2000,
+                animation: 'fadeInSpray 1s ease-out',
+                backdropFilter: 'blur(2px)',
+                padding: isMobile ? '10px' : '20px',
+                boxSizing: 'border-box'
+              }}>
               
-              {/* Botón para revivir solo al jugador perdedor - Solo visible cuando hay un ganador */}
-              {isCombatOver && (
-                <Button
-                  variant="outline"
-                  size={isMobile ? "xs" : "lg"}
-                  onClick={reviveLosingPlayer}
-                  style={{ 
-                    padding: isMobile ? "4px 8px" : "8px 12px",
-                    backgroundColor: "transparent",
-                    border: `3px solid #fc3f31`,
-                    borderRadius: isMobile ? "10px" : "15px",
-                    transition: "all 0.2s ease",
-                    minWidth: isMobile ? "60px" : "120px",
-                    height: isMobile ? "40px" : "80px",
-                    cursor: "pointer",
-                    overflow: "hidden",
-                    boxShadow: `
-                      0 0 10px #fc3f31,
-                      0 0 20px rgba(252, 63, 49, 0.4),
-                      inset 0 0 10px rgba(252, 63, 49, 0.1)
-                    `,
-                    fontSize: isMobile ? "8px" : "12px",
+              {/* 3D Model of winning character - Large background */}
+              <CharacterPreview
+                characterName={(() => {
+                  const winnerCharacter = player1IsDead ? selectedPlayer2Character?.name || selectedPlayer2Character : selectedPlayer1Character?.name || selectedPlayer1Character;
+                  return winnerCharacter;
+                })()}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: isMobile ? '120vw' : '80vw',
+                  height: isMobile ? '120vh' : '100vh',
+                  zIndex: 1,
+                  opacity: 1,
+                  pointerEvents: 'none'
+                }}
+              />
+              
+              {/* Winner Title */}
+              <div style={{
+                fontSize: isMobile ? '32px' : '72px',
+                fontWeight: 900,
+                color: '#f32210',
+                fontFamily: 'Anton, sans-serif',
+                letterSpacing: isMobile ? '4px' : '8px',
+                textAlign: 'center',
+                marginBottom: isMobile ? '10px' : '40px',
+                textShadow: '4px 4px 8px rgba(0, 0, 0, 0.9)',
+                textTransform: 'uppercase',
+                lineHeight: isMobile ? '1.1' : '1.2',
+                zIndex: 10,
+                position: 'relative'
+              }}>
+                {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"}
+              </div>
+
+              {/* Coins Reward - Only show for Player 1 victory */}
+              {!player1IsDead && (
+                <div style={{
+                  backgroundColor: 'rgba(243, 34, 16, 0.2)',
+                  border: '2px solid #f32210',
+                  borderRadius: '15px',
+                  padding: isMobile ? '10px 20px' : '20px 40px',
+                  marginBottom: isMobile ? '15px' : '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: isMobile ? '8px' : '15px',
+                  boxShadow: `
+                    0 0 20px rgba(243, 34, 16, 0.4),
+                    inset 0 0 20px rgba(243, 34, 16, 0.1)
+                  `,
+                  animation: 'neonPulse 2s ease-in-out infinite',
+                  zIndex: 10,
+                  position: 'relative'
+                }}>
+                  {/* Coin Icon */}
+                  <div style={{
+                    width: isMobile ? '30px' : '60px',
+                    height: isMobile ? '30px' : '60px',
+                    backgroundColor: '#FFD700',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: isMobile ? '16px' : '30px',
+                    boxShadow: '0 0 15px rgba(255, 215, 0, 0.6)',
+                    animation: 'rotate 3s linear infinite'
+                  }}>
+                    ⭐
+                  </div>
+                  
+                  {/* Coins Text */}
+                  <div style={{
+                    fontSize: isMobile ? '20px' : '36px',
+                    fontWeight: 900,
+                    color: '#FFD700',
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '2px',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
+                  }}>
+                    +200
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div style={{
+                display: 'flex',
+                gap: isMobile ? '15px' : '40px',
+                marginTop: isMobile ? '10px' : '30px',
+                width: '100%',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                zIndex: 10,
+                position: 'relative'
+              }}>
+                {/* REMATCH Button */}
+                <button
+                  onClick={() => {
+                    playButtonSound();
+                    resetHealth();
+                    initializeCombat();
+                  }}
+                  style={{
+                    fontSize: isMobile ? '16px' : '24px',
                     fontWeight: 700,
-                    color: "#fc3f31",
-                    textTransform: "uppercase",
-                    textShadow: "0 0 5px #fc3f31"
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '2px',
+                    textTransform: 'uppercase',
+                    color: '#f32210',
+                    backgroundColor: 'transparent',
+                    backgroundImage: `url(${mainButtonImg})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    border: '3px solid #f32210',
+                    borderRadius: '15px',
+                    padding: isMobile ? '12px 24px' : '20px 40px',
+                    minWidth: isMobile ? '110px' : '160px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = 'scale(1.05)';
+                      e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.2)';
+                      e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = 'scale(1)';
+                      e.target.style.backgroundColor = 'transparent';
+                      e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+                    }
                   }}
                 >
-                  {isMobile ? "REVIVE" : "REVIVE LOSER"}
+                  REMATCH
+                </button>
+
+                {/* MENU Button */}
+                <button
+                  onClick={() => {
+                    playButtonSound();
+                    navigateToMenu();
+                  }}
+                  style={{
+                    fontSize: isMobile ? '16px' : '24px',
+                    fontWeight: 700,
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '2px',
+                    textTransform: 'uppercase',
+                    color: '#f32210',
+                    backgroundColor: 'transparent',
+                    backgroundImage: `url(${mainButtonImg})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    border: '3px solid #f32210',
+                    borderRadius: '15px',
+                    padding: isMobile ? '12px 24px' : '20px 40px',
+                    minWidth: isMobile ? '110px' : '160px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = 'scale(1.05)';
+                      e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.2)';
+                      e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = 'scale(1)';
+                      e.target.style.backgroundColor = 'transparent';
+                      e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+                    }
+                  }}
+                >
+                  MENU
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Controles de animación de baile - Solo en modo sincronizado - CENTRO ARRIBA */}
+          {!isCombatMode && (
+            <>
+              {/* Título Fight Club - ARRIBA CENTRO */}
+              <Affix position={{ 
+                top: isMobile ? 40 : 50, 
+                left: "50%",
+                transform: "translateX(-50%)"
+              }}>
+                <div style={{ textAlign: "center" }}>
+                  <div className="fight-title">
+                    FIGHT CLUB
+                  </div>
+                  
+
+                </div>
+              </Affix>
+
+              {/* MENÚ CENTRAL ESTILO FIGHT CLUB */}
+              <Affix position={{ 
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)"
+              }}>
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: isMobile ? '20px' : '30px'
+                }}>
+                  {/* Botón START */}
+                  <Button
+                    variant="outline"
+                    size="xl"
+                    onClick={() => {
+                      playButtonSound();
+                      setIsCombatMode(true);
+                      initializeCombat();
+                    }}
+                    style={{
+                      fontSize: isMobile ? "36px" : "48px",
+                      fontWeight: 700,
+                      padding: isMobile ? "15px 40px" : "20px 60px",
+                      minHeight: isMobile ? "80px" : "100px",
+                      minWidth: isMobile ? "280px" : "350px",
+                      backgroundColor: "transparent",
+                      borderColor: "#f32210",
+                      border: "4px solid #f32210",
+                      borderRadius: "15px",
+                      color: "#f32210",
+                      textTransform: "uppercase",
+                      letterSpacing: "3px",
+                      fontFamily: "Anton, sans-serif",
+                      boxShadow: `
+                        0 0 20px #f32210,
+                        0 0 40px rgba(243, 34, 16, 0.3),
+                        inset 0 0 20px rgba(243, 34, 16, 0.1)
+                      `,
+                      transition: "all 0.3s ease",
+                      cursor: "pointer"
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isMobile) {
+                        e.target.style.transform = "scale(1.05)";
+                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isMobile) {
+                        e.target.style.transform = "scale(1)";
+                        e.target.style.backgroundColor = "transparent";
+                      }
+                    }}
+                  >
+                    START
+                  </Button>
+
+                  {/* Botón FIGHTERS */}
+                  <Button
+                    variant="outline"
+                    size="xl"
+                    onClick={() => {
+                      playButtonSound();
+                      // Aquí se podría abrir un menú de selección de personajes
+                    }}
+                    style={{
+                      fontSize: isMobile ? "36px" : "48px",
+                      fontWeight: 700,
+                      padding: isMobile ? "15px 40px" : "20px 60px",
+                      minHeight: isMobile ? "80px" : "100px",
+                      minWidth: isMobile ? "280px" : "350px",
+                      backgroundColor: "transparent",
+                      borderColor: "#f32210",
+                      border: "4px solid #f32210",
+                      borderRadius: "15px",
+                      color: "#f32210",
+                      textTransform: "uppercase",
+                      letterSpacing: "3px",
+                      fontFamily: "Anton, sans-serif",
+                      boxShadow: `
+                        0 0 20px #f32210,
+                        0 0 40px rgba(243, 34, 16, 0.3),
+                        inset 0 0 20px rgba(243, 34, 16, 0.1)
+                      `,
+                      transition: "all 0.3s ease",
+                      cursor: "pointer"
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isMobile) {
+                        e.target.style.transform = "scale(1.05)";
+                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isMobile) {
+                        e.target.style.transform = "scale(1)";
+                        e.target.style.backgroundColor = "transparent";
+                      }
+                    }}
+                  >
+                    FIGHTERS
+                  </Button>
+                </div>
+              </Affix>
+
+              {/* Music Button - BOTTOM LEFT CORNER */}
+              <Button
+                variant="unstyled"
+                size="xs"
+                onClick={() => setShowMusicPlayer(!showMusicPlayer)}
+                style={{
+                  position: 'absolute',
+                  bottom: '20px',
+                  left: '20px',
+                  zIndex: 200,
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  width: '40px',
+                  height: '40px',
+                  padding: '0',
+                  minWidth: 'unset',
+                  cursor: 'pointer'
+                }}
+              >
+                {/* Music icon */}
+              </Button>
+
+              {/* Botón de Baile - ESQUINA INFERIOR DERECHA */}
+              <Affix position={{ 
+                bottom: isMobile ? 30 : 40, 
+                right: isMobile ? 30 : 40 
+              }}>
+                {/* Icono de baile */}
+                <Button
+                  variant="unstyled"
+                  onClick={() => {
+                    playButtonSound();
+                    toggleDanceCombo();
+                  }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    stopCombo();
+                  }}
+                  style={{
+                    width: isMobile ? "80px" : "100px",
+                    height: isMobile ? "80px" : "100px",
+                    borderRadius: "50%",
+                    backgroundColor: isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)",
+                    border: "3px solid #f32210",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: "all 0.3s ease",
+                    boxShadow: `
+                      0 0 15px #f32210,
+                      0 0 25px rgba(243, 34, 16, 0.3)
+                    `,
+                    animation: isPlayingCombo ? "pulse 1s ease-in-out infinite" : "none"
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = "scale(1.1)";
+                      e.target.style.backgroundColor = "rgba(243, 34, 16, 0.4)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isMobile) {
+                      e.target.style.transform = "scale(1)";
+                      e.target.style.backgroundColor = isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)";
+                    }
+                  }}
+                >
+                  <img 
+                    src={danceImg}
+                    alt="Dance"
+                    style={{
+                      width: isMobile ? "40px" : "50px",
+                      height: isMobile ? "40px" : "50px",
+                      objectFit: "contain",
+                      pointerEvents: "none",
+                      filter: "brightness(0) saturate(100%) invert(23%) sepia(89%) saturate(2700%) hue-rotate(355deg) brightness(102%) contrast(93%)"
+                    }}
+                  />
                 </Button>
+              </Affix>
+
+              {/* Información del combo actual (solo si está reproduciéndose) */}
+              {isPlayingCombo && (
+                <Affix position={{ 
+                  bottom: isMobile ? 120 : 140, 
+                  right: isMobile ? 30 : 40 
+                }}>
+                  <div style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    border: "2px solid #f32210",
+                    borderRadius: "10px",
+                    padding: "8px 12px",
+                    color: "#f32210",
+                    fontSize: "12px",
+                    fontFamily: "Anton, sans-serif",
+                    textAlign: "center",
+                    boxShadow: "0 0 10px rgba(243, 34, 16, 0.5)"
+                  }}>
+                    <div>{danceCombinations[currentComboIndex].name}</div>
+                    <div style={{ fontSize: "10px", opacity: 0.8 }}>
+                      {currentDanceInCombo + 1}/{danceCombinations[currentComboIndex].dances.length}
+                    </div>
+                  </div>
+                </Affix>
               )}
-              </Stack>
-          </Affix>
+            </>
+          )}
+
+          {/* Controles de combate - PAD DE PELEA MEJORADO */}
+          {isCombatMode && !isCombatOver && (
+            <>
+              {/* PAD DE PELEA PRINCIPAL - Diseño Arcade Profesional */}
+              <Affix position={{ 
+                bottom: isMobile ? 5 : 15, 
+                left: "50%",
+                transform: "translateX(-50%)"
+              }}>
+                <Box style={{ 
+                  textAlign: "center",
+                  backgroundColor: "transparent",
+                  borderRadius: isMobile ? "15px" : "20px",
+                  padding: isMobile ? "10px" : "20px",
+                  border: "none",
+                  boxShadow: "none",
+                  backdropFilter: "blur(10px)",
+                  maxWidth: isMobile ? "100vw" : "auto",
+                  width: isMobile ? "100vw" : "auto"
+                }}>
+                  {/* Fila de Botones de Ataque - Optimizado para fila inferior */}
+                  <Group spacing={isMobile ? "lg" : "xl"} position="center" style={{
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                    display: "flex",
+                    flexDirection: "row"
+                  }}>
+                    {attackButtons.map((attack, index) => {
+                      const canUseAttack = isAttackAvailable(attack.name);
+                      const staminaCost = staminaCosts[attack.name] || 0;
+                      
+                      return (
+                        <Box
+                          key={`p1-${attack.name}`}
+                          style={{
+                            position: "relative",
+                            transform: canUseAttack ? "scale(1)" : "scale(0.95)",
+                            transition: "all 0.2s ease",
+                            flex: isMobile ? "1" : "0 0 auto",
+                            maxWidth: isMobile ? "30%" : "140px",
+                            display: "flex",
+                            justifyContent: "center"
+                          }}
+                        >
+                          <Button
+                            variant="outline"
+                            size={isMobile ? "lg" : "xl"}
+                            disabled={!canUseAttack}
+                            onClick={() => triggerPlayer1Attack(attack.name)}
+                            style={{
+                              position: "relative",
+                              zIndex: 1,
+                              padding: "0",
+                              minHeight: isMobile ? "100px" : "120px",
+                              minWidth: isMobile ? "90px" : "120px",
+                              backgroundColor: "transparent",
+                              border: "none",
+                              borderRadius: "15px",
+                              cursor: canUseAttack ? "pointer" : "not-allowed",
+                              opacity: canUseAttack ? 1 : 0.5,
+                              transition: "all 0.3s ease",
+                              overflow: "hidden",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              boxShadow: "none"
+                            }}
+                            onTouchStart={(e) => {
+                              if (canUseAttack && isMobile) {
+                                e.target.style.transform = "scale(0.95)";
+                                e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
+                                e.target.style.animation = "impactShake 0.3s ease-out";
+                              }
+                            }}
+                            onTouchEnd={(e) => {
+                              if (canUseAttack && isMobile) {
+                                e.target.style.transform = "scale(1)";
+                                e.target.style.backgroundColor = "transparent";
+                                e.target.style.animation = "none";
+                              }
+                            }}
+                            onMouseEnter={(e) => {
+                              if (canUseAttack && !isMobile) {
+                                e.target.style.transform = "scale(1.05)";
+                                e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
+                                e.target.style.animation = "impactShake 0.3s ease-out";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (canUseAttack && !isMobile) {
+                                e.target.style.transform = "scale(1)";
+                                e.target.style.backgroundColor = "transparent";
+                                e.target.style.animation = "none";
+                              }
+                            }}
+                          >
+                            <img 
+                              src={attack.image}
+                              alt={attack.label}
+                              style={{
+                                width: "90%",
+                                height: "90%",
+                                objectFit: "contain",
+                                filter: canUseAttack ? "none" : "grayscale(1)",
+                                pointerEvents: "none",
+                                borderRadius: "4px"
+                              }}
+                            />
+                          </Button>
+                        </Box>
+                      );
+                    })}
+                  </Group>
+                </Box>
+              </Affix>
+
+              {/* Botón de Bloqueo - Estilo Arcade Mejorado */}
+              <Affix position={{ 
+                bottom: isMobile ? 135 : 220, 
+                left: isMobile ? 10 : 40
+              }}>
+                <Box style={{ position: "relative" }}>
+                    <Button
+                    variant="outline"
+                    size={isMobile ? "sm" : "xl"}
+                    disabled={!isBlockAvailable()}
+                    onClick={togglePlayer1Block}
+                    style={{
+                      position: "relative",
+                      zIndex: 1,
+                      padding: "0",
+                      width: isMobile ? "70px" : "120px",
+                      height: isMobile ? "60px" : "100px",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      borderRadius: isMobile ? "15px" : "15px",
+                      cursor: isBlockAvailable() ? "pointer" : "not-allowed",
+                      opacity: isBlockAvailable() ? 1 : 0.5,
+                      transition: "all 0.3s ease",
+                      overflow: "hidden",
+                      boxShadow: "none",
+                      flexShrink: 0
+                    }}
+                    onTouchStart={(e) => {
+                      if (isBlockAvailable() && isMobile) {
+                        e.target.style.transform = "scale(0.95)";
+                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
+                        e.target.style.animation = "impactShake 0.3s ease-out";
+                      }
+                    }}
+                    onTouchEnd={(e) => {
+                      if (isBlockAvailable() && isMobile) {
+                        e.target.style.transform = "scale(1)";
+                        e.target.style.backgroundColor = "transparent";
+                        e.target.style.animation = "none";
+                      }
+                    }}
+                    onMouseEnter={(e) => {
+                      if (isBlockAvailable() && !isMobile) {
+                        e.target.style.transform = "scale(1.05)";
+                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
+                        e.target.style.animation = "impactShake 0.3s ease-out";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (isBlockAvailable() && !isMobile) {
+                        e.target.style.transform = "scale(1)";
+                        e.target.style.backgroundColor = "transparent";
+                        e.target.style.animation = "none";
+                      }
+                    }}
+                  >
+                    <img 
+                      src={coverImg}
+                      alt="Block"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                        filter: isBlockAvailable() ? "none" : "grayscale(1)",
+                        pointerEvents: "none"
+                      }}
+                    />
+                          </Button>
+                </Box>
+              </Affix>
+
+              {/* Panel de Control - Derecha */}
+              <Affix position={{ 
+                bottom: isMobile ? 145 : 220, 
+                right: isMobile ? 10 : 40
+              }}>
+                <Stack spacing={isMobile ? "xs" : "md"} align="center">
+                    {/* Estado del combate */}
+                    {isCombatOver && (
+                    <Text size={isMobile ? "xs" : "md"} color="yellow" weight={700} align="center" style={{
+                      textShadow: "0 0 10px yellow",
+                      fontSize: isMobile ? "10px" : "16px"
+                    }}>
+                      {player1IsDead ? "DEFEAT" : "VICTORY"}
+                      </Text>
+                    )}
+                    
+                  {/* Botón para revivir solo al jugador perdedor - Solo visible cuando hay un ganador */}
+                  {isCombatOver && (
+                    <Button
+                      variant="outline"
+                      size={isMobile ? "xs" : "lg"}
+                      onClick={() => {
+                        playButtonSound();
+                        reviveLosingPlayer();
+                      }}
+                      style={{ 
+                        padding: isMobile ? "4px 8px" : "8px 12px",
+                        backgroundColor: "transparent",
+                        border: `3px solid #f32210`,
+                        borderRadius: isMobile ? "10px" : "15px",
+                        transition: "all 0.2s ease",
+                        minWidth: isMobile ? "60px" : "120px",
+                        height: isMobile ? "40px" : "80px",
+                        cursor: "pointer",
+                        overflow: "hidden",
+                        boxShadow: `
+                          0 0 10px #f32210,
+                          0 0 20px rgba(243, 34, 16, 0.4),
+                          inset 0 0 10px rgba(243, 34, 16, 0.1)
+                        `,
+                        fontSize: isMobile ? "8px" : "12px",
+                        fontWeight: 700,
+                        color: "#f32210",
+                        textTransform: "uppercase",
+                        textShadow: "0 0 5px #f32210"
+                      }}
+                    >
+                      {isMobile ? "REVIVE" : "REVIVE LOSER"}
+                    </Button>
+                  )}
+                  </Stack>
+              </Affix>
+            </>
+          )}
         </>
       )}
     </>

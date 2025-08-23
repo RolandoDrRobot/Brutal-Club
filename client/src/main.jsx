@@ -3,11 +3,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { CharacterAnimationsProvider } from "./contexts/CharacterAnimations";
-import { StarknetProvider } from "./contexts/StarknetProvider";
+import { GameStateProvider } from "./contexts/GameState";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <StarknetProvider>
+    <GameStateProvider>
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
@@ -45,7 +45,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               '#ff8080',
               '#ff4d4d',
               '#ff1a1a',
-              '#fc3f31',
+              '#f32210',
               '#d9362a',
               '#b62d23',
               '#93241c',
@@ -114,6 +114,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <App />
         </CharacterAnimationsProvider>
       </MantineProvider>
-    </StarknetProvider>
+    </GameStateProvider>
   </React.StrictMode>
 );
