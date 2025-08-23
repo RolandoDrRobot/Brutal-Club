@@ -7,15 +7,17 @@ const CRITICAL_MODELS = [
   './models/Tyler.glb',     // Default opponent
 ];
 
-// SECONDARY LOADING: Models loaded after critical ones (audience removed for performance)
+// SECONDARY LOADING: Models loaded after critical ones (audience restored)
 const SECONDARY_MODELS = [
-  // Audience models removed - no longer needed
+  './models/Chuck.glb',      // Audience member
+  './models/Earl.glb',       // Audience member
+  './models/Wayne.glb',      // Audience member
+  './models/Vince.glb',      // Audience member
 ];
 
 // LAZY LOADING: Models loaded only when needed
 const LAZY_MODELS = [
-  './models/Vince.glb',     // Shop character
-  './models/Bob.glb',       // Shop character
+  './models/Bob.glb',       // Shop character (Vince moved to secondary for audience)
 ];
 
 // ESSENTIAL AUDIO: Only critical sounds for initial experience

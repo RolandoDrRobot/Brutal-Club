@@ -1,7 +1,7 @@
 import { CameraControls } from "./CameraControls";
 import Pete from "./Pete";
 import Tyler from "./Tyler";
-
+import Audience from "./Audience";
 import BloodFloor from "./BloodFloor";
 import BarBasement from "./BarBasement";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
@@ -15,11 +15,11 @@ const Experience = () => {
       // Combat mode: facing each other
       return {
         player1: {
-          position: [-0.5, 0, 0],
+          position: [-0.5, -1, 0],
           rotation: [0, Math.PI / 2, 0]
         },
         player2: {
-          position: [0.5, 0, 0], 
+          position: [0.5, -1, 0], 
           rotation: [0, -Math.PI / 2, 0]
         }
       };
@@ -27,11 +27,11 @@ const Experience = () => {
       // Sync mode: same distance but facing each other (like combat)
       return {
         player1: {
-          position: [-0.5, 0, 0],
+          position: [-0.5, -1, 0],
           rotation: [0, Math.PI / 2, 0]  // Mirando hacia la derecha (al Player 2)
         },
         player2: {
-          position: [0.5, 0, 0],
+          position: [0.5, -1, 0],
           rotation: [0, -Math.PI / 2, 0] // Mirando hacia la izquierda (al Player 1)
         }
       };
@@ -64,6 +64,9 @@ const Experience = () => {
       
       {/* Bar Basement Scenario */}
       <BarBasement />
+      
+      {/* Audience around the fighters */}
+      <Audience />
       
       {/* Blood effects - Mantener gotas de sangre en el piso */}
       <BloodFloor />

@@ -7,19 +7,22 @@ const BloodFloor = () => {
   
   // Create blood puddles on the floor - MUCH MORE BLOOD!
   const bloodPuddles = useMemo(() => {
-    const puddleCount = 45; // TRIPLED! Much more blood
+    const puddleCount = 12; // Much less blood
     const positions = new Float32Array(puddleCount * 3);
     const scales = new Float32Array(puddleCount);
     const opacities = new Float32Array(puddleCount);
     
     for (let i = 0; i < puddleCount; i++) {
-      // Random positions on the floor
-      positions[i * 3] = (Math.random() - 0.5) * 14; // x - wider area
-      positions[i * 3 + 1] = -0.99; // y - just above the floor
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 14; // z - wider area
+      // Concentrated around the fighting area where fighters stand
+      const fightCenterX = Math.random() > 0.5 ? -0.5 : 0.5; // Around fighter positions
+      const fightCenterZ = 0; // Center Z where fighters are
       
-      // Varied sizes - bigger puddles
-      scales[i] = Math.random() * 0.9 + 0.3; // 0.3 to 1.2 - BIGGER puddles
+      positions[i * 3] = fightCenterX + (Math.random() - 0.5) * 2.5; // x - around fight area
+      positions[i * 3 + 1] = -0.99; // y - just above the floor
+      positions[i * 3 + 2] = fightCenterZ + (Math.random() - 0.5) * 2.0; // z - around fight center
+      
+      // Varied sizes - smaller puddles
+      scales[i] = Math.random() * 0.4 + 0.1; // 0.1 to 0.5 - SMALLER puddles
       
       // Higher opacities - more visible blood
       opacities[i] = Math.random() * 0.4 + 0.6; // 0.6 to 1.0 - MORE VISIBLE
@@ -66,17 +69,17 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-              {/* Additional smaller stains - REDUCED QUANTITY */}
-        {Array.from({ length: 35 }).map((_, index) => (
+              {/* Additional smaller stains - MUCH LESS */}
+        {Array.from({ length: 8 }).map((_, index) => (
         <mesh
           key={`splatter-${index}`}
           position={[
-            (Math.random() - 0.5) * 12,
+            (Math.random() - 0.5) * 3.0, // Concentrated around center
             -0.98,
-            (Math.random() - 0.5) * 12
+            (Math.random() - 0.5) * 2.5   // Near fight area
           ]}
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
-          scale={[Math.random() * 0.25 + 0.05, Math.random() * 0.25 + 0.05, 1]} // Smaller
+          scale={[Math.random() * 0.15 + 0.03, Math.random() * 0.15 + 0.03, 1]} // Much smaller
         >
           <circleGeometry args={[0.5, 8]} />
           <meshBasicMaterial
@@ -88,17 +91,17 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-              {/* Salpicaduras muy pequeñas adicionales - CANTIDAD REDUCIDA */}
-        {Array.from({ length: 70 }).map((_, index) => (
+              {/* Salpicaduras muy pequeñas adicionales - MINIMAL */}
+        {Array.from({ length: 15 }).map((_, index) => (
         <mesh
           key={`micro-splatter-${index}`}
           position={[
-            (Math.random() - 0.5) * 14,
+            (Math.random() - 0.5) * 3.5, // Around fighting area
             -0.97,
-            (Math.random() - 0.5) * 14
+            (Math.random() - 0.5) * 3.0   // Near fight zone
           ]}
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
-          scale={[Math.random() * 0.15 + 0.03, Math.random() * 0.15 + 0.03, 1]} // Muy pequeñas
+          scale={[Math.random() * 0.08 + 0.02, Math.random() * 0.08 + 0.02, 1]} // Tiny
         >
           <circleGeometry args={[0.3, 6]} />
           <meshBasicMaterial
@@ -110,17 +113,17 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-              {/* NUEVOS: Charcos GRANDES de sangre más dramáticos - REDUCIDOS */}
-        {Array.from({ length: 8 }).map((_, index) => (
+              {/* NUEVOS: Charcos medianos - MUY POCOS */}
+        {Array.from({ length: 3 }).map((_, index) => (
         <mesh
           key={`big-puddle-${index}`}
           position={[
-            (Math.random() - 0.5) * 12,
+            (Math.random() - 0.5) * 2.5, // Close to fight center
             -0.995,
-            (Math.random() - 0.5) * 12
+            (Math.random() - 0.5) * 2.0   // Right in fight area
           ]}
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
-          scale={[Math.random() * 1.5 + 1.2, Math.random() * 1.5 + 1.2, 1]} // MUY GRANDES
+          scale={[Math.random() * 0.6 + 0.4, Math.random() * 0.6 + 0.4, 1]} // Medium size
         >
           <circleGeometry args={[1.5, 20]} />
           <meshBasicMaterial
@@ -132,17 +135,17 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-              {/* NUEVOS: Rastros de sangre (como arrastrado) - REDUCIDOS */}
-        {Array.from({ length: 15 }).map((_, index) => (
+              {/* NUEVOS: Rastros de sangre (como arrastrado) - MINIMAL */}
+        {Array.from({ length: 5 }).map((_, index) => (
         <mesh
           key={`blood-trail-${index}`}
           position={[
-            (Math.random() - 0.5) * 14,
+            (Math.random() - 0.5) * 4.0, // Around fighters area
             -0.99,
-            (Math.random() - 0.5) * 14
+            (Math.random() - 0.5) * 3.0   // Extended fight zone
           ]}
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
-          scale={[Math.random() * 0.8 + 0.6, Math.random() * 0.3 + 0.1, 1]} // Alargados
+          scale={[Math.random() * 0.4 + 0.3, Math.random() * 0.15 + 0.05, 1]} // Small trails
         >
           <planeGeometry args={[2, 0.5]} />
           <meshBasicMaterial

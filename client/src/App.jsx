@@ -44,7 +44,7 @@ function App() {
       }} />
       
       <Canvas
-        camera={{ position: [0, 1.8, 2.5], fov: 75 }}
+        camera={{ position: [0, 1.5, 3.0], fov: 75 }}
         shadows
         gl={{ preserveDrawingBuffer: true, alpha: true }}
         style={{ background: 'transparent' }}

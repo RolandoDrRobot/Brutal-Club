@@ -1,8 +1,9 @@
 import { CameraControls } from "./CameraControls";
 import Pete from "./Pete";
 import Tyler from "./Tyler";
-
+import Audience from "./Audience";
 import BloodFloor from "./BloodFloor";
+import BarBasement from "./BarBasement";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import { getCharacterTransforms, getCharacterComponent } from "../utils/characterUtils";
 
@@ -31,31 +32,16 @@ const Experience = () => {
     <>
       <CameraControls />
       
-      {/* Iluminación neón cálida - MENOS SEPIA, MÁS ILUMINADO */}
-      <ambientLight intensity={0.4} color="#FFD099" />
+      {/* Bar Basement Scenario */}
+      <BarBasement />
       
-      {/* Foco principal menos amarillento */}
-      <spotLight
-        position={[0, 8, 0]}
-        intensity={1.5}
-        angle={Math.PI / 3}
-        penumbra={0.8}
-        color="#FFDD88"
-        castShadow
-      />
+      {/* Audience around the fighters */}
+      <Audience />
       
-      {/* Focos laterales menos saturados */}
-      <spotLight position={[-6, 5, 3]} intensity={0.8} angle={Math.PI / 4} penumbra={0.9} color="#FFBB66" />
-      <spotLight position={[6, 5, 3]} intensity={0.8} angle={Math.PI / 4} penumbra={0.9} color="#FFCC77" />
-      
-      {/* Ambiente trasero más claro */}
-      <directionalLight position={[0, 3, -8]} intensity={0.2} color="#DDAA66" />
-      
-      {/* Fondo negro con efectos de sangre */}
+      {/* Blood effects - Mantener gotas de sangre en el piso */}
       <BloodFloor />
       
-      {/* Characters */}
-      <group>
+      <group position={[0, 0, 0]}>
         {renderCharacter(
           selectedPlayer1Character, 
           1, 
@@ -69,8 +55,6 @@ const Experience = () => {
           transforms.player2.rotation
         )}
       </group>
-      
-
     </>
   );
 };

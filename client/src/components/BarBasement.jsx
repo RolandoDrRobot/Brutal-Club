@@ -302,25 +302,27 @@ const BarBasement = () => {
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
     
-    // Light 1 - Dramatic cinematic flickering (more noticeable)
+    // Light 1 - Dramatic cinematic flickering (VERY NOTICEABLE)
     if (flickerLight1Ref.current) {
-      const dramaticCycle = Math.sin(time * 0.4) * 0.7 + 0.3; // More dramatic cycles
-      const powerSurge = Math.sin(time * 2.5) > 0.75 ? 2.2 : 1; // Stronger, more frequent surges
-      const coolFlicker = Math.sin(time * 6) * 0.18; // More noticeable flickering
-      flickerLight1Ref.current.intensity = (1.3 * dramaticCycle * powerSurge) + coolFlicker;
+      const dramaticCycle = Math.sin(time * 0.5) * 0.8 + 0.2; // Even more dramatic cycles
+      const powerSurge = Math.sin(time * 2) > 0.7 ? 2.8 : 1; // Much stronger, frequent surges
+      const coolFlicker = Math.sin(time * 8) * 0.25; // Very noticeable flickering
+      const electricalChaos = Math.sin(time * 15) < -0.9 ? 0.1 : 1; // Occasional blackouts
+      flickerLight1Ref.current.intensity = (1.8 * dramaticCycle * powerSurge * electricalChaos) + coolFlicker;
     }
     
-    // Light 2 - Breathing light with electrical glitches (more visible)
+    // Light 2 - Breathing light with electrical glitches (MUCH MORE VISIBLE)
     if (flickerLight2Ref.current) {
-      const breathingBase = Math.sin(time * 0.8) * 0.5 + 0.5; // Stronger breathing effect
-      const electricalGlitch = Math.sin(time * 10) < -0.85 ? 0.2 : 1; // More frequent glitches
-      const subtlePulse = Math.sin(time * 4) * 0.2; // More noticeable pulsing
-      flickerLight2Ref.current.intensity = (1.2 * breathingBase * electricalGlitch) + subtlePulse;
+      const breathingBase = Math.sin(time * 1) * 0.6 + 0.4; // Much stronger breathing effect
+      const electricalGlitch = Math.sin(time * 8) < -0.8 ? 0.15 : 1; // Very frequent glitches
+      const subtlePulse = Math.sin(time * 5) * 0.3; // Very noticeable pulsing
+      const sparking = Math.sin(time * 12) > 0.95 ? 2.5 : 1; // Occasional sparking
+      flickerLight2Ref.current.intensity = (1.8 * breathingBase * electricalGlitch * sparking) + subtlePulse;
     }
   });
 
   return (
-    <group>
+    <group scale={[0.4, 0.4, 0.4]}> {/* Scale down basement much smaller to better match character size */}
 
 
       {/* Ceiling */}
@@ -546,13 +548,13 @@ const BarBasement = () => {
       ))}
 
       {/* DARK TAVERN BASEMENT LIGHTING SYSTEM */}
-      {/* Dark ambient light (less sepia) */}
-      <ambientLight intensity={0.12} color="#3d3529" />
+      {/* Dark ambient light (less sepia) - INCREASED */}
+      <ambientLight intensity={0.18} color="#3d3529" />
       
-      {/* Main overhead dark lighting (less sepia) */}
+      {/* Main overhead dark lighting (less sepia) - INCREASED */}
       <directionalLight
         position={[0, 8, 0]}
-        intensity={0.35}
+        intensity={0.45}
         color="#5a4d36"
         castShadow
         shadow-mapSize-width={2048}
@@ -572,7 +574,7 @@ const BarBasement = () => {
           key={`spot-${index}`}
           ref={index === 0 ? flickerLight1Ref : index === 1 ? flickerLight2Ref : null}
           position={[light.pos[0], light.pos[1] - 0.2, light.pos[2]]}
-          intensity={1.5}
+          intensity={1.8}
           angle={0.8}
           penumbra={0.6}
           color="#bb9955"

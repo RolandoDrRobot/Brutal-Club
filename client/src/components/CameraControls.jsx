@@ -26,8 +26,8 @@ export const CameraControls = () => {
               // CÁMARA ORBITAL MUY CERCA DE LOS MODELOS
         const orbitSpeed = 0.3; // Velocidad del giro orbital
         const orbitAngle = timeRef.current * orbitSpeed; // Ángulo que incrementa continuamente
-        const baseDistance = 2.2; // Distancia MUY CERCANA a los modelos
-        const baseHeight = 2.2; // Altura más elevada para mejor vista del sótano
+        const baseDistance = 3.0; // Distancia alejada para mejor vista general
+        const baseHeight = 1.5; // Altura elevada para ver mejor los peleadores
 
         // Variaciones sutiles para movimiento más natural
         const heightVariation = Math.sin(timeRef.current * 0.4) * 0.15; // Ligera variación de altura
@@ -47,7 +47,7 @@ export const CameraControls = () => {
       
       // SIEMPRE APUNTAR AL CENTRO DONDE ESTÁN LOS MODELOS
       const targetX = 0; // Centro exacto donde están los luchadores
-      const targetY = 1.0; // Nivel elevado para capturar mejor el escenario
+      const targetY = -0.5; // Apuntando a la parte media de los personajes
       const targetZ = 0; // Centro exacto
       
       // Enfocar directamente a los luchadores
@@ -66,14 +66,14 @@ export const CameraControls = () => {
   useEffect(() => {
     if (isCombatMode && initialCameraPosition.current) {
       // Perfect fighting game camera position (side profile view showing both fighters)
-      camera.position.set(0, 1.8, 2.5); // Side view from Z-axis, elevated, closer to fighters
+      camera.position.set(0, 0.2, 2.8); // Side view from Z-axis, closer to fighters
       camera.rotation.z = 0; // Reset roll
       if (orbitControlsRef.current) {
-        orbitControlsRef.current.target.set(0, 1.0, 0); // Look at center between fighters at torso level
+        orbitControlsRef.current.target.set(0, -0.3, 0); // Look at fighter upper torso level
         orbitControlsRef.current.update();
       }
-      // Ensure camera looks at the center between both fighters
-      camera.lookAt(0, 1.0, 0);
+      // Ensure camera looks at the center between both fighters at torso level
+      camera.lookAt(0, -0.3, 0);
     }
   }, [isCombatMode, camera]);
 
