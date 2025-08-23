@@ -66,8 +66,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-      {/* Additional smaller stains - INCREASED QUANTITY */}
-      {Array.from({ length: 60 }).map((_, index) => (
+              {/* Additional smaller stains - REDUCED QUANTITY */}
+        {Array.from({ length: 35 }).map((_, index) => (
         <mesh
           key={`splatter-${index}`}
           position={[
@@ -88,8 +88,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-      {/* Salpicaduras muy pequeñas adicionales - MÁS SALPICADURAS */}
-      {Array.from({ length: 120 }).map((_, index) => (
+              {/* Salpicaduras muy pequeñas adicionales - CANTIDAD REDUCIDA */}
+        {Array.from({ length: 70 }).map((_, index) => (
         <mesh
           key={`micro-splatter-${index}`}
           position={[
@@ -110,8 +110,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-      {/* NUEVOS: Charcos GRANDES de sangre más dramáticos */}
-      {Array.from({ length: 12 }).map((_, index) => (
+              {/* NUEVOS: Charcos GRANDES de sangre más dramáticos - REDUCIDOS */}
+        {Array.from({ length: 8 }).map((_, index) => (
         <mesh
           key={`big-puddle-${index}`}
           position={[
@@ -132,8 +132,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-      {/* NUEVOS: Rastros de sangre (como arrastrado) */}
-      {Array.from({ length: 25 }).map((_, index) => (
+              {/* NUEVOS: Rastros de sangre (como arrastrado) - REDUCIDOS */}
+        {Array.from({ length: 15 }).map((_, index) => (
         <mesh
           key={`blood-trail-${index}`}
           position={[

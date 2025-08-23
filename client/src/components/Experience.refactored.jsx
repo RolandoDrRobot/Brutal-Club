@@ -1,7 +1,7 @@
 import { CameraControls } from "./CameraControls";
 import Pete from "./Pete";
 import Tyler from "./Tyler";
-import ParticleEffect from "./ParticleEffect";
+
 import BloodFloor from "./BloodFloor";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import { getCharacterTransforms, getCharacterComponent } from "../utils/characterUtils";
@@ -70,8 +70,7 @@ const Experience = () => {
         )}
       </group>
       
-      {/* Effects */}
-      <ParticleEffect />
+
     </>
   );
 };

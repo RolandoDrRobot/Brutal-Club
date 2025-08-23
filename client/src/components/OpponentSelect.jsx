@@ -14,8 +14,8 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
   const { isExiting } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   
-  // Use GameState to get opponent status
-  const { getOpponentsStatus } = useGameState();
+  // Use GameState to get opponent status and coins
+  const { getOpponentsStatus, coins } = useGameState();
 
   // Get opponents with their current unlock status
   const opponents = getOpponentsStatus().map((opponent, index) => ({
@@ -268,7 +268,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                     letterSpacing: '1px',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)'
                   }}>
-                    Arcade Mode
+                    Arcade Mode - {coins} Coins
                   </Text>
                 </Group>
               </Box>

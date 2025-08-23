@@ -44,11 +44,13 @@ function App() {
       }} />
       
       <Canvas
-        camera={{ position: [1.8, 0.3, 0], fov: 80 }}
+        camera={{ position: [0, 1.8, 2.5], fov: 75 }}
         shadows
         gl={{ preserveDrawingBuffer: true, alpha: true }}
         style={{ background: 'transparent' }}
       >
+        {/* Atmospheric fog for dark tavern basement (darker, less sepia) */}
+        <fog attach="fog" args={['#161412', 5, 16]} />
         <Experience />
       </Canvas>
       

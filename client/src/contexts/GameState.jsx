@@ -4,7 +4,7 @@ const GameStateContext = createContext({});
 
 // Game configuration
 const GAME_CONFIG = {
-  COINS_PER_WIN: 200,
+  COINS_PER_WIN: 1,
   OPPONENTS: [
     {
       id: 'pete_1',
@@ -12,7 +12,7 @@ const GAME_CONFIG = {
       model: 'pete',
       description: 'Construction worker with heavy fists',
       unlockRequirement: null, // Available from the start
-      coinReward: 200
+      coinReward: 1
     },
     {
       id: 'tyler_1',
@@ -20,7 +20,7 @@ const GAME_CONFIG = {
       model: 'Tyler',
       description: 'Soap maker with deadly skills',
       unlockRequirement: 'pete_1', // Unlocked by defeating Pete 1
-      coinReward: 200
+      coinReward: 1
     },
     {
       id: 'pete_2',
@@ -28,7 +28,7 @@ const GAME_CONFIG = {
       model: 'pete',
       description: 'Construction worker returns stronger',
       unlockRequirement: 'tyler_1', // Unlocked by defeating Tyler 1
-      coinReward: 250
+      coinReward: 1
     },
     {
       id: 'tyler_2',
@@ -36,7 +36,7 @@ const GAME_CONFIG = {
       model: 'Tyler',
       description: 'Soap maker with refined techniques',
       unlockRequirement: 'pete_2', // Unlocked by defeating Pete 2
-      coinReward: 250
+      coinReward: 1
     },
     {
       id: 'pete_3',
@@ -44,7 +44,7 @@ const GAME_CONFIG = {
       model: 'pete',
       description: 'Final boss Pete - maximum power',
       unlockRequirement: 'tyler_2', // Unlocked by defeating Tyler 2
-      coinReward: 300
+      coinReward: 1
     },
     {
       id: 'tyler_3',
@@ -52,7 +52,7 @@ const GAME_CONFIG = {
       model: 'Tyler',
       description: 'Final boss Tyler - ultimate challenger',
       unlockRequirement: 'pete_3', // Unlocked by defeating Pete 3
-      coinReward: 300
+      coinReward: 1
     }
   ],
   CHARACTERS_FOR_PURCHASE: [
@@ -69,7 +69,7 @@ const GAME_CONFIG = {
       name: 'TYLER',
       model: 'Tyler',
       description: 'Soap Maker',
-      price: 200,
+      price: 5,
       emoji: '🧔‍♂️'
     },
     {
@@ -77,7 +77,7 @@ const GAME_CONFIG = {
       name: 'VINCE',
       model: 'Vince',
       description: 'Fire Fighter',
-      price: 600,
+      price: 5,
       emoji: '🧑‍🚒'
     },
     {
@@ -85,7 +85,7 @@ const GAME_CONFIG = {
       name: 'BOB',
       model: 'Bob',
       description: 'Business Man',
-      price: 800,
+      price: 5,
       emoji: '👔'
     }
   ]
@@ -98,7 +98,7 @@ export const GameStateProvider = ({ children }) => {
     localStorage.removeItem('fightClubGameState');
     
     const initialState = {
-      coins: 0,
+      coins: 1,
       defeatedOpponents: [], // IDs of defeated opponents
       purchasedCharacters: ['pete'], // Pete is free initially
       unlockedOpponents: ['pete_1'], // Only first opponent available at start
@@ -114,6 +114,16 @@ export const GameStateProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('fightClubGameState', JSON.stringify(gameState));
   }, [gameState]);
+
+  // Emergency coin system - give 1 coin if player has 0 coins and no progress
+  useEffect(() => {
+    if (gameState.coins === 0 && gameState.defeatedOpponents.length === 0) {
+      setGameState(prev => ({
+        ...prev,
+        coins: 1 // Emergency coin to prevent being stuck
+      }));
+    }
+  }, [gameState.coins, gameState.defeatedOpponents.length]);
 
   // Function to add coins
   const addCoins = (amount) => {
@@ -164,6 +174,14 @@ export const GameStateProvider = ({ children }) => {
     });
   }, []);
 
+  // Function to start arcade mode (pay entry fee)
+  const startArcadeMode = useCallback(() => {
+    setGameState(prev => ({
+      ...prev,
+      coins: Math.max(0, prev.coins - 1) // Pay 1 coin to start arcade
+    }));
+  }, []);
+
   // Function to register a defeat - ARCADE MODE: Reset progress on loss
   const registerDefeat = useCallback(() => {
     setGameState(prev => ({
@@ -171,8 +189,8 @@ export const GameStateProvider = ({ children }) => {
       totalFights: prev.totalFights + 1,
       // ARCADE MODE RESET: Lose all progress
       defeatedOpponents: [], // Reset all defeated opponents
-      unlockedOpponents: ['pete_1'], // Reset to only first opponent
-      coins: Math.floor(prev.coins * 0.5) // Lose half of coins as penalty
+      unlockedOpponents: ['pete_1'] // Reset to only first opponent
+      // Note: No coin deduction here since we pay when starting
     }));
   }, []);
 
@@ -237,7 +255,7 @@ export const GameStateProvider = ({ children }) => {
   // Function to reset the game (for development/testing)
   const resetGameState = () => {
     const initialState = {
-      coins: 0,
+      coins: 1,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
       unlockedOpponents: ['pete_1'], // Only first opponent available at start
@@ -258,7 +276,7 @@ export const GameStateProvider = ({ children }) => {
   const clearSavedData = () => {
     localStorage.removeItem('fightClubGameState');
     const initialState = {
-      coins: 0,
+      coins: 1,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
       unlockedOpponents: ['pete_1'], // Only first opponent available at start
@@ -285,6 +303,7 @@ export const GameStateProvider = ({ children }) => {
     // Combat functions
     registerVictory,
     registerDefeat,
+    startArcadeMode,
 
     // Shop functions
     purchaseCharacter,

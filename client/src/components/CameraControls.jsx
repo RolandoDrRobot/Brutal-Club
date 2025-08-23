@@ -27,7 +27,7 @@ export const CameraControls = () => {
         const orbitSpeed = 0.3; // Velocidad del giro orbital
         const orbitAngle = timeRef.current * orbitSpeed; // Ángulo que incrementa continuamente
         const baseDistance = 2.2; // Distancia MUY CERCANA a los modelos
-        const baseHeight = 0.8; // Altura cercana para capturar mejor los modelos
+        const baseHeight = 2.2; // Altura más elevada para mejor vista del sótano
 
         // Variaciones sutiles para movimiento más natural
         const heightVariation = Math.sin(timeRef.current * 0.4) * 0.15; // Ligera variación de altura
@@ -47,7 +47,7 @@ export const CameraControls = () => {
       
       // SIEMPRE APUNTAR AL CENTRO DONDE ESTÁN LOS MODELOS
       const targetX = 0; // Centro exacto donde están los luchadores
-      const targetY = 0.3; // Nivel del pecho/torso de los modelos
+      const targetY = 1.0; // Nivel elevado para capturar mejor el escenario
       const targetZ = 0; // Centro exacto
       
       // Enfocar directamente a los luchadores
@@ -65,13 +65,15 @@ export const CameraControls = () => {
   // Reset camera when switching modes
   useEffect(() => {
     if (isCombatMode && initialCameraPosition.current) {
-      // Reset to initial position for combat mode
-      camera.position.copy(initialCameraPosition.current);
+      // Perfect fighting game camera position (side profile view showing both fighters)
+      camera.position.set(0, 1.8, 2.5); // Side view from Z-axis, elevated, closer to fighters
       camera.rotation.z = 0; // Reset roll
       if (orbitControlsRef.current) {
-        orbitControlsRef.current.target.set(0, 0, 0);
+        orbitControlsRef.current.target.set(0, 1.0, 0); // Look at center between fighters at torso level
         orbitControlsRef.current.update();
       }
+      // Ensure camera looks at the center between both fighters
+      camera.lookAt(0, 1.0, 0);
     }
   }, [isCombatMode, camera]);
 
@@ -80,13 +82,14 @@ export const CameraControls = () => {
       <OrbitControls 
         ref={orbitControlsRef}
         enabled={isCombatMode} // Only enable manual controls in combat mode
-        enablePan={true}
+        enablePan={true} // Allow panning for full camera freedom
         enableZoom={true}
         enableRotate={isCombatMode}
-        minDistance={3}
-        maxDistance={5}
-        minPolarAngle={0}
-        maxPolarAngle={Math.PI / 2}
+        minDistance={1.5} // Allow getting very close to the action
+        maxDistance={10} // Allow wider shots for full scene view
+        minPolarAngle={0} // Full vertical range
+        maxPolarAngle={Math.PI} // Full vertical range
+        // No azimuth angle limits - full 360° rotation freedom
       />
     </>
   );

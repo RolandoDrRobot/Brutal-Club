@@ -18,13 +18,14 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const { playButtonSound } = useButtonSound();
   const [selectedCharacter, setSelectedCharacter] = useState(0);
 
-  const { 
+    const {
     coins,
     purchaseCharacter, 
     getShopCharactersStatus, 
     getOpponentsStatus,
     isCharacterPurchased, 
-    canAffordCharacter 
+    canAffordCharacter,
+    startArcadeMode
   } = useGameState();
   const { lazyLoadModel } = useModelLoader();
   const [loadingModels, setLoadingModels] = useState(new Set());
@@ -115,9 +116,23 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   };
 
   const handleOpponentSelect = (opponent) => {
-    if (!opponent.isLocked) {
+    // Check if opponent is available to fight
+    const isLocked = opponent.isLocked;
+    const isFirstOpponent = opponent.id === 'pete_1';
+    const hasNoCoins = coins === 0;
+    
+    if (!isLocked && !(isFirstOpponent && hasNoCoins)) {
       playButtonSound();
+      
+      // If fighting the first opponent, pay the arcade entry fee
+      if (isFirstOpponent) {
+        startArcadeMode(); // Deduct 1 coin
+      }
+      
       onChallengeClick(opponent);
+    } else if (isFirstOpponent && hasNoCoins) {
+      // Could add a sound effect or visual feedback for "no coins"
+      console.log("Need at least 1 coin to start arcade mode!");
     }
   };
 
@@ -165,10 +180,12 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     };
 
     if (isOpponent) {
-      // Opponent styling with 3 states
+      // Opponent styling with 4 states
       const isLocked = character.isLocked;
       const isDefeated = character.isDefeated;
-      const isActive = !isLocked && !isDefeated;
+      const isFirstOpponent = character.id === 'pete_1';
+      const hasNoCoins = coins === 0;
+      const isActive = !isLocked && !isDefeated && !(isFirstOpponent && hasNoCoins);
       
       let borderColor = '#666'; // Default: locked (gray)
       let opacity = 0.6;
@@ -177,6 +194,10 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       if (isDefeated) {
         borderColor = '#f32210'; // Defeated: red
         opacity = 0.8;
+        cursor = 'not-allowed';
+      } else if (isFirstOpponent && hasNoCoins) {
+        borderColor = '#666'; // No coins: gray (same as locked)
+        opacity = 0.4;
         cursor = 'not-allowed';
       } else if (isActive) {
         borderColor = '#FFD700'; // Active/Available: yellow
@@ -306,19 +327,22 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             letterSpacing: '1px',
             whiteSpace: 'nowrap'
           }}>
-            Arcade Mode
+            Arcade Mode - {coins} Coins
           </Text>
           
           <Text style={{
             fontSize: isMobile ? '16px' : '18px',
             fontWeight: 400,
-            color: '#F5F5DC',
+            color: coins === 0 ? '#f32210' : '#F5F5DC',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.5px',
             marginTop: '4px',
             lineHeight: 1.2
           }}>
-            Defeat all de oponents and earn coins!
+            {coins === 0 
+              ? "Need 1 coin to start arcade mode! Emergency coin incoming..."
+              : "Defeat all opponents and earn coins! Each arcade run costs 1 coin to start."
+            }
           </Text>
         </Box>
 
