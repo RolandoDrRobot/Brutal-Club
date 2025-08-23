@@ -7,20 +7,52 @@ const GAME_CONFIG = {
   COINS_PER_WIN: 200,
   OPPONENTS: [
     {
-      id: 'tyler',
-      name: 'TYLER',
-      model: 'Tyler',
-      description: 'Soap maker with deadly skills',
+      id: 'pete_1',
+      name: 'PETE',
+      model: 'pete',
+      description: 'Construction worker with heavy fists',
       unlockRequirement: null, // Available from the start
       coinReward: 200
     },
     {
-      id: 'pete',
+      id: 'tyler_1',
+      name: 'TYLER',
+      model: 'Tyler',
+      description: 'Soap maker with deadly skills',
+      unlockRequirement: 'pete_1', // Unlocked by defeating Pete 1
+      coinReward: 200
+    },
+    {
+      id: 'pete_2',
       name: 'PETE',
       model: 'pete',
-      description: 'Construction worker with heavy fists',
-      unlockRequirement: 'tyler', // Unlocked by defeating Tyler
-      coinReward: 200
+      description: 'Construction worker returns stronger',
+      unlockRequirement: 'tyler_1', // Unlocked by defeating Tyler 1
+      coinReward: 250
+    },
+    {
+      id: 'tyler_2',
+      name: 'TYLER',
+      model: 'Tyler',
+      description: 'Soap maker with refined techniques',
+      unlockRequirement: 'pete_2', // Unlocked by defeating Pete 2
+      coinReward: 250
+    },
+    {
+      id: 'pete_3',
+      name: 'PETE',
+      model: 'pete',
+      description: 'Final boss Pete - maximum power',
+      unlockRequirement: 'tyler_2', // Unlocked by defeating Tyler 2
+      coinReward: 300
+    },
+    {
+      id: 'tyler_3',
+      name: 'TYLER',
+      model: 'Tyler',
+      description: 'Final boss Tyler - ultimate challenger',
+      unlockRequirement: 'pete_3', // Unlocked by defeating Pete 3
+      coinReward: 300
     }
   ],
   CHARACTERS_FOR_PURCHASE: [
@@ -62,19 +94,17 @@ const GAME_CONFIG = {
 export const GameStateProvider = ({ children }) => {
   // Persistent game state
   const [gameState, setGameState] = useState(() => {
-    const savedState = localStorage.getItem('fightClubGameState');
-    if (savedState) {
-      const parsed = JSON.parse(savedState);
-      return parsed;
-    }
+    // Force reset to new progression system - remove this after testing
+    localStorage.removeItem('fightClubGameState');
     
     const initialState = {
       coins: 0,
       defeatedOpponents: [], // IDs of defeated opponents
       purchasedCharacters: ['pete'], // Pete is free initially
-      unlockedOpponents: ['tyler'], // Only Tyler is available at the start
+      unlockedOpponents: ['pete_1'], // Only first opponent available at start
       totalWins: 0,
-      totalFights: 0
+      totalFights: 0,
+      version: 2 // Version to force updates if needed
     };
     
     return initialState;
@@ -206,9 +236,10 @@ export const GameStateProvider = ({ children }) => {
       coins: 0,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
-      unlockedOpponents: ['tyler'],
+      unlockedOpponents: ['pete_1'], // Only first opponent available at start
       totalWins: 0,
-      totalFights: 0
+      totalFights: 0,
+      version: 2
     };
     setGameState(initialState);
     localStorage.setItem('fightClubGameState', JSON.stringify(initialState));
@@ -226,9 +257,10 @@ export const GameStateProvider = ({ children }) => {
       coins: 0,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
-      unlockedOpponents: ['tyler'],
+      unlockedOpponents: ['pete_1'], // Only first opponent available at start
       totalWins: 0,
-      totalFights: 0
+      totalFights: 0,
+      version: 2
     };
     setGameState(initialState);
   };

@@ -101,15 +101,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     model: char.model
   }));
 
-  // Sincronizar selectedCharacter con el personaje actualmente seleccionado
-  useEffect(() => {
-    if (ownedCharacters.length > 0 && selectedPlayer1Character) {
-      const currentIndex = ownedCharacters.findIndex(char => char.model === selectedPlayer1Character);
-      if (currentIndex !== -1) {
-        setSelectedCharacter(currentIndex);
-      }
-    }
-  }, [ownedCharacters, selectedPlayer1Character]);
+
 
   const handlePurchase = (character) => {
     if (character.price && character.canAfford && !character.isPurchased) {
@@ -173,13 +165,39 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     };
 
     if (isOpponent) {
-      // Opponent styling
+      // Opponent styling with 3 states
       const isLocked = character.isLocked;
+      const isDefeated = character.isDefeated;
+      const isActive = !isLocked && !isDefeated;
+      
+      let borderColor = '#666'; // Default: locked (gray)
+      let opacity = 0.6;
+      let cursor = 'not-allowed';
+      
+      if (isDefeated) {
+        borderColor = '#f32210'; // Defeated: red
+        opacity = 0.8;
+        cursor = 'not-allowed';
+      } else if (isActive) {
+        borderColor = '#FFD700'; // Active/Available: yellow
+        opacity = 1;
+        cursor = 'pointer';
+      }
+      
       return {
         ...baseStyle,
-        cursor: isLocked ? 'not-allowed' : 'pointer',
-        opacity: isLocked ? 0.6 : 1,
-        border: isLocked ? '3px solid #666' : '3px solid #f32210'
+        cursor: cursor,
+        opacity: opacity,
+        border: `3px solid ${borderColor}`,
+        boxShadow: isActive ? `
+          0 0 10px ${borderColor},
+          0 0 20px rgba(255, 215, 0, 0.3),
+          inset 0 0 10px rgba(255, 215, 0, 0.1)
+        ` : isDefeated ? `
+          0 0 10px ${borderColor},
+          0 0 20px rgba(243, 34, 16, 0.2),
+          inset 0 0 10px rgba(243, 34, 16, 0.05)
+        ` : baseStyle.boxShadow
       };
     } else {
       // Shop character styling
