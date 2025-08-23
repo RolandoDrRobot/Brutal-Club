@@ -7,11 +7,9 @@ const CRITICAL_MODELS = [
   './models/Tyler.glb',     // Default opponent
 ];
 
-// SECONDARY LOADING: Models loaded after critical ones
+// SECONDARY LOADING: Models loaded after critical ones (audience removed for performance)
 const SECONDARY_MODELS = [
-  './models/Chuck.glb',     // Audience member
-  './models/Earl.glb',      // Audience member
-  './models/Wayne.glb',     // Audience member
+  // Audience models removed - no longer needed
 ];
 
 // LAZY LOADING: Models loaded only when needed

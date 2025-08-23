@@ -3,8 +3,6 @@ import Pete from "./Pete";
 import Tyler from "./Tyler";
 import ParticleEffect from "./ParticleEffect";
 import BloodFloor from "./BloodFloor";
-import Audience from "./Audience";
-import BarBasement from "./UrbanEnvironment";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import { getCharacterTransforms, getCharacterComponent } from "../utils/characterUtils";
 
@@ -33,12 +31,15 @@ const Experience = () => {
     <>
       <CameraControls />
       
-      {/* Lighting */}
-      <ambientLight intensity={0.3} />
-      <directionalLight position={[5, 5, 5]} intensity={0.8} castShadow />
+      {/* Iluminación balanceada para fondo negro */}
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[5, 5, 5]} intensity={0.9} castShadow />
+      {/* Luz adicional desde el frente */}
+      <directionalLight position={[0, 5, 10]} intensity={0.5} color="#ffffff" />
+      {/* Luz de relleno desde atrás sutil */}
+      <directionalLight position={[0, 3, -5]} intensity={0.25} color="#f0f0f0" />
       
-      {/* Environment */}
-      <BarBasement />
+      {/* Fondo negro con efectos de sangre */}
       <BloodFloor />
       
       {/* Characters */}
@@ -57,8 +58,7 @@ const Experience = () => {
         )}
       </group>
       
-      {/* Audience and effects */}
-      <Audience />
+      {/* Effects */}
       <ParticleEffect />
     </>
   );

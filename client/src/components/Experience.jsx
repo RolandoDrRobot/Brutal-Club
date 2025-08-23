@@ -3,8 +3,6 @@ import Pete from "./Pete";
 import Tyler from "./Tyler";
 import ParticleEffect from "./ParticleEffect";
 import BloodFloor from "./BloodFloor";
-import Audience from "./Audience";
-import BarBasement from "./UrbanEnvironment";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 
 const Experience = () => {
@@ -62,10 +60,12 @@ const Experience = () => {
   return (
     <>
       <CameraControls />
-      <ambientLight intensity={0.2} />
+      
+      {/* Iluminación balanceada para fondo negro */}
+      <ambientLight intensity={0.4} />
       <directionalLight
         position={[-5, 10, 5]}
-        intensity={0.5}
+        intensity={0.9}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -75,16 +75,22 @@ const Experience = () => {
         shadow-camera-top={20}
         shadow-camera-bottom={-20}
       />
+      {/* Luz adicional desde el frente para mejor visibilidad */}
+      <directionalLight
+        position={[0, 5, 10]}
+        intensity={0.5}
+        color="#ffffff"
+      />
+      {/* Luz de relleno desde atrás para contorno sutil */}
+      <directionalLight
+        position={[0, 3, -5]}
+        intensity={0.25}
+        color="#f0f0f0"
+      />
       
-      {/* Bar basement */}
-      <BarBasement />
-      
-      {/* Blood effects - In both modes */}
+      {/* Blood effects - Gotas y manchas de sangre en fondo negro */}
       <ParticleEffect />
       <BloodFloor />
-      
-      {/* Audience - Characters dancing around */}
-      <Audience />
       
       <group position={[0, -1, 0]}>
         {/* Player 1 - Selected character */}

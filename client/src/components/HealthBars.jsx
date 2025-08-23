@@ -85,28 +85,13 @@ const HealthBars = () => {
 
   return (
     <>
-      {/* TÍTULO FIGHT CLUB - CENTRO SUPERIOR SUPERPUESTO */}
-      <Box
-        style={{
-          position: "fixed",
-          top: 25,
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 1001, // Más alto que las barras para estar superpuesto
-          textAlign: "center",
-          pointerEvents: "none", // Para que no interfiera con otros elementos
-        }}
-      >
-        <div className="fight-title">
-          FIGHT CLUB
-        </div>
-      </Box>
 
-      {/* CONTADOR DE VICTORIAS - Debajo del título */}
+
+      {/* CONTADOR DE VICTORIAS - CENTRO SUPERIOR */}
       <Box
         style={{
           position: "absolute",
-          top: 70,
+          top: 28,
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 1001,
@@ -135,7 +120,7 @@ const HealthBars = () => {
       <Box
         style={{
           ...barStyle,
-          top: 65,
+          top: 15,
           left: isMobile ? 20 : 30,
         }}
       >
@@ -202,7 +187,7 @@ const HealthBars = () => {
       <Box
         style={{
           ...barStyle,
-          top: 65,
+          top: 15,
           right: isMobile ? 20 : 30,
         }}
       >
