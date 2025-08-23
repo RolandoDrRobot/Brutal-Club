@@ -18,11 +18,9 @@ function CharacterModel({ characterName, ...props }) {
       'BOB': './models/Bob.glb',
       'CHUCK': './models/Chuck.glb',
       'EARL': './models/Earl.glb',
-      'LOU': './models/Lou.glb',
-      'TONY': './models/Tony.glb',
-      'LAWRENCE': './models/Lawrence.glb',
       'WAYNE': './models/Wayne.glb',
       'MARLA': './models/woman.gltf'
+      // ❌ REMOVED: LOU, TONY, LAWRENCE - unused legacy models
     };
     return modelMap[name] || './models/pete.glb';
   };
@@ -134,8 +132,10 @@ const CharacterPreview = ({ characterName, style }) => {
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 383, height: 535 }); // Set default dimensions
 
-  // Force proper dimensions calculation on mount and resize
+  // Force proper dimensions calculation on mount and resize - Throttled for performance
   useLayoutEffect(() => {
+    let isThrottling = false;
+    
     const updateDimensions = () => {
       if (containerRef.current) {
         const { clientWidth, clientHeight } = containerRef.current;
@@ -146,16 +146,27 @@ const CharacterPreview = ({ characterName, style }) => {
       }
     };
 
+    // Throttled resize handler to prevent excessive calls
+    const throttledUpdateDimensions = () => {
+      if (!isThrottling) {
+        isThrottling = true;
+        requestAnimationFrame(() => {
+          updateDimensions();
+          isThrottling = false;
+        });
+      }
+    };
+
     // Initial calculation with a small delay to ensure container is rendered
     const timer = setTimeout(() => {
       updateDimensions();
     }, 50);
 
-    // Add resize listener
-    window.addEventListener('resize', updateDimensions);
+    // Add throttled resize listener
+    window.addEventListener('resize', throttledUpdateDimensions);
 
     return () => {
-      window.removeEventListener('resize', updateDimensions);
+      window.removeEventListener('resize', throttledUpdateDimensions);
       clearTimeout(timer);
     };
   }, [characterName]);
@@ -279,8 +290,6 @@ useGLTF.preload('./models/Earl.glb');      // Audience member
 useGLTF.preload('./models/Wayne.glb');     // Audience member
 
 // Models available but not currently used in game (loaded on-demand)
-// useGLTF.preload('./models/Lou.glb');
-// useGLTF.preload('./models/Tony.glb');
-// useGLTF.preload('./models/Lawrence.glb');
+// ❌ REMOVED: Preloads for unused legacy models (Lou, Tony, Lawrence)
 
 export default CharacterPreview; 

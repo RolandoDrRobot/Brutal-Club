@@ -7,19 +7,15 @@ import danceIcon from '../assets/dance.png';
 const MusicPlayer = () => {
   const { isCombatMode, triggerSyncAnimation, animations } = useCharacterAnimations();
   
-  // Song list (using actual files from the music directory)
+  // Song list (OPTIMIZED - only existing files to prevent loading delays)
   const songs = [
     { id: 0, name: "No Music", artist: "", file: null },
     { id: 1, name: "Nine Thou", artist: "Styles Of Beyond", file: "/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3" },
-    { id: 2, name: "Another", artist: "Full On The Mouth", file: "/music/Full On The Mouth - Another.mp3" },
-    { id: 3, name: "Fight Club Theme", artist: "The Dust Brothers", file: "/music/fight-club-theme.mp3" },
-    { id: 4, name: "Where Is My Mind", artist: "Pixies", file: "/music/pixies-where-is-my-mind.mp3" },
-    { id: 5, name: "This Is Your Life", artist: "The Dust Brothers", file: "/music/this-is-your-life.mp3" },
-    { id: 6, name: "Marla's Theme", artist: "The Dust Brothers", file: "/music/marlas-theme.mp3" },
-    { id: 7, name: "Corporate Sponsorship", artist: "The Dust Brothers", file: "/music/corporate-sponsorship.mp3" },
-    { id: 8, name: "What Is Fight Club", artist: "The Dust Brothers", file: "/music/what-is-fight-club.mp3" },
-    { id: 9, name: "Medulla Oblongata", artist: "The Dust Brothers", file: "/music/medulla-oblongata.mp3" },
-    { id: 10, name: "His Apartment", artist: "The Dust Brothers", file: "/music/his-apartment.mp3" }
+    { id: 2, name: "Another", artist: "Full On The Mouth", file: "/music/Full On The Mouth - Another.mp3" }
+    // ❌ REMOVED: 8 non-existent files that were causing loading delays:
+    // - fight-club-theme.mp3, pixies-where-is-my-mind.mp3, this-is-your-life.mp3
+    // - marlas-theme.mp3, corporate-sponsorship.mp3, what-is-fight-club.mp3  
+    // - medulla-oblongata.mp3, his-apartment.mp3
   ];
 
   const [currentSongIndex, setCurrentSongIndex] = useState(1);

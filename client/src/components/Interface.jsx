@@ -1,21 +1,22 @@
 import { Affix, Button, Group, Switch, Text, Stack, Box } from "@mantine/core";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import { useMediaQuery } from "@mantine/hooks";
-import React, { useState, useEffect } from 'react';
-import MusicPlayer from "./MusicPlayer";
-import MainMenu from "./MainMenu";
-import CharacterSkillTree from "./CharacterSkillTree";
-import CombinedShopOpponents from "./CombinedShopOpponents";
-import Shop from "./Shop";
+import React, { useState, useEffect, Suspense } from 'react';
+// OPTIMIZED: Lazy load menu screens for better code splitting
+const MusicPlayer = React.lazy(() => import("./MusicPlayer"));
+const MainMenu = React.lazy(() => import("./MainMenu"));
+const CharacterSkillTree = React.lazy(() => import("./CharacterSkillTree"));
+const CombinedShopOpponents = React.lazy(() => import("./CombinedShopOpponents"));
+const Shop = React.lazy(() => import("./Shop"));
 import '../styles/fightAnimations.css';
-import punchImg from "../assets/punch.png";
-import kickImg from "../assets/kick.png";
-import comboImg from "../assets/combo.png";
-import coverImg from "../assets/cover.png";
-import resetImg from "../assets/reset.png";
-import danceImg from "../assets/dance.png";
-import fightImg from "../assets/fight.png";
-import mainButtonImg from "../assets/mainbutton.jpeg";
+import punchImg from "../assets/punch.png";     // ✅ Used in attack buttons
+import kickImg from "../assets/kick.png";       // ✅ Used in attack buttons
+import comboImg from "../assets/combo.png";     // ✅ Used in attack buttons
+import coverImg from "../assets/cover.png";     // ✅ Used in block button
+// ❌ REMOVED: resetImg - imported but never used in component
+import danceImg from "../assets/dance.png";     // ✅ Used in dance button
+// ❌ REMOVED: fightImg - imported but never used in component
+import mainButtonImg from "../assets/mainbutton.jpeg"; // ✅ Used in multiple buttons
 import { useButtonSound } from '../hooks/useButtonSound';
 import LoadingScreen from './LoadingScreen';
 import { useModelLoader } from '../hooks/useModelLoader';
@@ -441,40 +442,52 @@ const Interface = () => {
       {/* Inject CSS animations */}
       <style dangerouslySetInnerHTML={{ __html: interfaceStyles }} />
 
-      {/* Music player - visible in any mode */}
-      {showMusicPlayer && <MusicPlayer />}
+      {/* Music player - visible in any mode - Lazy loaded */}
+      {showMusicPlayer && (
+        <Suspense fallback={null}>
+          <MusicPlayer />
+        </Suspense>
+      )}
 
-      {/* Mostrar componente de menú principal cuando currentScreen es 'menu' */}
+      {/* Mostrar componente de menú principal cuando currentScreen es 'menu' - Lazy loaded */}
       {currentScreen === 'menu' && (
-        <MainMenu 
-          onStartClick={navigateToOpponentSelect}
-          onFightersClick={navigateToCharacterSelect}
-          onStoreClick={navigateToShop}
-          onBackClick={navigateBackToDance}
-        />
+        <Suspense fallback={<div style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#f32210', fontSize: '18px', fontFamily: 'Anton, sans-serif'}}>Loading Menu...</div>}>
+          <MainMenu 
+            onStartClick={navigateToOpponentSelect}
+            onFightersClick={navigateToCharacterSelect}
+            onStoreClick={navigateToShop}
+            onBackClick={navigateBackToDance}
+          />
+        </Suspense>
       )}
 
-      {/* Mostrar pantalla de árbol de habilidades cuando currentScreen es 'characterSelect' */}
+      {/* Mostrar pantalla de árbol de habilidades cuando currentScreen es 'characterSelect' - Lazy loaded */}
       {currentScreen === 'characterSelect' && (
-        <CharacterSkillTree 
-          onSelectClick={handleCharacterSelection}
-          onBackClick={navigateBackFromCharacterSelect}
-        />
+        <Suspense fallback={<div style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#f32210', fontSize: '18px', fontFamily: 'Anton, sans-serif'}}>Loading Skills...</div>}>
+          <CharacterSkillTree 
+            onSelectClick={handleCharacterSelection}
+            onBackClick={navigateBackFromCharacterSelect}
+          />
+        </Suspense>
       )}
 
-      {/* Mostrar pantalla combinada de oponentes y tienda cuando currentScreen es 'opponentSelect' */}
+      {/* Mostrar pantalla combinada de oponentes y tienda cuando currentScreen es 'opponentSelect' - Lazy loaded */}
       {currentScreen === 'opponentSelect' && (
-        <CombinedShopOpponents 
-          onChallengeClick={handleOpponentChallenge}
-          onBackClick={navigateBackFromOpponentSelect}
-        />
+        <Suspense fallback={<div style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#f32210', fontSize: '18px', fontFamily: 'Anton, sans-serif'}}>Loading Fight...</div>}>
+          <CombinedShopOpponents 
+            onChallengeClick={handleOpponentChallenge}
+            onBackClick={navigateBackFromOpponentSelect}
+          />
+        </Suspense>
       )}
 
-      {/* Mostrar pantalla de tienda cuando currentScreen es 'shop' */}
+      {/* Mostrar pantalla de tienda cuando currentScreen es 'shop' - Lazy loaded */}
       {currentScreen === 'shop' && (
-        <Shop 
-          onBackClick={navigateBackFromShop}
-        />
+        <Suspense fallback={<div style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#f32210', fontSize: '18px', fontFamily: 'Anton, sans-serif'}}>Loading Store...</div>}>
+          <Shop 
+            onBackClick={navigateBackFromShop}
+          />
+        </Suspense>
       )}
 
       {/* Pantalla de baile - currentScreen 'dance' */}

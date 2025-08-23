@@ -1,11 +1,14 @@
 import { CameraControls } from "./CameraControls";
 import Pete from "./Pete";
 import Tyler from "./Tyler";
-import Audience from "./Audience";
 import BloodFloor from "./BloodFloor";
-import BarBasement from "./BarBasement";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import { getCharacterTransforms, getCharacterComponent } from "../utils/characterUtils";
+import React, { Suspense } from "react";
+
+// OPTIMIZED: Lazy load heavy 3D components for better code splitting
+const Audience = React.lazy(() => import("./Audience"));
+const BarBasement = React.lazy(() => import("./BarBasement"));
 
 const Experience = () => {
   const { isCombatMode, selectedPlayer1Character, selectedPlayer2Character } = useCharacterAnimations();
@@ -32,11 +35,15 @@ const Experience = () => {
     <>
       <CameraControls />
       
-      {/* Bar Basement Scenario */}
-      <BarBasement />
+      {/* Bar Basement Scenario - Lazy loaded */}
+      <Suspense fallback={null}>
+        <BarBasement />
+      </Suspense>
       
-      {/* Audience around the fighters */}
-      <Audience />
+      {/* Audience around the fighters - Lazy loaded */}
+      <Suspense fallback={null}>
+        <Audience />
+      </Suspense>
       
       {/* Blood effects - Mantener gotas de sangre en el piso */}
       <BloodFloor />

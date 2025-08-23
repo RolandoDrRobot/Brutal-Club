@@ -7,7 +7,7 @@ const BloodFloor = () => {
   
   // Create blood puddles on the floor - MUCH MORE BLOOD!
   const bloodPuddles = useMemo(() => {
-    const puddleCount = 12; // Much less blood
+    const puddleCount = 6; // Optimized: 50% less instances for better performance
     const positions = new Float32Array(puddleCount * 3);
     const scales = new Float32Array(puddleCount);
     const opacities = new Float32Array(puddleCount);
@@ -31,8 +31,11 @@ const BloodFloor = () => {
     return { positions, scales, opacities, puddleCount };
   }, []);
   
-  // Subtle animation of the stains
+  // Subtle animation of the stains - Optimized with frame skipping
   useFrame((state) => {
+    // Skip frames for better performance (run at ~15 FPS instead of 60 for subtle effects)
+    if (Math.floor(state.clock.getElapsedTime() * 60) % 4 !== 0) return;
+    
     if (meshRef.current) {
       const time = state.clock.elapsedTime;
       
@@ -59,7 +62,7 @@ const BloodFloor = () => {
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
           scale={[bloodPuddles.scales[index], bloodPuddles.scales[index], 1]}
         >
-          <circleGeometry args={[1, 16]} />
+          <circleGeometry args={[1, 12]} /> {/* Optimized: 25% fewer vertices */}
           <meshBasicMaterial
             color="#4A0000" // Dark blood red
             transparent={true}
@@ -69,8 +72,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-              {/* Additional smaller stains - MUCH LESS */}
-        {Array.from({ length: 8 }).map((_, index) => (
+              {/* Additional smaller stains - OPTIMIZED */}
+        {Array.from({ length: 4 }).map((_, index) => (
         <mesh
           key={`splatter-${index}`}
           position={[
@@ -81,7 +84,7 @@ const BloodFloor = () => {
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
           scale={[Math.random() * 0.15 + 0.03, Math.random() * 0.15 + 0.03, 1]} // Much smaller
         >
-          <circleGeometry args={[0.5, 8]} />
+          <circleGeometry args={[0.5, 6]} /> {/* Optimized: 25% fewer vertices */}
           <meshBasicMaterial
             color="#2D0000" // Even darker blood red
             transparent={true}
@@ -91,8 +94,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-              {/* Salpicaduras muy pequeñas adicionales - MINIMAL */}
-        {Array.from({ length: 15 }).map((_, index) => (
+              {/* Salpicaduras muy pequeñas adicionales - OPTIMIZED */}
+        {Array.from({ length: 8 }).map((_, index) => (
         <mesh
           key={`micro-splatter-${index}`}
           position={[
@@ -103,7 +106,7 @@ const BloodFloor = () => {
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
           scale={[Math.random() * 0.08 + 0.02, Math.random() * 0.08 + 0.02, 1]} // Tiny
         >
-          <circleGeometry args={[0.3, 6]} />
+          <circleGeometry args={[0.3, 5]} /> {/* Optimized: 17% fewer vertices */}
           <meshBasicMaterial
             color="#1A0000" // Rojo sangre muy oscuro
             transparent={true}
@@ -113,8 +116,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-              {/* NUEVOS: Charcos medianos - MUY POCOS */}
-        {Array.from({ length: 3 }).map((_, index) => (
+              {/* NUEVOS: Charcos medianos - OPTIMIZED */}
+        {Array.from({ length: 2 }).map((_, index) => (
         <mesh
           key={`big-puddle-${index}`}
           position={[
@@ -125,7 +128,7 @@ const BloodFloor = () => {
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
           scale={[Math.random() * 0.6 + 0.4, Math.random() * 0.6 + 0.4, 1]} // Medium size
         >
-          <circleGeometry args={[1.5, 20]} />
+          <circleGeometry args={[1.5, 16]} /> {/* Optimized: 20% fewer vertices */}
           <meshBasicMaterial
             color="#380000" // Sangre coagulada muy oscura
             transparent={true}
@@ -135,8 +138,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-              {/* NUEVOS: Rastros de sangre (como arrastrado) - MINIMAL */}
-        {Array.from({ length: 5 }).map((_, index) => (
+              {/* NUEVOS: Rastros de sangre (como arrastrado) - OPTIMIZED */}
+        {Array.from({ length: 3 }).map((_, index) => (
         <mesh
           key={`blood-trail-${index}`}
           position={[

@@ -18,9 +18,12 @@ export const CameraControls = () => {
     }
   }, [camera]);
 
-  // Cámara cinematográfica de pelea para capturar luchadores de perfil
+  // Cámara cinematográfica de pelea para capturar luchadores de perfil - Optimized with frame skipping
   useFrame((state, delta) => {
     if (!isCombatMode && orbitControlsRef.current) {
+      // Skip frames for better performance (run at ~30 FPS instead of 60)
+      if (Math.floor(state.clock.getElapsedTime() * 60) % 2 !== 0) return;
+      
       timeRef.current += delta;
       
               // CÁMARA ORBITAL MUY CERCA DE LOS MODELOS

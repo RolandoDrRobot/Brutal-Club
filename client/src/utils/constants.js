@@ -5,7 +5,7 @@ export const BREAKPOINTS = {
   desktop: '(min-width: 1025px)'
 };
 
-// Character model mappings
+// Character model mappings (OPTIMIZED - removed unused legacy models)
 export const CHARACTER_MODELS = {
   paths: {
     'PETE': './models/pete.glb',
@@ -14,11 +14,9 @@ export const CHARACTER_MODELS = {
     'BOB': './models/Bob.glb',
     'CHUCK': './models/Chuck.glb',
     'EARL': './models/Earl.glb',
-    'LOU': './models/Lou.glb',
-    'TONY': './models/Tony.glb',
-    'LAWRENCE': './models/Lawrence.glb',
     'WAYNE': './models/Wayne.glb',
     'MARLA': './models/woman.gltf'
+    // ❌ REMOVED: Lou.glb, Tony.glb, Lawrence.glb (unused legacy models)
   },
   components: {
     'pete': 'Pete',

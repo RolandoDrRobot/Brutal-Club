@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Button, Box, Text, Stack, Group, Paper, Progress } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
@@ -25,33 +25,39 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     GAME_CONFIG 
   } = useGameState();
   
-  // Filter only purchased characters
-  const purchasedCharacters = getShopCharactersStatus().filter(char => char.isPurchased);
+  // Filter only purchased characters - Memoized for performance
+  const purchasedCharacters = useMemo(() => 
+    getShopCharactersStatus().filter(char => char.isPurchased),
+    [getShopCharactersStatus]
+  );
   
-  // Map to the expected format for character selection
-  const characters = purchasedCharacters.map(char => ({
-    id: char.id,
-    name: char.name,
-    description: char.description,
-    model: char.model
-  }));
+  // Map to the expected format for character selection - Memoized to prevent re-renders
+  const characters = useMemo(() => 
+    purchasedCharacters.map(char => ({
+      id: char.id,
+      name: char.name,
+      description: char.description,
+      model: char.model
+    })),
+    [purchasedCharacters]
+  );
 
-  const handlePreviousCharacter = () => {
+  const handlePreviousCharacter = useCallback(() => {
     playButtonSound();
     setSelectedCharacter((prev) => (prev > 0 ? prev - 1 : characters.length - 1));
-  };
+  }, [playButtonSound, characters.length]);
 
-  const handleNextCharacter = () => {
+  const handleNextCharacter = useCallback(() => {
     playButtonSound();
     setSelectedCharacter((prev) => (prev < characters.length - 1 ? prev + 1 : 0));
-  };
+  }, [playButtonSound, characters.length]);
 
-  const handleSelectCharacter = () => {
+  const handleSelectCharacter = useCallback(() => {
     playButtonSound();
     onSelectClick(characters[selectedCharacter]);
-  };
+  }, [playButtonSound, onSelectClick, characters, selectedCharacter]);
 
-  const handleUpgradeStat = (statName) => {
+  const handleUpgradeStat = useCallback((statName) => {
     playButtonSound();
     const characterId = characters[selectedCharacter].id;
     const success = upgradeCharacterStat(characterId, statName);
@@ -59,34 +65,34 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
       // Could add feedback for failed upgrade (no coins, max level, etc.)
       console.log(`Failed to upgrade ${statName} for ${characterId}`);
     }
-  };
+  }, [playButtonSound, characters, selectedCharacter, upgradeCharacterStat]);
 
-  const getStatProgress = (statName) => {
+  const getStatProgress = useCallback((statName) => {
     const characterId = characters[selectedCharacter].id;
     const stats = getCharacterStats(characterId);
     const currentLevel = stats[statName];
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     return (currentLevel / maxLevel) * 100;
-  };
+  }, [characters, selectedCharacter, getCharacterStats, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL]);
 
-  const getStatLevel = (statName) => {
+  const getStatLevel = useCallback((statName) => {
     const characterId = characters[selectedCharacter].id;
     const stats = getCharacterStats(characterId);
     return stats[statName];
-  };
+  }, [characters, selectedCharacter, getCharacterStats]);
 
-  const canUpgrade = (statName) => {
+  const canUpgrade = useCallback((statName) => {
     const currentLevel = getStatLevel(statName);
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
     return currentLevel < maxLevel && coins >= upgradeCost;
-  };
+  }, [getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL, GAME_CONFIG.STAT_CONFIG.UPGRADE_COST, coins]);
 
-  const isMaxLevel = (statName) => {
+  const isMaxLevel = useCallback((statName) => {
     const currentLevel = getStatLevel(statName);
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     return currentLevel >= maxLevel;
-  };
+  }, [getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL]);
 
   // Skill tree component for a single stat
   const StatUpgradeTree = ({ statName }) => {

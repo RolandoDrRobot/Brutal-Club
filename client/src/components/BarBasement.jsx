@@ -373,8 +373,11 @@ const BarBasement = () => {
     ]
   }), []);
 
-  // Cool electrical flickering effect
+  // Cool electrical flickering effect - Optimized with frame skipping
   useFrame((state) => {
+    // Skip frames for better performance (run at ~20 FPS instead of 60)
+    if (Math.floor(state.clock.getElapsedTime() * 60) % 3 !== 0) return;
+    
     const time = state.clock.getElapsedTime();
     
     // Light 1 - Dramatic cinematic flickering (VERY NOTICEABLE)

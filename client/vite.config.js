@@ -23,7 +23,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Organize assets by type
+        // OPTIMIZED: Advanced code splitting for better caching and load times
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');
           const extType = info[info.length - 1];
@@ -43,22 +43,53 @@ export default defineConfig({
           
           return `assets/[name]-[hash][extname]`;
         },
-        chunkFileNames: 'assets/js/[name]-[hash].js',
+        chunkFileNames: (chunkInfo) => {
+          // Create separate chunks for different types of components
+          if (chunkInfo.name.includes('three')) return 'assets/js/three-[hash].js';
+          if (chunkInfo.name.includes('mantine')) return 'assets/js/ui-[hash].js';
+          if (chunkInfo.name.includes('Experience') || chunkInfo.name.includes('3D')) return 'assets/js/3d-[hash].js';
+          if (chunkInfo.name.includes('Menu') || chunkInfo.name.includes('Interface')) return 'assets/js/ui-[hash].js';
+          return 'assets/js/[name]-[hash].js';
+        },
         entryFileNames: 'assets/js/[name]-[hash].js',
+        manualChunks: {
+          // Vendor chunks for better caching
+          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei', 'three-stdlib'],
+          'ui-vendor': ['@mantine/core', '@mantine/hooks'],
+          'react-vendor': ['react', 'react-dom'],
+          // Separate chunks for heavy components that load on demand
+          'menu-screens': [
+            './src/components/MainMenu.jsx',
+            './src/components/Shop.jsx', 
+            './src/components/CharacterSkillTree.jsx',
+            './src/components/CombinedShopOpponents.jsx'
+          ],
+          '3d-components': [
+            './src/components/Audience.jsx',
+            './src/components/BarBasement.jsx'
+          ]
+        }
       },
     },
     target: 'es2020', // Modern target for smaller bundles
     
-    // Optimize dependencies
+    // OPTIMIZED: Pre-bundle dependencies for faster dev and smaller initial chunks
     optimizeDeps: {
       include: [
         'react',
         'react-dom',
         '@mantine/core',
+        '@mantine/hooks',
         '@react-three/fiber',
         '@react-three/drei',
-        'three'
+        'three',
+        'three-stdlib'
       ],
+      exclude: [
+        // Exclude heavy optional dependencies from initial bundle
+        './src/components/Audience.jsx',
+        './src/components/BarBasement.jsx'
+      ]
     },
   },
   

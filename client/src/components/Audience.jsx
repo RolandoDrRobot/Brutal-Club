@@ -3,9 +3,9 @@ import React, { useEffect, useRef, useMemo, useState } from "react";
 import { SkeletonUtils } from "three-stdlib";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 
-function AudienceMember({ position, rotation, initialAnimationIndex, memberId, ...props }) {
+function AudienceMember({ position, rotation, modelPath = "./models/pete.glb", initialAnimationIndex, memberId, ...props }) {
   const group = useRef();
-  const { scene, animations } = useGLTF("./models/pete.glb");
+  const { scene, animations } = useGLTF(modelPath);
   const [currentAnimationIndex, setCurrentAnimationIndex] = useState(initialAnimationIndex);
   
   // Clone the scene to create independent instances
@@ -26,10 +26,17 @@ function AudienceMember({ position, rotation, initialAnimationIndex, memberId, .
         actions[crowdAnimationName].reset().fadeIn(0.5).play();
         actions[crowdAnimationName].setLoop(2201, Infinity); // Loop infinitely
         
+        // Proper cleanup function to prevent memory leaks
         return () => {
           if (actions[crowdAnimationName]) {
-            actions[crowdAnimationName].fadeOut(0.5);
+            actions[crowdAnimationName].fadeOut(0.5).stop();
           }
+          // Stop all animations on unmount
+          Object.values(actions).forEach(action => {
+            if (action.isRunning()) {
+              action.fadeOut(0.2).stop();
+            }
+          });
         };
       } else {
         // Fallback to first available animation if crowd not found
@@ -47,181 +54,45 @@ function AudienceMember({ position, rotation, initialAnimationIndex, memberId, .
   );
 }
 
-// Chuck audience member with crowd animation
-function ChuckAudience({ position, rotation, ...props }) {
-  const group = useRef();
-  const { scene, animations } = useGLTF("./models/Chuck.glb");
-  
-  // Clone the scene to create independent instance
-  const clonedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
-  const { actions, names } = useAnimations(animations, group);
+// Chuck audience member with crowd animation - Now using unified component
+const ChuckAudience = ({ position, rotation, ...props }) => (
+  <AudienceMember 
+    position={position} 
+    rotation={rotation} 
+    modelPath="./models/Chuck.glb"
+    {...props} 
+  />
+);
 
-  // Find and play the "crowd" animation in loop
-  useEffect(() => {
-    if (actions && names.length > 0) {
-      // Find the crowd animation
-      const crowdAnimationName = names.find(name => name.toLowerCase().includes('crowd'));
-      
-      if (crowdAnimationName && actions[crowdAnimationName]) {
-        // Stop all other animations first
-        Object.values(actions).forEach(action => action.stop());
-        
-        // Play the crowd animation in loop
-        actions[crowdAnimationName].reset().fadeIn(0.5).play();
-        actions[crowdAnimationName].setLoop(2201, Infinity); // Loop infinitely
-        
-        return () => {
-          if (actions[crowdAnimationName]) {
-            actions[crowdAnimationName].fadeOut(0.5);
-          }
-        };
-      } else {
-        // Fallback to first available animation if crowd not found
-        if (actions[names[0]]) {
-          actions[names[0]].reset().fadeIn(0.5).play();
-        }
-      }
-    }
-  }, [actions, names]);
+// Earl audience member with crowd animation - Now using unified component
+const EarlAudience = ({ position, rotation, ...props }) => (
+  <AudienceMember 
+    position={position} 
+    rotation={rotation} 
+    modelPath="./models/Earl.glb"
+    {...props} 
+  />
+);
 
-  return (
-    <group ref={group} position={position} rotation={rotation} {...props} dispose={null}>
-      <primitive object={clonedScene} />
-    </group>
-  );
-}
+// Wayne audience member with crowd animation - Now using unified component
+const WayneAudience = ({ position, rotation, ...props }) => (
+  <AudienceMember 
+    position={position} 
+    rotation={rotation} 
+    modelPath="./models/Wayne.glb"
+    {...props} 
+  />
+);
 
-// Earl audience member with crowd animation
-function EarlAudience({ position, rotation, ...props }) {
-  const group = useRef();
-  const { scene, animations } = useGLTF("./models/Earl.glb");
-  
-  // Clone the scene to create independent instance
-  const clonedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
-  const { actions, names } = useAnimations(animations, group);
-
-  // Find and play the "crowd" animation in loop
-  useEffect(() => {
-    if (actions && names.length > 0) {
-      // Find the crowd animation
-      const crowdAnimationName = names.find(name => name.toLowerCase().includes('crowd'));
-      
-      if (crowdAnimationName && actions[crowdAnimationName]) {
-        // Stop all other animations first
-        Object.values(actions).forEach(action => action.stop());
-        
-        // Play the crowd animation in loop
-        actions[crowdAnimationName].reset().fadeIn(0.5).play();
-        actions[crowdAnimationName].setLoop(2201, Infinity); // Loop infinitely
-        
-        return () => {
-          if (actions[crowdAnimationName]) {
-            actions[crowdAnimationName].fadeOut(0.5);
-          }
-        };
-      } else {
-        // Fallback to first available animation if crowd not found
-        if (actions[names[0]]) {
-          actions[names[0]].reset().fadeIn(0.5).play();
-        }
-      }
-    }
-  }, [actions, names]);
-
-  return (
-    <group ref={group} position={position} rotation={rotation} {...props} dispose={null}>
-      <primitive object={clonedScene} />
-    </group>
-  );
-}
-
-// Wayne audience member with crowd animation
-function WayneAudience({ position, rotation, ...props }) {
-  const group = useRef();
-  const { scene, animations } = useGLTF("./models/Wayne.glb");
-  
-  // Clone the scene to create independent instance
-  const clonedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
-  const { actions, names } = useAnimations(animations, group);
-
-  // Find and play the "crowd" animation in loop
-  useEffect(() => {
-    if (actions && names.length > 0) {
-      // Find the crowd animation
-      const crowdAnimationName = names.find(name => name.toLowerCase().includes('crowd'));
-      
-      if (crowdAnimationName && actions[crowdAnimationName]) {
-        // Stop all other animations first
-        Object.values(actions).forEach(action => action.stop());
-        
-        // Play the crowd animation in loop
-        actions[crowdAnimationName].reset().fadeIn(0.5).play();
-        actions[crowdAnimationName].setLoop(2201, Infinity); // Loop infinitely
-        
-        return () => {
-          if (actions[crowdAnimationName]) {
-            actions[crowdAnimationName].fadeOut(0.5);
-          }
-        };
-      } else {
-        // Fallback to first available animation if crowd not found
-        if (actions[names[0]]) {
-          actions[names[0]].reset().fadeIn(0.5).play();
-        }
-      }
-    }
-  }, [actions, names]);
-
-  return (
-    <group ref={group} position={position} rotation={rotation} {...props} dispose={null}>
-      <primitive object={clonedScene} />
-    </group>
-  );
-}
-
-// Vince audience member with crowd animation
-function VinceAudience({ position, rotation, ...props }) {
-  const group = useRef();
-  const { scene, animations } = useGLTF("./models/Vince.glb");
-  
-  // Clone the scene to create independent instance
-  const clonedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
-  const { actions, names } = useAnimations(animations, group);
-
-  // Find and play the "crowd" animation in loop
-  useEffect(() => {
-    if (actions && names.length > 0) {
-      // Find the crowd animation
-      const crowdAnimationName = names.find(name => name.toLowerCase().includes('crowd'));
-      
-      if (crowdAnimationName && actions[crowdAnimationName]) {
-        // Stop all other animations first
-        Object.values(actions).forEach(action => action.stop());
-        
-        // Play the crowd animation in loop
-        actions[crowdAnimationName].reset().fadeIn(0.5).play();
-        actions[crowdAnimationName].setLoop(2201, Infinity); // Loop infinitely
-        
-        return () => {
-          if (actions[crowdAnimationName]) {
-            actions[crowdAnimationName].fadeOut(0.5);
-          }
-        };
-      } else {
-        // Fallback to first available animation if crowd not found
-        if (actions[names[0]]) {
-          actions[names[0]].reset().fadeIn(0.5).play();
-        }
-      }
-    }
-  }, [actions, names]);
-
-  return (
-    <group ref={group} position={position} rotation={rotation} {...props} dispose={null}>
-      <primitive object={clonedScene} />
-    </group>
-  );
-}
+// Vince audience member with crowd animation - Now using unified component  
+const VinceAudience = ({ position, rotation, ...props }) => (
+  <AudienceMember 
+    position={position} 
+    rotation={rotation} 
+    modelPath="./models/Vince.glb"
+    {...props} 
+  />
+);
 
 function Audience() {
   const { animations } = useCharacterAnimations();
