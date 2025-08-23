@@ -62,7 +62,8 @@ const GAME_CONFIG = {
       model: 'pete',
       description: 'Construction Worker',
       price: null, // Free initial character
-      emoji: '👷‍♂️'
+      emoji: '👷‍♂️',
+      baseStats: { speed: 1, stamina: 1, strength: 1 }
     },
     {
       id: 'tyler',
@@ -70,7 +71,8 @@ const GAME_CONFIG = {
       model: 'Tyler',
       description: 'Soap Maker',
       price: 5,
-      emoji: '🧔‍♂️'
+      emoji: '🧔‍♂️',
+      baseStats: { speed: 1, stamina: 1, strength: 1 }
     },
     {
       id: 'vince',
@@ -78,7 +80,8 @@ const GAME_CONFIG = {
       model: 'Vince',
       description: 'Fire Fighter',
       price: 5,
-      emoji: '🧑‍🚒'
+      emoji: '🧑‍🚒',
+      baseStats: { speed: 1, stamina: 1, strength: 1 }
     },
     {
       id: 'bob',
@@ -86,9 +89,24 @@ const GAME_CONFIG = {
       model: 'Bob',
       description: 'Business Man',
       price: 5,
-      emoji: '👔'
+      emoji: '👔',
+      baseStats: { speed: 1, stamina: 1, strength: 1 }
     }
-  ]
+  ],
+  STAT_CONFIG: {
+    MAX_LEVEL: 10,
+    UPGRADE_COST: 1,
+    STAT_NAMES: {
+      speed: 'SPEED',
+      stamina: 'STAMINA', 
+      strength: 'STRENGTH'
+    },
+    STAT_ICONS: {
+      speed: 'SPD',
+      stamina: 'STA', 
+      strength: 'STR'
+    }
+  }
 };
 
 export const GameStateProvider = ({ children }) => {
@@ -104,7 +122,11 @@ export const GameStateProvider = ({ children }) => {
       unlockedOpponents: ['pete_1'], // Only first opponent available at start
       totalWins: 0,
       totalFights: 0,
-      version: 2 // Version to force updates if needed
+      characterStats: {
+        // Initialize stats for owned characters
+        'pete': { speed: 1, stamina: 1, strength: 1 }
+      },
+      version: 3 // Version to force updates if needed
     };
     
     return initialState;
@@ -203,11 +225,49 @@ export const GameStateProvider = ({ children }) => {
       setGameState(prev => ({
         ...prev,
         coins: prev.coins - character.price,
-        purchasedCharacters: [...prev.purchasedCharacters, characterId]
+        purchasedCharacters: [...prev.purchasedCharacters, characterId],
+        // Initialize stats for new character
+        characterStats: {
+          ...prev.characterStats,
+          [characterId]: character.baseStats
+        }
       }));
       return true;
     }
     return false;
+  };
+
+  // Function to upgrade character stat
+  const upgradeCharacterStat = (characterId, statName) => {
+    const currentStats = gameState.characterStats[characterId];
+    if (!currentStats) return false;
+    
+    const currentLevel = currentStats[statName];
+    const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
+    const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
+    
+    // Check if upgrade is possible
+    if (currentLevel >= maxLevel || gameState.coins < upgradeCost) {
+      return false;
+    }
+    
+    setGameState(prev => ({
+      ...prev,
+      coins: prev.coins - upgradeCost,
+      characterStats: {
+        ...prev.characterStats,
+        [characterId]: {
+          ...prev.characterStats[characterId],
+          [statName]: currentLevel + 1
+        }
+      }
+    }));
+    return true;
+  };
+
+  // Function to get character stats
+  const getCharacterStats = (characterId) => {
+    return gameState.characterStats[characterId] || { speed: 1, stamina: 1, strength: 1 };
   };
 
   // Function to get the next opponent to unlock
@@ -309,6 +369,10 @@ export const GameStateProvider = ({ children }) => {
     purchaseCharacter,
     isCharacterPurchased,
     canAffordCharacter,
+
+    // Character stat functions
+    upgradeCharacterStat,
+    getCharacterStats,
 
     // Opponent functions
     isOpponentUnlocked,

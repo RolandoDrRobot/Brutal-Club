@@ -4,7 +4,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import React, { useState, useEffect } from 'react';
 import MusicPlayer from "./MusicPlayer";
 import MainMenu from "./MainMenu";
-import CharacterSelect from "./CharacterSelect";
+import CharacterSkillTree from "./CharacterSkillTree";
 import CombinedShopOpponents from "./CombinedShopOpponents";
 import Shop from "./Shop";
 import '../styles/fightAnimations.css';
@@ -454,9 +454,9 @@ const Interface = () => {
         />
       )}
 
-      {/* Mostrar pantalla de selección de personajes cuando currentScreen es 'characterSelect' */}
+      {/* Mostrar pantalla de árbol de habilidades cuando currentScreen es 'characterSelect' */}
       {currentScreen === 'characterSelect' && (
-        <CharacterSelect 
+        <CharacterSkillTree 
           onSelectClick={handleCharacterSelection}
           onBackClick={navigateBackFromCharacterSelect}
         />
