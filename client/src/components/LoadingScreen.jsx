@@ -21,7 +21,7 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
     
     @keyframes shimmer {
       0% { 
-        background: linear-gradient(90deg, #fc3f31 0%, #ff6b53 50%, #fc3f31 100%);
+        background: linear-gradient(90deg, #f32210 0%, #ff6b53 50%, #f32210 100%);
         background-size: 200% 100%;
         background-position: 200% 0;
       }
@@ -49,11 +49,11 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
     @keyframes buttonPulse {
       0%, 100% { 
         transform: scale(1);
-        box-shadow: 0 0 15px rgba(252, 63, 49, 0.6);
+        box-shadow: 0 0 15px rgba(243, 34, 16, 0.6);
       }
       50% { 
         transform: scale(1.02);
-        box-shadow: 0 0 25px rgba(252, 63, 49, 0.8);
+        box-shadow: 0 0 25px rgba(243, 34, 16, 0.8);
       }
     }
   `;
@@ -79,21 +79,6 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
           transition: 'opacity 0.5s ease-in-out'
         }}
       >
-        {/* Título FIGHT CLUB centrado con animación */}
-        <Box
-          style={{
-            textAlign: 'center',
-            marginBottom: '20px',
-            animation: 'pulse 2s ease-in-out infinite'
-          }}
-        >
-          <div className="fight-title">
-            FIGHT CLUB
-          </div>
-          <div className="fight-subtitle">
-            You do not talk about fight club
-          </div>
-        </Box>
         
         {/* Texto de carga principal con efecto neón */}
         <Text 
@@ -121,19 +106,19 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
             borderRadius: '3px',
             overflow: 'hidden',
             marginBottom: '15px',
-            border: '1px solid rgba(252, 63, 49, 0.3)',
-            boxShadow: '0 0 10px rgba(252, 63, 49, 0.2)'
+            border: '1px solid rgba(243, 34, 16, 0.3)',
+            boxShadow: '0 0 10px rgba(243, 34, 16, 0.2)'
           }}
         >
           <Box
             style={{
               width: `${progress}%`,
               height: '100%',
-              background: 'linear-gradient(90deg, #fc3f31, #ff6b53, #fc3f31)',
+              background: 'linear-gradient(90deg, #f32210, #ff6b53, #f32210)',
               backgroundSize: '200% 100%',
               borderRadius: '3px',
               transition: 'width 0.5s ease-out, background 0.3s ease-in-out',
-              boxShadow: '0 0 15px rgba(252, 63, 49, 0.8)',
+              boxShadow: '0 0 15px rgba(243, 34, 16, 0.8)',
               animation: progress > 0 ? 'shimmer 2s ease-in-out infinite' : 'none'
             }}
           />
@@ -143,11 +128,11 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
         <Text 
           size="lg" 
           style={{ 
-            color: '#fc3f31',
+            color: '#f32210',
             textAlign: 'center',
             fontWeight: 700,
             fontSize: '18px',
-            textShadow: '0 0 10px rgba(252, 63, 49, 0.6)',
+            textShadow: '0 0 10px rgba(243, 34, 16, 0.6)',
             transition: 'color 0.3s ease-in-out, text-shadow 0.3s ease-in-out'
           }}
         >

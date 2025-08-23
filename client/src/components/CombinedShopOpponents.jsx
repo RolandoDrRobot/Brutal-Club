@@ -8,12 +8,16 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
+import punchImg from "../assets/punch.png";
+import comboImg from "../assets/combo.png";
 
 const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
-  const { isExiting } = useCharacterAnimations();
+  const { isExiting, selectedPlayer1Character, setSelectedPlayer1Character } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
+  const [selectedCharacter, setSelectedCharacter] = useState(0);
+
   const { 
     coins,
     purchaseCharacter, 
@@ -40,7 +44,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       >
         <Text style={{
           fontSize: "24px",
-          color: "#fc3f31",
+          color: "#f32210",
           fontFamily: "Anton, sans-serif"
         }}>
           Loading...
@@ -89,6 +93,24 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   // Get characters with their current status from GameState
   const shopCharacters = getShopCharactersStatus();
 
+  // Get purchased characters for selection
+  const allCharacters = getShopCharactersStatus();
+  const ownedCharacters = allCharacters.filter(char => char.isPurchased).map(char => ({
+    id: char.id,
+    name: char.name.toUpperCase(),
+    model: char.model
+  }));
+
+  // Sincronizar selectedCharacter con el personaje actualmente seleccionado
+  useEffect(() => {
+    if (ownedCharacters.length > 0 && selectedPlayer1Character) {
+      const currentIndex = ownedCharacters.findIndex(char => char.model === selectedPlayer1Character);
+      if (currentIndex !== -1) {
+        setSelectedCharacter(currentIndex);
+      }
+    }
+  }, [ownedCharacters, selectedPlayer1Character]);
+
   const handlePurchase = (character) => {
     if (character.price && character.canAfford && !character.isPurchased) {
       const success = purchaseCharacter(character.id);
@@ -107,13 +129,34 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     }
   };
 
+  // Character navigation functions
+  const handlePreviousCharacter = () => {
+    playButtonSound();
+    const newIndex = selectedCharacter > 0 ? selectedCharacter - 1 : ownedCharacters.length - 1;
+    setSelectedCharacter(newIndex);
+    // Cambiar directamente el personaje activo
+    if (ownedCharacters[newIndex]) {
+      setSelectedPlayer1Character(ownedCharacters[newIndex].model);
+    }
+  };
+
+  const handleNextCharacter = () => {
+    playButtonSound();
+    const newIndex = selectedCharacter < ownedCharacters.length - 1 ? selectedCharacter + 1 : 0;
+    setSelectedCharacter(newIndex);
+    // Cambiar directamente el personaje activo
+    if (ownedCharacters[newIndex]) {
+      setSelectedPlayer1Character(ownedCharacters[newIndex].model);
+    }
+  };
+
   const getCharacterCardStyle = (character, isOpponent = false) => {
     const baseStyle = {
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      border: '3px solid #fc3f31',
-      borderRadius: '15px',
-      padding: isMobile ? '10px' : '15px',
-      height: isMobile ? '200px' : '250px',
+      border: '3px solid #f32210',
+      borderRadius: '12px',
+      padding: isMobile ? '8px' : '12px',
+      aspectRatio: '1',
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
@@ -122,9 +165,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       position: 'relative',
       transition: 'all 0.3s ease',
       boxShadow: `
-        0 0 10px #fc3f31,
-        0 0 20px rgba(252, 63, 49, 0.2),
-        inset 0 0 10px rgba(252, 63, 49, 0.05)
+        0 0 10px #f32210,
+        0 0 20px rgba(243, 34, 16, 0.2),
+        inset 0 0 10px rgba(243, 34, 16, 0.05)
       `,
       overflow: 'hidden'
     };
@@ -136,7 +179,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         ...baseStyle,
         cursor: isLocked ? 'not-allowed' : 'pointer',
         opacity: isLocked ? 0.6 : 1,
-        border: isLocked ? '3px solid #666' : '3px solid #fc3f31'
+        border: isLocked ? '3px solid #666' : '3px solid #f32210'
       };
     } else {
       // Shop character styling
@@ -154,7 +197,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         ...baseStyle,
         cursor: isLocked ? 'not-allowed' : 'pointer',
         opacity: isLocked ? 0.6 : 1,
-        border: isLocked ? '3px solid #666' : '3px solid #fc3f31'
+        border: isLocked ? '3px solid #666' : '3px solid #f32210'
       };
     }
   };
@@ -163,9 +206,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     const baseStyle = {
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
       border: 'none',
-      fontSize: isMobile ? '16px' : '18px',
+      fontSize: isMobile ? '12px' : '14px',
       fontWeight: 700,
-      padding: '8px 12px',
+      padding: '6px 8px',
       borderRadius: '8px',
       textTransform: 'uppercase',
       letterSpacing: '1px',
@@ -183,7 +226,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       const isLocked = character.isLocked;
       return {
         ...baseStyle,
-        color: isLocked ? '#666' : '#fc3f31',
+        color: isLocked ? '#666' : '#f32210',
         cursor: isLocked ? 'not-allowed' : 'pointer'
       };
     } else {
@@ -245,7 +288,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             letterSpacing: '1px',
             whiteSpace: 'nowrap'
           }}>
-            {coins} COINS
+            Arcade Mode
           </Text>
           
           <Text style={{
@@ -257,7 +300,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             marginTop: '4px',
             lineHeight: 1.2
           }}>
-            Defeat opponents to earn coins, then unlock new fighters in the store
+            Defeat all de oponents and earn coins!
           </Text>
         </Box>
 
@@ -277,17 +320,17 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
               fontWeight: 700,
               padding: "12px 20px",
               backgroundColor: "transparent",
-              borderColor: "#fc3f31",
-              border: "3px solid #fc3f31",
+              borderColor: "#f32210",
+              border: "3px solid #f32210",
               borderRadius: "10px",
-              color: "#fc3f31",
+              color: "#f32210",
               textTransform: "uppercase",
               letterSpacing: "2px",
               fontFamily: "Anton, sans-serif",
               height: "55px"
             }}
           >
-            <span className="fight-button-text">BACK</span>
+            <span className="fight-button-text">X</span>
           </Button>
         </Box>
       </Box>
@@ -298,7 +341,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         overflowY: "auto",
         overflowX: "hidden",
         paddingRight: isMobile ? "5px" : "10px",
-        paddingTop: isMobile ? "15px" : "20px",
+        paddingTop: isMobile ? "40px" : "50px",
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         minHeight: 0,
         maxWidth: "400px",
@@ -306,20 +349,134 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         margin: "0 auto",
         marginBottom: isMobile ? "10px" : "15px"
       }}>
+        {/* CHARACTER SELECTION Section */}
+        {ownedCharacters.length > 0 && (
+          <Box style={{ marginBottom: isMobile ? "30px" : "40px" }}>
+
+
+            {/* Character Selection UI */}
+            <Box style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: isMobile ? '10px' : '20px',
+              marginBottom: isMobile ? '20px' : '30px'
+            }}>
+              {/* Left Arrow */}
+              <Button
+                variant="unstyled"
+                onClick={handlePreviousCharacter}
+                style={{
+                  width: isMobile ? '50px' : '60px',
+                  height: isMobile ? '50px' : '60px',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'all 0.3s ease',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  position: 'relative'
+                }}
+              >
+                <div className="left-arrow-bg" style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  backgroundImage: `url(${comboImg})`,
+                  backgroundSize: 'contain',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  transform: 'scaleX(-1)',
+                  transition: 'all 0.3s ease',
+                  pointerEvents: 'none'
+                }} />
+              </Button>
+
+              {/* Character Display */}
+              <Box style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minWidth: isMobile ? '200px' : '250px'
+              }}>
+                {/* Character Preview */}
+                <Box style={{
+                  width: isMobile ? '150px' : '200px',
+                  height: isMobile ? '200px' : '280px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                  border: '3px solid #f32210',
+                  borderRadius: '20px',
+                  marginBottom: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  <CharacterPreview
+                    characterName={ownedCharacters[selectedCharacter]?.name}
+                    style={{
+                      width: '120%',
+                      height: '120%',
+                      transform: 'scale(1.2)'
+                    }}
+                  />
+                </Box>
+                
+                {/* Instruction Text */}
+                <Text style={{
+                  fontSize: isMobile ? '14px' : '16px',
+                  fontWeight: 700,
+                  color: 'rgb(255, 215, 0)',
+                  fontFamily: 'Anton, sans-serif',
+                  letterSpacing: '1px',
+                  textAlign: 'center',
+                  lineHeight: 1.3,
+                  maxWidth: '200px'
+                }}>
+                  SELECT YOUR FIGHTER AND YOUR NEXT OPPONENT
+                </Text>
+              </Box>
+
+              {/* Right Arrow */}
+              <Button
+                variant="unstyled"
+                onClick={handleNextCharacter}
+                style={{
+                  width: isMobile ? '50px' : '60px',
+                  height: isMobile ? '50px' : '60px',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'all 0.3s ease',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  position: 'relative'
+                }}
+              >
+                <div className="left-arrow-bg" style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  backgroundImage: `url(${comboImg})`,
+                  backgroundSize: 'contain',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  transition: 'all 0.3s ease',
+                  pointerEvents: 'none'
+                }} />
+              </Button>
+            </Box>
+
+
+          </Box>
+        )}
+
         {/* OPPONENTS Section */}
         <Box style={{ marginBottom: isMobile ? "30px" : "40px" }}>
-          <Text style={{
-            fontSize: isMobile ? '24px' : '32px',
-            fontWeight: 700,
-            color: '#F5F5DC',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '2px',
-            textAlign: 'center',
-            marginBottom: isMobile ? '15px' : '20px',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-          }}>
-            OPPONENTS
-          </Text>
           
           <Grid 
             gutter={isMobile ? "sm" : "md"}
@@ -332,7 +489,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             {opponents.map((opponent, index) => (
               <Grid.Col 
                 key={opponent.id} 
-                span={6}
+                span={4}
                 style={{
                   animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`
                 }}
@@ -351,8 +508,8 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                     {opponent.model && (
                       <Box style={{
                         position: 'absolute',
-                        top: '55%',
-                        left: '50%',
+                        top: '60%',
+                        left: '40%',
                         transform: 'translate(-50%, -50%)',
                         width: '90%',
                         height: '55%',
@@ -373,41 +530,12 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                       </Box>
                     )}
 
-                    {/* Action Button - Moved to bottom */}
-                    <Box style={{
-                      position: 'absolute',
-                      bottom: '8px',
-                      left: '8px',
-                      right: '8px',
-                      zIndex: 2,
-                      display: 'flex',
-                      justifyContent: 'center'
-                    }}>
-                      <Button
-                        style={{
-                          ...getButtonStyle(opponent, true),
-                          width: '100%'
-                        }}
-                        disabled={opponent.isLocked}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleOpponentSelect(opponent);
-                        }}
-                      >
-                        {opponent.isLocked ? (
-                          <span>{opponent.price}</span>
-                        ) : opponent.isDefeated ? (
-                          <span>DEFEATED</span>
-                        ) : (
-                          <span>{opponent.price}</span>
-                        )}
-                      </Button>
-                    </Box>
+
                   </Card>
                   
                   {/* Fighter Name */}
                   <Text style={{
-                    fontSize: isMobile ? '16px' : '18px',
+                    fontSize: isMobile ? '14px' : '16px',
                     fontWeight: 700,
                     color: opponent.isLocked ? '#666' : '#F5F5DC',
                     fontFamily: 'Anton, sans-serif',
@@ -424,135 +552,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           </Grid>
         </Box>
 
-        {/* STORE Section */}
-        <Box style={{ marginBottom: isMobile ? "20px" : "30px" }}>
-          <Text style={{
-            fontSize: isMobile ? '24px' : '32px',
-            fontWeight: 700,
-            color: '#F5F5DC',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '2px',
-            textAlign: 'center',
-            marginBottom: isMobile ? '15px' : '20px',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-          }}>
-            STORE
-          </Text>
-          
-          <Grid 
-            gutter={isMobile ? "sm" : "md"}
-            style={{ 
-              width: '100%',
-              maxWidth: '800px',
-              margin: '0 auto'
-            }}
-          >
-            {shopCharacters.map((character, index) => (
-              <Grid.Col 
-                key={character.id} 
-                span={6}
-                style={{
-                  animation: `fadeInSpray 0.5s ease-out ${0.5 + index * 0.1}s both`
-                }}
-              >
-                <Box style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  <Card
-                    style={getCharacterCardStyle(character, false)}
-                    onClick={() => {
-                      const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
-                      if (!isLocked && !character.isPurchased) {
-                        handlePurchase(character);
-                      }
-                    }}
-                  >
-                    {/* 3D Model as Background */}
-                    {character.model && (
-                      <Box style={{
-                        position: 'absolute',
-                        top: '55%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '90%',
-                        height: '55%',
-                        zIndex: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}>
-                        <CharacterPreview
-                          characterName={character.name}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            transform: 'scale(1.4)'
-                          }}
-                        />
-                      </Box>
-                    )}
 
-                    {/* Action Button - Moved to bottom */}
-                    <Box style={{
-                      position: 'absolute',
-                      bottom: '8px',
-                      left: '8px',
-                      right: '8px',
-                      zIndex: 2,
-                      display: 'flex',
-                      justifyContent: 'center'
-                    }}>
-                      <Button
-                        style={{
-                          ...getButtonStyle(character, false),
-                          width: '100%'
-                        }}
-                        disabled={
-                          (character.price !== null && !character.canAfford && !character.isPurchased) || 
-                          character.isPurchased
-                        }
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
-                          if (!isLocked && !character.isPurchased) {
-                            handlePurchase(character);
-                          }
-                        }}
-                      >
-                        {character.isPurchased ? (
-                          <span>OWNED</span>
-                        ) : (character.price !== null && !character.canAfford && !character.isPurchased) ? (
-                          <span>LOCKED</span>
-                        ) : character.price === null ? (
-                          <span>FREE</span>
-                        ) : (
-                          <span>{character.price}</span>
-                        )}
-                      </Button>
-                    </Box>
-                  </Card>
-                  
-                  {/* Fighter Name */}
-                  <Text style={{
-                    fontSize: isMobile ? '16px' : '18px',
-                    fontWeight: 700,
-                    color: (character.price !== null && !character.canAfford && !character.isPurchased) ? '#666' : '#F5F5DC',
-                    fontFamily: 'Anton, sans-serif',
-                    letterSpacing: '1px',
-                    textAlign: 'center',
-                    textTransform: 'uppercase',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-                  }}>
-                    {character.name}
-                  </Text>
-                </Box>
-              </Grid.Col>
-            ))}
-          </Grid>
-        </Box>
       </Box>
     </Box>
   );

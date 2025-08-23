@@ -212,7 +212,7 @@ const MusicPlayer = () => {
       right: '2%',
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
       borderRadius: '8px',
-      boxShadow: '0 0 10px rgba(252, 63, 49, 0.3)',
+      boxShadow: '0 0 10px rgba(243, 34, 16, 0.3)',
       width: 'fit-content',
       height: 'fit-content'
     }}>

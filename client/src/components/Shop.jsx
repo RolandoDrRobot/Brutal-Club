@@ -14,7 +14,14 @@ const Shop = ({ onBackClick }) => {
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
-  const { gameState, purchaseCharacter, getShopCharactersStatus, isCharacterPurchased, canAffordCharacter, clearSavedData } = useGameState();
+  const { 
+    gameState = {}, 
+    purchaseCharacter = () => {}, 
+    getShopCharactersStatus = () => [], 
+    isCharacterPurchased = () => false, 
+    canAffordCharacter = () => false, 
+    clearSavedData = () => {} 
+  } = useGameState() || {};
   const { setSelectedPlayer1Character } = useCharacterAnimations();
   const { lazyLoadModel } = useModelLoader();
   const [loadingModels, setLoadingModels] = useState(new Set());
@@ -67,7 +74,7 @@ const Shop = ({ onBackClick }) => {
     if (character.isPurchased) {
       return {
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        border: '3px solid #fc3f31',
+        border: '3px solid #f32210',
         borderRadius: '15px',
         padding: isMobile ? '15px' : '20px',
         height: '250px',
@@ -80,9 +87,9 @@ const Shop = ({ onBackClick }) => {
         opacity: 1,
         transition: 'all 0.3s ease',
         boxShadow: `
-          0 0 10px #fc3f31,
-          0 0 20px rgba(252, 63, 49, 0.2),
-          inset 0 0 10px rgba(252, 63, 49, 0.05)
+          0 0 10px #f32210,
+          0 0 20px rgba(243, 34, 16, 0.2),
+          inset 0 0 10px rgba(243, 34, 16, 0.05)
         `,
         overflow: 'hidden'
       };
@@ -93,7 +100,7 @@ const Shop = ({ onBackClick }) => {
     
     return {
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      border: '3px solid #fc3f31',
+      border: '3px solid #f32210',
       borderRadius: '15px',
       padding: isMobile ? '15px' : '20px',
       height: '250px',
@@ -106,9 +113,9 @@ const Shop = ({ onBackClick }) => {
       opacity: isLocked ? 0.6 : 1,
       transition: 'all 0.3s ease',
       boxShadow: `
-        0 0 10px #fc3f31,
-        0 0 20px rgba(252, 63, 49, 0.2),
-        inset 0 0 10px rgba(252, 63, 49, 0.05)
+        0 0 10px #f32210,
+        0 0 20px rgba(243, 34, 16, 0.2),
+        inset 0 0 10px rgba(243, 34, 16, 0.05)
       `,
       overflow: 'hidden'
     };
@@ -201,30 +208,73 @@ const Shop = ({ onBackClick }) => {
         flexDirection: "column"
       }}
     >
-      {/* Header with title and coins */}
+      {/* Header with coins, description and back button */}
       <Box style={{ 
-        textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
-        marginBottom: "20px"
+        marginBottom: "20px",
+        paddingTop: "10px",
+        flexWrap: 'wrap',
+        gap: '10px',
+        width: '100%'
       }}>
-        <Text className="fight-title">
-          FIGHT CLUB
-        </Text>
-        <Text className="fight-subtitle">
-          STORE
-        </Text>
-        
-        {/* Coins display */}
-        <Text style={{
-          fontSize: isMobile ? '20px' : '24px',
-          fontWeight: 700,
-          color: '#FFD700',
-          fontFamily: 'Anton, sans-serif',
-          letterSpacing: '1px'
+        <Box style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          flex: '1 1 0%'
         }}>
-          {gameState.coins} COINS
-        </Text>
+          <Text style={{
+            fontSize: '24px',
+            fontWeight: 700,
+            color: '#FFD700',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '1px',
+            whiteSpace: 'nowrap'
+          }}>
+            {gameState?.coins || 0} COINS
+          </Text>
+          <Text style={{
+            fontSize: '16px',
+            fontWeight: 400,
+            color: '#F5F5DC',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '0.5px',
+            marginTop: '4px',
+            lineHeight: 1.2
+          }}>
+            Defeat opponents to earn coins, then unlock new fighters in the store
+          </Text>
+        </Box>
+        <Box style={{
+          flexShrink: 0
+        }}>
+          <Button
+            variant="outline"
+            onClick={() => {
+              playButtonSound();
+              onBackClick();
+            }}
+            style={{
+              fontSize: '16px',
+              fontWeight: 700,
+              padding: '12px 20px',
+              backgroundColor: 'transparent',
+              border: '3px solid #f32210',
+              borderRadius: '10px',
+              color: '#f32210',
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
+              fontFamily: 'Anton, sans-serif',
+              height: '55px'
+            }}
+          >
+            <span className="fight-button-text">X</span>
+          </Button>
+        </Box>
       </Box>
 
       {/* Scrollable Character Grid Container */}
@@ -351,12 +401,9 @@ const Shop = ({ onBackClick }) => {
         </Grid>
       </Box>
 
-      {/* Back Button */}
+      {/* Back Button - Hidden since it's now in header */}
       <Box style={{
-        animation: "fadeInSpray 0.5s ease-out 0.4s both",
-        flexShrink: 0,
-        paddingTop: isMobile ? "15px" : "20px",
-        textAlign: "center"
+        display: 'none'
       }}>
         <Button
           variant="outline"
@@ -376,18 +423,18 @@ const Shop = ({ onBackClick }) => {
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundColor: "transparent",
-            borderColor: "#fc3f31",
-            border: "4px solid #fc3f31",
+            borderColor: "#f32210",
+            border: "4px solid #f32210",
             borderRadius: "15px",
-            color: "#fc3f31",
+            color: "#f32210",
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
             textTransform: "uppercase",
             letterSpacing: "3px",
             fontFamily: "Anton, sans-serif",
             boxShadow: `
-              0 0 20px #fc3f31,
-              0 0 40px rgba(252, 63, 49, 0.3),
-              inset 0 0 20px rgba(252, 63, 49, 0.1)
+              0 0 20px #f32210,
+              0 0 40px rgba(243, 34, 16, 0.3),
+              inset 0 0 20px rgba(243, 34, 16, 0.1)
             `,
             transition: "all 0.3s ease",
             cursor: "pointer"
@@ -396,9 +443,9 @@ const Shop = ({ onBackClick }) => {
             if (!isMobile) {
               e.target.style.transform = "scale(1.05)";
               e.target.style.boxShadow = `
-                0 0 30px #fc3f31,
-                0 0 60px rgba(252, 63, 49, 0.5),
-                inset 0 0 30px rgba(252, 63, 49, 0.2)
+                0 0 30px #f32210,
+                0 0 60px rgba(243, 34, 16, 0.5),
+                inset 0 0 30px rgba(243, 34, 16, 0.2)
               `;
             }
           }}
@@ -406,9 +453,9 @@ const Shop = ({ onBackClick }) => {
             if (!isMobile) {
               e.target.style.transform = "scale(1)";
               e.target.style.boxShadow = `
-                0 0 20px #fc3f31,
-                0 0 40px rgba(252, 63, 49, 0.3),
-                inset 0 0 20px rgba(252, 63, 49, 0.1)
+                0 0 20px #f32210,
+                0 0 40px rgba(243, 34, 16, 0.3),
+                inset 0 0 20px rgba(243, 34, 16, 0.1)
               `;
             }
           }}

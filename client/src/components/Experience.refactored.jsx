@@ -31,13 +31,25 @@ const Experience = () => {
     <>
       <CameraControls />
       
-      {/* Iluminación balanceada para fondo negro */}
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[5, 5, 5]} intensity={0.9} castShadow />
-      {/* Luz adicional desde el frente */}
-      <directionalLight position={[0, 5, 10]} intensity={0.5} color="#ffffff" />
-      {/* Luz de relleno desde atrás sutil */}
-      <directionalLight position={[0, 3, -5]} intensity={0.25} color="#f0f0f0" />
+      {/* Iluminación neón cálida - MENOS SEPIA, MÁS ILUMINADO */}
+      <ambientLight intensity={0.4} color="#FFD099" />
+      
+      {/* Foco principal menos amarillento */}
+      <spotLight
+        position={[0, 8, 0]}
+        intensity={1.5}
+        angle={Math.PI / 3}
+        penumbra={0.8}
+        color="#FFDD88"
+        castShadow
+      />
+      
+      {/* Focos laterales menos saturados */}
+      <spotLight position={[-6, 5, 3]} intensity={0.8} angle={Math.PI / 4} penumbra={0.9} color="#FFBB66" />
+      <spotLight position={[6, 5, 3]} intensity={0.8} angle={Math.PI / 4} penumbra={0.9} color="#FFCC77" />
+      
+      {/* Ambiente trasero más claro */}
+      <directionalLight position={[0, 3, -8]} intensity={0.2} color="#DDAA66" />
       
       {/* Fondo negro con efectos de sangre */}
       <BloodFloor />

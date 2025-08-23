@@ -213,24 +213,45 @@ const CharacterPreview = ({ characterName, style }) => {
           dpr={[1, 2]}
           resize={{ scroll: false, debounce: { scroll: 50, resize: 0 } }}
         >
-          {/* Lighting setup */}
-          <ambientLight intensity={0.4} />
-          <directionalLight
-            position={[2, 4, 2]}
-            intensity={0.8}
+          {/* Iluminación neón cálida - MENOS SEPIA, MÁS ILUMINADO */}
+          <ambientLight intensity={0.4} color="#FFD099" />
+          
+          {/* Foco principal menos amarillento */}
+          <spotLight
+            position={[0, 6, 0]}
+            intensity={1.2}
+            angle={Math.PI / 3}
+            penumbra={0.8}
+            color="#FFDD88"
             castShadow
             shadow-mapSize-width={1024}
             shadow-mapSize-height={1024}
-            shadow-camera-far={20}
-            shadow-camera-left={-5}
-            shadow-camera-right={5}
-            shadow-camera-top={5}
-            shadow-camera-bottom={-5}
+            shadow-camera-near={1}
+            shadow-camera-far={15}
           />
-          <pointLight
-            position={[-1, 2, 1]}
-            intensity={0.3}
-            color="#fc3f31"
+          
+          {/* Focos laterales menos saturados */}
+          <spotLight
+            position={[-3, 3, 2]}
+            intensity={0.6}
+            angle={Math.PI / 4}
+            penumbra={0.9}
+            color="#FFBB66"
+          />
+          
+          <spotLight
+            position={[3, 3, 2]}
+            intensity={0.6}
+            angle={Math.PI / 4}
+            penumbra={0.9}
+            color="#FFCC77"
+          />
+          
+          {/* Ambiente trasero más claro */}
+          <directionalLight
+            position={[0, 2, -5]}
+            intensity={0.15}
+            color="#DDAA66"
           />
           
           {/* Character model - positioned lower and facing forward */}

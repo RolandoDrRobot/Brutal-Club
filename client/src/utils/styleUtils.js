@@ -75,7 +75,7 @@ export const getCharacterCardStyle = (character, options = {}) => {
 
   const baseStyle = {
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
-    border: '3px solid #fc3f31',
+    border: '3px solid #f32210',
     borderRadius: '15px',
     padding: isMobile ? (isOpponent ? '10px' : '15px') : (isOpponent ? '15px' : '20px'),
     height: isMobile ? '200px' : '250px',
@@ -97,7 +97,7 @@ export const getCharacterCardStyle = (character, options = {}) => {
       ...baseStyle,
       cursor: isLocked ? 'not-allowed' : 'pointer',
       opacity: isLocked ? 0.6 : 1,
-      border: isLocked ? '3px solid #666' : '3px solid #fc3f31'
+      border: isLocked ? '3px solid #666' : '3px solid #f32210'
     };
   } else {
     // Shop character card styling
@@ -115,7 +115,7 @@ export const getCharacterCardStyle = (character, options = {}) => {
       ...baseStyle,
       cursor: isLocked ? 'not-allowed' : 'pointer',
       opacity: isLocked ? 0.6 : 1,
-      border: isLocked ? '3px solid #666' : '3px solid #fc3f31'
+      border: isLocked ? '3px solid #666' : '3px solid #f32210'
     };
   }
 }; 

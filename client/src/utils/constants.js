@@ -34,7 +34,7 @@ export const SHOP_MODELS = ['Vince', 'Bob'];
 // UI Theme constants
 export const THEME = {
   colors: {
-    primary: '#fc3f31',
+    primary: '#f32210',
     gold: '#FFD700',
     white: '#F5F5DC',
     black: '#000000',
@@ -42,9 +42,9 @@ export const THEME = {
   },
   shadows: {
     neon: `
-      0 0 10px #fc3f31,
-      0 0 20px rgba(252, 63, 49, 0.2),
-      inset 0 0 10px rgba(252, 63, 49, 0.05)
+      0 0 10px #f32210,
+      0 0 20px rgba(243, 34, 16, 0.2),
+      inset 0 0 10px rgba(243, 34, 16, 0.05)
     `,
     button: '2px 2px 4px rgba(0, 0, 0, 0.8)'
   },

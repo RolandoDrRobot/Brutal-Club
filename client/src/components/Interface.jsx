@@ -6,6 +6,7 @@ import MusicPlayer from "./MusicPlayer";
 import MainMenu from "./MainMenu";
 import CharacterSelect from "./CharacterSelect";
 import CombinedShopOpponents from "./CombinedShopOpponents";
+import Shop from "./Shop";
 import '../styles/fightAnimations.css';
 import punchImg from "../assets/punch.png";
 import kickImg from "../assets/kick.png";
@@ -37,17 +38,17 @@ const interfaceStyles = `
   @keyframes neonPulse {
     0%, 100% {
       box-shadow: 
-        0 0 15px #fc3f31,
-        0 0 30px rgba(252, 63, 49, 0.5),
-        0 4px 12px rgba(252, 63, 49, 0.3),
-        inset 0 0 15px rgba(252, 63, 49, 0.1);
+        0 0 15px #f32210,
+        0 0 30px rgba(243, 34, 16, 0.5),
+        0 4px 12px rgba(243, 34, 16, 0.3),
+        inset 0 0 15px rgba(243, 34, 16, 0.1);
     }
     50% {
       box-shadow: 
-        0 0 25px #fc3f31,
-        0 0 50px rgba(252, 63, 49, 0.8),
-        0 4px 20px rgba(252, 63, 49, 0.6),
-        inset 0 0 25px rgba(252, 63, 49, 0.2);
+        0 0 25px #f32210,
+        0 0 50px rgba(243, 34, 16, 0.8),
+        0 4px 20px rgba(243, 34, 16, 0.6),
+        inset 0 0 25px rgba(243, 34, 16, 0.2);
     }
   }
   
@@ -84,15 +85,15 @@ const interfaceStyles = `
   @keyframes buttonPowerUp {
     0% {
       transform: scale(1);
-      box-shadow: 0 0 10px rgba(252, 63, 49, 0.3);
+      box-shadow: 0 0 10px rgba(243, 34, 16, 0.3);
     }
     50% {
       transform: scale(1.1);
-      box-shadow: 0 0 30px rgba(252, 63, 49, 0.8);
+      box-shadow: 0 0 30px rgba(243, 34, 16, 0.8);
     }
     100% {
       transform: scale(1);
-      box-shadow: 0 0 10px rgba(252, 63, 49, 0.3);
+      box-shadow: 0 0 10px rgba(243, 34, 16, 0.3);
     }
   }
 `;
@@ -140,7 +141,9 @@ const Interface = () => {
     player2CombatState,
     canPlayerAttack,
     COMBAT_STATES,
-    ATTACK_TIMINGS
+    ATTACK_TIMINGS,
+    navigateToShop,
+    navigateBackFromShop
   } = useCharacterAnimations();
 
   const { playButtonSound } = useButtonSound();
@@ -295,48 +298,48 @@ const Interface = () => {
       @keyframes neonPulse {
         0% {
           box-shadow: 
-            0 0 10px #fc3f31,
-            0 0 20px rgba(252, 63, 49, 0.3),
-            0 4px 8px rgba(252, 63, 49, 0.2),
-            inset 0 0 10px rgba(252, 63, 49, 0.05);
+            0 0 10px #f32210,
+            0 0 20px rgba(243, 34, 16, 0.3),
+            0 4px 8px rgba(243, 34, 16, 0.2),
+            inset 0 0 10px rgba(243, 34, 16, 0.05);
         }
         50% {
           box-shadow: 
-            0 0 25px #fc3f31,
-            0 0 50px rgba(252, 63, 49, 0.8),
-            0 4px 20px rgba(252, 63, 49, 0.5),
-            inset 0 0 25px rgba(252, 63, 49, 0.2);
+            0 0 25px #f32210,
+            0 0 50px rgba(243, 34, 16, 0.8),
+            0 4px 20px rgba(243, 34, 16, 0.5),
+            inset 0 0 25px rgba(243, 34, 16, 0.2);
         }
         100% {
           box-shadow: 
-            0 0 10px #fc3f31,
-            0 0 20px rgba(252, 63, 49, 0.3),
-            0 4px 8px rgba(252, 63, 49, 0.2),
-            inset 0 0 10px rgba(252, 63, 49, 0.05);
+            0 0 10px #f32210,
+            0 0 20px rgba(243, 34, 16, 0.3),
+            0 4px 8px rgba(243, 34, 16, 0.2),
+            inset 0 0 10px rgba(243, 34, 16, 0.05);
         }
       }
       
       @keyframes redNeonText {
         0% {
           text-shadow: 
-            0 0 3px #fc3f31,
-            0 0 6px #fc3f31,
-            0 0 9px rgba(252, 63, 49, 0.4),
+            0 0 3px #f32210,
+            0 0 6px #f32210,
+            0 0 9px rgba(243, 34, 16, 0.4),
             2px 2px 4px rgba(0,0,0,0.8);
         }
         50% {
           text-shadow: 
-            0 0 5px #fc3f31,
-            0 0 10px #fc3f31,
-            0 0 15px rgba(252, 63, 49, 0.6),
-            0 0 20px rgba(252, 63, 49, 0.3),
+            0 0 5px #f32210,
+            0 0 10px #f32210,
+            0 0 15px rgba(243, 34, 16, 0.6),
+            0 0 20px rgba(243, 34, 16, 0.3),
             2px 2px 4px rgba(0,0,0,0.8);
         }
         100% {
           text-shadow: 
-            0 0 3px #fc3f31,
-            0 0 6px #fc3f31,
-            0 0 9px rgba(252, 63, 49, 0.4),
+            0 0 3px #f32210,
+            0 0 6px #f32210,
+            0 0 9px rgba(243, 34, 16, 0.4),
             2px 2px 4px rgba(0,0,0,0.8);
         }
       }
@@ -382,8 +385,16 @@ const Interface = () => {
     };
   }, []);
   
-  // Función mejorada para navegar al menú con efecto de impacto
+  // Función mejorada para navegar al menú con efecto de impacto y ataques dobles
   const handleNavigateToMenu = () => {
+    // 🥊 PRIMERO: Ejecutar primer ataque del Player 1
+    triggerPlayer1Attack('punch'); // Primer golpe
+    
+    // 🥊 SEGUNDO: Ejecutar segundo ataque después de un delay
+    setTimeout(() => {
+      triggerPlayer1Attack('kick'); // Segundo golpe (patada)
+    }, 1200); // Esperar 1.2 segundos para que termine el primer ataque
+    
     setFightTransition(true);
     
     // Crear efecto de sacudida en toda la pantalla
@@ -397,7 +408,7 @@ const Interface = () => {
       left: 0;
       width: 100vw;
       height: 100dvh;
-      background: radial-gradient(circle, rgba(252, 63, 49, 0.3) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(243, 34, 16, 0.3) 0%, transparent 70%);
       pointer-events: none;
       z-index: 9999;
       animation: fightTransition 0.8s ease-out;
@@ -438,6 +449,7 @@ const Interface = () => {
         <MainMenu 
           onStartClick={navigateToOpponentSelect}
           onFightersClick={navigateToCharacterSelect}
+          onStoreClick={navigateToShop}
           onBackClick={navigateBackToDance}
         />
       )}
@@ -458,6 +470,13 @@ const Interface = () => {
         />
       )}
 
+      {/* Mostrar pantalla de tienda cuando currentScreen es 'shop' */}
+      {currentScreen === 'shop' && (
+        <Shop 
+          onBackClick={navigateBackFromShop}
+        />
+      )}
+
       {/* Pantalla de baile - currentScreen 'dance' */}
       {currentScreen === 'dance' && (
         <>
@@ -475,16 +494,13 @@ const Interface = () => {
                 FIGHT CLUB
               </div>
               
-              {/* Subtítulo con la primera regla */}
-              <div className="fight-subtitle">
-                You do not talk about fight club
-              </div>
+
             </div>
           </Affix>
 
           {/* Botón para ir al menú principal - ABAJO CENTRO */}
           <Affix position={{ 
-            bottom: isMobile ? 30 : 40,
+            bottom: isMobile ? 50 : 70,
             left: "50%",
             transform: "translateX(-50%)"
           }}>
@@ -497,22 +513,23 @@ const Interface = () => {
               }}
               disabled={fightTransition}
               style={{
-                fontSize: isMobile ? "32px" : "42px",
+                fontSize: isMobile ? "36px" : "48px",
                 fontWeight: 700,
-                padding: isMobile ? "15px 40px" : "20px 60px",
-                minHeight: isMobile ? "80px" : "100px",
+                padding: isMobile ? "20px 50px" : "25px 70px",
+                minHeight: isMobile ? "100px" : "120px",
                 minWidth: isMobile ? "280px" : "350px",
                 maxWidth: isMobile ? "calc(100vw - 40px)" : "350px",
-                margin: isMobile ? "0 20px" : "0",
-                backgroundColor: fightTransition ? "rgba(252, 63, 49, 0.2)" : "transparent",
+                margin: "0",
+                width: "100%",
+                backgroundColor: fightTransition ? "rgba(243, 34, 16, 0.2)" : "transparent",
                 backgroundImage: `url(${mainButtonImg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
-                borderColor: "#fc3f31",
-                border: "4px solid #fc3f31",
+                borderColor: "#f32210",
+                border: "4px solid #f32210",
                 borderRadius: "15px",
-                color: "#fc3f31",
+                color: "#f32210",
                 textTransform: "uppercase",
                 letterSpacing: "3px",
                 fontFamily: "Anton, sans-serif",
@@ -526,14 +543,14 @@ const Interface = () => {
                   2px 2px 4px #000000
                 `,
                 boxShadow: fightTransition ? `
-                  0 0 40px #fc3f31,
-                  0 0 80px rgba(252, 63, 49, 0.8),
-                  0 0 120px rgba(252, 63, 49, 0.4),
-                  inset 0 0 40px rgba(252, 63, 49, 0.3)
+                  0 0 40px #f32210,
+                  0 0 80px rgba(243, 34, 16, 0.8),
+                  0 0 120px rgba(243, 34, 16, 0.4),
+                  inset 0 0 40px rgba(243, 34, 16, 0.3)
                 ` : `
-                  0 0 20px #fc3f31,
-                  0 0 40px rgba(252, 63, 49, 0.3),
-                  inset 0 0 20px rgba(252, 63, 49, 0.1)
+                  0 0 20px #f32210,
+                  0 0 40px rgba(243, 34, 16, 0.3),
+                  inset 0 0 20px rgba(243, 34, 16, 0.1)
                 `,
                 transition: "all 0.3s ease",
                 cursor: fightTransition ? "not-allowed" : "pointer",
@@ -543,7 +560,7 @@ const Interface = () => {
               onMouseEnter={(e) => {
                 if (!isMobile && !fightTransition) {
                   e.target.style.transform = "scale(1.05)";
-                  e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                  e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
                   e.target.style.animation = "impactShake 0.3s ease-out";
                 }
               }}
@@ -610,7 +627,7 @@ const Interface = () => {
               <div style={{
                 fontSize: isMobile ? '32px' : '72px',
                 fontWeight: 900,
-                color: '#fc3f31',
+                color: '#f32210',
                 fontFamily: 'Anton, sans-serif',
                 letterSpacing: isMobile ? '4px' : '8px',
                 textAlign: 'center',
@@ -627,8 +644,8 @@ const Interface = () => {
               {/* Coins Reward - Only show for Player 1 victory */}
               {!player1IsDead && (
                 <div style={{
-                  backgroundColor: 'rgba(252, 63, 49, 0.2)',
-                  border: '2px solid #fc3f31',
+                  backgroundColor: 'rgba(243, 34, 16, 0.2)',
+                  border: '2px solid #f32210',
                   borderRadius: '15px',
                   padding: isMobile ? '10px 20px' : '20px 40px',
                   marginBottom: isMobile ? '15px' : '40px',
@@ -636,8 +653,8 @@ const Interface = () => {
                   alignItems: 'center',
                   gap: isMobile ? '8px' : '15px',
                   boxShadow: `
-                    0 0 20px rgba(252, 63, 49, 0.4),
-                    inset 0 0 20px rgba(252, 63, 49, 0.1)
+                    0 0 20px rgba(243, 34, 16, 0.4),
+                    inset 0 0 20px rgba(243, 34, 16, 0.1)
                   `,
                   animation: 'neonPulse 2s ease-in-out infinite',
                   zIndex: 10,
@@ -697,13 +714,13 @@ const Interface = () => {
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
                     textTransform: 'uppercase',
-                    color: '#fc3f31',
+                    color: '#f32210',
                     backgroundColor: 'transparent',
                     backgroundImage: `url(${mainButtonImg})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    border: '3px solid #fc3f31',
+                    border: '3px solid #f32210',
                     borderRadius: '15px',
                     padding: isMobile ? '12px 24px' : '20px 40px',
                     minWidth: isMobile ? '110px' : '160px',
@@ -715,7 +732,7 @@ const Interface = () => {
                   onMouseEnter={(e) => {
                     if (!isMobile) {
                       e.target.style.transform = 'scale(1.05)';
-                      e.target.style.backgroundColor = 'rgba(252, 63, 49, 0.2)';
+                      e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.2)';
                       e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
                     }
                   }}
@@ -742,13 +759,13 @@ const Interface = () => {
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
                     textTransform: 'uppercase',
-                    color: '#fc3f31',
+                    color: '#f32210',
                     backgroundColor: 'transparent',
                     backgroundImage: `url(${mainButtonImg})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    border: '3px solid #fc3f31',
+                    border: '3px solid #f32210',
                     borderRadius: '15px',
                     padding: isMobile ? '12px 24px' : '20px 40px',
                     minWidth: isMobile ? '110px' : '160px',
@@ -760,7 +777,7 @@ const Interface = () => {
                   onMouseEnter={(e) => {
                     if (!isMobile) {
                       e.target.style.transform = 'scale(1.05)';
-                      e.target.style.backgroundColor = 'rgba(252, 63, 49, 0.2)';
+                      e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.2)';
                       e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
                     }
                   }}
@@ -792,10 +809,7 @@ const Interface = () => {
                     FIGHT CLUB
                   </div>
                   
-                  {/* Subtítulo con la primera regla */}
-                  <div className="fight-subtitle">
-                    You do not talk about fight club
-                  </div>
+
                 </div>
               </Affix>
 
@@ -827,17 +841,17 @@ const Interface = () => {
                       minHeight: isMobile ? "80px" : "100px",
                       minWidth: isMobile ? "280px" : "350px",
                       backgroundColor: "transparent",
-                      borderColor: "#fc3f31",
-                      border: "4px solid #fc3f31",
+                      borderColor: "#f32210",
+                      border: "4px solid #f32210",
                       borderRadius: "15px",
-                      color: "#fc3f31",
+                      color: "#f32210",
                       textTransform: "uppercase",
                       letterSpacing: "3px",
                       fontFamily: "Anton, sans-serif",
                       boxShadow: `
-                        0 0 20px #fc3f31,
-                        0 0 40px rgba(252, 63, 49, 0.3),
-                        inset 0 0 20px rgba(252, 63, 49, 0.1)
+                        0 0 20px #f32210,
+                        0 0 40px rgba(243, 34, 16, 0.3),
+                        inset 0 0 20px rgba(243, 34, 16, 0.1)
                       `,
                       transition: "all 0.3s ease",
                       cursor: "pointer"
@@ -845,7 +859,7 @@ const Interface = () => {
                     onMouseEnter={(e) => {
                       if (!isMobile) {
                         e.target.style.transform = "scale(1.05)";
-                        e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -873,17 +887,17 @@ const Interface = () => {
                       minHeight: isMobile ? "80px" : "100px",
                       minWidth: isMobile ? "280px" : "350px",
                       backgroundColor: "transparent",
-                      borderColor: "#fc3f31",
-                      border: "4px solid #fc3f31",
+                      borderColor: "#f32210",
+                      border: "4px solid #f32210",
                       borderRadius: "15px",
-                      color: "#fc3f31",
+                      color: "#f32210",
                       textTransform: "uppercase",
                       letterSpacing: "3px",
                       fontFamily: "Anton, sans-serif",
                       boxShadow: `
-                        0 0 20px #fc3f31,
-                        0 0 40px rgba(252, 63, 49, 0.3),
-                        inset 0 0 20px rgba(252, 63, 49, 0.1)
+                        0 0 20px #f32210,
+                        0 0 40px rgba(243, 34, 16, 0.3),
+                        inset 0 0 20px rgba(243, 34, 16, 0.1)
                       `,
                       transition: "all 0.3s ease",
                       cursor: "pointer"
@@ -891,7 +905,7 @@ const Interface = () => {
                     onMouseEnter={(e) => {
                       if (!isMobile) {
                         e.target.style.transform = "scale(1.05)";
-                        e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -948,29 +962,29 @@ const Interface = () => {
                     width: isMobile ? "80px" : "100px",
                     height: isMobile ? "80px" : "100px",
                     borderRadius: "50%",
-                    backgroundColor: isPlayingCombo ? "rgba(252, 63, 49, 0.4)" : "rgba(252, 63, 49, 0.2)",
-                    border: "3px solid #fc3f31",
+                    backgroundColor: isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)",
+                    border: "3px solid #f32210",
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
                     transition: "all 0.3s ease",
                     boxShadow: `
-                      0 0 15px #fc3f31,
-                      0 0 25px rgba(252, 63, 49, 0.3)
+                      0 0 15px #f32210,
+                      0 0 25px rgba(243, 34, 16, 0.3)
                     `,
                     animation: isPlayingCombo ? "pulse 1s ease-in-out infinite" : "none"
                   }}
                   onMouseEnter={(e) => {
                     if (!isMobile) {
                       e.target.style.transform = "scale(1.1)";
-                      e.target.style.backgroundColor = "rgba(252, 63, 49, 0.4)";
+                      e.target.style.backgroundColor = "rgba(243, 34, 16, 0.4)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isMobile) {
                       e.target.style.transform = "scale(1)";
-                      e.target.style.backgroundColor = isPlayingCombo ? "rgba(252, 63, 49, 0.4)" : "rgba(252, 63, 49, 0.2)";
+                      e.target.style.backgroundColor = isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)";
                     }
                   }}
                 >
@@ -996,14 +1010,14 @@ const Interface = () => {
                 }}>
                   <div style={{
                     backgroundColor: "rgba(0, 0, 0, 0.8)",
-                    border: "2px solid #fc3f31",
+                    border: "2px solid #f32210",
                     borderRadius: "10px",
                     padding: "8px 12px",
-                    color: "#fc3f31",
+                    color: "#f32210",
                     fontSize: "12px",
                     fontFamily: "Anton, sans-serif",
                     textAlign: "center",
-                    boxShadow: "0 0 10px rgba(252, 63, 49, 0.5)"
+                    boxShadow: "0 0 10px rgba(243, 34, 16, 0.5)"
                   }}>
                     <div>{danceCombinations[currentComboIndex].name}</div>
                     <div style={{ fontSize: "10px", opacity: 0.8 }}>
@@ -1086,7 +1100,7 @@ const Interface = () => {
                             onTouchStart={(e) => {
                               if (canUseAttack && isMobile) {
                                 e.target.style.transform = "scale(0.95)";
-                                e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                                e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
                                 e.target.style.animation = "impactShake 0.3s ease-out";
                               }
                             }}
@@ -1100,7 +1114,7 @@ const Interface = () => {
                             onMouseEnter={(e) => {
                               if (canUseAttack && !isMobile) {
                                 e.target.style.transform = "scale(1.05)";
-                                e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                                e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
                                 e.target.style.animation = "impactShake 0.3s ease-out";
                               }
                             }}
@@ -1162,7 +1176,7 @@ const Interface = () => {
                     onTouchStart={(e) => {
                       if (isBlockAvailable() && isMobile) {
                         e.target.style.transform = "scale(0.95)";
-                        e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
                         e.target.style.animation = "impactShake 0.3s ease-out";
                       }
                     }}
@@ -1176,7 +1190,7 @@ const Interface = () => {
                     onMouseEnter={(e) => {
                       if (isBlockAvailable() && !isMobile) {
                         e.target.style.transform = "scale(1.05)";
-                        e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
                         e.target.style.animation = "impactShake 0.3s ease-out";
                       }
                     }}
@@ -1231,7 +1245,7 @@ const Interface = () => {
                       style={{ 
                         padding: isMobile ? "4px 8px" : "8px 12px",
                         backgroundColor: "transparent",
-                        border: `3px solid #fc3f31`,
+                        border: `3px solid #f32210`,
                         borderRadius: isMobile ? "10px" : "15px",
                         transition: "all 0.2s ease",
                         minWidth: isMobile ? "60px" : "120px",
@@ -1239,15 +1253,15 @@ const Interface = () => {
                         cursor: "pointer",
                         overflow: "hidden",
                         boxShadow: `
-                          0 0 10px #fc3f31,
-                          0 0 20px rgba(252, 63, 49, 0.4),
-                          inset 0 0 10px rgba(252, 63, 49, 0.1)
+                          0 0 10px #f32210,
+                          0 0 20px rgba(243, 34, 16, 0.4),
+                          inset 0 0 10px rgba(243, 34, 16, 0.1)
                         `,
                         fontSize: isMobile ? "8px" : "12px",
                         fontWeight: 700,
-                        color: "#fc3f31",
+                        color: "#f32210",
                         textTransform: "uppercase",
-                        textShadow: "0 0 5px #fc3f31"
+                        textShadow: "0 0 5px #f32210"
                       }}
                     >
                       {isMobile ? "REVIVE" : "REVIVE LOSER"}

@@ -63,7 +63,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         <Text style={{
           fontSize: isMobile ? '24px' : '32px',
           fontWeight: 700,
-          color: '#fc3f31',
+          color: '#f32210',
           fontFamily: 'Anton, sans-serif',
           letterSpacing: '2px',
           textAlign: 'center',
@@ -91,10 +91,10 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             fontWeight: 700,
             padding: isMobile ? "12px 20px" : "15px 30px",
             backgroundColor: "transparent",
-            borderColor: "#fc3f31",
-            border: "3px solid #fc3f31",
+            borderColor: "#f32210",
+            border: "3px solid #f32210",
             borderRadius: "10px",
-            color: "#fc3f31",
+            color: "#f32210",
             textTransform: "uppercase",
             letterSpacing: "2px",
             fontFamily: "Anton, sans-serif",
@@ -121,9 +121,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         marginBottom: '20px',
         animation: "fadeInSpray 0.6s ease-out"
       }}>
-        <Text className="fight-title">
-          FIGHT CLUB
-        </Text>
+
         <Text className="fight-subtitle">
           SELECT CHARACTER
         </Text>
@@ -159,7 +157,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               const bgElement = e.target.querySelector('.left-arrow-bg');
               if (bgElement) {
                 bgElement.style.transform = "scaleX(-1) scale(1.1)";
-                bgElement.style.filter = "drop-shadow(0 0 10px #fc3f31)";
+                bgElement.style.filter = "drop-shadow(0 0 10px #f32210)";
               }
             }
           }}
@@ -210,15 +208,15 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               width: '100%',
               height: '80%',
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              border: '3px solid #fc3f31',
+              border: '3px solid #f32210',
               borderRadius: '20px',
               marginBottom: '15px',
               boxShadow: `
-                0 0 30px #fc3f31,
-                0 0 60px rgba(252, 63, 49, 0.4),
-                0 0 90px rgba(252, 63, 49, 0.2),
-                inset 0 0 30px rgba(252, 63, 49, 0.1),
-                inset 0 0 60px rgba(252, 63, 49, 0.05)
+                0 0 30px #f32210,
+                0 0 60px rgba(243, 34, 16, 0.4),
+                0 0 90px rgba(243, 34, 16, 0.2),
+                inset 0 0 30px rgba(243, 34, 16, 0.1),
+                inset 0 0 60px rgba(243, 34, 16, 0.05)
               `,
               animation: "characterSwitch 0.8s ease-out, neonPulse 3s ease-in-out infinite",
               position: 'relative',
@@ -238,7 +236,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               transform: 'translateX(-50%)',
               width: '80%',
               height: '20px',
-              background: 'radial-gradient(ellipse, rgba(252, 63, 49, 0.4) 0%, transparent 70%)',
+              background: 'radial-gradient(ellipse, rgba(243, 34, 16, 0.4) 0%, transparent 70%)',
               borderRadius: '50%',
               zIndex: 1,
               pointerEvents: 'none'
@@ -298,7 +296,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
           onMouseEnter={(e) => {
             if (!isMobile) {
               e.target.style.transform = "scale(1.1)";
-              e.target.style.filter = "drop-shadow(0 0 10px #fc3f31)";
+              e.target.style.filter = "drop-shadow(0 0 10px #f32210)";
             }
           }}
           onMouseLeave={(e) => {
@@ -330,10 +328,10 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             fontWeight: 700,
             padding: isMobile ? "12px 20px" : "15px 30px",
             backgroundColor: "transparent",
-            borderColor: "#fc3f31",
-            border: "3px solid #fc3f31",
+            borderColor: "#f32210",
+            border: "3px solid #f32210",
             borderRadius: "10px",
-            color: "#fc3f31",
+            color: "#f32210",
             textTransform: "uppercase",
             letterSpacing: "2px",
             fontFamily: "Anton, sans-serif",
@@ -366,12 +364,12 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               0 0 20px #000000,
               2px 2px 4px #000000
             `,
-            animation: "selectButtonGlow 2s ease-in-out infinite"
+            animation: "none"
           }}
           onMouseEnter={(e) => {
             if (!isMobile) {
               e.target.style.transform = "scale(1.05)";
-              e.target.style.backgroundColor = "rgba(252, 63, 49, 0.1)";
+              e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
             }
           }}
           onMouseLeave={(e) => {

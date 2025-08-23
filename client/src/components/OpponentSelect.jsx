@@ -34,7 +34,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
 
   const getOpponentCardStyle = (opponent) => ({
     backgroundColor: 'transparent',
-    border: '3px solid #fc3f31',
+    border: '3px solid #f32210',
     borderRadius: '15px',
     padding: '0px',
     height: isMobile ? '140px' : '180px',
@@ -46,7 +46,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
     opacity: opponent.isLocked ? 0.6 : 1,
     transition: 'all 0.3s ease',
     boxShadow: `
-      0 0 10px rgba(252, 63, 49, 0.3)
+      0 0 10px rgba(243, 34, 16, 0.3)
     `,
     overflow: 'hidden'
   });
@@ -126,10 +126,10 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`,
                 marginBottom: isMobile ? "20px" : "30px",
                 boxShadow: `
-                  0 0 15px #fc3f31,
-                  0 0 30px rgba(252, 63, 49, 0.4),
-                  0 0 45px rgba(252, 63, 49, 0.2),
-                  inset 0 0 15px rgba(252, 63, 49, 0.1)
+                  0 0 15px #f32210,
+                  0 0 30px rgba(243, 34, 16, 0.4),
+                  0 0 45px rgba(243, 34, 16, 0.2),
+                  inset 0 0 15px rgba(243, 34, 16, 0.1)
                 `
               }}
               onClick={() => {
@@ -140,10 +140,10 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 if (!isMobile && !opponent.isLocked) {
                   e.currentTarget.style.transform = "scale(1.02)";
                   e.currentTarget.style.boxShadow = `
-                    0 0 25px #fc3f31,
-                    0 0 50px rgba(252, 63, 49, 0.6),
-                    0 0 75px rgba(252, 63, 49, 0.3),
-                    inset 0 0 25px rgba(252, 63, 49, 0.2)
+                    0 0 25px #f32210,
+                    0 0 50px rgba(243, 34, 16, 0.6),
+                    0 0 75px rgba(243, 34, 16, 0.3),
+                    inset 0 0 25px rgba(243, 34, 16, 0.2)
                   `;
                 }
               }}
@@ -151,10 +151,10 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 if (!isMobile && !opponent.isLocked) {
                   e.currentTarget.style.transform = "scale(1)";
                   e.currentTarget.style.boxShadow = `
-                    0 0 15px #fc3f31,
-                    0 0 30px rgba(252, 63, 49, 0.4),
-                    0 0 45px rgba(252, 63, 49, 0.2),
-                    inset 0 0 15px rgba(252, 63, 49, 0.1)
+                    0 0 15px #f32210,
+                    0 0 30px rgba(243, 34, 16, 0.4),
+                    0 0 45px rgba(243, 34, 16, 0.2),
+                    inset 0 0 15px rgba(243, 34, 16, 0.1)
                   `;
                 }
               }}
@@ -268,7 +268,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                     letterSpacing: '1px',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)'
                   }}>
-                    200 coins
+                    Arcade Mode
                   </Text>
                 </Group>
               </Box>
@@ -303,18 +303,18 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundColor: "transparent",
-            borderColor: "#fc3f31",
-            border: "4px solid #fc3f31",
+            borderColor: "#f32210",
+            border: "4px solid #f32210",
             borderRadius: "15px",
-            color: "#fc3f31",
+            color: "#f32210",
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
             textTransform: "uppercase",
             letterSpacing: "3px",
             fontFamily: "Anton, sans-serif",
             boxShadow: `
-              0 0 20px #fc3f31,
-              0 0 40px rgba(252, 63, 49, 0.3),
-              inset 0 0 20px rgba(252, 63, 49, 0.1)
+              0 0 20px #f32210,
+              0 0 40px rgba(243, 34, 16, 0.3),
+              inset 0 0 20px rgba(243, 34, 16, 0.1)
             `,
             transition: "all 0.3s ease",
             cursor: "pointer"
@@ -323,9 +323,9 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
             if (!isMobile) {
               e.target.style.transform = "scale(1.05)";
               e.target.style.boxShadow = `
-                0 0 30px #fc3f31,
-                0 0 60px rgba(252, 63, 49, 0.5),
-                inset 0 0 30px rgba(252, 63, 49, 0.2)
+                0 0 30px #f32210,
+                0 0 60px rgba(243, 34, 16, 0.5),
+                inset 0 0 30px rgba(243, 34, 16, 0.2)
               `;
             }
           }}
@@ -333,9 +333,9 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
             if (!isMobile) {
               e.target.style.transform = "scale(1)";
               e.target.style.boxShadow = `
-                0 0 20px #fc3f31,
-                0 0 40px rgba(252, 63, 49, 0.3),
-                inset 0 0 20px rgba(252, 63, 49, 0.1)
+                0 0 20px #f32210,
+                0 0 40px rgba(243, 34, 16, 0.3),
+                inset 0 0 20px rgba(243, 34, 16, 0.1)
               `;
             }
           }}

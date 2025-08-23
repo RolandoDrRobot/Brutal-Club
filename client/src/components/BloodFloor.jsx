@@ -5,9 +5,9 @@ import * as THREE from 'three';
 const BloodFloor = () => {
   const meshRef = useRef();
   
-  // Create blood puddles on the floor with reduced count for better performance
+  // Create blood puddles on the floor - MUCH MORE BLOOD!
   const bloodPuddles = useMemo(() => {
-    const puddleCount = 15; // Reduced from 25
+    const puddleCount = 45; // TRIPLED! Much more blood
     const positions = new Float32Array(puddleCount * 3);
     const scales = new Float32Array(puddleCount);
     const opacities = new Float32Array(puddleCount);
@@ -18,11 +18,11 @@ const BloodFloor = () => {
       positions[i * 3 + 1] = -0.99; // y - just above the floor
       positions[i * 3 + 2] = (Math.random() - 0.5) * 14; // z - wider area
       
-      // Smaller sizes
-      scales[i] = Math.random() * 0.6 + 0.2; // 0.2 to 0.8 - smaller
+      // Varied sizes - bigger puddles
+      scales[i] = Math.random() * 0.9 + 0.3; // 0.3 to 1.2 - BIGGER puddles
       
-      // Random opacities
-      opacities[i] = Math.random() * 0.5 + 0.4; // 0.4 to 0.9 - more visible
+      // Higher opacities - more visible blood
+      opacities[i] = Math.random() * 0.4 + 0.6; // 0.6 to 1.0 - MORE VISIBLE
     }
     
     return { positions, scales, opacities, puddleCount };
@@ -66,8 +66,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-      {/* Additional smaller stains - REDUCED QUANTITY */}
-      {Array.from({ length: 15 }).map((_, index) => (
+      {/* Additional smaller stains - INCREASED QUANTITY */}
+      {Array.from({ length: 60 }).map((_, index) => (
         <mesh
           key={`splatter-${index}`}
           position={[
@@ -88,8 +88,8 @@ const BloodFloor = () => {
         </mesh>
       ))}
       
-      {/* Salpicaduras muy pequeñas adicionales */}
-      {Array.from({ length: 40 }).map((_, index) => (
+      {/* Salpicaduras muy pequeñas adicionales - MÁS SALPICADURAS */}
+      {Array.from({ length: 120 }).map((_, index) => (
         <mesh
           key={`micro-splatter-${index}`}
           position={[
@@ -105,6 +105,50 @@ const BloodFloor = () => {
             color="#1A0000" // Rojo sangre muy oscuro
             transparent={true}
             opacity={Math.random() * 0.6 + 0.2}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      ))}
+      
+      {/* NUEVOS: Charcos GRANDES de sangre más dramáticos */}
+      {Array.from({ length: 12 }).map((_, index) => (
+        <mesh
+          key={`big-puddle-${index}`}
+          position={[
+            (Math.random() - 0.5) * 12,
+            -0.995,
+            (Math.random() - 0.5) * 12
+          ]}
+          rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
+          scale={[Math.random() * 1.5 + 1.2, Math.random() * 1.5 + 1.2, 1]} // MUY GRANDES
+        >
+          <circleGeometry args={[1.5, 20]} />
+          <meshBasicMaterial
+            color="#380000" // Sangre coagulada muy oscura
+            transparent={true}
+            opacity={Math.random() * 0.3 + 0.7} // Muy visible
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      ))}
+      
+      {/* NUEVOS: Rastros de sangre (como arrastrado) */}
+      {Array.from({ length: 25 }).map((_, index) => (
+        <mesh
+          key={`blood-trail-${index}`}
+          position={[
+            (Math.random() - 0.5) * 14,
+            -0.99,
+            (Math.random() - 0.5) * 14
+          ]}
+          rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}
+          scale={[Math.random() * 0.8 + 0.6, Math.random() * 0.3 + 0.1, 1]} // Alargados
+        >
+          <planeGeometry args={[2, 0.5]} />
+          <meshBasicMaterial
+            color="#2A0000" // Sangre seca
+            transparent={true}
+            opacity={Math.random() * 0.4 + 0.4}
             side={THREE.DoubleSide}
           />
         </mesh>
