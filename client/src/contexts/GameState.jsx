@@ -164,11 +164,15 @@ export const GameStateProvider = ({ children }) => {
     });
   }, []);
 
-  // Function to register a defeat
+  // Function to register a defeat - ARCADE MODE: Reset progress on loss
   const registerDefeat = useCallback(() => {
     setGameState(prev => ({
       ...prev,
-      totalFights: prev.totalFights + 1
+      totalFights: prev.totalFights + 1,
+      // ARCADE MODE RESET: Lose all progress
+      defeatedOpponents: [], // Reset all defeated opponents
+      unlockedOpponents: ['pete_1'], // Reset to only first opponent
+      coins: Math.floor(prev.coins * 0.5) // Lose half of coins as penalty
     }));
   }, []);
 
