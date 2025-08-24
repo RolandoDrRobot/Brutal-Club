@@ -216,17 +216,37 @@ const Shop = ({ onBackClick }) => {
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
         marginBottom: "20px",
-        paddingTop: "10px",
+        paddingTop: "20px",
         flexWrap: 'wrap',
         gap: '10px',
         width: '100%'
       }}>
-        <Box style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          flex: '1 1 0%'
-        }}>
+        <Box 
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            flex: '1 1 0%',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onClick={() => {
+            playButtonSound();
+            onBackClick();
+          }}
+          onMouseEnter={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = "scale(1.02)";
+              e.target.style.opacity = "0.8";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = "scale(1)";
+              e.target.style.opacity = "1";
+            }
+          }}
+        >
           <Text style={{
             fontSize: '24px',
             fontWeight: 700,
@@ -292,7 +312,10 @@ const Shop = ({ onBackClick }) => {
             width: '100%',
             maxWidth: '800px',
             margin: '0 auto',
-            paddingBottom: isMobile ? "20px" : "30px"
+            paddingBottom: isMobile ? "20px" : "30px",
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%'
           }}
         >
           {shopCharacters.map((character, index) => (
@@ -406,7 +429,7 @@ const Shop = ({ onBackClick }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: isMobile ? '20px' : '30px',
+        paddingTop: '20px',
         paddingBottom: isMobile ? '20px' : '30px'
       }}>
         <Button

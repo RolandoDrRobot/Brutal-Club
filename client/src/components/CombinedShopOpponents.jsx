@@ -307,18 +307,38 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
         marginBottom: isMobile ? "20px" : "25px",
-        paddingTop: isMobile ? "10px" : "15px",
+        paddingTop: "20px",
         flexWrap: 'wrap',
         gap: isMobile ? '10px' : '15px',
         width: '100%'
       }}>
         {/* Left side: Coins and description text */}
-        <Box style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          flex: 1
-        }}>
+        <Box 
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            flex: 1,
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onClick={() => {
+            playButtonSound();
+            onBackClick();
+          }}
+          onMouseEnter={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = "scale(1.02)";
+              e.target.style.opacity = "0.8";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = "scale(1)";
+              e.target.style.opacity = "1";
+            }
+          }}
+        >
           <Text style={{
             fontSize: isMobile ? '24px' : '28px',
             fontWeight: 700,
@@ -397,7 +417,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         overflowY: "auto",
         overflowX: "hidden",
         paddingRight: isMobile ? "5px" : "10px",
-        paddingTop: isMobile ? "20px" : "30px", // Reduced top padding since content is now centered
+        paddingTop: "20px",
         paddingBottom: isMobile ? "20px" : "30px", // Added bottom padding for balance
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         minHeight: 0,

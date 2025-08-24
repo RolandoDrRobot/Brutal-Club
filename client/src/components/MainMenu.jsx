@@ -78,7 +78,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
       {/* Title at the top */}
       <div style={{ 
         textAlign: "center",
-        paddingTop: isMobile ? "40px" : "60px",
+        paddingTop: "20px",
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.5s ease-out 0.2s both"
       }}>
         <div className="fight-title">

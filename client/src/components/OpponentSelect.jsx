@@ -280,7 +280,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
       {/* Bottom Buttons */}
       <Box style={{
         flexShrink: 0,
-        paddingTop: isMobile ? "15px" : "20px",
+        paddingTop: "20px",
         textAlign: "center",
         animation: "fadeInSpray 0.5s ease-out 0.4s both"
       }}>
