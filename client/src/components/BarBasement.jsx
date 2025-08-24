@@ -15,6 +15,10 @@ const BarBasement = () => {
 
     // Blood stains
     bloodStain: new THREE.CircleGeometry(0.3, 32),
+    // Boxes for basement atmosphere
+    box: new THREE.BoxGeometry(1.2, 1.2, 1.2),
+    smallBox: new THREE.BoxGeometry(0.8, 0.8, 0.8),
+    crate: new THREE.BoxGeometry(1.5, 1.0, 1.0),
   }), []);
 
   const materials = useMemo(() => ({
@@ -42,6 +46,22 @@ const BarBasement = () => {
       metalness: 0.0,
       transparent: true,
       opacity: 0.9,
+    }),
+    // Box materials
+    box: new THREE.MeshStandardMaterial({
+      color: '#8B4513', // Brown wood color
+      roughness: 0.8,
+      metalness: 0.1
+    }),
+    smallBox: new THREE.MeshStandardMaterial({
+      color: '#654321', // Darker brown
+      roughness: 0.9,
+      metalness: 0.05
+    }),
+    crate: new THREE.MeshStandardMaterial({
+      color: '#A0522D', // Sienna wood color
+      roughness: 0.7,
+      metalness: 0.2
     })
   }), []);
 
@@ -82,6 +102,22 @@ const BarBasement = () => {
       { pos: [-0.4, -2.99, 1.6], scale: [0.7, 0.7, 0.7] }, // Drop 8
       { pos: [0.2, -2.99, -1.0], scale: [0.6, 0.6, 0.6] }, // Drop 9
       { pos: [-1.8, -2.99, -0.2], scale: [0.8, 0.8, 0.8] }, // Drop 10
+    ],
+    
+    // Boxes scattered around the basement
+    boxes: [
+      { pos: [-8, -1.9, -8], rot: [0, Math.PI/4, 0], type: 'box' },
+      { pos: [8, -1.9, -8], rot: [0, -Math.PI/6, 0], type: 'smallBox' },
+      { pos: [-8, -1.9, 8], rot: [0, Math.PI/3, 0], type: 'crate' },
+      { pos: [8, -1.9, 8], rot: [0, -Math.PI/4, 0], type: 'box' },
+      { pos: [-6, -1.9, -10], rot: [0, Math.PI/2, 0], type: 'smallBox' },
+      { pos: [6, -1.9, -10], rot: [0, -Math.PI/2, 0], type: 'crate' },
+      { pos: [-10, -1.9, -6], rot: [0, 0, 0], type: 'box' },
+      { pos: [10, -1.9, -6], rot: [0, Math.PI, 0], type: 'smallBox' },
+      { pos: [-6, -1.9, 10], rot: [0, Math.PI/2, 0], type: 'crate' },
+      { pos: [6, -1.9, 10], rot: [0, -Math.PI/2, 0], type: 'box' },
+      { pos: [-10, -1.9, 6], rot: [0, 0, 0], type: 'smallBox' },
+      { pos: [10, -1.9, 6], rot: [0, Math.PI, 0], type: 'crate' },
     ],
     
 
@@ -139,6 +175,19 @@ const BarBasement = () => {
           position={stain.pos}
           scale={stain.scale}
           rotation={[-Math.PI / 2, 0, 0]}
+          receiveShadow
+        />
+      ))}
+
+      {/* Boxes scattered around the basement */}
+      {elementPositions.boxes.map((box, index) => (
+        <mesh
+          key={`box-${index}`}
+          geometry={geometries[box.type]}
+          material={materials[box.type]}
+          position={box.pos}
+          rotation={box.rot}
+          castShadow
           receiveShadow
         />
       ))}
