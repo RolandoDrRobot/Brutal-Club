@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Box, Text, Stack } from '@mantine/core';
+import { Button, Box, Text, Stack, Grid } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
@@ -18,11 +18,11 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
   const { playButtonSound } = useButtonSound();
 
   const getMenuButtonStyle = (backgroundImage) => ({
-    fontSize: isMobile ? "36px" : "45px",
+    fontSize: isMobile ? "24px" : "32px",
     fontWeight: 700,
-    padding: isMobile ? "18px 40px" : "20px 60px",
-    minHeight: isMobile ? "100px" : "130px",
-    minWidth: isMobile ? "280px" : "350px",
+    padding: "0px",
+    minHeight: isMobile ? "80px" : "100px",
+    minWidth: isMobile ? "140px" : "180px",
     backgroundColor: "transparent",
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: "cover",
@@ -33,11 +33,11 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     borderRadius: "15px",
     color: "#f32210",
     textTransform: "uppercase",
-    letterSpacing: "3px",
+    letterSpacing: "2px",
     fontFamily: "Anton, sans-serif",
-    textAlign: "left",
+    textAlign: "center",
     display: "flex",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     textShadow: `
       0 0 10px #000000,
@@ -47,7 +47,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     boxShadow: "none",
     transition: "all 0.3s ease",
     cursor: "pointer",
-    marginBottom: isMobile ? "15px" : "20px",
     animation: "none"
   });
 
@@ -69,19 +68,33 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out, backgroundImpact 0.8s ease-out"
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out, backgroundImpact 0.8s ease-out",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        minHeight: "100vh"
       }}
     >
       {/* Main title */}
-      <Stack spacing={isMobile ? "xl" : "xxl"} align="center">
+      <Stack spacing={isMobile ? "xl" : "xxl"} align="center" style={{ flex: 1, justifyContent: "center" }}>
+        {/* Title content can go here */}
+      </Stack>
 
-
-        {/* Menu buttons */}
-        <Stack 
-          spacing={isMobile ? "lg" : "xl"} 
-          align="center"
+      {/* Menu buttons in 2x2 grid at bottom */}
+      <Box
+        style={{
+          padding: isMobile ? "20px" : "40px",
+          animation: "fadeInSpray 0.7s ease-out 0.2s both"
+        }}
+      >
+        <Box
           style={{
-            animation: "fadeInSpray 0.7s ease-out 0.2s both"
+            maxWidth: isMobile ? "320px" : "500px",
+            width: "100%",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: isMobile ? "16px" : "24px"
           }}
         >
           <Button
@@ -139,8 +152,8 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
           >
             BACK
           </Button>
-        </Stack>
-      </Stack>
+        </Box>
+      </Box>
     </Box>
   );
 };
