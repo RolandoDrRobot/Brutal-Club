@@ -18,24 +18,22 @@ export const CameraControls = () => {
     }
   }, [camera]);
 
-  // Cámara cinematográfica de pelea para capturar luchadores de perfil - Optimized with frame skipping
+  // Cámara cinematográfica de pelea para capturar luchadores de perfil - Smooth movement
   useFrame((state, delta) => {
     if (!isCombatMode && orbitControlsRef.current) {
-      // Skip frames for better performance (run at ~30 FPS instead of 60)
-      if (Math.floor(state.clock.getElapsedTime() * 60) % 2 !== 0) return;
-      
+      // Smooth continuous movement without frame skipping for fluid motion
       timeRef.current += delta;
       
-              // CÁMARA ORBITAL MUY CERCA DE LOS MODELOS
-        const orbitSpeed = 0.3; // Velocidad del giro orbital
-        const orbitAngle = timeRef.current * orbitSpeed; // Ángulo que incrementa continuamente
-        const baseDistance = 3.0; // Distancia alejada para mejor vista general
-        const baseHeight = 1.5; // Altura elevada para ver mejor los peleadores
+      // CÁMARA ORBITAL MUY CERCA DE LOS MODELOS - Smooth motion parameters
+      const orbitSpeed = 0.2; // Slower, more smooth orbital speed
+      const orbitAngle = timeRef.current * orbitSpeed; // Ángulo que incrementa continuamente
+      const baseDistance = 3.0; // Distancia alejada para mejor vista general
+      const baseHeight = 1.9; // Altura elevada para ver mejor los peleadores (subida desde 1.5)
 
-        // Variaciones sutiles para movimiento más natural
-        const heightVariation = Math.sin(timeRef.current * 0.4) * 0.15; // Ligera variación de altura
-        const distanceVariation = Math.cos(timeRef.current * 0.6) * 0.2; // Ligera variación de distancia
-        const heightOffset = Math.cos(orbitAngle * 1.3) * 0.1; // Altura que varía con el orbit
+      // Variaciones sutiles para movimiento más natural y fluido
+      const heightVariation = Math.sin(timeRef.current * 0.3) * 0.1; // Smoother height variation
+      const distanceVariation = Math.cos(timeRef.current * 0.4) * 0.15; // Smoother distance variation
+      const heightOffset = Math.cos(orbitAngle * 1.1) * 0.08; // Smoother height offset
       
               // POSICIÓN ORBITAL ALREDEDOR DE LOS MODELOS
         const finalDistance = baseDistance + distanceVariation;

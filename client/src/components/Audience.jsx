@@ -8,8 +8,34 @@ function AudienceMember({ position, rotation, modelPath = "./models/pete.glb", i
   const { scene, animations } = useGLTF(modelPath);
   const [currentAnimationIndex, setCurrentAnimationIndex] = useState(initialAnimationIndex);
   
-  // Clone the scene to create independent instances
-  const clonedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  // Clone the scene to create independent instances and apply natural materials
+  const clonedScene = useMemo(() => {
+    const cloned = SkeletonUtils.clone(scene);
+    
+    // Apply natural, non-shiny materials to all meshes
+    cloned.traverse((child) => {
+      if (child.isMesh && child.material) {
+        // If it's an array of materials
+        if (Array.isArray(child.material)) {
+          child.material = child.material.map((mat) => {
+            const newMaterial = mat.clone();
+            newMaterial.roughness = 0.9; // Very rough (non-shiny)
+            newMaterial.metalness = 0.05; // Minimal metallic properties
+            return newMaterial;
+          });
+        } else {
+          // Single material
+          const newMaterial = child.material.clone();
+          newMaterial.roughness = 0.9; // Very rough (non-shiny)
+          newMaterial.metalness = 0.05; // Minimal metallic properties
+          child.material = newMaterial;
+        }
+      }
+    });
+    
+    return cloned;
+  }, [scene]);
+  
   const { actions, names } = useAnimations(animations, group);
 
   // Find and play the "crowd" animation in loop

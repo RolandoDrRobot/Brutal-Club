@@ -268,7 +268,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                     letterSpacing: '1px',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)'
                   }}>
-                    Arcade Mode - {coins} Coins
+                    Arcade Mode
                   </Text>
                 </Group>
               </Box>

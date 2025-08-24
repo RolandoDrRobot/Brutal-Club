@@ -123,7 +123,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             onMouseEnter={(e) => handleButtonHover(e, true)}
             onMouseLeave={(e) => handleButtonHover(e, false)}
           >
-            STORE
+            RECRUIT
           </Button>
 
           <Button

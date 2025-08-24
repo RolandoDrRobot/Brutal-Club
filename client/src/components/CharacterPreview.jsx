@@ -14,6 +14,8 @@ function CharacterModel({ characterName, ...props }) {
     const modelMap = {
       'PETE': './models/pete.glb',
       'TYLER': './models/Tyler.glb',
+      'TYPER': './models/Tyler.glb',    // ✅ First arcade opponent (Tyler model)
+      'TAYLER': './models/Tyler.glb',   // ✅ Final arcade opponent (Tyler model)
       'VINCE': './models/Vince.glb',
       'BOB': './models/Bob.glb',
       'CHUCK': './models/Chuck.glb',
@@ -28,9 +30,30 @@ function CharacterModel({ characterName, ...props }) {
   const modelPath = getModelPath(characterName);
   const { scene, animations } = useGLTF(modelPath);
   
-  // Clone the scene to create independent instances
+  // Clone the scene to create independent instances and apply natural materials
   const clonedScene = useMemo(() => {
     const cloned = SkeletonUtils.clone(scene);
+    
+    // Apply natural, non-shiny materials to all meshes
+    cloned.traverse((child) => {
+      if (child.isMesh && child.material) {
+        // If it's an array of materials
+        if (Array.isArray(child.material)) {
+          child.material = child.material.map((mat) => {
+            const newMaterial = mat.clone();
+            newMaterial.roughness = 0.9; // Very rough (non-shiny)
+            newMaterial.metalness = 0.05; // Minimal metallic properties
+            return newMaterial;
+          });
+        } else {
+          // Single material
+          const newMaterial = child.material.clone();
+          newMaterial.roughness = 0.9; // Very rough (non-shiny)
+          newMaterial.metalness = 0.05; // Minimal metallic properties
+          child.material = newMaterial;
+        }
+      }
+    });
     
     // Calculate bounding box for precise centering
     const box = new THREE.Box3().setFromObject(cloned);

@@ -235,7 +235,7 @@ const Shop = ({ onBackClick }) => {
             letterSpacing: '1px',
             whiteSpace: 'nowrap'
           }}>
-            {gameState?.coins || 0} COINS
+            Recruite Fighters
           </Text>
           <Text style={{
             fontSize: '16px',
@@ -246,7 +246,7 @@ const Shop = ({ onBackClick }) => {
             marginTop: '4px',
             lineHeight: 1.2
           }}>
-            Defeat opponents to earn coins, then unlock new fighters in the store
+            Unlock fighters to recruit once you defeat them
           </Text>
         </Box>
         <Box style={{

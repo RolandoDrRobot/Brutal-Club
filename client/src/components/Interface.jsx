@@ -586,7 +586,7 @@ const Interface = () => {
               }}
             >
               <span className="fight-button-text">
-                {fightTransition ? "ENTERING..." : "ENTER FIGHT CLUB"}
+                PRESS START
               </span>
             </Button>
           </Affix>

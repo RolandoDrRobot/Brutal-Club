@@ -94,22 +94,22 @@
 
 @keyframes backgroundImpact {
   0% {
-    background-color: #1a1a1a;
+    background-color: transparent;
   }
   5% {
-    background-color: #2a1a1a;
+    background-color: transparent;
   }
   15% {
-    background-color: #1a1a1a;
+    background-color: transparent;
   }
   25% {
-    background-color: #2a1a1a;
+    background-color: transparent;
   }
   35% {
-    background-color: #1a1a1a;
+    background-color: transparent;
   }
   100% {
-    background-color: #1a1a1a;
+    background-color: transparent;
   }
 }
 
@@ -387,13 +387,10 @@
   }
 }
 
-/* Common screen background styles */
+/* Common screen background styles - OPTIMIZED: Removed heavy background image */
 .fight-screen-background {
-  background: #1a1a1a;
-  background-image: url('../assets/background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  /* ❌ REMOVED: background-image: url('../assets/background.png'); - 384KB saved */
+  /* ❌ REMOVED: background gradient - user requested plain background */
   background-attachment: fixed;
 }
 
@@ -413,7 +410,7 @@
 
 /* Common title styles */
 .fight-title {
-  font-size: 66px;
+  font-size: 55px;
   font-weight: 900;
   color: #f32210;
   font-family: 'Anton', sans-serif;

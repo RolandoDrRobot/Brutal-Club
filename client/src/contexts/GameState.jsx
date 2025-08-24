@@ -7,51 +7,27 @@ const GAME_CONFIG = {
   COINS_PER_WIN: 1,
   OPPONENTS: [
     {
-      id: 'pete_1',
-      name: 'PETE',
-      model: 'pete',
-      description: 'Construction worker with heavy fists',
+      id: 'tyler_1',
+      name: 'TYPER',
+      model: 'Tyler',
+      description: 'Soap maker with deadly skills',
       unlockRequirement: null, // Available from the start
       coinReward: 1
     },
     {
-      id: 'tyler_1',
-      name: 'TYLER',
-      model: 'Tyler',
-      description: 'Soap maker with deadly skills',
-      unlockRequirement: 'pete_1', // Unlocked by defeating Pete 1
-      coinReward: 1
-    },
-    {
-      id: 'pete_2',
+      id: 'pete_1',
       name: 'PETE',
       model: 'pete',
-      description: 'Construction worker returns stronger',
-      unlockRequirement: 'tyler_1', // Unlocked by defeating Tyler 1
+      description: 'Construction worker with heavy fists',
+      unlockRequirement: 'tyler_1', // Unlocked by defeating Typer
       coinReward: 1
     },
     {
       id: 'tyler_2',
-      name: 'TYLER',
+      name: 'TAYLER',
       model: 'Tyler',
-      description: 'Soap maker with refined techniques',
-      unlockRequirement: 'pete_2', // Unlocked by defeating Pete 2
-      coinReward: 1
-    },
-    {
-      id: 'pete_3',
-      name: 'PETE',
-      model: 'pete',
-      description: 'Final boss Pete - maximum power',
-      unlockRequirement: 'tyler_2', // Unlocked by defeating Tyler 2
-      coinReward: 1
-    },
-    {
-      id: 'tyler_3',
-      name: 'TYLER',
-      model: 'Tyler',
-      description: 'Final boss Tyler - ultimate challenger',
-      unlockRequirement: 'pete_3', // Unlocked by defeating Pete 3
+      description: 'Final boss - ultimate challenger',
+      unlockRequirement: 'pete_1', // Unlocked by defeating Pete
       coinReward: 1
     }
   ],
@@ -119,7 +95,7 @@ export const GameStateProvider = ({ children }) => {
       coins: 1,
       defeatedOpponents: [], // IDs of defeated opponents
       purchasedCharacters: ['pete'], // Pete is free initially
-      unlockedOpponents: ['pete_1'], // Only first opponent available at start
+      unlockedOpponents: ['tyler_1'], // Only first opponent available at start
       totalWins: 0,
       totalFights: 0,
       characterStats: {
@@ -211,7 +187,7 @@ export const GameStateProvider = ({ children }) => {
       totalFights: prev.totalFights + 1,
       // ARCADE MODE RESET: Lose all progress
       defeatedOpponents: [], // Reset all defeated opponents
-      unlockedOpponents: ['pete_1'] // Reset to only first opponent
+      unlockedOpponents: ['tyler_1'] // Reset to only first opponent (TYPER)
       // Note: No coin deduction here since we pay when starting
     }));
   }, []);
@@ -318,7 +294,7 @@ export const GameStateProvider = ({ children }) => {
       coins: 1,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
-      unlockedOpponents: ['pete_1'], // Only first opponent available at start
+      unlockedOpponents: ['tyler_1'], // Only first opponent available at start
       totalWins: 0,
       totalFights: 0,
       version: 2
@@ -339,7 +315,7 @@ export const GameStateProvider = ({ children }) => {
       coins: 1,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
-      unlockedOpponents: ['pete_1'], // Only first opponent available at start
+      unlockedOpponents: ['tyler_1'], // Only first opponent available at start
       totalWins: 0,
       totalFights: 0,
       version: 2

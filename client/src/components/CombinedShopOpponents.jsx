@@ -118,7 +118,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const handleOpponentSelect = (opponent) => {
     // Check if opponent is available to fight
     const isLocked = opponent.isLocked;
-    const isFirstOpponent = opponent.id === 'pete_1';
+    const isFirstOpponent = opponent.id === 'tyler_1';
     const hasNoCoins = coins === 0;
     
     if (!isLocked && !(isFirstOpponent && hasNoCoins)) {
@@ -183,7 +183,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       // Opponent styling with 4 states
       const isLocked = character.isLocked;
       const isDefeated = character.isDefeated;
-      const isFirstOpponent = character.id === 'pete_1';
+      const isFirstOpponent = character.id === 'tyler_1';
       const hasNoCoins = coins === 0;
       const isActive = !isLocked && !isDefeated && !(isFirstOpponent && hasNoCoins);
       
@@ -327,7 +327,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             letterSpacing: '1px',
             whiteSpace: 'nowrap'
           }}>
-            Arcade Mode - {coins} Coins
+            Arcade Mode
           </Text>
           
           <Text style={{
@@ -339,10 +339,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             marginTop: '4px',
             lineHeight: 1.2
           }}>
-            {coins === 0 
-              ? "Need 1 coin to start arcade mode! Emergency coin incoming..."
-              : "Defeat all opponents and earn coins! Each arcade run costs 1 coin to start."
-            }
+            Defeat all opponents and earn 1 coin each time you win, Each arcade run costs 1 coin to start
           </Text>
         </Box>
 
@@ -377,16 +374,21 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         </Box>
       </Box>
 
-      {/* Scrollable Content Container */}
+      {/* Scrollable Content Container - Vertically Centered */}
       <Box style={{ 
         flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         overflowY: "auto",
         overflowX: "hidden",
         paddingRight: isMobile ? "5px" : "10px",
-        paddingTop: isMobile ? "40px" : "50px",
+        paddingTop: isMobile ? "20px" : "30px", // Reduced top padding since content is now centered
+        paddingBottom: isMobile ? "20px" : "30px", // Added bottom padding for balance
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         minHeight: 0,
-        maxWidth: "400px",
+        maxWidth: "100%", // ✅ Sin limitación de ancho para más espacio
         width: "100%",
         margin: "0 auto",
         marginBottom: isMobile ? "10px" : "15px"
@@ -411,12 +413,13 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                 style={{
                   width: isMobile ? '50px' : '60px',
                   height: isMobile ? '50px' : '60px',
-                  cursor: 'pointer',
+                  cursor: ownedCharacters.length <= 1 ? 'default' : 'pointer',
                   padding: 0,
                   transition: 'all 0.3s ease',
                   border: 'none',
                   backgroundColor: 'transparent',
-                  position: 'relative'
+                  position: 'relative',
+                  opacity: ownedCharacters.length <= 1 ? 0.4 : 1
                 }}
               >
                 <div className="left-arrow-bg" style={{
@@ -431,7 +434,8 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                   backgroundRepeat: 'no-repeat',
                   transform: 'scaleX(-1)',
                   transition: 'all 0.3s ease',
-                  pointerEvents: 'none'
+                  pointerEvents: 'none',
+                  filter: ownedCharacters.length <= 1 ? 'grayscale(100%)' : 'none'
                 }} />
               </Button>
 
@@ -489,12 +493,13 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                 style={{
                   width: isMobile ? '50px' : '60px',
                   height: isMobile ? '50px' : '60px',
-                  cursor: 'pointer',
+                  cursor: ownedCharacters.length <= 1 ? 'default' : 'pointer',
                   padding: 0,
                   transition: 'all 0.3s ease',
                   border: 'none',
                   backgroundColor: 'transparent',
-                  position: 'relative'
+                  position: 'relative',
+                  opacity: ownedCharacters.length <= 1 ? 0.4 : 1
                 }}
               >
                 <div className="left-arrow-bg" style={{
@@ -508,7 +513,8 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
                   transition: 'all 0.3s ease',
-                  pointerEvents: 'none'
+                  pointerEvents: 'none',
+                  filter: ownedCharacters.length <= 1 ? 'grayscale(100%)' : 'none'
                 }} />
               </Button>
             </Box>
@@ -518,13 +524,13 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         )}
 
         {/* OPPONENTS Section */}
-        <Box style={{ marginBottom: isMobile ? "30px" : "40px" }}>
+        <Box style={{ width: '100%' }}>
           
           <Grid 
             gutter={isMobile ? "sm" : "md"}
             style={{ 
               width: '100%',
-              maxWidth: '800px',
+              maxWidth: '400px', // ✅ Limitado a 400px para mejor proporción
               margin: '0 auto'
             }}
           >
