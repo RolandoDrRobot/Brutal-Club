@@ -18,11 +18,11 @@ const Experience = () => {
       // Combat mode: facing each other
       return {
         player1: {
-          position: [-0.5, -1, 0],
+          position: [-0.5, -1.2, 0],
           rotation: [0, Math.PI / 2, 0]
         },
         player2: {
-          position: [0.5, -1, 0], 
+          position: [0.5, -1.2, 0], 
           rotation: [0, -Math.PI / 2, 0]
         }
       };
@@ -30,11 +30,11 @@ const Experience = () => {
       // Sync mode: same distance but facing each other (like combat)
       return {
         player1: {
-          position: [-0.5, -1, 0],
+          position: [-0.5, -1.2, 0],
           rotation: [0, Math.PI / 2, 0]  // Mirando hacia la derecha (al Player 2)
         },
         player2: {
-          position: [0.5, -1, 0],
+          position: [0.5, -1.2, 0],
           rotation: [0, -Math.PI / 2, 0] // Mirando hacia la izquierda (al Player 1)
         }
       };

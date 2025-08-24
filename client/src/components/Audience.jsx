@@ -135,7 +135,7 @@ function Audience() {
     
     const numMembers = audienceTypes.length; // 4 audience members for better performance
     const radius = 2.8; // Closer distance from center where the fighters are
-    const centerY = -1; // Same level as main characters
+    const centerY = -1.2; // Same level as main characters
     
     audienceTypes.forEach((type, i) => {
       // Distribute evenly around the circle

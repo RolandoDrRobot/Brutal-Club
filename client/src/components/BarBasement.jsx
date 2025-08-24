@@ -8,22 +8,13 @@ const BarBasement = () => {
   const flickerLight2Ref = useRef();
 
   // Memoized geometries and materials for performance
-  const geometries = useMemo(() => ({
-    floor: new THREE.PlaneGeometry(18, 18),
-    ceiling: new THREE.PlaneGeometry(18, 18),
-    wall: new THREE.PlaneGeometry(18, 6),
-    column: new THREE.BoxGeometry(0.8, 4, 0.8),
-    // Ceiling infrastructure
-    horizontalCable: new THREE.CylinderGeometry(0.03, 0.03, 12), // Long horizontal cables
-    metalBar: new THREE.BoxGeometry(8, 0.1, 0.1), // Metal support bars
-    cableSupport: new THREE.BoxGeometry(0.15, 0.2, 0.15), // Cable support brackets
-    // Light fixtures
-    lightFixture: new THREE.CylinderGeometry(0.4, 0.4, 0.3), // Main light fixture body
-    lightBulb: new THREE.SphereGeometry(0.25, 8, 6), // Light bulb
-    lightSocket: new THREE.CylinderGeometry(0.15, 0.15, 0.2), // Light socket
-    lightCable: new THREE.CylinderGeometry(0.02, 0.02, 1.5), // Cable hanging from ceiling
+      const geometries = useMemo(() => ({
+      floor: new THREE.PlaneGeometry(25, 25),
+      ceiling: new THREE.PlaneGeometry(25, 25),
+      wall: new THREE.PlaneGeometry(25, 6),
+
     // Blood stains
-    bloodStain: new THREE.CircleGeometry(0.5, 8),
+    bloodStain: new THREE.CircleGeometry(0.3, 32),
   }), []);
 
   const materials = useMemo(() => ({
@@ -43,51 +34,10 @@ const BarBasement = () => {
       roughness: 0.7,
       metalness: 0.1
     }),
-    column: new THREE.MeshStandardMaterial({
-      color: '#3d2a25',
-      roughness: 0.6,
-      metalness: 0.2
-    }),
-    // Ceiling infrastructure materials
-    cable: new THREE.MeshStandardMaterial({
-      color: '#222222', // Dark cable color
-      roughness: 0.8,
-      metalness: 0.1
-    }),
-    metalBar: new THREE.MeshStandardMaterial({
-      color: '#444444', // Dark metal
-      roughness: 0.6,
-      metalness: 0.7
-    }),
-    cableSupport: new THREE.MeshStandardMaterial({
-      color: '#333333', // Dark support brackets
-      roughness: 0.7,
-      metalness: 0.5
-    }),
-    // Light fixture materials
-    lightFixture: new THREE.MeshStandardMaterial({
-      color: '#333333', // Dark metal fixture
-      roughness: 0.7,
-      metalness: 0.8
-    }),
-    lightBulb: new THREE.MeshStandardMaterial({
-      color: '#ffffcc', // Warm light bulb color
-      roughness: 0.1,
-      metalness: 0.0
-    }),
-    lightSocket: new THREE.MeshStandardMaterial({
-      color: '#222222', // Dark socket
-      roughness: 0.8,
-      metalness: 0.6
-    }),
-    lightCable: new THREE.MeshStandardMaterial({
-      color: '#111111', // Dark cable
-      roughness: 0.9,
-      metalness: 0.1
-    }),
+
     // Blood stain material
     bloodStain: new THREE.MeshStandardMaterial({
-      color: '#CC0000', // Bright red blood
+      color: '#660000', // Very dark red blood
       roughness: 0.2,
       metalness: 0.0,
       transparent: true,
@@ -97,104 +47,73 @@ const BarBasement = () => {
 
   // Generate positions for essential elements only
   const elementPositions = useMemo(() => ({
-    // Support columns (closer for claustrophobia)
-    columns: [
-      [-5, 2, -5],
-      [5, 2, -5],
-      [-5, 2, 5],
-      [5, 2, 5]
-    ],
     
-    // Horizontal ceiling cables (higher position)
-    horizontalCables: [
-      { pos: [-2, 3.2, 0], rot: [0, 0, Math.PI/2] }, // Cable running East-West
-      { pos: [2, 3.0, 0], rot: [0, 0, Math.PI/2] },  // Parallel cable
-      { pos: [0, 3.1, -3], rot: [Math.PI/2, 0, 0] }, // Cable running North-South
-      { pos: [0, 2.9, 3], rot: [Math.PI/2, 0, 0] }   // Parallel cable
-    ],
-    
-    // Metal support bars (higher position)
-    metalBars: [
-      { pos: [-4, 3.3, 0], rot: [0, 0, 0] },         // Horizontal bar
-      { pos: [4, 3.3, 0], rot: [0, 0, 0] },          // Parallel bar
-      { pos: [0, 3.2, -4], rot: [0, Math.PI/2, 0] }, // Perpendicular bar
-      { pos: [0, 3.2, 4], rot: [0, Math.PI/2, 0] }   // Parallel bar
-    ],
-    
-    // Cable support brackets (higher position)
-    cableSupports: [
-      { pos: [-6, 3.1, 0] }, { pos: [1, 3.1, 0] }, { pos: [6, 3.1, 0] },
-      { pos: [0, 3.0, -6] }, { pos: [0, 3.0, -1] }, { pos: [0, 3.0, 6] }
-    ],
-    
-
-    
-    // Light fixtures positions
-    lightFixtures: [
-      { 
-        pos: [-5, 3.8, -5], 
-        cablePos: [-5, 3.2, -5],
-        bulbPos: [-5, 3.5, -5],
-        socketPos: [-5, 3.3, -5]
-      },
-      { 
-        pos: [5, 3.8, 5], 
-        cablePos: [5, 3.2, 5],
-        bulbPos: [5, 3.5, 5],
-        socketPos: [5, 3.3, 5]
-      }
-    ],
-    
-    // Blood stains (essential for fight club)
+    // Blood stains simulating a real fight pattern - expanded coverage
     bloodStains: [
-      { pos: [1.2, -2.99, -0.8], scale: [1.5, 1.5, 1.5] },
-      { pos: [-1.8, -2.99, 1.5], scale: [1.0, 1.0, 1.0] },
-      { pos: [2.5, -2.99, 2.0], scale: [0.8, 0.8, 0.8] },
-      { pos: [-0.5, -2.99, -2.2], scale: [1.2, 1.2, 1.2] },
-      { pos: [0.8, -2.99, 2.8], scale: [0.6, 0.6, 0.6] },
+      // Main impact area - where the fight is most intense
+      { pos: [0.0, -2.99, 0.0], scale: [3.2, 3.2, 3.2] }, // Central large pool
+      { pos: [0.4, -2.99, -0.3], scale: [1.8, 1.8, 1.8] }, // Splatter from main pool
+      { pos: [-0.3, -2.99, 0.5], scale: [1.6, 1.6, 1.6] }, // Another splatter
+      
+      // Extended blood trails from movement during the fight
+      { pos: [1.2, -2.99, 0.8], scale: [1.1, 1.1, 1.1] }, // Trail 1
+      { pos: [1.8, -2.99, 0.4], scale: [0.9, 0.9, 0.9] }, // Trail 2
+      { pos: [-1.2, -2.99, -1.0], scale: [1.3, 1.3, 1.3] }, // Trail 3
+      { pos: [-1.6, -2.99, -0.6], scale: [1.0, 1.0, 1.0] }, // Trail 4
+      { pos: [2.0, -2.99, -0.8], scale: [1.2, 1.2, 1.2] }, // Trail 5
+      { pos: [-2.0, -2.99, 0.8], scale: [1.1, 1.1, 1.1] }, // Trail 6
+      
+      // Impact splatters from punches/kicks - expanded area
+      { pos: [0.8, -2.99, -0.8], scale: [1.4, 1.4, 1.4] }, // Impact 1
+      { pos: [-0.6, -2.99, 1.2], scale: [1.2, 1.2, 1.2] }, // Impact 2
+      { pos: [1.4, -2.99, -0.4], scale: [1.1, 1.1, 1.1] }, // Impact 3
+      { pos: [-1.0, -2.99, 0.4], scale: [1.3, 1.3, 1.3] }, // Impact 4
+      { pos: [0.6, -2.99, 1.4], scale: [1.0, 1.0, 1.0] }, // Impact 5
+      { pos: [-0.8, -2.99, -1.2], scale: [1.2, 1.2, 1.2] }, // Impact 6
+      
+      // Smaller drops from movement and sweat - wider distribution
+      { pos: [0.4, -2.99, 0.8], scale: [0.8, 0.8, 0.8] }, // Drop 1
+      { pos: [-0.5, -2.99, -0.8], scale: [0.7, 0.7, 0.7] }, // Drop 2
+      { pos: [1.0, -2.99, 0.2], scale: [0.9, 0.9, 0.9] }, // Drop 3
+      { pos: [-0.2, -2.99, -1.4], scale: [0.8, 0.8, 0.8] }, // Drop 4
+      { pos: [0.8, -2.99, -0.6], scale: [0.7, 0.7, 0.7] }, // Drop 5
+      { pos: [-1.4, -2.99, 0.2], scale: [0.6, 0.6, 0.6] }, // Drop 6
+      { pos: [1.6, -2.99, 0.6], scale: [0.8, 0.8, 0.8] }, // Drop 7
+      { pos: [-0.4, -2.99, 1.6], scale: [0.7, 0.7, 0.7] }, // Drop 8
+      { pos: [0.2, -2.99, -1.0], scale: [0.6, 0.6, 0.6] }, // Drop 9
+      { pos: [-1.8, -2.99, -0.2], scale: [0.8, 0.8, 0.8] }, // Drop 10
     ],
     
 
   }), []);
 
-  // Intense electrical flickering effect - very loose and unstable elements
+  // Electrical flickering effect for basement atmosphere
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
     
-    // Light 1 - Subtle electrical problems with loose elements - brighter
+    // Light 1 - Electrical problems with dramatic flickering
     if (flickerLight1Ref.current) {
-      const dramaticCycle = Math.sin(time * 0.4) * 0.2 + 0.8; // Less variation
-      const powerSurge = Math.sin(time * 1.8) > 0.8 ? 1.2 : 0.9; // Less frequent and milder surges
-      const subtleFlicker = Math.sin(time * 8) * 0.1; // Much less visible flicker
-      const electricalChaos = Math.sin(time * 12) < -0.9 ? 0.7 : 1; // Less frequent electrical failures
-      const looseMovement = Math.sin(time * 2) * 0.1; // Reduced loose movement
-      flickerLight1Ref.current.intensity = (2.8 * dramaticCycle * powerSurge * electricalChaos) + subtleFlicker + looseMovement;
+      const dramaticCycle = Math.sin(time * 0.3) * 0.3 + 0.7; // Base flickering
+      const powerSurge = Math.sin(time * 2.5) > 0.8 ? 1.4 : 0.8; // Power surges
+      const electricalGlitch = Math.sin(time * 15) < -0.9 ? 0.5 : 1; // Electrical failures
+      const subtleFlicker = Math.sin(time * 12) * 0.2; // Rapid flickering
+      flickerLight1Ref.current.intensity = (2.8 * dramaticCycle * powerSurge * electricalGlitch) + subtleFlicker;
     }
     
-    // Light 2 - Subtle electrical breathing with loose elements - brighter
+    // Light 2 - Different electrical pattern for variety
     if (flickerLight2Ref.current) {
-      const breathingBase = Math.sin(time * 1.0) * 0.2 + 0.8; // Less breathing effect
-      const electricalGlitch = Math.sin(time * 20) < -0.8 ? 0.7 : 1; // Much less frequent glitches
-      const subtlePulse = Math.sin(time * 5) * 0.1; // Much less noticeable pulsing
-      const subtleSparking = Math.sin(time * 25) > 0.9 ? 1.1 : 0.9; // Much less frequent and milder sparks
-      const looseSway = Math.sin(time * 3) * 0.08; // Reduced loose swaying
-      flickerLight2Ref.current.intensity = (2.8 * breathingBase * electricalGlitch * subtleSparking) + subtlePulse + looseSway;
+      const breathingBase = Math.sin(time * 0.8) * 0.2 + 0.8; // Breathing effect
+      const electricalChaos = Math.sin(time * 18) < -0.8 ? 0.6 : 1; // Different electrical failures
+      const powerSpike = Math.sin(time * 3.2) > 0.9 ? 1.3 : 0.9; // Power spikes
+      const rapidFlicker = Math.sin(time * 20) * 0.15; // Rapid flickering
+      flickerLight2Ref.current.intensity = (2.8 * breathingBase * electricalChaos * powerSpike) + rapidFlicker;
     }
-    
-
   });
 
   return (
     <group scale={[0.4, 0.4, 0.4]}>
 
-      {/* Floor - Dark brown/café */}
-      <mesh 
-        geometry={geometries.floor} 
-        material={materials.floor}
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -2.5, 0]} 
-        receiveShadow
-      />
+
 
       {/* Ceiling */}
       <mesh 
@@ -206,10 +125,23 @@ const BarBasement = () => {
       />
 
       {/* Walls */}
-      <mesh geometry={geometries.wall} material={materials.wall} position={[0, 3, -9]} receiveShadow />
-      <mesh geometry={geometries.wall} material={materials.wall} position={[0, 3, 9]} rotation={[0, Math.PI, 0]} receiveShadow />
-      <mesh geometry={geometries.wall} material={materials.wall} position={[-9, 3, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow />
-      <mesh geometry={geometries.wall} material={materials.wall} position={[9, 3, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow />
+      <mesh geometry={geometries.wall} material={materials.wall} position={[0, 0.5, -12.5]} receiveShadow />
+      <mesh geometry={geometries.wall} material={materials.wall} position={[0, 0.5, 12.5]} rotation={[0, Math.PI, 0]} receiveShadow />
+      <mesh geometry={geometries.wall} material={materials.wall} position={[-12.5, 0.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow />
+      <mesh geometry={geometries.wall} material={materials.wall} position={[12.5, 0.5, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow />
+
+      {/* Blood stains on the floor */}
+      {elementPositions.bloodStains.map((stain, index) => (
+        <mesh
+          key={`blood-stain-${index}`}
+          geometry={geometries.bloodStain}
+          material={materials.bloodStain}
+          position={stain.pos}
+          scale={stain.scale}
+          rotation={[-Math.PI / 2, 0, 0]}
+          receiveShadow
+        />
+      ))}
 
 
 
