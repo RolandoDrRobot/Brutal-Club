@@ -18,7 +18,6 @@ import danceImg from "../assets/dance.png";     // ✅ Used in dance button
 // ❌ REMOVED: fightImg - imported but never used in component
 import mainButtonImg from "../assets/mainbutton.jpeg"; // ✅ Used in multiple buttons
 import { useButtonSound } from '../hooks/useButtonSound';
-import LoadingScreen from './LoadingScreen';
 import { useModelLoader } from '../hooks/useModelLoader';
 import { useGameState } from '../contexts/GameState';
 import CharacterPreview from "./CharacterPreview";
@@ -428,22 +427,13 @@ const Interface = () => {
   // Import the optimized model loader
   const { isLoading, loadingProgress, loadingStatus, lazyLoadModel } = useModelLoader();
 
-  if (isLoading) {
-    return (
-      <LoadingScreen 
-        progress={loadingProgress} 
-        status={loadingStatus}
-      />
-    );
-  }
-
   return (
     <>
       {/* Inject CSS animations */}
       <style dangerouslySetInnerHTML={{ __html: interfaceStyles }} />
 
-      {/* Music player - only visible on cover screen - Lazy loaded */}
-      {showMusicPlayer && currentScreen === 'dance' && (
+      {/* Music player - visible on all screens - Lazy loaded */}
+      {showMusicPlayer && (
         <Suspense fallback={null}>
           <MusicPlayer />
         </Suspense>
@@ -451,7 +441,7 @@ const Interface = () => {
 
       {/* Mostrar componente de menú principal cuando currentScreen es 'menu' - Lazy loaded */}
       {currentScreen === 'menu' && (
-        <Suspense fallback={<div style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#f32210', fontSize: '18px', fontFamily: 'Anton, sans-serif'}}>Loading Menu...</div>}>
+        <Suspense fallback={null}>
           <MainMenu 
             onStartClick={navigateToOpponentSelect}
             onFightersClick={navigateToCharacterSelect}
@@ -463,7 +453,7 @@ const Interface = () => {
 
       {/* Mostrar pantalla de árbol de habilidades cuando currentScreen es 'characterSelect' - Lazy loaded */}
       {currentScreen === 'characterSelect' && (
-        <Suspense fallback={<div style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#f32210', fontSize: '18px', fontFamily: 'Anton, sans-serif'}}>Loading Skills...</div>}>
+        <Suspense fallback={null}>
           <CharacterSkillTree 
             onSelectClick={handleCharacterSelection}
             onBackClick={navigateBackFromCharacterSelect}
@@ -473,7 +463,7 @@ const Interface = () => {
 
       {/* Mostrar pantalla combinada de oponentes y tienda cuando currentScreen es 'opponentSelect' - Lazy loaded */}
       {currentScreen === 'opponentSelect' && (
-        <Suspense fallback={<div style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#f32210', fontSize: '18px', fontFamily: 'Anton, sans-serif'}}>Loading Fight...</div>}>
+        <Suspense fallback={null}>
           <CombinedShopOpponents 
             onChallengeClick={handleOpponentChallenge}
             onBackClick={navigateBackFromOpponentSelect}
@@ -483,7 +473,7 @@ const Interface = () => {
 
       {/* Mostrar pantalla de tienda cuando currentScreen es 'shop' - Lazy loaded */}
       {currentScreen === 'shop' && (
-        <Suspense fallback={<div style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#f32210', fontSize: '18px', fontFamily: 'Anton, sans-serif'}}>Loading Store...</div>}>
+        <Suspense fallback={null}>
           <Shop 
             onBackClick={navigateBackFromShop}
           />
@@ -714,51 +704,7 @@ const Interface = () => {
                 zIndex: 10,
                 position: 'relative'
               }}>
-                {/* REMATCH Button */}
-                <button
-                  onClick={() => {
-                    playButtonSound();
-                    resetHealth();
-                    initializeCombat();
-                  }}
-                  style={{
-                    fontSize: isMobile ? '16px' : '24px',
-                    fontWeight: 700,
-                    fontFamily: 'Anton, sans-serif',
-                    letterSpacing: '2px',
-                    textTransform: 'uppercase',
-                    color: '#f32210',
-                    backgroundColor: 'transparent',
-                    backgroundImage: `url(${mainButtonImg})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    border: '3px solid #f32210',
-                    borderRadius: '15px',
-                    padding: isMobile ? '12px 24px' : '20px 40px',
-                    minWidth: isMobile ? '110px' : '160px',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isMobile) {
-                      e.target.style.transform = 'scale(1.05)';
-                      e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.2)';
-                      e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isMobile) {
-                      e.target.style.transform = 'scale(1)';
-                      e.target.style.backgroundColor = 'transparent';
-                      e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
-                    }
-                  }}
-                >
-                  REMATCH
-                </button>
+
 
                 {/* MENU Button */}
                 <button
@@ -955,68 +901,70 @@ const Interface = () => {
                 {/* Music icon */}
               </Button>
 
-              {/* Botón de Baile - ESQUINA INFERIOR DERECHA */}
-              <Affix position={{ 
-                bottom: isMobile ? 30 : 40, 
-                right: isMobile ? 30 : 40 
-              }}>
-                {/* Icono de baile */}
-                <Button
-                  variant="unstyled"
-                  onClick={() => {
-                    playButtonSound();
-                    toggleDanceCombo();
-                  }}
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    stopCombo();
-                  }}
-                  style={{
-                    width: isMobile ? "80px" : "100px",
-                    height: isMobile ? "80px" : "100px",
-                    borderRadius: "50%",
-                    backgroundColor: isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)",
-                    border: "3px solid #f32210",
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    transition: "all 0.3s ease",
-                    boxShadow: `
-                      0 0 15px #f32210,
-                      0 0 25px rgba(243, 34, 16, 0.3)
-                    `,
-                    animation: isPlayingCombo ? "pulse 1s ease-in-out infinite" : "none"
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isMobile) {
-                      e.target.style.transform = "scale(1.1)";
-                      e.target.style.backgroundColor = "rgba(243, 34, 16, 0.4)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isMobile) {
-                      e.target.style.transform = "scale(1)";
-                      e.target.style.backgroundColor = isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)";
-                    }
-                  }}
-                >
-                  <img 
-                    src={danceImg}
-                    alt="Dance"
-                    style={{
-                      width: isMobile ? "40px" : "50px",
-                      height: isMobile ? "40px" : "50px",
-                      objectFit: "contain",
-                      pointerEvents: "none",
-                      filter: "brightness(0) saturate(100%) invert(23%) sepia(89%) saturate(2700%) hue-rotate(355deg) brightness(102%) contrast(93%)"
+              {/* Botón de Baile - SOLO EN COVER PAGE */}
+              {currentScreen === 'dance' && (
+                <Affix position={{ 
+                  bottom: isMobile ? 30 : 40, 
+                  right: isMobile ? 30 : 40 
+                }}>
+                  {/* Icono de baile */}
+                  <Button
+                    variant="unstyled"
+                    onClick={() => {
+                      playButtonSound();
+                      toggleDanceCombo();
                     }}
-                  />
-                </Button>
-              </Affix>
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      stopCombo();
+                    }}
+                    style={{
+                      width: isMobile ? "80px" : "100px",
+                      height: isMobile ? "80px" : "100px",
+                      borderRadius: "50%",
+                      backgroundColor: isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)",
+                      border: "3px solid #f32210",
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      transition: "all 0.3s ease",
+                      boxShadow: `
+                        0 0 15px #f32210,
+                        0 0 25px rgba(243, 34, 16, 0.3)
+                      `,
+                      animation: isPlayingCombo ? "pulse 1s ease-in-out infinite" : "none"
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isMobile) {
+                        e.target.style.transform = "scale(1.1)";
+                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.4)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isMobile) {
+                        e.target.style.transform = "scale(1)";
+                        e.target.style.backgroundColor = isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)";
+                      }
+                    }}
+                  >
+                    <img 
+                      src={danceImg}
+                      alt="Dance"
+                      style={{
+                        width: isMobile ? "40px" : "50px",
+                        height: isMobile ? "40px" : "50px",
+                        objectFit: "contain",
+                        pointerEvents: "none",
+                        filter: "brightness(0) saturate(100%) invert(23%) sepia(89%) saturate(2700%) hue-rotate(355deg) brightness(102%) contrast(93%)"
+                      }}
+                    />
+                  </Button>
+                </Affix>
+              )}
 
-              {/* Información del combo actual (solo si está reproduciéndose) */}
-              {isPlayingCombo && (
+              {/* Información del combo actual (solo si está reproduciéndose) - SOLO EN COVER PAGE */}
+              {isPlayingCombo && currentScreen === 'dance' && (
                 <Affix position={{ 
                   bottom: isMobile ? 120 : 140, 
                   right: isMobile ? 30 : 40 
