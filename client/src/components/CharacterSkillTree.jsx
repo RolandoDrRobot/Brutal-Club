@@ -12,7 +12,7 @@ import CharacterPreview from './CharacterPreview';
 const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isVerySmall = useMediaQuery("(max-width: 480px)");
-  const { isExiting } = useCharacterAnimations();
+  const { isExiting, setSelectedPlayer1Character } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   const [selectedCharacter, setSelectedCharacter] = useState(0);
 
@@ -43,14 +43,26 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
   );
 
   const handlePreviousCharacter = useCallback(() => {
+    if (characters.length <= 1) return; // No action if only one character
     playButtonSound();
-    setSelectedCharacter((prev) => (prev > 0 ? prev - 1 : characters.length - 1));
-  }, [playButtonSound, characters.length]);
+    const newIndex = selectedCharacter > 0 ? selectedCharacter - 1 : characters.length - 1;
+    setSelectedCharacter(newIndex);
+    // Update active fighter
+    if (characters[newIndex]) {
+      setSelectedPlayer1Character(characters[newIndex].model);
+    }
+  }, [playButtonSound, characters, selectedCharacter, setSelectedPlayer1Character]);
 
   const handleNextCharacter = useCallback(() => {
+    if (characters.length <= 1) return; // No action if only one character
     playButtonSound();
-    setSelectedCharacter((prev) => (prev < characters.length - 1 ? prev + 1 : 0));
-  }, [playButtonSound, characters.length]);
+    const newIndex = selectedCharacter < characters.length - 1 ? selectedCharacter + 1 : 0;
+    setSelectedCharacter(newIndex);
+    // Update active fighter
+    if (characters[newIndex]) {
+      setSelectedPlayer1Character(characters[newIndex].model);
+    }
+  }, [playButtonSound, characters, selectedCharacter, setSelectedPlayer1Character]);
 
   const handleSelectCharacter = useCallback(() => {
     playButtonSound();
@@ -106,37 +118,47 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
 
     return (
       <Paper
+        onClick={() => canUpgrade(statName) ? handleUpgradeStat(statName) : null}
+        onMouseEnter={(e) => {
+          if (canUpgrade(statName) && !isMobile) {
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (canUpgrade(statName) && !isMobile) {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+          }
+        }}
         style={{
-          padding: isMobile ? '8px' : '20px',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          border: '2px solid #FFD700',
+          padding: isMobile ? '15px' : '25px',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          backgroundImage: `url(${mainButtonImg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          border: `2px solid ${canUpgrade(statName) ? '#FFD700' : '#666'}`,
           borderRadius: '15px',
-          boxShadow: `
+          boxShadow: canUpgrade(statName) ? `
             0 0 15px rgba(255, 215, 0, 0.3),
             inset 0 0 15px rgba(255, 215, 0, 0.1)
+          ` : `
+            0 0 15px rgba(102, 102, 102, 0.3),
+            inset 0 0 15px rgba(102, 102, 102, 0.1)
           `,
           width: '100%',
           maxWidth: isMobile ? 'calc(33.333% - 6px)' : '280px', // 3 cajas en una fila móvil
-          minHeight: 'auto',
-          flex: isMobile ? '1' : 'none' // Flex igual para las 3 cajas en móvil
+          minHeight: isMobile ? '120px' : '160px',
+          flex: isMobile ? '1' : 'none', // Flex igual para las 3 cajas en móvil
+          cursor: canUpgrade(statName) ? 'pointer' : 'not-allowed',
+          transition: 'all 0.2s ease',
+          opacity: canUpgrade(statName) ? 1 : 0.6
         }}
       >
         {/* Stat Header */}
         <Stack spacing={isMobile ? 'xs' : 'sm'} align="center">
-          <Text style={{
-            fontSize: isMobile ? '14px' : '18px',
-            lineHeight: 1,
-            fontWeight: 900,
-            color: '#FFD700',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '1px',
-            backgroundColor: 'rgba(255, 215, 0, 0.1)',
-            padding: isMobile ? '4px 8px' : '6px 12px',
-            borderRadius: '6px',
-            border: '1px solid #FFD700'
-          }}>
-            {icon}
-          </Text>
+
           <Text style={{
             fontSize: isMobile ? '12px' : '20px',
             fontWeight: 700,
@@ -144,7 +166,12 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'center',
-            lineHeight: 1
+            lineHeight: 1,
+            textShadow: `
+              0 0 10px #000000,
+              0 0 20px #000000,
+              2px 2px 4px #000000
+            `
           }}>
             {displayName}
           </Text>
@@ -155,7 +182,12 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             color: '#FFD700',
             fontWeight: 600,
             fontFamily: 'Anton, sans-serif',
-            lineHeight: 1
+            lineHeight: 1,
+            textShadow: `
+              0 0 10px #000000,
+              0 0 20px #000000,
+              2px 2px 4px #000000
+            `
           }}>
             LEVEL {currentLevel}/{maxLevel}
           </Text>
@@ -180,64 +212,22 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           </Box>
 
           {/* Upgrade Button or Max Level Indicator */}
-          {isMaxLevel(statName) ? (
-            <Button
-              disabled
-              style={{
-                fontSize: isMobile ? '8px' : '14px',
-                fontWeight: 700,
-                padding: isMobile ? '4px 8px' : '8px 16px',
-                backgroundColor: '#444',
-                borderColor: '#666',
-                border: '2px solid #666',
-                borderRadius: '8px',
-                color: '#999',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                fontFamily: 'Anton, sans-serif',
-                width: '100%',
-                minHeight: isMobile ? '28px' : 'auto'
-              }}
-            >
-              MAXED OUT
-            </Button>
-          ) : (
-            <Button
-              onClick={() => handleUpgradeStat(statName)}
-              disabled={!canUpgrade(statName)}
-              style={{
-                fontSize: isMobile ? '8px' : '14px',
-                fontWeight: 700,
-                padding: isMobile ? '4px 6px' : '8px 16px',
-                backgroundColor: canUpgrade(statName) ? 'transparent' : 'rgba(100, 100, 100, 0.3)',
-                borderColor: canUpgrade(statName) ? '#FFD700' : '#666',
-                border: `2px solid ${canUpgrade(statName) ? '#FFD700' : '#666'}`,
-                borderRadius: '8px',
-                color: canUpgrade(statName) ? '#FFD700' : '#999',
-                textTransform: 'uppercase',
-                letterSpacing: isMobile ? '0.5px' : '1px',
-                fontFamily: 'Anton, sans-serif',
-                width: '100%',
-                cursor: canUpgrade(statName) ? 'pointer' : 'not-allowed',
-                minHeight: isMobile ? '28px' : 'auto',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (canUpgrade(statName) && !isMobile) {
-                  e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
-                  e.target.style.transform = 'scale(1.05)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (canUpgrade(statName) && !isMobile) {
-                  e.target.style.backgroundColor = 'transparent';
-                  e.target.style.transform = 'scale(1)';
-                }
-              }}
-            >
-              +1 ({upgradeCost}C)
-            </Button>
-          )}
+          {/* Status indicator */}
+          <Text style={{
+            fontSize: isMobile ? '8px' : '12px',
+            fontWeight: 600,
+            color: isMaxLevel(statName) ? '#999' : canUpgrade(statName) ? '#FFD700' : '#666',
+            fontFamily: 'Anton, sans-serif',
+            textAlign: 'center',
+            marginTop: isMobile ? '4px' : '8px',
+            textShadow: `
+              0 0 10px #000000,
+              0 0 20px #000000,
+              2px 2px 4px #000000
+            `
+          }}>
+            {isMaxLevel(statName) ? 'MAX LEVEL' : canUpgrade(statName) ? `CLICK TO UPGRADE (${upgradeCost}C)` : 'INSUFFICIENT COINS'}
+          </Text>
         </Stack>
       </Paper>
     );
@@ -315,27 +305,75 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         overflowY: "auto",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center", // Centrar verticalmente
+        justifyContent: "space-between", // Distribuir espacios
         alignItems: "center"
       }}
     >
-      {/* Header with coin count */}
-      <Box style={{ 
-        textAlign: 'center', 
-        marginBottom: isMobile ? '15px' : '25px',
-        animation: "fadeInSpray 0.6s ease-out",
+      {/* Header with Arcade Mode info and close button */}
+      <Box style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
+        paddingTop: '20px',
+        paddingBottom: '30px',
+        flexWrap: 'wrap',
+        gap: '10px',
         width: '100%'
       }}>
-        <div 
-          className="fight-title"
-          style={{
-            fontSize: isMobile ? '32px' : '66px', // Escalado para móvil pero manteniendo proporciones
-            marginBottom: '20px'
-          }}
-        >
-          BRUTAL CLUB
-        </div>
+        <Box style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          flex: '1 1 0%'
+        }}>
+          <Text style={{
+            fontSize: '24px',
+            fontWeight: 700,
+            color: '#FFD700',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '1px',
+            whiteSpace: 'nowrap'
+          }}>
+            Welcome to the Club
+          </Text>
+          <Text style={{
+            fontSize: '16px',
+            fontWeight: 400,
+            color: 'rgb(245, 245, 220)',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '0.5px',
+            marginTop: '4px',
+            lineHeight: 1.2
+          }}>
+            Get your fighters trained using your coins
+            </Text>
+        </Box>
+        <Box style={{ flexShrink: 0 }}>
+          <Button
+            variant="outline"
+            onClick={() => {
+              playButtonSound();
+              onBackClick();
+            }}
+            style={{
+              fontSize: '16px',
+              fontWeight: 700,
+              padding: '12px 20px',
+              backgroundColor: 'transparent',
+              border: '3px solid #f32210',
+              borderRadius: '10px',
+              color: '#f32210',
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
+              fontFamily: 'Anton, sans-serif',
+              height: '55px'
+            }}
+          >
+            <span className="fight-button-text">X</span>
+          </Button>
+        </Box>
       </Box>
 
       {/* Character selection area */}
@@ -357,11 +395,12 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             width: isMobile ? '50px' : '60px',
             height: isMobile ? '50px' : '60px',
             position: 'relative',
-            cursor: 'pointer',
+            cursor: characters.length <= 1 ? 'default' : 'pointer',
             padding: 0,
             transition: 'all 0.3s ease',
             border: 'none',
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
+            opacity: characters.length <= 1 ? 0.4 : 1
           }}
         >
           <div 
@@ -377,7 +416,8 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               backgroundRepeat: 'no-repeat',
               transform: 'scaleX(-1)',
               transition: 'all 0.3s ease',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              filter: characters.length <= 1 ? 'grayscale(100%)' : 'none'
             }}
           />
         </Button>
@@ -398,14 +438,14 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             key={selectedCharacter}
             style={{
               width: '100%',
-              height: '85%', // Mayor porcentaje de la caja
+              height: '98%', // Mayor porcentaje de la caja
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              border: '3px solid #FFD700',
+              border: '3px solid #f32210',
               borderRadius: '15px',
               marginBottom: '10px',
               boxShadow: `
-                0 0 20px rgba(255, 215, 0, 0.3),
-                inset 0 0 20px rgba(255, 215, 0, 0.1)
+                0 0 20px rgba(243, 34, 16, 0.3),
+                inset 0 0 20px rgba(243, 34, 16, 0.1)
               `,
               position: 'relative',
               overflow: 'hidden',
@@ -453,11 +493,13 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             backgroundSize: 'contain',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-            cursor: 'pointer',
+            cursor: characters.length <= 1 ? 'default' : 'pointer',
             padding: 0,
             transition: 'all 0.3s ease',
             border: 'none',
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
+            opacity: characters.length <= 1 ? 0.4 : 1,
+            filter: characters.length <= 1 ? 'grayscale(100%)' : 'none'
           }}
         />
       </Box>
@@ -466,13 +508,13 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
       <Box style={{
         display: 'flex',
         flexDirection: 'row', // Siempre horizontal, tanto móvil como desktop
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'flex-start',
         gap: isMobile ? '8px' : '25px',
         width: '100%',
         maxWidth: isMobile ? '100%' : '900px',
         margin: '0 auto',
-        marginBottom: isMobile ? '20px' : '30px',
+        marginBottom: '40px',
         flexShrink: 0,
         padding: isMobile ? '0 5px' : '0'
       }}>
@@ -481,68 +523,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         <StatUpgradeTree statName="strength" />
       </Box>
 
-      {/* Action buttons */}
-      <Group spacing={isMobile ? "md" : "lg"} position="center" style={{ 
-        width: '100%',
-        justifyContent: 'center',
-        flexShrink: 0,
-        paddingTop: isMobile ? '15px' : '0'
-      }}>
-        {/* Back Button */}
-        <Button
-          variant="outline"
-          size={isMobile ? "md" : "lg"}
-          onClick={() => {
-            playButtonSound();
-            onBackClick();
-          }}
-          style={{
-            fontSize: isMobile ? "14px" : "20px",
-            fontWeight: 700,
-            padding: isMobile ? "10px 16px" : "15px 30px",
-            backgroundColor: "transparent",
-            borderColor: "#FFD700",
-            border: "3px solid #FFD700",
-            borderRadius: "10px",
-            color: "#FFD700",
-            textTransform: "uppercase",
-            letterSpacing: "2px",
-            fontFamily: "Anton, sans-serif",
-            minHeight: isMobile ? '40px' : 'auto'
-          }}
-        >
-          BACK
-        </Button>
 
-        {/* Select Button */}
-        <Button
-          variant="outline"
-          size={isMobile ? "lg" : "xl"}
-          onClick={handleSelectCharacter}
-          className="fight-button"
-          style={{
-            fontSize: isMobile ? "16px" : "24px",
-            padding: isMobile ? "10px 16px" : "15px 30px",
-            minHeight: isMobile ? "40px" : "70px",
-            minWidth: isMobile ? "100px" : "160px",
-            backgroundImage: `url(${mainButtonImg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            textAlign: "center",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textShadow: `
-              0 0 10px #000000,
-              0 0 20px #000000,
-              2px 2px 4px #000000
-            `,
-          }}
-        >
-          SELECT
-        </Button>
-      </Group>
     </Box>
   );
 };

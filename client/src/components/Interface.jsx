@@ -442,8 +442,8 @@ const Interface = () => {
       {/* Inject CSS animations */}
       <style dangerouslySetInnerHTML={{ __html: interfaceStyles }} />
 
-      {/* Music player - visible in any mode - Lazy loaded */}
-      {showMusicPlayer && (
+      {/* Music player - only visible on cover screen - Lazy loaded */}
+      {showMusicPlayer && currentScreen === 'dance' && (
         <Suspense fallback={null}>
           <MusicPlayer />
         </Suspense>

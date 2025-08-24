@@ -5,9 +5,9 @@ import * as THREE from 'three';
 const BloodFloor = () => {
   const meshRef = useRef();
   
-  // Create blood puddles on the floor - VISIBLE blood stains around fighters
+  // Create blood puddles on the floor - DISABLED (no blood stains)
   const bloodPuddles = useMemo(() => {
-    const puddleCount = 4; // More visible stains
+    const puddleCount = 0; // No blood stains
     const positions = new Float32Array(puddleCount * 3);
     const scales = new Float32Array(puddleCount);
     const opacities = new Float32Array(puddleCount);
