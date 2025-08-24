@@ -339,8 +339,21 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             marginTop: '4px',
             lineHeight: 1.2
           }}>
-            Defeat all opponents and earn 1 coin each time you win, Each arcade run costs 1 coin to start
+            Beat opponents to win 1 coin
           </Text>
+
+          <Text style={{
+            fontSize: isMobile ? '16px' : '18px',
+            fontWeight: 400,
+            color: coins === 0 ? '#f32210' : '#F5F5DC',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '0.5px',
+            marginTop: '4px',
+            lineHeight: 1.2
+          }}>
+            Arcade costs 1 coin
+          </Text>
+          
         </Box>
 
         {/* Right side: Back Button */}
@@ -450,7 +463,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                 {/* Character Preview */}
                 <Box style={{
                   width: isMobile ? '150px' : '200px',
-                  height: isMobile ? '200px' : '280px',
+                  height: isMobile ? '24vh' : '28vh',
                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
                   border: '3px solid #f32210',
                   borderRadius: '20px',
@@ -524,7 +537,13 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         )}
 
         {/* OPPONENTS Section */}
-        <Box style={{ width: '100%' }}>
+        <Box style={{ 
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '30px'
+        }}>
           
           <Grid 
             gutter={isMobile ? "sm" : "md"}
@@ -598,6 +617,21 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
               </Grid.Col>
             ))}
           </Grid>
+
+          {/* Arcade Mechanic Label */}
+          <Text style={{
+            fontSize: '14px',
+            fontWeight: 700,
+            color: 'rgb(255, 215, 0)',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '1px',
+            textAlign: 'center',
+            lineHeight: 1.3,
+            maxWidth: '200px',
+            animation: 'fadeInSpray 0.5s ease-out 0.6s both'
+          }}>
+            FIGHT THROUGH ALL OPPONENTS IN SEQUENCE TO UNLOCK THE NEXT ONE
+          </Text>
         </Box>
 
 

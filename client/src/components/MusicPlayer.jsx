@@ -5,7 +5,7 @@ import musicIcon from '../assets/music.png';
 import danceIcon from '../assets/dance.png';
 
 const MusicPlayer = () => {
-  const { isCombatMode, triggerSyncAnimation, animations } = useCharacterAnimations();
+  const { isCombatMode, triggerSyncAnimation, animations, currentScreen } = useCharacterAnimations();
   
   // Song list (OPTIMIZED - only existing files to prevent loading delays)
   const songs = [
@@ -200,6 +200,9 @@ const MusicPlayer = () => {
 
   const currentSong = songs[currentSongIndex];
 
+  // Solo mostrar en la pantalla de dance (cover)
+  const isVisible = currentScreen === 'dance';
+
   return (
     <Box style={{
       position: 'absolute',
@@ -210,7 +213,10 @@ const MusicPlayer = () => {
       borderRadius: '8px',
       boxShadow: '0 0 10px rgba(243, 34, 16, 0.3)',
       width: 'fit-content',
-      height: 'fit-content'
+      height: 'fit-content',
+      opacity: isVisible ? 1 : 0,
+      transition: 'opacity 0.3s ease',
+      pointerEvents: isVisible ? 'auto' : 'none'
     }}>
       {/* Audio element */}
       {currentSong.file && (

@@ -75,10 +75,19 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
         minHeight: "100vh"
       }}
     >
-      {/* Main title */}
-      <Stack spacing={isMobile ? "xl" : "xxl"} align="center" style={{ flex: 1, justifyContent: "center" }}>
-        {/* Title content can go here */}
-      </Stack>
+      {/* Title at the top */}
+      <div style={{ 
+        textAlign: "center",
+        paddingTop: isMobile ? "40px" : "60px",
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.5s ease-out 0.2s both"
+      }}>
+        <div className="fight-title">
+          FIGHT CLUB
+        </div>
+      </div>
+
+      {/* Spacer for the middle */}
+      <div style={{ flex: 1 }}></div>
 
       {/* Menu buttons in 2x2 grid at bottom */}
       <Box
