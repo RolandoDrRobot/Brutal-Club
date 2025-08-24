@@ -77,7 +77,7 @@ const Shop = ({ onBackClick }) => {
         border: '3px solid #f32210',
         borderRadius: '15px',
         padding: isMobile ? '15px' : '20px',
-        height: '250px',
+        height: '200px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -103,7 +103,7 @@ const Shop = ({ onBackClick }) => {
       border: '3px solid #f32210',
       borderRadius: '15px',
       padding: isMobile ? '15px' : '20px',
-      height: '250px',
+      height: '200px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -399,6 +399,82 @@ const Shop = ({ onBackClick }) => {
             </Grid.Col>
           ))}
         </Grid>
+      </Box>
+
+      {/* Buy Coins Button */}
+      <Box style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: isMobile ? '20px' : '30px',
+        paddingBottom: isMobile ? '20px' : '30px'
+      }}>
+        <Button
+          variant="outline"
+          size="xl"
+          onClick={() => {
+            playButtonSound();
+            // TODO: Implement buy coins functionality
+            console.log('Buy Coins clicked');
+          }}
+          style={{
+            fontSize: isMobile ? "36px" : "48px",
+            fontWeight: 700,
+            padding: isMobile ? "20px 50px" : "25px 70px",
+            minHeight: isMobile ? "100px" : "120px",
+            minWidth: isMobile ? "280px" : "350px",
+            maxWidth: isMobile ? "calc(100vw - 40px)" : "350px",
+            margin: "0",
+            width: "100%",
+            backgroundColor: "transparent",
+            backgroundImage: `url(${mainButtonImg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            borderColor: "#f32210",
+            border: "4px solid #f32210",
+            borderRadius: "15px",
+            color: "#f32210",
+            textTransform: "uppercase",
+            letterSpacing: "3px",
+            fontFamily: "Anton, sans-serif",
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            textShadow: `
+              0 0 10px #000000,
+              0 0 20px #000000,
+              2px 2px 4px #000000
+            `,
+            boxShadow: `
+              0 0 20px #f32210,
+              0 0 40px rgba(243, 34, 16, 0.3),
+              inset 0 0 20px rgba(243, 34, 16, 0.1)
+            `,
+            transition: "all 0.3s ease",
+            cursor: "pointer",
+            animation: "fadeInSpray 0.5s ease-out 0.6s both"
+          }}
+          onMouseEnter={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = "scale(1.05)";
+              e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
+              e.target.style.animation = "impactShake 0.3s ease-out";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = "scale(1)";
+              e.target.style.backgroundColor = "transparent";
+              e.target.style.animation = "none";
+            }
+          }}
+        >
+          <span className="fight-button-text">
+            BUY COINS
+          </span>
+        </Button>
       </Box>
 
       {/* Back Button - Hidden since it's now in header */}
