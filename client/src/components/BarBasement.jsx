@@ -105,7 +105,7 @@ const BarBasement = () => {
       const powerSurge = Math.sin(time * 1.8) > 0.75 ? 1.3 : 1; // More frequent surges
       const coolFlicker = Math.sin(time * 8) * 0.15; // More visible flicker
       const electricalChaos = Math.sin(time * 15) < -0.85 ? 0.5 : 1; // More electrical failures
-      flickerLight1Ref.current.intensity = (2.0 * dramaticCycle * powerSurge * electricalChaos) + coolFlicker;
+      flickerLight1Ref.current.intensity = (2.2 * dramaticCycle * powerSurge * electricalChaos) + coolFlicker;
     }
     
     // Light 2 - More dramatic electrical breathing
@@ -114,7 +114,7 @@ const BarBasement = () => {
       const electricalGlitch = Math.sin(time * 7) < -0.8 ? 0.7 : 1; // More frequent glitches
       const subtlePulse = Math.sin(time * 5) * 0.12; // More noticeable pulsing
       const sparking = Math.sin(time * 12) > 0.92 ? 1.2 : 1; // More frequent sparks
-      flickerLight2Ref.current.intensity = (2.0 * breathingBase * electricalGlitch * sparking) + subtlePulse;
+      flickerLight2Ref.current.intensity = (2.2 * breathingBase * electricalGlitch * sparking) + subtlePulse;
     }
   });
 
@@ -199,12 +199,12 @@ const BarBasement = () => {
 
       {/* DARK TAVERN BASEMENT LIGHTING SYSTEM */}
       {/* Dark ambient light */}
-      <ambientLight intensity={0.22} color="#3d3529" />
+      <ambientLight intensity={0.28} color="#3d3529" />
       
       {/* Main overhead lighting */}
       <directionalLight
         position={[0, 8, 0]}
-        intensity={0.55}
+        intensity={0.65}
         color="#5a4d36"
         castShadow
         shadow-mapSize-width={2048}
@@ -244,7 +244,7 @@ const BarBasement = () => {
       {/* Additional atmospheric lighting */}
       <directionalLight
         position={[-8, 3, 0]}
-        intensity={0.15}
+        intensity={0.2}
         color="#554433"
       />
       
