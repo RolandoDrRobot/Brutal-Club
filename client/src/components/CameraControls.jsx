@@ -66,15 +66,15 @@ export const CameraControls = () => {
   // Reset camera when switching modes
   useEffect(() => {
     if (isCombatMode && initialCameraPosition.current) {
-      // Perfect fighting game camera position (side profile view showing both fighters)
-      camera.position.set(0, 0.2, 2.8); // Side view from Z-axis, closer to fighters
+      // Perfect fighting game camera position (side profile view showing both fighters) - RAISED
+      camera.position.set(0, 0.6, 2.8); // Side view from Z-axis, HIGHER camera position
       camera.rotation.z = 0; // Reset roll
       if (orbitControlsRef.current) {
-        orbitControlsRef.current.target.set(0, -0.3, 0); // Look at fighter upper torso level
+        orbitControlsRef.current.target.set(0, -0.1, 0); // Look at fighter upper torso level (adjusted)
         orbitControlsRef.current.update();
       }
       // Ensure camera looks at the center between both fighters at torso level
-      camera.lookAt(0, -0.3, 0);
+      camera.lookAt(0, -0.1, 0);
     }
   }, [isCombatMode, camera]);
 
@@ -87,7 +87,7 @@ export const CameraControls = () => {
         enableZoom={true}
         enableRotate={isCombatMode}
         minDistance={1.5} // Allow getting very close to the action
-        maxDistance={10} // Allow wider shots for full scene view
+        maxDistance={6} // RESTRICTED: Prevent zooming outside basement (was 10)
         minPolarAngle={0} // Full vertical range
         maxPolarAngle={Math.PI} // Full vertical range
         // No azimuth angle limits - full 360° rotation freedom

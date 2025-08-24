@@ -109,11 +109,11 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         style={{
           padding: isMobile ? '8px' : '20px',
           backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          border: '2px solid #f32210',
+          border: '2px solid #FFD700',
           borderRadius: '15px',
           boxShadow: `
-            0 0 15px rgba(243, 34, 16, 0.3),
-            inset 0 0 15px rgba(243, 34, 16, 0.1)
+            0 0 15px rgba(255, 215, 0, 0.3),
+            inset 0 0 15px rgba(255, 215, 0, 0.1)
           `,
           width: '100%',
           maxWidth: isMobile ? 'calc(33.333% - 6px)' : '280px', // 3 cajas en una fila móvil
@@ -127,13 +127,13 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             fontSize: isMobile ? '14px' : '18px',
             lineHeight: 1,
             fontWeight: 900,
-            color: '#f32210',
+            color: '#FFD700',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
-            backgroundColor: 'rgba(243, 34, 16, 0.1)',
+            backgroundColor: 'rgba(255, 215, 0, 0.1)',
             padding: isMobile ? '4px 8px' : '6px 12px',
             borderRadius: '6px',
-            border: '1px solid #f32210'
+            border: '1px solid #FFD700'
           }}>
             {icon}
           </Text>
@@ -152,7 +152,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           {/* Level Display */}
           <Text style={{
             fontSize: isMobile ? '10px' : '16px',
-            color: '#f32210',
+            color: '#FFD700',
             fontWeight: 600,
             fontFamily: 'Anton, sans-serif',
             lineHeight: 1
@@ -164,7 +164,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           <Box style={{ width: '100%', marginBottom: isMobile ? '6px' : '10px' }}>
             <Progress
               value={progress}
-              color="#f32210"
+              color="#FFD700"
               size={isMobile ? 'sm' : 'lg'}
               radius="md"
               style={{
@@ -172,8 +172,8 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               }}
               styles={{
                 bar: {
-                  background: `linear-gradient(90deg, #f32210, #ff4444)`,
-                  boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)'
+                  background: `linear-gradient(90deg, #FFD700, #FFA500)`,
+                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.5)'
                 }
               }}
             />
@@ -210,10 +210,10 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
                 fontWeight: 700,
                 padding: isMobile ? '4px 6px' : '8px 16px',
                 backgroundColor: canUpgrade(statName) ? 'transparent' : 'rgba(100, 100, 100, 0.3)',
-                borderColor: canUpgrade(statName) ? '#f32210' : '#666',
-                border: `2px solid ${canUpgrade(statName) ? '#f32210' : '#666'}`,
+                borderColor: canUpgrade(statName) ? '#FFD700' : '#666',
+                border: `2px solid ${canUpgrade(statName) ? '#FFD700' : '#666'}`,
                 borderRadius: '8px',
-                color: canUpgrade(statName) ? '#f32210' : '#999',
+                color: canUpgrade(statName) ? '#FFD700' : '#999',
                 textTransform: 'uppercase',
                 letterSpacing: isMobile ? '0.5px' : '1px',
                 fontFamily: 'Anton, sans-serif',
@@ -224,7 +224,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               }}
               onMouseEnter={(e) => {
                 if (canUpgrade(statName) && !isMobile) {
-                  e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.1)';
+                  e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
                   e.target.style.transform = 'scale(1.05)';
                 }
               }}
@@ -289,10 +289,10 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             fontWeight: 700,
             padding: isMobile ? "12px 20px" : "15px 30px",
             backgroundColor: "transparent",
-            borderColor: "#f32210",
-            border: "3px solid #f32210",
+            borderColor: "#FFD700",
+            border: "3px solid #FFD700",
             borderRadius: "10px",
-            color: "#f32210",
+            color: "#FFD700",
             textTransform: "uppercase",
             letterSpacing: "2px",
             fontFamily: "Anton, sans-serif",
@@ -400,12 +400,12 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               width: '100%',
               height: '85%', // Mayor porcentaje de la caja
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              border: '3px solid #f32210',
+              border: '3px solid #FFD700',
               borderRadius: '15px',
               marginBottom: '10px',
               boxShadow: `
-                0 0 20px rgba(243, 34, 16, 0.3),
-                inset 0 0 20px rgba(243, 34, 16, 0.1)
+                0 0 20px rgba(255, 215, 0, 0.3),
+                inset 0 0 20px rgba(255, 215, 0, 0.1)
               `,
               position: 'relative',
               overflow: 'hidden',
@@ -501,10 +501,10 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             fontWeight: 700,
             padding: isMobile ? "10px 16px" : "15px 30px",
             backgroundColor: "transparent",
-            borderColor: "#f32210",
-            border: "3px solid #f32210",
+            borderColor: "#FFD700",
+            border: "3px solid #FFD700",
             borderRadius: "10px",
-            color: "#f32210",
+            color: "#FFD700",
             textTransform: "uppercase",
             letterSpacing: "2px",
             fontFamily: "Anton, sans-serif",
