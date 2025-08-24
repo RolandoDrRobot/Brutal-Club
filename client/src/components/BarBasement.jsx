@@ -17,6 +17,11 @@ const BarBasement = () => {
     horizontalCable: new THREE.CylinderGeometry(0.03, 0.03, 12), // Long horizontal cables
     metalBar: new THREE.BoxGeometry(8, 0.1, 0.1), // Metal support bars
     cableSupport: new THREE.BoxGeometry(0.15, 0.2, 0.15), // Cable support brackets
+    // Light fixtures
+    lightFixture: new THREE.CylinderGeometry(0.4, 0.4, 0.3), // Main light fixture body
+    lightBulb: new THREE.SphereGeometry(0.25, 8, 6), // Light bulb
+    lightSocket: new THREE.CylinderGeometry(0.15, 0.15, 0.2), // Light socket
+    lightCable: new THREE.CylinderGeometry(0.02, 0.02, 1.5), // Cable hanging from ceiling
     // Blood stains
     bloodStain: new THREE.CircleGeometry(0.5, 8),
   }), []);
@@ -59,6 +64,27 @@ const BarBasement = () => {
       roughness: 0.7,
       metalness: 0.5
     }),
+    // Light fixture materials
+    lightFixture: new THREE.MeshStandardMaterial({
+      color: '#333333', // Dark metal fixture
+      roughness: 0.7,
+      metalness: 0.8
+    }),
+    lightBulb: new THREE.MeshStandardMaterial({
+      color: '#ffffcc', // Warm light bulb color
+      roughness: 0.1,
+      metalness: 0.0
+    }),
+    lightSocket: new THREE.MeshStandardMaterial({
+      color: '#222222', // Dark socket
+      roughness: 0.8,
+      metalness: 0.6
+    }),
+    lightCable: new THREE.MeshStandardMaterial({
+      color: '#111111', // Dark cable
+      roughness: 0.9,
+      metalness: 0.1
+    }),
     // Blood stain material
     bloodStain: new THREE.MeshStandardMaterial({
       color: '#CC0000', // Bright red blood
@@ -79,29 +105,45 @@ const BarBasement = () => {
       [5, 2, 5]
     ],
     
-    // Horizontal ceiling cables (closer for claustrophobia)
+    // Horizontal ceiling cables (higher position)
     horizontalCables: [
-      { pos: [-2, 2.8, 0], rot: [0, 0, Math.PI/2] }, // Cable running East-West
-      { pos: [2, 2.6, 0], rot: [0, 0, Math.PI/2] },  // Parallel cable
-      { pos: [0, 2.7, -3], rot: [Math.PI/2, 0, 0] }, // Cable running North-South
-      { pos: [0, 2.5, 3], rot: [Math.PI/2, 0, 0] }   // Parallel cable
+      { pos: [-2, 3.2, 0], rot: [0, 0, Math.PI/2] }, // Cable running East-West
+      { pos: [2, 3.0, 0], rot: [0, 0, Math.PI/2] },  // Parallel cable
+      { pos: [0, 3.1, -3], rot: [Math.PI/2, 0, 0] }, // Cable running North-South
+      { pos: [0, 2.9, 3], rot: [Math.PI/2, 0, 0] }   // Parallel cable
     ],
     
-    // Metal support bars (closer for claustrophobia)
+    // Metal support bars (higher position)
     metalBars: [
-      { pos: [-4, 2.9, 0], rot: [0, 0, 0] },         // Horizontal bar
-      { pos: [4, 2.9, 0], rot: [0, 0, 0] },          // Parallel bar
-      { pos: [0, 2.8, -4], rot: [0, Math.PI/2, 0] }, // Perpendicular bar
-      { pos: [0, 2.8, 4], rot: [0, Math.PI/2, 0] }   // Parallel bar
+      { pos: [-4, 3.3, 0], rot: [0, 0, 0] },         // Horizontal bar
+      { pos: [4, 3.3, 0], rot: [0, 0, 0] },          // Parallel bar
+      { pos: [0, 3.2, -4], rot: [0, Math.PI/2, 0] }, // Perpendicular bar
+      { pos: [0, 3.2, 4], rot: [0, Math.PI/2, 0] }   // Parallel bar
     ],
     
-    // Cable support brackets (closer for claustrophobia)
+    // Cable support brackets (higher position)
     cableSupports: [
-      { pos: [-6, 2.7, 0] }, { pos: [1, 2.7, 0] }, { pos: [6, 2.7, 0] },
-      { pos: [0, 2.6, -6] }, { pos: [0, 2.6, -1] }, { pos: [0, 2.6, 6] }
+      { pos: [-6, 3.1, 0] }, { pos: [1, 3.1, 0] }, { pos: [6, 3.1, 0] },
+      { pos: [0, 3.0, -6] }, { pos: [0, 3.0, -1] }, { pos: [0, 3.0, 6] }
     ],
     
 
+    
+    // Light fixtures positions
+    lightFixtures: [
+      { 
+        pos: [-5, 3.8, -5], 
+        cablePos: [-5, 3.2, -5],
+        bulbPos: [-5, 3.5, -5],
+        socketPos: [-5, 3.3, -5]
+      },
+      { 
+        pos: [5, 3.8, 5], 
+        cablePos: [5, 3.2, 5],
+        bulbPos: [5, 3.5, 5],
+        socketPos: [5, 3.3, 5]
+      }
+    ],
     
     // Blood stains (essential for fight club)
     bloodStains: [
@@ -115,30 +157,31 @@ const BarBasement = () => {
 
   }), []);
 
-  // Noticeable electrical flickering effect - electrical problems but not annoying
+  // Intense electrical flickering effect - very loose and unstable elements
   useFrame((state) => {
-    // Skip frames for better performance
-    if (Math.floor(state.clock.getElapsedTime() * 60) % 2 !== 0) return;
-    
     const time = state.clock.getElapsedTime();
     
-    // Light 1 - More noticeable electrical problems
+    // Light 1 - Subtle electrical problems with loose elements - brighter
     if (flickerLight1Ref.current) {
-      const dramaticCycle = Math.sin(time * 0.4) * 0.25 + 0.75; // More variation
-      const powerSurge = Math.sin(time * 1.8) > 0.75 ? 1.3 : 1; // More frequent surges
-      const coolFlicker = Math.sin(time * 8) * 0.15; // More visible flicker
-      const electricalChaos = Math.sin(time * 15) < -0.85 ? 0.5 : 1; // More electrical failures
-      flickerLight1Ref.current.intensity = (2.2 * dramaticCycle * powerSurge * electricalChaos) + coolFlicker;
+      const dramaticCycle = Math.sin(time * 0.4) * 0.2 + 0.8; // Less variation
+      const powerSurge = Math.sin(time * 1.8) > 0.8 ? 1.2 : 0.9; // Less frequent and milder surges
+      const subtleFlicker = Math.sin(time * 8) * 0.1; // Much less visible flicker
+      const electricalChaos = Math.sin(time * 12) < -0.9 ? 0.7 : 1; // Less frequent electrical failures
+      const looseMovement = Math.sin(time * 2) * 0.1; // Reduced loose movement
+      flickerLight1Ref.current.intensity = (2.8 * dramaticCycle * powerSurge * electricalChaos) + subtleFlicker + looseMovement;
     }
     
-    // Light 2 - More dramatic electrical breathing
+    // Light 2 - Subtle electrical breathing with loose elements - brighter
     if (flickerLight2Ref.current) {
-      const breathingBase = Math.sin(time * 1.0) * 0.2 + 0.8; // More breathing effect
-      const electricalGlitch = Math.sin(time * 7) < -0.8 ? 0.7 : 1; // More frequent glitches
-      const subtlePulse = Math.sin(time * 5) * 0.12; // More noticeable pulsing
-      const sparking = Math.sin(time * 12) > 0.92 ? 1.2 : 1; // More frequent sparks
-      flickerLight2Ref.current.intensity = (2.2 * breathingBase * electricalGlitch * sparking) + subtlePulse;
+      const breathingBase = Math.sin(time * 1.0) * 0.2 + 0.8; // Less breathing effect
+      const electricalGlitch = Math.sin(time * 20) < -0.8 ? 0.7 : 1; // Much less frequent glitches
+      const subtlePulse = Math.sin(time * 5) * 0.1; // Much less noticeable pulsing
+      const subtleSparking = Math.sin(time * 25) > 0.9 ? 1.1 : 0.9; // Much less frequent and milder sparks
+      const looseSway = Math.sin(time * 3) * 0.08; // Reduced loose swaying
+      flickerLight2Ref.current.intensity = (2.8 * breathingBase * electricalGlitch * subtleSparking) + subtlePulse + looseSway;
     }
+    
+
   });
 
   return (
@@ -168,54 +211,13 @@ const BarBasement = () => {
       <mesh geometry={geometries.wall} material={materials.wall} position={[-9, 3, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow />
       <mesh geometry={geometries.wall} material={materials.wall} position={[9, 3, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow />
 
-      {/* Support columns */}
-      {elementPositions.columns.map((pos, index) => (
-        <mesh
-          key={`column-${index}`}
-          geometry={geometries.column}
-          material={materials.column}
-          position={pos}
-          castShadow
-          receiveShadow
-        />
-      ))}
 
 
 
-      {/* Horizontal ceiling cables */}
-      {elementPositions.horizontalCables.map((cable, index) => (
-        <mesh
-          key={`horizontal-cable-${index}`}
-          geometry={geometries.horizontalCable}
-          material={materials.cable}
-          position={cable.pos}
-          rotation={cable.rot}
-          castShadow
-        />
-      ))}
 
-      {/* Metal support bars */}
-      {elementPositions.metalBars.map((bar, index) => (
-        <mesh
-          key={`metal-bar-${index}`}
-          geometry={geometries.metalBar}
-          material={materials.metalBar}
-          position={bar.pos}
-          rotation={bar.rot}
-          castShadow
-        />
-      ))}
 
-      {/* Cable support brackets */}
-      {elementPositions.cableSupports.map((support, index) => (
-        <mesh
-          key={`cable-support-${index}`}
-          geometry={geometries.cableSupport}
-          material={materials.cableSupport}
-          position={support.pos}
-          castShadow
-        />
-      ))}
+
+
 
 
 
@@ -229,15 +231,15 @@ const BarBasement = () => {
       {/* ATMOSPHERIC FOG INSIDE BASEMENT */}
       <fog attach="fog" args={['#2a2318', 1.5, 8]} />
 
-      {/* DARK TAVERN BASEMENT LIGHTING SYSTEM */}
-      {/* Dark ambient light */}
-      <ambientLight intensity={0.28} color="#3d3529" />
+      {/* BRIGHTER TAVERN BASEMENT LIGHTING SYSTEM */}
+      {/* Brighter ambient light */}
+      <ambientLight intensity={0.45} color="#4d4538" />
       
-      {/* Main overhead lighting */}
+      {/* Main overhead lighting - brighter */}
       <directionalLight
         position={[0, 8, 0]}
-        intensity={0.65}
-        color="#5a4d36"
+        intensity={0.85}
+        color="#6a5d46"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -250,14 +252,14 @@ const BarBasement = () => {
         shadow-camera-far={30}
       />
 
-      {/* Fixed ceiling spotlights for ambient lighting */}
+      {/* Fixed ceiling spotlights for ambient lighting - brighter */}
       <spotLight
         ref={flickerLight1Ref}
         position={[-5, 3.8, -5]}
-        intensity={2.0}
+        intensity={2.8}
         angle={0.8}
         penumbra={0.6}
-        color="#bb9955"
+        color="#ccaa66"
         castShadow
         target-position={[0, 0, 0]}
       />
@@ -265,38 +267,38 @@ const BarBasement = () => {
       <spotLight
         ref={flickerLight2Ref}
         position={[5, 3.8, 5]}
-        intensity={2.0}
+        intensity={2.8}
         angle={0.8}
         penumbra={0.6}
-        color="#bb9955"
+        color="#ccaa66"
         castShadow
         target-position={[0, 0, 0]}
       />
 
-      {/* Additional atmospheric lighting */}
+      {/* Additional atmospheric lighting - brighter */}
       <directionalLight
         position={[-8, 3, 0]}
+        intensity={0.35}
+        color="#665544"
+      />
+      
+      <directionalLight
+        position={[8, 3, 0]}
+        intensity={0.3}
+        color="#665544"
+      />
+
+      {/* Rim lighting for atmosphere - brighter */}
+      <directionalLight
+        position={[0, 1, -12]}
         intensity={0.2}
         color="#554433"
       />
       
       <directionalLight
-        position={[8, 3, 0]}
-        intensity={0.15}
-        color="#554433"
-      />
-
-      {/* Rim lighting for atmosphere */}
-      <directionalLight
-        position={[0, 1, -12]}
-        intensity={0.1}
-        color="#443322"
-      />
-      
-      <directionalLight
         position={[0, 1, 12]}
-        intensity={0.1}
-        color="#443322"
+        intensity={0.2}
+        color="#554433"
       />
 
       {/* Underground atmosphere */}

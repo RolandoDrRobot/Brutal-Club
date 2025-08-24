@@ -706,11 +706,11 @@ const Interface = () => {
               }}>
 
 
-                {/* MENU Button */}
+                {/* FIGHT Button */}
                 <button
                   onClick={() => {
                     playButtonSound();
-                    navigateToMenu();
+                    navigateToOpponentSelect();
                   }}
                   style={{
                     fontSize: isMobile ? '16px' : '24px',
@@ -748,7 +748,7 @@ const Interface = () => {
                     }
                   }}
                 >
-                  MENU
+                  FIGHT
                 </button>
               </div>
             </div>
