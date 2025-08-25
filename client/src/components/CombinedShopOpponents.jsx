@@ -44,7 +44,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         }}
       >
         <Text style={{
-          fontSize: "24px",
+                      fontSize: "30px",
           color: "#f32210",
           fontFamily: "Anton, sans-serif"
         }}>
@@ -245,7 +245,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     const baseStyle = {
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
       border: 'none',
-      fontSize: isMobile ? '12px' : '14px',
+                  fontSize: isMobile ? '15px' : '18px',
       fontWeight: 700,
       padding: '6px 8px',
       borderRadius: '8px',
@@ -339,7 +339,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           }}
         >
           <Text style={{
-            fontSize: '24px',
+            fontSize: '30px',
             fontWeight: 700,
             color: 'rgb(255, 215, 0)',
             fontFamily: 'Anton, sans-serif',
@@ -350,7 +350,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           </Text>
           
           <Text style={{
-            fontSize: '16px',
+            fontSize: '20px',
             fontWeight: 400,
             color: coins === 0 ? '#f32210' : 'rgb(245, 245, 220)',
             fontFamily: 'Anton, sans-serif',
@@ -362,7 +362,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           </Text>
 
           <Text style={{
-            fontSize: '16px',
+            fontSize: '20px',
             fontWeight: 400,
             color: coins === 0 ? '#f32210' : 'rgb(245, 245, 220)',
             fontFamily: 'Anton, sans-serif',
@@ -387,7 +387,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
               onBackClick();
             }}
             style={{
-              fontSize: "16px",
+              fontSize: "20px",
               fontWeight: 700,
               padding: "12px 20px",
               backgroundColor: "transparent",
@@ -505,7 +505,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                 
                 {/* Instruction Text */}
                 <Text style={{
-                  fontSize: isMobile ? '14px' : '16px',
+                  fontSize: isMobile ? '18px' : '20px',
                   fontWeight: 700,
                   color: 'rgb(255, 215, 0)',
                   fontFamily: 'Anton, sans-serif',
@@ -621,7 +621,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                   
                   {/* Fighter Name */}
                   <Text style={{
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? '18px' : '20px',
                     fontWeight: 700,
                     color: opponent.isLocked ? '#666' : '#F5F5DC',
                     fontFamily: 'Anton, sans-serif',
@@ -639,7 +639,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
           {/* Arcade Mechanic Label */}
           <Text style={{
-            fontSize: '14px',
+            fontSize: '18px',
             fontWeight: 700,
             color: 'rgb(255, 215, 0)',
             fontFamily: 'Anton, sans-serif',

@@ -160,7 +160,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         <Stack spacing={isMobile ? 'xs' : 'sm'} align="center">
 
           <Text style={{
-            fontSize: isMobile ? '12px' : '20px',
+            fontSize: '24px',
             fontWeight: 700,
             color: '#F5F5DC',
             fontFamily: 'Anton, sans-serif',
@@ -176,21 +176,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             {displayName}
           </Text>
           
-          {/* Level Display */}
-          <Text style={{
-            fontSize: isMobile ? '10px' : '16px',
-            color: '#FFD700',
-            fontWeight: 600,
-            fontFamily: 'Anton, sans-serif',
-            lineHeight: 1,
-            textShadow: `
-              0 0 10px #000000,
-              0 0 20px #000000,
-              2px 2px 4px #000000
-            `
-          }}>
-            LEVEL {currentLevel}/{maxLevel}
-          </Text>
+
 
           {/* Progress Bar */}
           <Box style={{ width: '100%', marginBottom: isMobile ? '6px' : '10px' }}>
@@ -201,6 +187,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               radius="md"
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                height: '30px'
               }}
               styles={{
                 bar: {

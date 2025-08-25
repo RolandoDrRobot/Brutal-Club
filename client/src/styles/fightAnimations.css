@@ -410,7 +410,7 @@
 
 /* Common title styles */
 .fight-title {
-  font-size: 55px;
+  font-size: 69px;
   font-weight: 900;
   color: #f32210;
   font-family: 'Anton', sans-serif;
@@ -434,7 +434,7 @@
 .fight-subtitle {
   color: rgb(245, 245, 220);
   font-family: Anton, sans-serif;
-  font-size: 28px;
+  font-size: 40px;
   font-weight: 400;
   margin-top: 0px;
   margin-bottom: 0;
@@ -504,6 +504,6 @@
   display: inline-block;
   max-width: 100%;
   line-height: 1;
-  font-size: 30px;
+  font-size: 38px;
   letter-spacing: 3px;
 } 

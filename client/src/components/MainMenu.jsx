@@ -18,7 +18,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
   const { playButtonSound } = useButtonSound();
 
   const getMenuButtonStyle = (backgroundImage) => ({
-    fontSize: isMobile ? "24px" : "32px",
+            fontSize: isMobile ? "30px" : "40px",
     fontWeight: 700,
     padding: "0px",
     minHeight: isMobile ? "80px" : "100px",

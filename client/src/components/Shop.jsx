@@ -127,7 +127,7 @@ const Shop = ({ onBackClick }) => {
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         color: '#FFD700',
         border: 'none',
-        fontSize: isMobile ? '24px' : '28px',
+        fontSize: isMobile ? '30px' : '35px',
         fontWeight: 700,
         padding: '0px',
         borderRadius: '8px',
@@ -151,7 +151,7 @@ const Shop = ({ onBackClick }) => {
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         color: '#FFD700',
         border: 'none',
-        fontSize: isMobile ? '24px' : '28px',
+        fontSize: isMobile ? '30px' : '35px',
         fontWeight: 700,
         padding: '0px',
         borderRadius: '8px',
@@ -170,7 +170,7 @@ const Shop = ({ onBackClick }) => {
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         color: '#FFD700',
         border: 'none',
-        fontSize: isMobile ? '24px' : '28px',
+        fontSize: isMobile ? '30px' : '35px',
         fontWeight: 700,
         padding: '0px',
         borderRadius: '8px',
@@ -248,7 +248,7 @@ const Shop = ({ onBackClick }) => {
           }}
         >
           <Text style={{
-            fontSize: '24px',
+            fontSize: '30px',
             fontWeight: 700,
             color: 'rgb(255, 215, 0)',
             fontFamily: 'Anton, sans-serif',
@@ -258,7 +258,7 @@ const Shop = ({ onBackClick }) => {
             Recruite Fighters
           </Text>
           <Text style={{
-            fontSize: '16px',
+            fontSize: '20px',
             fontWeight: 400,
             color: 'rgb(245, 245, 220)',
             fontFamily: 'Anton, sans-serif',
@@ -279,7 +279,7 @@ const Shop = ({ onBackClick }) => {
               onBackClick();
             }}
             style={{
-              fontSize: '16px',
+              fontSize: '20px',
               fontWeight: 700,
               padding: '12px 20px',
               backgroundColor: 'transparent',
@@ -441,7 +441,7 @@ const Shop = ({ onBackClick }) => {
             console.log('Buy Coins clicked');
           }}
           style={{
-            fontSize: isMobile ? "36px" : "48px",
+            fontSize: isMobile ? "45px" : "60px",
             fontWeight: 700,
             padding: isMobile ? "20px 50px" : "25px 70px",
             minHeight: isMobile ? "100px" : "120px",
@@ -512,7 +512,7 @@ const Shop = ({ onBackClick }) => {
             onBackClick();
           }}
           style={{
-            fontSize: isMobile ? "20px" : "24px",
+            fontSize: isMobile ? "25px" : "30px",
             fontWeight: 700,
             padding: isMobile ? "15px 40px" : "20px 60px",
             minHeight: isMobile ? "60px" : "80px",
