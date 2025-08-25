@@ -306,7 +306,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         alignItems: 'center',
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
-        paddingTop: "33px",
         paddingBottom: "30px",
         flexWrap: 'wrap',
         gap: '10px',
@@ -428,7 +427,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       }}>
         {/* CHARACTER SELECTION Section */}
         {ownedCharacters.length > 0 && (
-          <Box style={{ marginBottom: isMobile ? "30px" : "40px" }}>
+          <Box>
 
 
             {/* Character Selection UI */}
@@ -482,7 +481,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
               }}>
                 {/* Character Preview */}
                 <Box style={{
-                  width: isMobile ? '150px' : '200px',
+                  width: '195px',
                   height: isMobile ? '24dvh' : '28vh',
                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
                   border: '3px solid #f32210',
@@ -647,7 +646,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             letterSpacing: '1px',
             textAlign: 'center',
             lineHeight: 1.3,
-            maxWidth: '200px',
+            maxWidth: '300px',
             animation: 'fadeInSpray 0.5s ease-out 0.6s both'
           }}>
             FIGHT THROUGH ALL OPPONENTS IN SEQUENCE TO UNLOCK THE NEXT ONE

@@ -212,22 +212,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           </Box>
 
           {/* Upgrade Button or Max Level Indicator */}
-          {/* Status indicator */}
-          <Text style={{
-            fontSize: isMobile ? '8px' : '12px',
-            fontWeight: 600,
-            color: isMaxLevel(statName) ? '#999' : canUpgrade(statName) ? '#FFD700' : '#666',
-            fontFamily: 'Anton, sans-serif',
-            textAlign: 'center',
-            marginTop: isMobile ? '4px' : '8px',
-            textShadow: `
-              0 0 10px #000000,
-              0 0 20px #000000,
-              2px 2px 4px #000000
-            `
-          }}>
-            {isMaxLevel(statName) ? 'MAX LEVEL' : canUpgrade(statName) ? `CLICK TO UPGRADE (${upgradeCost}C)` : 'INSUFFICIENT COINS'}
-          </Text>
+
         </Stack>
       </Paper>
     );
