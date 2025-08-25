@@ -630,7 +630,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                     textTransform: 'uppercase',
                     textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                   }}>
-                    {opponent.name}
+                    {opponent.isDefeated ? 'DEFEATED' : opponent.isUnlocked ? 'FIGHT' : opponent.name}
                   </Text>
                 </Box>
               </Grid.Col>
