@@ -81,7 +81,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     };
 
     loadShopModels();
-  }, [lazyLoadModel]);
+  }, []); // Removed lazyLoadModel dependency to prevent infinite loop
 
   // Get opponents with their current unlock status
   const opponents = getOpponentsStatus().map((opponent, index) => ({

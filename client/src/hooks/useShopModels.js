@@ -29,7 +29,7 @@ export const useShopModels = (lazyLoadModel) => {
     };
 
     loadShopModels();
-  }, [lazyLoadModel]);
+  }, []); // Removed lazyLoadModel dependency to prevent infinite loop
 
   return {
     loadingModels,

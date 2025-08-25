@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useGLTF } from '@react-three/drei';
 
 // PRIORITY LOADING: Core models needed immediately
@@ -262,13 +262,13 @@ export const useModelLoader = () => {
   }, []);
 
   // Lazy load function for on-demand assets
-  const lazyLoadModel = async (modelName) => {
+  const lazyLoadModel = useCallback(async (modelName) => {
     const modelPath = LAZY_MODELS.find(path => path.includes(modelName));
     if (modelPath) {
       return preloadModel(modelPath, 'lazy');
     }
     return false;
-  };
+  }, []);
 
   return {
     isLoading,
