@@ -482,7 +482,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                 {/* Character Preview */}
                 <Box style={{
                   width: '195px',
-                  height: isMobile ? '24dvh' : '28vh',
+                  height: isMobile ? '33dvh' : '28vh',
                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
                   border: '3px solid #f32210',
                   borderRadius: '20px',
@@ -503,19 +503,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                   />
                 </Box>
                 
-                {/* Instruction Text */}
-                <Text style={{
-                  fontSize: isMobile ? '18px' : '20px',
-                  fontWeight: 700,
-                  color: 'rgb(255, 215, 0)',
-                  fontFamily: 'Anton, sans-serif',
-                  letterSpacing: '1px',
-                  textAlign: 'center',
-                  lineHeight: 1.3,
-                  maxWidth: '200px'
-                }}>
-                  SELECT YOUR FIGHTER AND YOUR NEXT OPPONENT
-                </Text>
+
               </Box>
 
               {/* Right Arrow */}

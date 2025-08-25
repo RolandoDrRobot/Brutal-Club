@@ -93,7 +93,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
       <Box
         style={{
           width: "100%",
-          padding: "0 0 60px",
+          padding: "0 0 90px",
           animation: "fadeInSpray 0.7s ease-out 0.2s both"
         }}
       >

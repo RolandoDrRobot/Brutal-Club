@@ -138,18 +138,17 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          border: `2px solid ${canUpgrade(statName) ? '#FFD700' : '#666'}`,
+          border: `2px solid ${isMaxLevel(statName) ? '#FFD700' : '#f32210'}`,
           borderRadius: '15px',
-          boxShadow: canUpgrade(statName) ? `
+          boxShadow: isMaxLevel(statName) ? `
             0 0 15px rgba(255, 215, 0, 0.3),
             inset 0 0 15px rgba(255, 215, 0, 0.1)
           ` : `
-            0 0 15px rgba(102, 102, 102, 0.3),
-            inset 0 0 15px rgba(102, 102, 102, 0.1)
+            0 0 15px rgba(243, 34, 16, 0.3),
+            inset 0 0 15px rgba(243, 34, 16, 0.1)
           `,
           width: '100%',
           maxWidth: isMobile ? 'calc(33.333% - 6px)' : '280px', // 3 cajas en una fila móvil
-          minHeight: isMobile ? '120px' : '160px',
           flex: isMobile ? '1' : 'none', // Flex igual para las 3 cajas en móvil
           cursor: canUpgrade(statName) ? 'pointer' : 'not-allowed',
           transition: 'all 0.2s ease',
@@ -288,7 +287,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         alignItems: 'center',
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
-        paddingTop: '50px',
+        paddingTop: '15px',
         paddingBottom: '30px',
         flexWrap: 'wrap',
         gap: '10px',
@@ -430,7 +429,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             key={selectedCharacter}
             style={{
               width: '100%',
-              height: '98%', // Mayor porcentaje de la caja
+              height: '120%', // Aumentado para hacer el elemento más alto
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
               border: '3px solid #f32210',
               borderRadius: '15px',
@@ -460,18 +459,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             />
           </Box>
 
-          {/* Character Name */}
-          <Text style={{
-            fontSize: isMobile ? '16px' : '24px',
-            fontWeight: 700,
-            color: '#F5F5DC',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '1px',
-            textAlign: 'center',
-            lineHeight: 1
-          }}>
-            {characters[selectedCharacter].name}
-          </Text>
+
         </Box>
 
         {/* Right Arrow */}
@@ -505,8 +493,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         gap: isMobile ? '8px' : '25px',
         width: '100%',
         maxWidth: isMobile ? '100%' : '900px',
-        margin: '0 auto',
-        marginBottom: '40px',
+        margin: '0',
         flexShrink: 0,
         padding: isMobile ? '0 5px' : '0'
       }}>
@@ -514,6 +501,23 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         <StatUpgradeTree statName="stamina" />
         <StatUpgradeTree statName="strength" />
       </Box>
+
+      {/* Training Instructions Label */}
+      <Text style={{
+        fontSize: '18px',
+        fontWeight: 700,
+        color: 'rgb(255, 215, 0)',
+        fontFamily: 'Anton, sans-serif',
+        letterSpacing: '1px',
+        textAlign: 'center',
+        lineHeight: 1.3,
+        maxWidth: '300px',
+        margin: '0 auto',
+        paddingBottom: '25px',
+        animation: 'fadeInSpray 0.5s ease-out 0.6s both'
+      }}>
+        TRAIN YOUR FIGHTER BY TAPPING THE BUTTON
+      </Text>
 
 
     </Box>

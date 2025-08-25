@@ -401,11 +401,14 @@
   left: 0;
   width: 100vw;
   height: 100dvh;
+  max-width: 100vw;
+  max-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   z-index: 1000;
+  overflow: hidden;
 }
 
 /* Common title styles */

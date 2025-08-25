@@ -215,7 +215,7 @@ const Shop = ({ onBackClick }) => {
         alignItems: 'center',
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
-        paddingTop: "33px",
+        paddingTop: "0",
         paddingBottom: "30px",
         flexWrap: 'wrap',
         gap: '10px',
