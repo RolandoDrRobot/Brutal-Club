@@ -316,7 +316,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         alignItems: 'center',
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
-        paddingTop: '20px',
+        paddingTop: '50px',
         paddingBottom: '30px',
         flexWrap: 'wrap',
         gap: '10px',

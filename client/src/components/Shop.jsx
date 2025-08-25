@@ -215,8 +215,8 @@ const Shop = ({ onBackClick }) => {
         alignItems: 'center',
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
-        marginBottom: "20px",
-        paddingTop: "20px",
+        paddingTop: "33px",
+        paddingBottom: "30px",
         flexWrap: 'wrap',
         gap: '10px',
         width: '100%'
@@ -250,7 +250,7 @@ const Shop = ({ onBackClick }) => {
           <Text style={{
             fontSize: '24px',
             fontWeight: 700,
-            color: '#FFD700',
+            color: 'rgb(255, 215, 0)',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             whiteSpace: 'nowrap'
@@ -260,7 +260,7 @@ const Shop = ({ onBackClick }) => {
           <Text style={{
             fontSize: '16px',
             fontWeight: 400,
-            color: '#F5F5DC',
+            color: 'rgb(245, 245, 220)',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.5px',
             marginTop: '4px',

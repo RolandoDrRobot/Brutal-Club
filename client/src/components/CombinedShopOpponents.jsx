@@ -306,10 +306,10 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         alignItems: 'center',
         animation: "fadeInSpray 0.7s ease-out 0.2s both",
         flexShrink: 0,
-        marginBottom: isMobile ? "20px" : "25px",
-        paddingTop: "20px",
+        paddingTop: "33px",
+        paddingBottom: "30px",
         flexWrap: 'wrap',
-        gap: isMobile ? '10px' : '15px',
+        gap: '10px',
         width: '100%'
       }}>
         {/* Left side: Coins and description text */}
@@ -340,9 +340,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           }}
         >
           <Text style={{
-            fontSize: isMobile ? '24px' : '28px',
+            fontSize: '24px',
             fontWeight: 700,
-            color: '#FFD700',
+            color: 'rgb(255, 215, 0)',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             whiteSpace: 'nowrap'
@@ -351,9 +351,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           </Text>
           
           <Text style={{
-            fontSize: isMobile ? '16px' : '18px',
+            fontSize: '16px',
             fontWeight: 400,
-            color: coins === 0 ? '#f32210' : '#F5F5DC',
+            color: coins === 0 ? '#f32210' : 'rgb(245, 245, 220)',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.5px',
             marginTop: '4px',
@@ -363,9 +363,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           </Text>
 
           <Text style={{
-            fontSize: isMobile ? '16px' : '18px',
+            fontSize: '16px',
             fontWeight: 400,
-            color: coins === 0 ? '#f32210' : '#F5F5DC',
+            color: coins === 0 ? '#f32210' : 'rgb(245, 245, 220)',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.5px',
             marginTop: '4px',
@@ -483,7 +483,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                 {/* Character Preview */}
                 <Box style={{
                   width: isMobile ? '150px' : '200px',
-                  height: isMobile ? '24vh' : '28vh',
+                  height: isMobile ? '24dvh' : '28vh',
                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
                   border: '3px solid #f32210',
                   borderRadius: '20px',

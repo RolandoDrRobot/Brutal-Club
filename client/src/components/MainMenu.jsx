@@ -92,7 +92,8 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
       {/* Menu buttons in 2x2 grid at bottom */}
       <Box
         style={{
-          padding: isMobile ? "20px" : "40px",
+          width: "100%",
+          padding: "0 0 60px",
           animation: "fadeInSpray 0.7s ease-out 0.2s both"
         }}
       >
