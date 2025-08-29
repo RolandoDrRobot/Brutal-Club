@@ -3,7 +3,8 @@ import Pete from "./Pete";
 import Tyler from "./Tyler";
 import BloodFloor from "./BloodFloor";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useEffect } from "react";
+import { useModelLoader } from "../hooks/useModelLoader";
 
 // OPTIMIZED: Lazy load heavy 3D components for better code splitting
 const Audience = React.lazy(() => import("./Audience"));
@@ -11,6 +12,36 @@ const BarBasement = React.lazy(() => import("./BarBasement"));
 
 const Experience = () => {
   const { isCombatMode, selectedPlayer1Character, selectedPlayer2Character } = useCharacterAnimations();
+  const { loadOpponentModel } = useModelLoader();
+  
+  // 🚀 OPTIMIZATION: Track loaded models to avoid re-loading
+  const [loadedModels, setLoadedModels] = useState(new Set(['pete'])); // Pete is always loaded
+  const [showAudience, setShowAudience] = useState(false);
+
+  // 🎯 Load opponent model only when needed
+  useEffect(() => {
+    const loadOpponentIfNeeded = async () => {
+      if (selectedPlayer2Character && !loadedModels.has(selectedPlayer2Character.toLowerCase())) {
+        try {
+          await loadOpponentModel(selectedPlayer2Character);
+          setLoadedModels(prev => new Set([...prev, selectedPlayer2Character.toLowerCase()]));
+        } catch (error) {
+          console.warn('Failed to load opponent model:', error);
+        }
+      }
+    };
+
+    loadOpponentIfNeeded();
+  }, [selectedPlayer2Character, loadedModels, loadOpponentModel]);
+
+  // 🎭 Show audience only after initial load is complete
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowAudience(true);
+    }, 2000); // Show audience after 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Positions and rotations according to mode
   const getCharacterTransforms = () => {
@@ -45,7 +76,14 @@ const Experience = () => {
   const renderCharacter = (characterModel, player, position, rotation) => {
     const props = { player, position, rotation };
     
-    switch (characterModel.toLowerCase()) {
+    // 🚀 OPTIMIZATION: Only render if model is loaded or is the default
+    const modelName = characterModel.toLowerCase();
+    if (!loadedModels.has(modelName) && modelName !== 'pete') {
+      // Show loading placeholder or fallback to Pete
+      return <Pete {...props} />;
+    }
+    
+    switch (modelName) {
       case 'pete':
         return <Pete {...props} />;
       case 'tyler':
@@ -70,10 +108,12 @@ const Experience = () => {
         <BarBasement />
       </Suspense>
       
-      {/* Audience around the fighters - Lazy loaded */}
-      <Suspense fallback={null}>
-        <Audience />
-      </Suspense>
+      {/* Audience around the fighters - Lazy loaded and delayed */}
+      {showAudience && (
+        <Suspense fallback={null}>
+          <Audience />
+        </Suspense>
+      )}
       
       {/* Blood effects - Mantener gotas de sangre en el piso */}
       <BloodFloor />

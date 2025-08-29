@@ -58,6 +58,23 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
     }
   `;
 
+  // 🚀 MOBILE OPTIMIZATION: Show different messages based on progress
+  const getProgressMessage = () => {
+    if (progress >= 35) {
+      return "🎮 ¡Listo para jugar!";
+    } else if (progress >= 30) {
+      return "🔊 Cargando audio esencial...";
+    } else if (progress >= 20) {
+      return "🎨 Cargando interfaz...";
+    } else if (progress >= 0) {
+      return "🚀 Cargando modelos 3D...";
+    }
+    return status;
+  };
+
+  // 🚀 MOBILE OPTIMIZATION: Show playable indicator
+  const isPlayable = progress >= 35;
+
   return (
     <>
       {/* Inyectar estilos CSS */}
@@ -94,7 +111,7 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
             minHeight: '20px'
           }}
         >
-          {status}
+          {getProgressMessage()}
         </Text>
         
         {/* Barra de progreso mejorada */}
@@ -114,11 +131,15 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
             style={{
               width: `${progress}%`,
               height: '100%',
-              background: 'linear-gradient(90deg, #f32210, #ff6b53, #f32210)',
+              background: isPlayable 
+                ? 'linear-gradient(90deg, #00ff00, #00cc00, #00ff00)' // Green when playable
+                : 'linear-gradient(90deg, #f32210, #ff6b53, #f32210)', // Red when loading
               backgroundSize: '200% 100%',
               borderRadius: '3px',
               transition: 'width 0.5s ease-out, background 0.3s ease-in-out',
-              boxShadow: '0 0 15px rgba(243, 34, 16, 0.8)',
+              boxShadow: isPlayable 
+                ? '0 0 15px rgba(0, 255, 0, 0.8)' // Green glow
+                : '0 0 15px rgba(243, 34, 16, 0.8)', // Red glow
               animation: progress > 0 ? 'shimmer 2s ease-in-out infinite' : 'none'
             }}
           />
@@ -128,16 +149,53 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
         <Text 
           size="lg" 
           style={{ 
-            color: '#f32210',
+            color: isPlayable ? '#00ff00' : '#f32210',
             textAlign: 'center',
             fontWeight: 700,
             fontSize: '18px',
-            textShadow: '0 0 10px rgba(243, 34, 16, 0.6)',
+            textShadow: isPlayable 
+              ? '0 0 10px rgba(0, 255, 0, 0.6)' // Green shadow
+              : '0 0 10px rgba(243, 34, 16, 0.6)', // Red shadow
             transition: 'color 0.3s ease-in-out, text-shadow 0.3s ease-in-out'
           }}
         >
           {Math.round(progress)}%
         </Text>
+
+        {/* 🚀 MOBILE OPTIMIZATION: Show playable indicator */}
+        {isPlayable && (
+          <Text 
+            size="sm" 
+            style={{ 
+              color: '#00ff00',
+              textAlign: 'center',
+              fontWeight: 600,
+              fontSize: '14px',
+              marginTop: '10px',
+              textShadow: '0 0 8px rgba(0, 255, 0, 0.6)',
+              animation: 'fadeInOut 1.5s ease-in-out infinite'
+            }}
+          >
+            ¡Toca para comenzar!
+          </Text>
+        )}
+
+        {/* 🚀 MOBILE OPTIMIZATION: Show loading tips */}
+        {!isPlayable && progress < 20 && (
+          <Text 
+            size="xs" 
+            style={{ 
+              color: '#F5F5DC',
+              textAlign: 'center',
+              opacity: 0.7,
+              marginTop: '20px',
+              fontSize: '12px',
+              maxWidth: '300px'
+            }}
+          >
+            💡 Consejo: En conexiones lentas, la carga puede tomar unos segundos más
+          </Text>
+        )}
       </Box>
     </>
   );

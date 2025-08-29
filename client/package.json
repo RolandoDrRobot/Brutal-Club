@@ -7,13 +7,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:prod": "NODE_ENV=production vite build",
     "preview": "vite preview",
-    "preview:prod": "vite preview --port 3000",
-    "serve": "vite preview --port 3000 --host",
-    "check-size": "du -sh dist/*",
-    "analyze": "yarn build:prod && npx vite-bundle-analyzer dist",
-    "lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html --view"
+    "optimize": "node scripts/optimize-assets.js",
+    "build:mobile": "yarn optimize && vite build",
+    "analyze": "vite build --mode analyze"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",

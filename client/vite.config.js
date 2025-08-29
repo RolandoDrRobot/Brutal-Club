@@ -19,6 +19,11 @@ export default defineConfig({
       compress: {
         drop_console: true, // Remove console.logs in production
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'], // Remove more console calls
+        passes: 2, // Multiple passes for better compression
+      },
+      mangle: {
+        toplevel: true, // Mangle top-level names
       },
     },
     rollupOptions: {
@@ -53,10 +58,15 @@ export default defineConfig({
         },
         entryFileNames: 'assets/js/[name]-[hash].js',
         manualChunks: {
-          // Vendor chunks for better caching
-          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei', 'three-stdlib'],
-          'ui-vendor': ['@mantine/core', '@mantine/hooks'],
-          'react-vendor': ['react', 'react-dom'],
+          // 🚀 MOBILE OPTIMIZATION: Smaller initial chunks
+          'three-core': ['three'],
+          'three-fiber': ['@react-three/fiber'],
+          'three-drei': ['@react-three/drei'],
+          'three-stdlib': ['three-stdlib'],
+          'ui-core': ['@mantine/core'],
+          'ui-hooks': ['@mantine/hooks'],
+          'react-core': ['react'],
+          'react-dom': ['react-dom'],
           // Separate chunks for heavy components that load on demand
           'menu-screens': [
             './src/components/MainMenu.jsx',
@@ -67,13 +77,17 @@ export default defineConfig({
           '3d-components': [
             './src/components/Audience.jsx',
             './src/components/BarBasement.jsx'
+          ],
+          'audio-components': [
+            './src/components/CrowdSound.jsx',
+            './src/components/PunchSound.jsx'
           ]
         }
       },
     },
     target: 'es2020', // Modern target for smaller bundles
     
-    // OPTIMIZED: Pre-bundle dependencies for faster dev and smaller initial chunks
+    // 🚀 MOBILE OPTIMIZATION: Pre-bundle dependencies for faster dev and smaller initial chunks
     optimizeDeps: {
       include: [
         'react',
@@ -88,9 +102,14 @@ export default defineConfig({
       exclude: [
         // Exclude heavy optional dependencies from initial bundle
         './src/components/Audience.jsx',
-        './src/components/BarBasement.jsx'
+        './src/components/BarBasement.jsx',
+        './src/components/CrowdSound.jsx',
+        './src/components/PunchSound.jsx'
       ]
     },
+    
+    // 🚀 MOBILE OPTIMIZATION: Chunk size warnings
+    chunkSizeWarningLimit: 500, // Warn if chunks are larger than 500KB
   },
   
   // Performance optimizations
@@ -98,12 +117,16 @@ export default defineConfig({
     target: 'es2020',
     // Tree-shaking optimization
     treeShaking: true,
+    // Remove unused code more aggressively
+    drop: ['console', 'debugger'],
   },
   
   // Optimize CSS
   css: {
     devSourcemap: false,
+    // 🚀 MOBILE OPTIMIZATION: CSS optimization (removed autoprefixer for now)
   },
+  
   // Development server optimizations
   server: {
     // Enable gzip compression
@@ -123,6 +146,7 @@ export default defineConfig({
       ]
     }
   },
+  
   // Asset handling
   assetsInclude: [
     '**/*.gltf', 
@@ -132,19 +156,24 @@ export default defineConfig({
     '**/*.mp3',
     '**/*.wav'
   ],
+  
   // Environment variables and build optimizations
   define: {
     __DEV__: process.env.NODE_ENV === 'development',
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     // Remove React DevTools in production
-    __REACT_DEVTOOLS_GLOBAL_HOOK__: process.env.NODE_ENV === 'production' ? '({ isDisabled: true })' : undefined
+    __REACT_DEVTOOLS_GLOBAL_HOOK__: process.env.NODE_ENV === 'production' ? '({ isDisabled: true })' : undefined,
+    // 🚀 MOBILE OPTIMIZATION: Add mobile detection
+    'process.env.IS_MOBILE': JSON.stringify(true)
   },
+  
   // Resolve optimizations
   resolve: {
     alias: {
       '@': '/src'
     }
   },
+  
   // Experimental features for better performance
   experimental: {
     renderBuiltUrl(filename, { hostType, type }) {
@@ -154,9 +183,17 @@ export default defineConfig({
       return filename;
     }
   },
+  
   // Worker optimizations
   worker: {
     format: 'es',
     plugins: [react()]
+  },
+  
+  // 🚀 MOBILE OPTIMIZATION: Add compression
+  preview: {
+    port: 4173,
+    host: true,
+    strictPort: true,
   }
 })
