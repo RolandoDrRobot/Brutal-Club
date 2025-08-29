@@ -688,7 +688,7 @@ const Interface = () => {
                     letterSpacing: '2px',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
                   }}>
-                    +200
+                    +1
                   </div>
                 </div>
               )}

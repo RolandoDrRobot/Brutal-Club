@@ -197,7 +197,48 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             />
           </Box>
 
-          {/* Upgrade Button or Max Level Indicator */}
+          {/* Level Display */}
+          <Text style={{
+            fontSize: isMobile ? '14px' : '16px',
+            fontWeight: 700,
+            color: '#FFD700',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '1px',
+            textAlign: 'center',
+            textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
+          }}>
+            LEVEL {currentLevel}/{maxLevel}
+          </Text>
+
+          {/* Cost Display */}
+          {!isMaxLevel(statName) && (
+            <Text style={{
+              fontSize: isMobile ? '12px' : '14px',
+              fontWeight: 600,
+              color: canUpgrade(statName) ? '#FFD700' : '#f32210',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              textAlign: 'center',
+              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
+            }}>
+              COST: {upgradeCost} COIN{upgradeCost !== 1 ? 'S' : ''}
+            </Text>
+          )}
+
+          {/* Max Level Indicator */}
+          {isMaxLevel(statName) && (
+            <Text style={{
+              fontSize: isMobile ? '12px' : '14px',
+              fontWeight: 600,
+              color: '#FFD700',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              textAlign: 'center',
+              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
+            }}>
+              MAX LEVEL
+            </Text>
+          )}
 
         </Stack>
       </Paper>

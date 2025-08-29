@@ -46,7 +46,7 @@ const GAME_CONFIG = {
       name: 'TYLER',
       model: 'Tyler',
       description: 'Soap Maker',
-      price: 5,
+      price: 3,
       emoji: '🧔‍♂️',
       baseStats: { speed: 1, stamina: 1, strength: 1 }
     },
@@ -55,7 +55,7 @@ const GAME_CONFIG = {
       name: 'VINCE',
       model: 'Vince',
       description: 'Fire Fighter',
-      price: 5,
+      price: null, // Locked for now
       emoji: '🧑‍🚒',
       baseStats: { speed: 1, stamina: 1, strength: 1 }
     },
@@ -64,7 +64,7 @@ const GAME_CONFIG = {
       name: 'BOB',
       model: 'Bob',
       description: 'Business Man',
-      price: 5,
+      price: null, // Locked for now
       emoji: '👔',
       baseStats: { speed: 1, stamina: 1, strength: 1 }
     }
@@ -92,7 +92,7 @@ export const GameStateProvider = ({ children }) => {
     localStorage.removeItem('fightClubGameState');
     
     const initialState = {
-      coins: 1,
+      coins: 3,
       defeatedOpponents: [], // IDs of defeated opponents
       purchasedCharacters: ['pete'], // Pete is free initially
       unlockedOpponents: ['tyler_1'], // Only first opponent available at start
@@ -113,12 +113,12 @@ export const GameStateProvider = ({ children }) => {
     localStorage.setItem('fightClubGameState', JSON.stringify(gameState));
   }, [gameState]);
 
-  // Emergency coin system - give 1 coin if player has 0 coins and no progress
+  // Emergency coin system - give 3 coins if player has 0 coins and no progress
   useEffect(() => {
     if (gameState.coins === 0 && gameState.defeatedOpponents.length === 0) {
       setGameState(prev => ({
         ...prev,
-        coins: 1 // Emergency coin to prevent being stuck
+        coins: 3 // Emergency coins to prevent being stuck
       }));
     }
   }, [gameState.coins, gameState.defeatedOpponents.length]);
@@ -146,14 +146,14 @@ export const GameStateProvider = ({ children }) => {
         ...prev,
         totalWins: prev.totalWins + 1,
         totalFights: prev.totalFights + 1,
+        coins: prev.coins + GAME_CONFIG.COINS_PER_WIN, // Always award 1 coin per victory
       };
 
-      // Only award coins if it's the first time defeating this opponent
+      // Track defeated opponents for progression
       const isFirstTimeDefeating = !prev.defeatedOpponents.includes(opponentId);
       
       if (isFirstTimeDefeating) {
-        // First victory against this opponent - award coins
-        newState.coins = prev.coins + GAME_CONFIG.COINS_PER_WIN;
+        // First victory against this opponent - unlock next opponent
         newState.defeatedOpponents = [...prev.defeatedOpponents, opponentId];
         
         // Unlock the next opponent
@@ -162,15 +162,14 @@ export const GameStateProvider = ({ children }) => {
           newState.unlockedOpponents = [...prev.unlockedOpponents, nextOpponent.id];
         }
       } else {
-        // Repeat victory - no coins awarded
-        newState.coins = prev.coins; // Keep current coins
-        newState.defeatedOpponents = prev.defeatedOpponents; // Keep current list
-        newState.unlockedOpponents = prev.unlockedOpponents; // Keep unlocked opponents
+        // Repeat victory - keep current progression but still award coins
+        newState.defeatedOpponents = prev.defeatedOpponents;
+        newState.unlockedOpponents = prev.unlockedOpponents;
       }
 
       return newState;
     });
-  }, []);
+    }, []);
 
   // Function to start arcade mode (pay entry fee)
   const startArcadeMode = useCallback(() => {
@@ -291,7 +290,7 @@ export const GameStateProvider = ({ children }) => {
   // Function to reset the game (for development/testing)
   const resetGameState = () => {
     const initialState = {
-      coins: 1,
+      coins: 3,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
       unlockedOpponents: ['tyler_1'], // Only first opponent available at start
@@ -312,7 +311,7 @@ export const GameStateProvider = ({ children }) => {
   const clearSavedData = () => {
     localStorage.removeItem('fightClubGameState');
     const initialState = {
-      coins: 1,
+      coins: 3,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
       unlockedOpponents: ['tyler_1'], // Only first opponent available at start
