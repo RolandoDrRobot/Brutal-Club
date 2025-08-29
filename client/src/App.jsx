@@ -3,6 +3,7 @@ import React, { Suspense } from "react";
 import Experience from "./components/Experience";
 import LoadingScreen from "./components/LoadingScreen";
 import { useModelLoader } from "./hooks/useModelLoader";
+import { useCharacterAnimations } from "./contexts/CharacterAnimations";
 
 // Lazy loading for heavy non-critical components
 const Interface = React.lazy(() => import("./components/Interface"));
@@ -27,6 +28,7 @@ const ComponentFallback = () => (
 
 function App() {
   const { isLoading, loadingProgress, loadingStatus } = useModelLoader();
+  const { currentScreen } = useCharacterAnimations();
 
   return (
     <>
@@ -57,7 +59,8 @@ function App() {
       {/* Cargar UI componentes de forma lazy solo después de que el 3D esté listo */}
       <Suspense fallback={<ComponentFallback />}>
         <Interface />
-        <HealthBars />
+        {/* Solo mostrar HealthBars durante el combate */}
+        {currentScreen === 'combat' && <HealthBars />}
         <CrowdSound />
         <PunchSound />
       </Suspense>

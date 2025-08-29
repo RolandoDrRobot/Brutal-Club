@@ -13,6 +13,7 @@ const HealthBars = () => {
     player1IsDead,
     player2IsDead,
     isCombatMode,
+    currentScreen,
     player1Wins,
     player1IsBlocking,
     player2IsBlocking
@@ -35,8 +36,9 @@ const HealthBars = () => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // No mostrar si no estamos en modo combate
-  if (!isCombatMode) return null;
+  // No mostrar si no estamos en modo combate, si no estamos en la pantalla de combate, o si el combate ha terminado
+  const isCombatOver = player1IsDead || player2IsDead;
+  if (!isCombatMode || currentScreen !== 'combat' || isCombatOver) return null;
 
   // Determinar si el combate ha terminado
   const winner = player1IsDead ? "Player 2" : player2IsDead ? "Player 1" : null;
