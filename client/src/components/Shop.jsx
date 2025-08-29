@@ -272,12 +272,7 @@ const Shop = ({ onBackClick }) => {
         <Box style={{
           flexShrink: 0
         }}>
-          <Button
-            variant="outline"
-            onClick={() => {
-              playButtonSound();
-              onBackClick();
-            }}
+          <Box
             style={{
               fontSize: '20px',
               fontWeight: 700,
@@ -289,11 +284,15 @@ const Shop = ({ onBackClick }) => {
               textTransform: 'uppercase',
               letterSpacing: '2px',
               fontFamily: 'Anton, sans-serif',
-              height: '55px'
+              height: '55px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: '80px'
             }}
           >
-            <span className="fight-button-text">X</span>
-          </Button>
+            <span className="fight-button-text">{gameState.coins || 0}</span>
+          </Box>
         </Box>
       </Box>
 

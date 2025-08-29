@@ -342,12 +342,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             </Text>
         </Box>
         <Box style={{ flexShrink: 0 }}>
-          <Button
-            variant="outline"
-            onClick={() => {
-              playButtonSound();
-              onBackClick();
-            }}
+          <Box
             style={{
               fontSize: '16px',
               fontWeight: 700,
@@ -359,11 +354,15 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               textTransform: 'uppercase',
               letterSpacing: '2px',
               fontFamily: 'Anton, sans-serif',
-              height: '55px'
+              height: '55px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: '80px'
             }}
           >
-            <span className="fight-button-text">X</span>
-          </Button>
+            <span className="fight-button-text">{coins || 0}</span>
+          </Box>
         </Box>
       </Box>
 
