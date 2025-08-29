@@ -15,6 +15,8 @@ const Shop = ({ onBackClick }) => {
   const { isExiting } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   const { 
+    coins,
+    addCoins,
     gameState = {}, 
     purchaseCharacter = () => {}, 
     getShopCharactersStatus = () => [], 
@@ -291,7 +293,7 @@ const Shop = ({ onBackClick }) => {
               minWidth: '80px'
             }}
           >
-            <span className="fight-button-text">{gameState.coins || 0}</span>
+            <span className="fight-button-text">{coins || 0}</span>
           </Box>
         </Box>
       </Box>
@@ -395,13 +397,14 @@ const Shop = ({ onBackClick }) => {
                     position: 'relative'
                   }}
                   disabled={
-                    (character.price !== null && !character.canAfford && !character.isPurchased) || 
+                    character.price === null || 
+                    !character.canAfford || 
                     character.isPurchased
                   }
                   onClick={(e) => {
                     e.stopPropagation();
-                    const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
-                    if (!isLocked && !character.isPurchased) {
+                    const isLocked = character.price === null || !character.canAfford || character.isPurchased;
+                    if (!isLocked) {
                       playButtonSound();
                       handlePurchase(character);
                     }
@@ -409,10 +412,10 @@ const Shop = ({ onBackClick }) => {
                 >
                   {character.isPurchased ? (
                     <span>OWNED</span>
-                  ) : (character.price !== null && !character.canAfford && !character.isPurchased) ? (
-                    <span>LOCKED</span>
                   ) : character.price === null ? (
-                    <span>FREE</span>
+                    <span>LOCKED</span>
+                  ) : !character.canAfford ? (
+                    <span>LOCKED</span>
                   ) : (
                     `BUY ${character.price} COINS`
                   )}
@@ -436,8 +439,7 @@ const Shop = ({ onBackClick }) => {
           size="xl"
           onClick={() => {
             playButtonSound();
-            // TODO: Implement buy coins functionality
-            console.log('Buy Coins clicked');
+            addCoins(1); // Add 1 coin to balance
           }}
           style={{
             fontSize: isMobile ? "45px" : "60px",

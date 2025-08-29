@@ -15,6 +15,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
   const { isExiting, setSelectedPlayer1Character } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   const [selectedCharacter, setSelectedCharacter] = useState(0);
+  const [showNoCoinsModal, setShowNoCoinsModal] = useState(false);
 
   // Use GameState to get purchased characters and stats
   const { 
@@ -69,15 +70,11 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     onSelectClick(characters[selectedCharacter]);
   }, [playButtonSound, onSelectClick, characters, selectedCharacter]);
 
-  const handleUpgradeStat = useCallback((statName) => {
-    playButtonSound();
+  const getStatLevel = useCallback((statName) => {
     const characterId = characters[selectedCharacter].id;
-    const success = upgradeCharacterStat(characterId, statName);
-    if (!success) {
-      // Could add feedback for failed upgrade (no coins, max level, etc.)
-      console.log(`Failed to upgrade ${statName} for ${characterId}`);
-    }
-  }, [playButtonSound, characters, selectedCharacter, upgradeCharacterStat]);
+    const stats = getCharacterStats(characterId);
+    return stats[statName];
+  }, [characters, selectedCharacter, getCharacterStats]);
 
   const getStatProgress = useCallback((statName) => {
     const characterId = characters[selectedCharacter].id;
@@ -87,16 +84,37 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     return (currentLevel / maxLevel) * 100;
   }, [characters, selectedCharacter, getCharacterStats, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL]);
 
-  const getStatLevel = useCallback((statName) => {
+  const handleUpgradeStat = useCallback((statName) => {
+    playButtonSound();
     const characterId = characters[selectedCharacter].id;
-    const stats = getCharacterStats(characterId);
-    return stats[statName];
-  }, [characters, selectedCharacter, getCharacterStats]);
+    const currentLevel = getStatLevel(statName);
+    const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
+    const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
+    
+    // Check if upgrade is possible
+    if (currentLevel >= maxLevel) {
+      // Already at max level
+      return;
+    }
+    
+    if (coins < upgradeCost) {
+      // Not enough coins - show modal
+      setShowNoCoinsModal(true);
+      return;
+    }
+    
+    const success = upgradeCharacterStat(characterId, statName);
+    if (!success) {
+      // Could add feedback for failed upgrade
+      console.log(`Failed to upgrade ${statName} for ${characterId}`);
+    }
+  }, [playButtonSound, characters, selectedCharacter, upgradeCharacterStat, coins, getStatLevel, GAME_CONFIG.STAT_CONFIG]);
 
   const canUpgrade = useCallback((statName) => {
     const currentLevel = getStatLevel(statName);
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
+    // Verificación estricta: debe tener al menos el costo exacto de la mejora
     return currentLevel < maxLevel && coins >= upgradeCost;
   }, [getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL, GAME_CONFIG.STAT_CONFIG.UPGRADE_COST, coins]);
 
@@ -559,6 +577,119 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         TRAIN YOUR FIGHTER BY TAPPING THE BUTTON
       </Text>
 
+      {/* No Coins Modal */}
+      {showNoCoinsModal && (
+        <Box
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            animation: 'fadeInSpray 0.3s ease-out'
+          }}
+          onClick={() => setShowNoCoinsModal(false)}
+        >
+          <Box
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.95)',
+              border: '3px solid #f32210',
+              borderRadius: '15px',
+              padding: isMobile ? '30px 20px' : '40px 30px',
+              maxWidth: isMobile ? '90%' : '400px',
+              textAlign: 'center',
+              animation: 'fadeInSpray 0.5s ease-out 0.1s both'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Coin Icon */}
+            <Box
+              style={{
+                width: isMobile ? '60px' : '80px',
+                height: isMobile ? '60px' : '80px',
+                backgroundColor: '#FFD700',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: isMobile ? '30px' : '40px',
+                margin: '0 auto 20px',
+                boxShadow: '0 0 20px rgba(255, 215, 0, 0.6)',
+                animation: 'rotate 3s linear infinite'
+              }}
+            >
+              ⭐
+            </Box>
+
+            {/* Title */}
+            <Text
+              style={{
+                fontSize: isMobile ? '24px' : '32px',
+                fontWeight: 900,
+                color: '#f32210',
+                fontFamily: 'Anton, sans-serif',
+                letterSpacing: '2px',
+                marginBottom: '15px',
+                textTransform: 'uppercase'
+              }}
+            >
+              NO COINS!
+            </Text>
+
+            {/* Message */}
+            <Text
+              style={{
+                fontSize: isMobile ? '16px' : '18px',
+                color: '#F5F5DC',
+                fontFamily: 'Anton, sans-serif',
+                letterSpacing: '1px',
+                marginBottom: '25px',
+                lineHeight: 1.4
+              }}
+            >
+              You need 1 coin to upgrade your fighter's stats. Fight opponents to earn more coins!
+            </Text>
+
+            {/* Close Button */}
+            <Button
+              onClick={() => setShowNoCoinsModal(false)}
+              style={{
+                fontSize: isMobile ? '16px' : '18px',
+                fontWeight: 700,
+                padding: isMobile ? '12px 25px' : '15px 30px',
+                backgroundColor: 'transparent',
+                border: '3px solid #f32210',
+                borderRadius: '10px',
+                color: '#f32210',
+                textTransform: 'uppercase',
+                letterSpacing: '2px',
+                fontFamily: 'Anton, sans-serif',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.1)';
+                  e.target.style.transform = 'scale(1.05)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.target.style.backgroundColor = 'transparent';
+                  e.target.style.transform = 'scale(1)';
+                }
+              }}
+            >
+              OK
+            </Button>
+          </Box>
+        </Box>
+      )}
 
     </Box>
   );

@@ -118,10 +118,12 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const handleOpponentSelect = (opponent) => {
     // Check if opponent is available to fight
     const isLocked = opponent.isLocked;
+    const isDefeated = opponent.isDefeated;
     const isFirstOpponent = opponent.id === 'tyler_1';
     const hasNoCoins = coins === 0;
     
-    if (!isLocked && !(isFirstOpponent && hasNoCoins)) {
+    // No permitir pelear contra oponentes bloqueados, derrotados, o sin monedas para el primer oponente
+    if (!isLocked && !isDefeated && !(isFirstOpponent && hasNoCoins)) {
       playButtonSound();
       
       // If fighting the first opponent, pay the arcade entry fee
@@ -133,6 +135,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     } else if (isFirstOpponent && hasNoCoins) {
       // Could add a sound effect or visual feedback for "no coins"
       console.log("Need at least 1 coin to start arcade mode!");
+    } else if (isDefeated) {
+      // Could add a sound effect or visual feedback for "already defeated"
+      console.log("This opponent has already been defeated in this arcade run!");
     }
   };
 
@@ -352,7 +357,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <Text style={{
             fontSize: '20px',
             fontWeight: 400,
-            color: coins === 0 ? '#f32210' : 'rgb(245, 245, 220)',
+            color: 'rgb(245, 245, 220)',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.5px',
             marginTop: '4px',
@@ -364,7 +369,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <Text style={{
             fontSize: '20px',
             fontWeight: 400,
-            color: coins === 0 ? '#f32210' : 'rgb(245, 245, 220)',
+            color: 'rgb(245, 245, 220)',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.5px',
             marginTop: '4px',

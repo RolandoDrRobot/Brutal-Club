@@ -113,15 +113,26 @@ export const GameStateProvider = ({ children }) => {
     localStorage.setItem('fightClubGameState', JSON.stringify(gameState));
   }, [gameState]);
 
-  // Emergency coin system - give 3 coins if player has 0 coins and no progress
+  // Emergency coin system - give 3 coins if player has 0 coins and no progress (only for completely new players)
   useEffect(() => {
-    if (gameState.coins === 0 && gameState.defeatedOpponents.length === 0) {
+    // Solo activar para jugadores completamente nuevos que nunca han jugado
+    const isCompletelyNewPlayer = gameState.coins === 0 && 
+        gameState.defeatedOpponents.length === 0 && 
+        gameState.totalWins === 0 && 
+        gameState.totalFights === 0 &&
+        gameState.purchasedCharacters.length === 1 && // Only Pete purchased (free character)
+        gameState.characterStats['pete'] && 
+        gameState.characterStats['pete'].speed === 1 &&
+        gameState.characterStats['pete'].stamina === 1 &&
+        gameState.characterStats['pete'].strength === 1; // Stats at base level
+    
+    if (isCompletelyNewPlayer) {
       setGameState(prev => ({
         ...prev,
-        coins: 3 // Emergency coins to prevent being stuck
+        coins: 3 // Emergency coins to prevent being stuck (only for completely new players)
       }));
     }
-  }, [gameState.coins, gameState.defeatedOpponents.length]);
+  }, [gameState.coins, gameState.defeatedOpponents.length, gameState.totalWins, gameState.totalFights, gameState.purchasedCharacters.length, gameState.characterStats]);
 
   // Function to add coins
   const addCoins = (amount) => {

@@ -648,17 +648,12 @@ const Interface = () => {
               {!player1IsDead && (
                 <div style={{
                   backgroundColor: 'rgba(243, 34, 16, 0.2)',
-                  border: '2px solid #f32210',
                   borderRadius: '15px',
                   padding: isMobile ? '10px 20px' : '20px 40px',
                   marginBottom: isMobile ? '15px' : '40px',
                   display: 'flex',
                   alignItems: 'center',
                   gap: isMobile ? '8px' : '15px',
-                  boxShadow: `
-                    0 0 20px rgba(243, 34, 16, 0.4),
-                    inset 0 0 20px rgba(243, 34, 16, 0.1)
-                  `,
                   animation: 'neonPulse 2s ease-in-out infinite',
                   zIndex: 10,
                   position: 'relative'
