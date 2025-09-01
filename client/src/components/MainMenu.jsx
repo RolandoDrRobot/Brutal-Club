@@ -31,7 +31,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     borderColor: "#f32210",
     border: "4px solid #f32210",
     borderRadius: "15px",
-    color: "#f32210",
+    color: "#F5F5DC",
     textTransform: "uppercase",
     letterSpacing: "2px",
     fontFamily: "Anton, sans-serif",
@@ -81,7 +81,25 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
         paddingTop: "20px",
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.5s ease-out 0.2s both"
       }}>
-        <div className="fight-title">
+        <div 
+          className="fight-title"
+          onClick={() => {
+            playButtonSound();
+            onBackClick();
+          }}
+          style={{
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.transform = "scale(1.05)";
+            e.target.style.opacity = "0.8";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = "scale(1)";
+            e.target.style.opacity = "1";
+          }}
+        >
           FIGHT CLUB
         </div>
       </div>
@@ -99,14 +117,58 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
       >
         <Box
           style={{
-            maxWidth: isMobile ? "320px" : "500px",
             width: "100%",
             margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: isMobile ? "16px" : "24px"
+            display: "flex",
+            flexDirection: "column",
+            gap: isMobile ? "16px" : "24px",
+            padding: "0 15px"
           }}
         >
+          {/* CLUB and SHOP buttons - Row */}
+          <Box
+            style={{
+              display: "flex",
+              gap: isMobile ? "16px" : "24px",
+              width: "100%"
+            }}
+          >
+            <Button
+              variant="outline"
+              size="xl"
+              onClick={() => {
+                playButtonSound();
+                onFightersClick();
+              }}
+              style={{
+                ...getMenuButtonStyle(button2),
+                flex: 1
+              }}
+              onMouseEnter={(e) => handleButtonHover(e, true)}
+              onMouseLeave={(e) => handleButtonHover(e, false)}
+            >
+              CLUB
+            </Button>
+
+            <Button
+              variant="outline"
+              size="xl"
+              onClick={() => {
+                playButtonSound();
+                onStoreClick();
+              }}
+              style={{
+                ...getMenuButtonStyle(button3),
+                flex: 1
+              }}
+              onMouseEnter={(e) => handleButtonHover(e, true)}
+              onMouseLeave={(e) => handleButtonHover(e, false)}
+            >
+              SHOP
+            </Button>
+          </Box>
+
+          {/* FIGHT button - Full width */}
           <Button
             variant="outline"
             size="xl"
@@ -114,54 +176,17 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
               playButtonSound();
               onStartClick();
             }}
-            style={getMenuButtonStyle(button1)}
+            style={{
+              ...getMenuButtonStyle(button1),
+              width: "100%",
+              minWidth: "100%"
+            }}
             onMouseEnter={(e) => handleButtonHover(e, true)}
             onMouseLeave={(e) => handleButtonHover(e, false)}
           >
             FIGHT
           </Button>
 
-          <Button
-            variant="outline"
-            size="xl"
-            onClick={() => {
-              playButtonSound();
-              onFightersClick();
-            }}
-            style={getMenuButtonStyle(button2)}
-            onMouseEnter={(e) => handleButtonHover(e, true)}
-            onMouseLeave={(e) => handleButtonHover(e, false)}
-          >
-            CLUB
-          </Button>
-
-          <Button
-            variant="outline"
-            size="xl"
-            onClick={() => {
-              playButtonSound();
-              onStoreClick();
-            }}
-            style={getMenuButtonStyle(button3)}
-            onMouseEnter={(e) => handleButtonHover(e, true)}
-            onMouseLeave={(e) => handleButtonHover(e, false)}
-          >
-            SHOP
-          </Button>
-
-          <Button
-            variant="outline"
-            size="xl"
-            onClick={() => {
-              playButtonSound();
-              onBackClick();
-            }}
-            style={getMenuButtonStyle(button4)}
-            onMouseEnter={(e) => handleButtonHover(e, true)}
-            onMouseLeave={(e) => handleButtonHover(e, false)}
-          >
-            BACK
-          </Button>
         </Box>
       </Box>
     </Box>

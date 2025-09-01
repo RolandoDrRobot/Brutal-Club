@@ -133,59 +133,7 @@ const Shop = ({ onBackClick }) => {
         </Box>
         
         {/* Currency Display */}
-        <Box style={{
-          display: 'flex',
-          gap: '10px',
-          flexShrink: 0
-        }}>
-          {/* Coins */}
-          <Box
-            style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              padding: '12px 15px',
-              backgroundColor: 'transparent',
-              border: '3px solid #FFD700',
-              borderRadius: '10px',
-              color: '#FFD700',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              fontFamily: 'Anton, sans-serif',
-              height: '55px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minWidth: '70px',
-              gap: '5px'
-            }}
-          >
-            🪙 {coins || 0}
-          </Box>
-          
-          {/* Stat Points */}
-          <Box
-            style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              padding: '12px 15px',
-              backgroundColor: 'transparent',
-              border: '3px solid #f32210',
-              borderRadius: '10px',
-              color: '#f32210',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              fontFamily: 'Anton, sans-serif',
-              height: '55px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minWidth: '70px',
-              gap: '5px'
-            }}
-          >
-            ⚡ {statPoints || 0}
-          </Box>
-        </Box>
+
       </Box>
 
       {/* Main Content */}
@@ -332,80 +280,7 @@ const Shop = ({ onBackClick }) => {
 
       </Box>
 
-      {/* Buy Coins Button */}
-      <Box style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: '20px',
-        paddingBottom: isMobile ? '20px' : '30px'
-      }}>
-        <Button
-          variant="outline"
-          size="xl"
-          onClick={() => {
-            playButtonSound();
-            setShowCoinPurchaseModal(true);
-          }}
-          style={{
-            fontSize: isMobile ? "40px" : "50px",
-            fontWeight: 700,
-            padding: isMobile ? "20px 40px" : "25px 60px",
-            minHeight: isMobile ? "90px" : "110px",
-            minWidth: isMobile ? "260px" : "320px",
-            maxWidth: isMobile ? "calc(100vw - 40px)" : "320px",
-            margin: "0",
-            width: "100%",
-            backgroundColor: "transparent",
-            backgroundImage: `url(${mainButtonImg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            borderColor: "#FFD700",
-            border: "4px solid #FFD700",
-            borderRadius: "15px",
-            color: "#FFD700",
-            textTransform: "uppercase",
-            letterSpacing: "3px",
-            fontFamily: "Anton, sans-serif",
-            textAlign: "center",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textShadow: `
-              0 0 10px #000000,
-              0 0 20px #000000,
-              2px 2px 4px #000000
-            `,
-            boxShadow: `
-              0 0 20px #FFD700,
-              0 0 40px rgba(255, 215, 0, 0.3),
-              inset 0 0 20px rgba(255, 215, 0, 0.1)
-            `,
-            transition: "all 0.3s ease",
-            cursor: "pointer",
-            animation: "fadeInSpray 0.5s ease-out 0.6s both"
-          }}
-          onMouseEnter={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1.05)";
-              e.target.style.backgroundColor = "rgba(255, 215, 0, 0.1)";
-              e.target.style.animation = "impactShake 0.3s ease-out";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1)";
-              e.target.style.backgroundColor = "transparent";
-              e.target.style.animation = "none";
-            }
-          }}
-        >
-          <span className="fight-button-text">
-            🪙 BUY COINS
-          </span>
-        </Button>
-      </Box>
+
 
       {/* Modals */}
       <CoinPurchaseModal

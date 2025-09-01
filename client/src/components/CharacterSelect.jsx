@@ -315,30 +315,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         width: '100%',
         justifyContent: 'center'
       }}>
-        {/* Back Button */}
-        <Button
-          variant="outline"
-          size="lg"
-          onClick={() => {
-            playButtonSound();
-            onBackClick();
-          }}
-          style={{
-            fontSize: isMobile ? "16px" : "20px",
-            fontWeight: 700,
-            padding: isMobile ? "12px 20px" : "15px 30px",
-            backgroundColor: "transparent",
-            borderColor: "#f32210",
-            border: "3px solid #f32210",
-            borderRadius: "10px",
-            color: "#f32210",
-            textTransform: "uppercase",
-            letterSpacing: "2px",
-            fontFamily: "Anton, sans-serif",
-          }}
-        >
-          BACK
-        </Button>
+
 
         {/* Select Button */}
         <Button

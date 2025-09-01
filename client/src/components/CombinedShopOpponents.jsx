@@ -399,59 +399,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         </Box>
 
         {/* Right side: Resource Indicators */}
-        <Box style={{
-          display: 'flex',
-          gap: '10px',
-          flexShrink: 0
-        }}>
-          {/* Coins */}
-          <Box
-            style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              padding: '12px 15px',
-              backgroundColor: 'transparent',
-              border: '3px solid #FFD700',
-              borderRadius: '10px',
-              color: '#FFD700',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              fontFamily: 'Anton, sans-serif',
-              height: '55px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minWidth: '70px',
-              gap: '5px'
-            }}
-          >
-            🪙 {coins || 0}
-          </Box>
-          
-          {/* Stat Points */}
-          <Box
-            style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              padding: '12px 15px',
-              backgroundColor: 'transparent',
-              border: '3px solid #f32210',
-              borderRadius: '10px',
-              color: '#f32210',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              fontFamily: 'Anton, sans-serif',
-              height: '55px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minWidth: '70px',
-              gap: '5px'
-            }}
-          >
-            ⚡ {statPoints || 0}
-          </Box>
-        </Box>
+
       </Box>
 
       {/* Scrollable Content Container - Vertically Centered */}

@@ -10,6 +10,7 @@ const Interface = React.lazy(() => import("./components/Interface"));
 const HealthBars = React.lazy(() => import("./components/HealthBars"));
 const CrowdSound = React.lazy(() => import("./components/CrowdSound"));
 const PunchSound = React.lazy(() => import("./components/PunchSound"));
+const CurrencyBar = React.lazy(() => import("./components/CurrencyBar"));
 
 // Componente de fallback ligero para Suspense
 const ComponentFallback = () => (
@@ -108,6 +109,13 @@ function App() {
         <Suspense fallback={null}>
           <CrowdSound />
           <PunchSound />
+        </Suspense>
+      )}
+      
+      {/* Persistent Currency Bar - Always visible on all screens */}
+      {uiReady && (
+        <Suspense fallback={null}>
+          <CurrencyBar />
         </Suspense>
       )}
     </>

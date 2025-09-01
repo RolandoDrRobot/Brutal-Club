@@ -494,7 +494,25 @@ const Interface = () => {
               textAlign: "center",
               animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.5s ease-out 0.2s both"
             }}>
-              <div className="fight-title">
+              <div 
+                className="fight-title"
+                onClick={() => {
+                  playButtonSound();
+                  navigateBackToDance();
+                }}
+                style={{
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = "scale(1.05)";
+                  e.target.style.opacity = "0.8";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = "scale(1)";
+                  e.target.style.opacity = "1";
+                }}
+              >
                 FIGHT CLUB
               </div>
               
@@ -504,7 +522,7 @@ const Interface = () => {
 
           {/* Botón para ir al menú principal - ABAJO CENTRO */}
           <Affix position={{ 
-            bottom: isMobile ? 50 : 70,
+            bottom: isMobile ? 90 : 110,
             left: "50%",
             transform: "translateX(-50%)"
           }}>
@@ -587,69 +605,7 @@ const Interface = () => {
       {/* Modo de combate - currentScreen 'combat' */}
       {currentScreen === 'combat' && (
         <>
-          {/* Resource Header - Top center during combat */}
-          {!isCombatOver && (
-            <Affix position={{ 
-              top: 20, 
-              left: "50%",
-              transform: "translateX(-50%)"
-            }}>
-              <Box style={{
-                display: 'flex',
-                gap: '15px',
-                animation: "fadeInSpray 0.5s ease-out",
-                zIndex: 100
-              }}>
-                {/* Coins */}
-                <Box
-                  style={{
-                    fontSize: '16px',
-                    fontWeight: 700,
-                    padding: '8px 12px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    border: '2px solid #FFD700',
-                    borderRadius: '10px',
-                    color: '#FFD700',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    fontFamily: 'Anton, sans-serif',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    minWidth: '60px',
-                    gap: '5px',
-                    boxShadow: '0 0 10px rgba(255, 215, 0, 0.3)'
-                  }}
-                >
-                  🪙 {coins || 0}
-                </Box>
-                
-                {/* Stat Points */}
-                <Box
-                  style={{
-                    fontSize: '16px',
-                    fontWeight: 700,
-                    padding: '8px 12px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    border: '2px solid #f32210',
-                    borderRadius: '10px',
-                    color: '#f32210',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    fontFamily: 'Anton, sans-serif',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    minWidth: '60px',
-                    gap: '5px',
-                    boxShadow: '0 0 10px rgba(243, 34, 16, 0.3)'
-                  }}
-                >
-                  ⚡ {statPoints || 0}
-                </Box>
-              </Box>
-            </Affix>
-          )}
+
           {/* Victory Screen - Full Screen Overlay */}
           {isCombatOver && (
             <div 
@@ -823,7 +779,25 @@ const Interface = () => {
                 transform: "translateX(-50%)"
               }}>
                 <div style={{ textAlign: "center" }}>
-                  <div className="fight-title">
+                  <div 
+                    className="fight-title"
+                    onClick={() => {
+                      playButtonSound();
+                      navigateBackToDance();
+                    }}
+                    style={{
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = "scale(1.05)";
+                      e.target.style.opacity = "0.8";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = "scale(1)";
+                      e.target.style.opacity = "1";
+                    }}
+                  >
                     FIGHT CLUB
                   </div>
                   
@@ -963,7 +937,7 @@ const Interface = () => {
               {/* Botón de Baile - SOLO EN COVER PAGE */}
               {currentScreen === 'dance' && (
                 <Affix position={{ 
-                  bottom: isMobile ? 30 : 40, 
+                  bottom: isMobile ? 70 : 90, 
                   right: isMobile ? 30 : 40 
                 }}>
                   {/* Icono de baile */}
@@ -1025,7 +999,7 @@ const Interface = () => {
               {/* Información del combo actual (solo si está reproduciéndose) - SOLO EN COVER PAGE */}
               {isPlayingCombo && currentScreen === 'dance' && (
                 <Affix position={{ 
-                  bottom: isMobile ? 120 : 140, 
+                  bottom: isMobile ? 160 : 190, 
                   right: isMobile ? 30 : 40 
                 }}>
                   <div style={{
@@ -1054,7 +1028,7 @@ const Interface = () => {
             <>
               {/* PAD DE PELEA PRINCIPAL - Diseño Arcade Profesional */}
               <Affix position={{ 
-                bottom: isMobile ? 5 : 15, 
+                bottom: isMobile ? 45 : 65, 
                 left: "50%",
                 transform: "translateX(-50%)"
               }}>
@@ -1168,7 +1142,7 @@ const Interface = () => {
 
               {/* Botón de Bloqueo - Estilo Arcade Mejorado */}
               <Affix position={{ 
-                bottom: isMobile ? 135 : 220, 
+                bottom: isMobile ? 175 : 270, 
                 left: isMobile ? 10 : 40
               }}>
                 <Box style={{ position: "relative" }}>
@@ -1239,7 +1213,7 @@ const Interface = () => {
 
               {/* Panel de Control - Derecha */}
               <Affix position={{ 
-                bottom: isMobile ? 145 : 220, 
+                bottom: isMobile ? 185 : 270, 
                 right: isMobile ? 10 : 40
               }}>
                 <Stack spacing={isMobile ? "xs" : "md"} align="center">

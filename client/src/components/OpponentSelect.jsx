@@ -91,7 +91,25 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
         flexShrink: 0,
         marginBottom: "20px"
       }}>
-        <Text className="fight-title">
+        <Text 
+          className="fight-title"
+          onClick={() => {
+            playButtonSound();
+            onBackClick();
+          }}
+          style={{
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.transform = "scale(1.05)";
+            e.target.style.opacity = "0.8";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = "scale(1)";
+            e.target.style.opacity = "1";
+          }}
+        >
           FIGHT CLUB
         </Text>
         <Text className="fight-subtitle">
@@ -284,64 +302,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
         textAlign: "center",
         animation: "fadeInSpray 0.5s ease-out 0.4s both"
       }}>
-        {/* Back Button */}
-        <Button
-          variant="outline"
-          size="xl"
-          onClick={() => {
-            playButtonSound();
-            onBackClick();
-          }}
-          style={{
-            fontSize: isMobile ? "20px" : "24px",
-            fontWeight: 700,
-            padding: isMobile ? "15px 40px" : "20px 60px",
-            minHeight: isMobile ? "60px" : "80px",
-            minWidth: isMobile ? "200px" : "250px",
-            backgroundImage: `url(${mainButtonImg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: "transparent",
-            borderColor: "#f32210",
-            border: "4px solid #f32210",
-            borderRadius: "15px",
-            color: "#f32210",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-            textTransform: "uppercase",
-            letterSpacing: "3px",
-            fontFamily: "Anton, sans-serif",
-            boxShadow: `
-              0 0 20px #f32210,
-              0 0 40px rgba(243, 34, 16, 0.3),
-              inset 0 0 20px rgba(243, 34, 16, 0.1)
-            `,
-            transition: "all 0.3s ease",
-            cursor: "pointer"
-          }}
-          onMouseEnter={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1.05)";
-              e.target.style.boxShadow = `
-                0 0 30px #f32210,
-                0 0 60px rgba(243, 34, 16, 0.5),
-                inset 0 0 30px rgba(243, 34, 16, 0.2)
-              `;
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1)";
-              e.target.style.boxShadow = `
-                0 0 20px #f32210,
-                0 0 40px rgba(243, 34, 16, 0.3),
-                inset 0 0 20px rgba(243, 34, 16, 0.1)
-              `;
-            }
-          }}
-        >
-          BACK
-        </Button>
+
       </Box>
     </Box>
   );
