@@ -7,6 +7,7 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import coinImg from '../assets/coin.png';
 import statCoinImg from '../assets/statCoin.png';
 import homeImg from '../assets/home.png';
+import '../styles/fightAnimations.css';
 
 const CurrencyBar = () => {
   const { coins, statPoints } = useGameState() || {};
@@ -28,7 +29,8 @@ const CurrencyBar = () => {
         padding: isMobile ? '8px 15px' : '10px 20px',
         backdropFilter: 'blur(10px)',
         boxShadow: '0 -4px 15px rgba(0, 0, 0, 0.7), 0 0 20px rgba(243, 34, 16, 0.3)',
-        borderRadius: '0px'
+        borderRadius: '0px',
+        animation: 'electricFadeIn 0.8s ease-out 0.2s both'
       }}
     >
       <Box
@@ -48,7 +50,8 @@ const CurrencyBar = () => {
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             textTransform: 'uppercase',
-            textShadow: '0 0 5px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8)'
+            textShadow: '0 0 5px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8)',
+            animation: 'electricGlitch 0.7s ease-out 0.5s both'
           }}
         >
           ROLOXWORLD
@@ -63,7 +66,8 @@ const CurrencyBar = () => {
             cursor: 'pointer',
             transition: 'all 0.3s ease',
             padding: '4px',
-            borderRadius: '50%'
+            borderRadius: '50%',
+            animation: 'electricPulse 0.7s ease-out 0.6s both'
           }}
           onClick={() => {
             playButtonSound();
@@ -112,7 +116,8 @@ const CurrencyBar = () => {
               letterSpacing: '1px',
               fontFamily: 'Anton, sans-serif',
               minWidth: isMobile ? '70px' : '80px',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              animation: 'electricStatic 0.7s ease-out 0.7s both'
             }}
           >
             <img 
@@ -146,7 +151,8 @@ const CurrencyBar = () => {
               letterSpacing: '1px',
               fontFamily: 'Anton, sans-serif',
               minWidth: isMobile ? '70px' : '80px',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              animation: 'electricFlicker 0.7s ease-out 0.8s both'
             }}
           >
             <img 
