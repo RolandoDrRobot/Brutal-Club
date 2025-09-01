@@ -233,7 +233,7 @@ const CharacterPurchaseModal = ({
               {characterEmoji || '🥊'}
             </motion.div>
 
-            {/* Recruited Text */}
+            {/* Shop Text */}
             <motion.div
               variants={textVariants}
               initial="hidden"
@@ -251,7 +251,7 @@ const CharacterPurchaseModal = ({
                   marginBottom: '15px'
                 }}
               >
-                RECRUITED!
+                SHOP!
               </Text>
             </motion.div>
 
