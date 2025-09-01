@@ -192,10 +192,23 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
                           style={{
               ...getMenuButtonStyle(button3),
               flex: 1,
-              animation: "electricPulse 0.7s ease-out 0.6s both"
+              animation: "electricPulse 0.7s ease-out 0.6s both",
+              boxShadow: "none"
             }}
-              onMouseEnter={(e) => handleButtonHover(e, true)}
-              onMouseLeave={(e) => handleButtonHover(e, false)}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.target.style.transform = "scale(1.05) rotate(1deg)";
+                  e.target.style.boxShadow = "none";
+                  e.target.style.animation = "screenShake 0.5s ease-in-out";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.target.style.transform = "scale(1) rotate(0deg)";
+                  e.target.style.boxShadow = "none";
+                  e.target.style.animation = "none";
+                }
+              }}
             >
               SHOP
             </Button>
