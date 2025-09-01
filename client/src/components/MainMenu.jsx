@@ -30,7 +30,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     backgroundRepeat: "no-repeat",
     borderColor: "#f32210",
     border: "4px solid #f32210",
-    borderRadius: "15px",
+    borderRadius: "0px",
     color: "#F5F5DC",
     textTransform: "uppercase",
     letterSpacing: "2px",

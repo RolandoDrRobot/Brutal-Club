@@ -167,7 +167,7 @@ const StatUpgradeModal = ({
                 width: '8px',
                 height: '8px',
                 backgroundColor: statColor,
-                borderRadius: '50%',
+                borderRadius: '0px',
                 left: `${particle.x}%`,
                 top: `${particle.y}%`,
                 boxShadow: `0 0 10px ${statColor}`,
@@ -185,7 +185,7 @@ const StatUpgradeModal = ({
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0.95)',
               border: `4px solid ${statColor}`,
-              borderRadius: '20px',
+              borderRadius: '0px',
               padding: '40px',
               textAlign: 'center',
               position: 'relative',
@@ -208,7 +208,7 @@ const StatUpgradeModal = ({
                 height: '200px',
                 background: `radial-gradient(circle, ${statColor}20 0%, transparent 70%)`,
                 transform: 'translate(-50%, -50%)',
-                borderRadius: '50%',
+                borderRadius: '0px',
                 pointerEvents: 'none'
               }}
             />
@@ -336,7 +336,7 @@ const StatUpgradeModal = ({
                 right: 0,
                 bottom: 0,
                 border: `2px solid ${statColor}`,
-                borderRadius: '20px',
+                borderRadius: '0px',
                 pointerEvents: 'none'
               }}
             />

@@ -93,7 +93,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             backgroundColor: "transparent",
             borderColor: "#f32210",
             border: "3px solid #f32210",
-            borderRadius: "10px",
+            borderRadius: "0px",
             color: "#f32210",
             textTransform: "uppercase",
             letterSpacing: "2px",
@@ -209,7 +209,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               height: '80%',
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
               border: '3px solid #f32210',
-              borderRadius: '20px',
+              borderRadius: '0px',
               marginBottom: '15px',
               boxShadow: `
                 0 0 30px #f32210,
@@ -237,7 +237,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               width: '80%',
               height: '20px',
               background: 'radial-gradient(ellipse, rgba(243, 34, 16, 0.4) 0%, transparent 70%)',
-              borderRadius: '50%',
+              borderRadius: '0px',
               zIndex: 1,
               pointerEvents: 'none'
             }} />

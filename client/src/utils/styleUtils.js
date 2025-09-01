@@ -7,7 +7,7 @@ const getBaseButtonStyle = (isMobile) => ({
   backgroundColor: 'rgba(0, 0, 0, 0.9)',
   border: 'none',
   fontWeight: 700,
-  borderRadius: '8px',
+  borderRadius: '0px',
   textTransform: 'uppercase',
   fontFamily: THEME.fonts.primary,
   textShadow: THEME.shadows.button,
@@ -76,7 +76,7 @@ export const getCharacterCardStyle = (character, options = {}) => {
   const baseStyle = {
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
     border: '3px solid #f32210',
-    borderRadius: '15px',
+    borderRadius: '0px',
     padding: isMobile ? (isOpponent ? '10px' : '15px') : (isOpponent ? '15px' : '20px'),
     height: isMobile ? '200px' : '250px',
     width: '100%',

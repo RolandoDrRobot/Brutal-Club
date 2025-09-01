@@ -168,7 +168,7 @@ const PackOpeningModal = ({
                 width: '8px',
                 height: '8px',
                 backgroundColor: particle.color,
-                borderRadius: '50%',
+                borderRadius: '0px',
                 left: '50%',
                 top: '50%',
                 boxShadow: `0 0 10px ${particle.color}`,
@@ -197,7 +197,7 @@ const PackOpeningModal = ({
               style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.95)',
                 border: '4px solid #f32210',
-                borderRadius: '20px',
+                borderRadius: '0px',
                 padding: '40px',
                 textAlign: 'center',
                 position: 'relative',
@@ -244,7 +244,7 @@ const PackOpeningModal = ({
                     style={{
                       backgroundColor: 'rgba(0, 0, 0, 0.8)',
                       border: `3px solid ${getItemTypeColor(item.type)}`,
-                      borderRadius: '15px',
+                      borderRadius: '0px',
                       padding: '20px',
                       position: 'relative',
                       boxShadow: `0 0 15px ${getItemTypeColor(item.type)}40`
@@ -261,7 +261,7 @@ const PackOpeningModal = ({
                         fontSize: '10px',
                         fontWeight: 900,
                         padding: '4px 8px',
-                        borderRadius: '10px',
+                        borderRadius: '0px',
                         fontFamily: 'Anton, sans-serif',
                         letterSpacing: '0.5px'
                       }}
@@ -333,7 +333,7 @@ const PackOpeningModal = ({
               style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.95)',
                 border: '4px solid #FFD700',
-                borderRadius: '20px',
+                borderRadius: '0px',
                 padding: '40px',
                 textAlign: 'center'
               }}
@@ -360,7 +360,7 @@ const PackOpeningModal = ({
                   padding: '12px 30px',
                   backgroundColor: 'transparent',
                   border: '3px solid #FFD700',
-                  borderRadius: '10px',
+                  borderRadius: '0px',
                   color: '#FFD700',
                   textTransform: 'uppercase',
                   letterSpacing: '1px',

@@ -50,7 +50,7 @@ const HealthBars = () => {
     padding: isMobile ? "8px" : "12px",
     backgroundColor: "rgba(0, 0, 0, 0.9)",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "0px",
     backdropFilter: "blur(4px)",
     width: isMobile ? "160px" : isTablet ? "200px" : "250px",
   };
@@ -103,7 +103,7 @@ const HealthBars = () => {
       >
         <Text
           style={{
-            borderRadius: "15px",
+            borderRadius: "0px",
             backgroundColor: "rgba(0, 0, 0, 0.6)",
             padding: "0",
             fontSize: "55px",

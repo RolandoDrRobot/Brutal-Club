@@ -35,7 +35,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
   const getOpponentCardStyle = (opponent) => ({
     backgroundColor: 'transparent',
     border: '3px solid #f32210',
-    borderRadius: '15px',
+    borderRadius: '0px',
     padding: '0px',
     height: isMobile ? '140px' : '180px',
     display: 'flex',
@@ -58,7 +58,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
     fontSize: isMobile ? '18px' : '20px',
     fontWeight: 700,
     padding: '0px',
-    borderRadius: '8px',
+    borderRadius: '0px',
     textTransform: 'uppercase',
     letterSpacing: '2px',
     fontFamily: 'Anton, sans-serif',
@@ -197,7 +197,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                   height: '100%',
                   position: 'relative',
                   overflow: 'hidden',
-                  borderRadius: '10px',
+                  borderRadius: '0px',
                   backgroundColor: opponent.model ? 'rgba(0, 0, 0, 0.3)' : 'transparent'
                 }}>
                   {opponent.model ? (

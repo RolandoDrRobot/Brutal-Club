@@ -120,7 +120,7 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
             width: '350px',
             height: '6px',
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '3px',
+            borderRadius: '0px',
             overflow: 'hidden',
             marginBottom: '15px',
             border: '1px solid rgba(243, 34, 16, 0.3)',
@@ -135,7 +135,7 @@ const LoadingScreen = ({ progress = 0, status = 'Starting...' }) => {
                 ? 'linear-gradient(90deg, #00ff00, #00cc00, #00ff00)' // Green when playable
                 : 'linear-gradient(90deg, #f32210, #ff6b53, #f32210)', // Red when loading
               backgroundSize: '200% 100%',
-              borderRadius: '3px',
+              borderRadius: '0px',
               transition: 'width 0.5s ease-out, background 0.3s ease-in-out',
               boxShadow: isPlayable 
                 ? '0 0 15px rgba(0, 255, 0, 0.8)' // Green glow

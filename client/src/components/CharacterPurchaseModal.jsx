@@ -173,7 +173,7 @@ const CharacterPurchaseModal = ({
                 width: '12px',
                 height: '12px',
                 backgroundColor: '#FFD700',
-                borderRadius: '50%',
+                borderRadius: '0px',
                 left: `${particle.x}%`,
                 top: `${particle.y}%`,
                 boxShadow: '0 0 15px #FFD700',
@@ -191,7 +191,7 @@ const CharacterPurchaseModal = ({
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0.95)',
               border: '4px solid #f32210',
-              borderRadius: '20px',
+              borderRadius: '0px',
               padding: '50px 40px',
               textAlign: 'center',
               position: 'relative',
@@ -214,7 +214,7 @@ const CharacterPurchaseModal = ({
                 height: '250px',
                 background: 'radial-gradient(circle, #f3221030 0%, transparent 70%)',
                 transform: 'translate(-50%, -50%)',
-                borderRadius: '50%',
+                borderRadius: '0px',
                 pointerEvents: 'none'
               }}
             />
@@ -378,7 +378,7 @@ const CharacterPurchaseModal = ({
                 right: 0,
                 bottom: 0,
                 border: '2px solid #f32210',
-                borderRadius: '20px',
+                borderRadius: '0px',
                 pointerEvents: 'none'
               }}
             />

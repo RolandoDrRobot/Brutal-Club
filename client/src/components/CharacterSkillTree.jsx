@@ -176,7 +176,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           border: `2px solid ${isMaxLevel(statName) ? '#FFD700' : '#f32210'}`,
-          borderRadius: '15px',
+          borderRadius: '0px',
           boxShadow: isMaxLevel(statName) ? `
             0 0 15px rgba(255, 215, 0, 0.3),
             inset 0 0 15px rgba(255, 215, 0, 0.1)
@@ -465,7 +465,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               height: '120%', // Aumentado para hacer el elemento más alto
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
               border: '3px solid #f32210',
-              borderRadius: '15px',
+              borderRadius: '0px',
               marginBottom: '10px',
               boxShadow: `
                 0 0 20px rgba(243, 34, 16, 0.3),
@@ -574,7 +574,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0.95)',
               border: '3px solid #f32210',
-              borderRadius: '15px',
+              borderRadius: '0px',
               padding: isMobile ? '30px 20px' : '40px 30px',
               maxWidth: isMobile ? '90%' : '400px',
               textAlign: 'center',
@@ -588,7 +588,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
                 width: isMobile ? '60px' : '80px',
                 height: isMobile ? '60px' : '80px',
                 backgroundColor: '#FFD700',
-                borderRadius: '50%',
+                borderRadius: '0px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -639,7 +639,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
                 padding: isMobile ? '12px 25px' : '15px 30px',
                 backgroundColor: 'transparent',
                 border: '3px solid #f32210',
-                borderRadius: '10px',
+                borderRadius: '0px',
                 color: '#f32210',
                 textTransform: 'uppercase',
                 letterSpacing: '2px',

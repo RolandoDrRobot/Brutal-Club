@@ -550,7 +550,7 @@ const Interface = () => {
                 backgroundRepeat: "no-repeat",
                 borderColor: "#f32210",
                 border: "4px solid #f32210",
-                borderRadius: "15px",
+                borderRadius: "0px",
                 color: "#f32210",
                 textTransform: "uppercase",
                 letterSpacing: "3px",
@@ -668,7 +668,7 @@ const Interface = () => {
               {!player1IsDead && (
                 <div style={{
                   backgroundColor: 'rgba(243, 34, 16, 0.2)',
-                  borderRadius: '15px',
+                  borderRadius: '0px',
                   padding: isMobile ? '10px 20px' : '20px 40px',
                   marginBottom: isMobile ? '15px' : '40px',
                   display: 'flex',
@@ -683,7 +683,7 @@ const Interface = () => {
                     width: isMobile ? '30px' : '60px',
                     height: isMobile ? '30px' : '60px',
                     backgroundColor: '#FFD700',
-                    borderRadius: '50%',
+                    borderRadius: '0px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -740,7 +740,7 @@ const Interface = () => {
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     border: '3px solid #f32210',
-                    borderRadius: '15px',
+                    borderRadius: '0px',
                     padding: isMobile ? '12px 24px' : '20px 40px',
                     minWidth: isMobile ? '110px' : '160px',
                     cursor: 'pointer',
@@ -835,7 +835,7 @@ const Interface = () => {
                       backgroundColor: "transparent",
                       borderColor: "#f32210",
                       border: "4px solid #f32210",
-                      borderRadius: "15px",
+                      borderRadius: "0px",
                       color: "#f32210",
                       textTransform: "uppercase",
                       letterSpacing: "3px",
@@ -881,7 +881,7 @@ const Interface = () => {
                       backgroundColor: "transparent",
                       borderColor: "#f32210",
                       border: "4px solid #f32210",
-                      borderRadius: "15px",
+                      borderRadius: "0px",
                       color: "#f32210",
                       textTransform: "uppercase",
                       letterSpacing: "3px",
@@ -954,7 +954,7 @@ const Interface = () => {
                     style={{
                       width: isMobile ? "80px" : "100px",
                       height: isMobile ? "80px" : "100px",
-                      borderRadius: "50%",
+                      borderRadius: "0px",
                       backgroundColor: isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)",
                       border: "3px solid #f32210",
                       display: 'flex',
@@ -1005,7 +1005,7 @@ const Interface = () => {
                   <div style={{
                     backgroundColor: "rgba(0, 0, 0, 0.8)",
                     border: "2px solid #f32210",
-                    borderRadius: "10px",
+                    borderRadius: "0px",
                     padding: "8px 12px",
                     color: "#f32210",
                     fontSize: "12px",
@@ -1035,7 +1035,7 @@ const Interface = () => {
                 <Box style={{ 
                   textAlign: "center",
                   backgroundColor: "transparent",
-                  borderRadius: isMobile ? "15px" : "20px",
+                  borderRadius: "0px",
                   padding: isMobile ? "10px" : "20px",
                   border: "none",
                   boxShadow: "none",
@@ -1081,7 +1081,7 @@ const Interface = () => {
                               minWidth: isMobile ? "90px" : "120px",
                               backgroundColor: "transparent",
                               border: "none",
-                              borderRadius: "15px",
+                              borderRadius: "0px",
                               cursor: canUseAttack ? "pointer" : "not-allowed",
                               opacity: canUseAttack ? 1 : 0.5,
                               transition: "all 0.3s ease",
@@ -1129,7 +1129,7 @@ const Interface = () => {
                                 objectFit: "contain",
                                 filter: canUseAttack ? "none" : "grayscale(1)",
                                 pointerEvents: "none",
-                                borderRadius: "4px"
+                                borderRadius: "0px"
                               }}
                             />
                           </Button>
@@ -1159,7 +1159,7 @@ const Interface = () => {
                       height: isMobile ? "60px" : "100px",
                       backgroundColor: "transparent",
                       border: "none",
-                      borderRadius: isMobile ? "15px" : "15px",
+                      borderRadius: "0px",
                       cursor: isBlockAvailable() ? "pointer" : "not-allowed",
                       opacity: isBlockAvailable() ? 1 : 0.5,
                       transition: "all 0.3s ease",
@@ -1240,7 +1240,7 @@ const Interface = () => {
                         padding: isMobile ? "4px 8px" : "8px 12px",
                         backgroundColor: "transparent",
                         border: `3px solid #f32210`,
-                        borderRadius: isMobile ? "10px" : "15px",
+                        borderRadius: "0px",
                         transition: "all 0.2s ease",
                         minWidth: isMobile ? "60px" : "120px",
                         height: isMobile ? "40px" : "80px",

@@ -151,7 +151,7 @@ const Shop = ({ onBackClick }) => {
         <Box style={{
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
           border: '4px solid #f32210',
-          borderRadius: '20px',
+          borderRadius: '0px',
           padding: isMobile ? '30px 20px' : '40px 30px',
           textAlign: 'center',
           minWidth: isMobile ? '280px' : '350px',
@@ -239,7 +239,7 @@ const Shop = ({ onBackClick }) => {
               width: '100%',
               backgroundColor: canAffordPack() ? 'transparent' : 'rgba(0, 0, 0, 0.5)',
               border: `3px solid ${canAffordPack() ? '#FFD700' : '#666'}`,
-              borderRadius: '12px',
+              borderRadius: '0px',
               color: canAffordPack() ? '#FFD700' : '#666',
               textTransform: 'uppercase',
               letterSpacing: '2px',
