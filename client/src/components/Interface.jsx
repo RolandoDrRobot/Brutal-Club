@@ -486,7 +486,7 @@ const Interface = () => {
         <>
           {/* Título Fight Club - ARRIBA CENTRO */}
           <Affix position={{ 
-            top: isMobile ? 40 : 50, 
+            top: 25, 
             left: "50%",
             transform: "translateX(-50%)"
           }}>
@@ -502,7 +502,8 @@ const Interface = () => {
                 }}
                 style={{
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  fontSize: '60px'
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.transform = "scale(1.05)";
@@ -773,7 +774,7 @@ const Interface = () => {
             <>
               {/* Título Fight Club - ARRIBA CENTRO */}
               <Affix position={{ 
-                top: isMobile ? 40 : 50, 
+                top: 25, 
                 left: "50%",
                 transform: "translateX(-50%)"
               }}>
@@ -786,7 +787,8 @@ const Interface = () => {
                     }}
                     style={{
                       cursor: 'pointer',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
+                      fontSize: '60px'
                     }}
                     onMouseEnter={(e) => {
                       e.target.style.transform = "scale(1.05)";

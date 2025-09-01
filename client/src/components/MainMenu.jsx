@@ -95,7 +95,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
       {/* Title at the top */}
       <div style={{ 
         textAlign: "center",
-        paddingTop: "20px",
+        paddingTop: "25px",
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricTitle 0.8s ease-out 0.1s both"
       }}>
         <div 
@@ -106,7 +106,8 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
           }}
           style={{
             cursor: 'pointer',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            fontSize: '60px'
           }}
           onMouseEnter={(e) => {
             e.target.style.transform = "scale(1.05)";

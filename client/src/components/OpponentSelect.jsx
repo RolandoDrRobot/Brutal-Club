@@ -89,7 +89,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
         textAlign: 'center',
         animation: "fadeInSpray 0.6s ease-out",
         flexShrink: 0,
-        marginBottom: "20px"
+        paddingTop: "25px"
       }}>
         <Text 
           className="fight-title"
@@ -99,7 +99,8 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
           }}
           style={{
             cursor: 'pointer',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            fontSize: '60px'
           }}
           onMouseEnter={(e) => {
             e.target.style.transform = "scale(1.05)";

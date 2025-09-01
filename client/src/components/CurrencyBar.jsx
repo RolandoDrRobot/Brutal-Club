@@ -44,11 +44,11 @@ const CurrencyBar = () => {
           style={{
             fontSize: isMobile ? '18px' : '22px',
             fontWeight: 700,
-            color: '#F5F5DC',
+            color: '#FFD700',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             textTransform: 'uppercase',
-            textShadow: '0 0 5px rgba(245, 245, 220, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8)'
+            textShadow: '0 0 5px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8)'
           }}
         >
           ROLOXWORLD
