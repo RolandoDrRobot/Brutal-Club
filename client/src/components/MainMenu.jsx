@@ -21,17 +21,16 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             fontSize: isMobile ? "30px" : "40px",
     fontWeight: 700,
     padding: "0px",
-    minHeight: isMobile ? "80px" : "100px",
+    minHeight: isMobile ? "65px" : "80px",
     minWidth: isMobile ? "140px" : "180px",
     backgroundColor: "transparent",
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: "cover",
     backgroundPosition: "top",
     backgroundRepeat: "no-repeat",
-    borderColor: "#f32210",
-    border: "4px solid #f32210",
-    borderRadius: "0px",
-    color: "#F5F5DC",
+    border: "2px solid #000000",
+    borderRadius: "10px",
+    color: "#f32210",
     textTransform: "uppercase",
     letterSpacing: "2px",
     fontFamily: "Anton, sans-serif",
@@ -44,21 +43,39 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
       0 0 20px #000000,
       2px 2px 4px #000000
     `,
-    boxShadow: "none",
+    boxShadow: `
+      0 0 20px #f32210,
+      0 0 40px rgba(243, 34, 16, 0.3),
+      inset 0 0 20px rgba(243, 34, 16, 0.1)
+    `,
     transition: "all 0.3s ease",
     cursor: "pointer",
-    animation: "none"
+    animation: "none",
+    // Reset any residual animation styles
+    filter: "none",
+    opacity: 1,
+    transform: "none"
   });
 
   const handleButtonHover = (e, isEntering) => {
     if (!isMobile) {
+      const neonBoxShadow = `
+        0 0 20px #f32210,
+        0 0 40px rgba(243, 34, 16, 0.3),
+        inset 0 0 20px rgba(243, 34, 16, 0.1)
+      `;
+      
       if (isEntering) {
         e.target.style.transform = "scale(1.05) rotate(1deg)";
-        e.target.style.boxShadow = "none";
+        e.target.style.boxShadow = `
+          0 0 30px #f32210,
+          0 0 60px rgba(243, 34, 16, 0.5),
+          inset 0 0 30px rgba(243, 34, 16, 0.2)
+        `;
         e.target.style.animation = "screenShake 0.5s ease-in-out";
       } else {
         e.target.style.transform = "scale(1) rotate(0deg)";
-        e.target.style.boxShadow = "none";
+        e.target.style.boxShadow = neonBoxShadow;
         e.target.style.animation = "none";
       }
     }
@@ -79,7 +96,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
       <div style={{ 
         textAlign: "center",
         paddingTop: "20px",
-        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.5s ease-out 0.2s both"
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricTitle 0.8s ease-out 0.1s both"
       }}>
         <div 
           className="fight-title"
@@ -111,8 +128,8 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
       <Box
         style={{
           width: "100%",
-          padding: "0 0 90px",
-          animation: "fadeInSpray 0.7s ease-out 0.2s both"
+          padding: "60px 0 90px",
+          animation: "electricFadeIn 0.9s ease-out 0.3s both"
         }}
       >
         <Box
@@ -140,12 +157,26 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
                 playButtonSound();
                 onFightersClick();
               }}
-              style={{
-                ...getMenuButtonStyle(button2),
-                flex: 1
+                          style={{
+              ...getMenuButtonStyle(button2),
+              flex: 1,
+              animation: "electricGlitch 0.7s ease-out 0.5s both",
+              boxShadow: "none"
+            }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.target.style.transform = "scale(1.05) rotate(1deg)";
+                  e.target.style.boxShadow = "none";
+                  e.target.style.animation = "screenShake 0.5s ease-in-out";
+                }
               }}
-              onMouseEnter={(e) => handleButtonHover(e, true)}
-              onMouseLeave={(e) => handleButtonHover(e, false)}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.target.style.transform = "scale(1) rotate(0deg)";
+                  e.target.style.boxShadow = "none";
+                  e.target.style.animation = "none";
+                }
+              }}
             >
               CLUB
             </Button>
@@ -157,10 +188,11 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
                 playButtonSound();
                 onStoreClick();
               }}
-              style={{
-                ...getMenuButtonStyle(button3),
-                flex: 1
-              }}
+                          style={{
+              ...getMenuButtonStyle(button3),
+              flex: 1,
+              animation: "electricPulse 0.7s ease-out 0.6s both"
+            }}
               onMouseEnter={(e) => handleButtonHover(e, true)}
               onMouseLeave={(e) => handleButtonHover(e, false)}
             >
@@ -177,12 +209,26 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
               onStartClick();
             }}
             style={{
-              ...getMenuButtonStyle(button1),
+              ...getMenuButtonStyle(mainButtonImg),
               width: "100%",
-              minWidth: "100%"
+              minWidth: "100%",
+              animation: "electricEntry 0.8s ease-out 0.8s both",
+              boxShadow: "none"
             }}
-            onMouseEnter={(e) => handleButtonHover(e, true)}
-            onMouseLeave={(e) => handleButtonHover(e, false)}
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1.05) rotate(1deg)";
+                e.target.style.boxShadow = "none";
+                e.target.style.animation = "screenShake 0.5s ease-in-out";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1) rotate(0deg)";
+                e.target.style.boxShadow = "none";
+                e.target.style.animation = "none";
+              }
+            }}
           >
             FIGHT
           </Button>

@@ -1,11 +1,17 @@
 import React from 'react';
 import { Box } from '@mantine/core';
 import { useGameState } from '../contexts/GameState';
+import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useMediaQuery } from '@mantine/hooks';
-import mainButtonImg from '../assets/mainbutton.jpeg';
+import { useButtonSound } from '../hooks/useButtonSound';
+import coinImg from '../assets/coin.png';
+import statCoinImg from '../assets/statCoin.png';
+import homeImg from '../assets/home.png';
 
 const CurrencyBar = () => {
   const { coins, statPoints } = useGameState() || {};
+  const { navigateToMenu } = useCharacterAnimations();
+  const { playButtonSound } = useButtonSound();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
@@ -17,11 +23,8 @@ const CurrencyBar = () => {
         right: 0,
         zIndex: 9999,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        backgroundImage: `url(${mainButtonImg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        borderTop: '2px solid #f32210',
+
+
         padding: isMobile ? '8px 15px' : '10px 20px',
         backdropFilter: 'blur(10px)',
         boxShadow: '0 -4px 15px rgba(0, 0, 0, 0.7), 0 0 20px rgba(243, 34, 16, 0.3)',
@@ -39,7 +42,7 @@ const CurrencyBar = () => {
         {/* Left side - ROLOXWORLD */}
         <Box
           style={{
-            fontSize: isMobile ? '16px' : '20px',
+            fontSize: isMobile ? '18px' : '22px',
             fontWeight: 700,
             color: '#F5F5DC',
             fontFamily: 'Anton, sans-serif',
@@ -51,6 +54,42 @@ const CurrencyBar = () => {
           ROLOXWORLD
         </Box>
 
+        {/* Center - Home icon */}
+        <Box
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            padding: '4px',
+            borderRadius: '50%'
+          }}
+          onClick={() => {
+            playButtonSound();
+            navigateToMenu();
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.transform = "scale(1.1)";
+            e.target.style.opacity = "0.8";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = "scale(1)";
+            e.target.style.opacity = "1";
+          }}
+        >
+          <img 
+            src={homeImg}
+            alt="Home"
+            style={{
+              width: isMobile ? '32px' : '40px',
+              height: isMobile ? '32px' : '40px',
+              filter: 'none',
+              pointerEvents: 'none'
+            }}
+          />
+        </Box>
+
         {/* Right side - Currency elements */}
         <Box
           style={{
@@ -59,75 +98,70 @@ const CurrencyBar = () => {
             alignItems: 'center'
           }}
         >
-          {/* Gold Coins */}
-          <Box
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: isMobile ? '6px' : '8px',
-              fontSize: isMobile ? '14px' : '16px',
-              fontWeight: 700,
-              padding: isMobile ? '6px 12px' : '8px 16px',
-              backgroundColor: 'rgba(255, 215, 0, 0.1)',
-              border: '2px solid #FFD700',
-              borderRadius: '0px',
-              color: '#FFD700',
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              fontFamily: 'Anton, sans-serif',
-              minWidth: isMobile ? '70px' : '80px',
-              justifyContent: 'center',
-              boxShadow: '0 0 15px rgba(255, 215, 0, 0.4)',
-              textShadow: '0 0 5px rgba(255, 215, 0, 0.8)'
-            }}
-          >
-            <span style={{
-              fontSize: isMobile ? '16px' : '18px',
-              animation: 'goldNeonText 2s ease-in-out infinite'
-            }}>
-              🪙
-            </span>
-            <span style={{
-              fontWeight: 900,
-              animation: 'goldNeonText 2s ease-in-out infinite'
-            }}>
-              {coins || 0}
-            </span>
-          </Box>
-
           {/* Skill Points */}
           <Box
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: isMobile ? '6px' : '8px',
-              fontSize: isMobile ? '14px' : '16px',
+              fontSize: isMobile ? '16px' : '18px',
               fontWeight: 700,
-              padding: isMobile ? '6px 12px' : '8px 16px',
-              backgroundColor: 'rgba(243, 34, 16, 0.1)',
-              border: '2px solid #f32210',
-              borderRadius: '0px',
+              backgroundColor: 'transparent',
               color: '#f32210',
               textTransform: 'uppercase',
               letterSpacing: '1px',
               fontFamily: 'Anton, sans-serif',
               minWidth: isMobile ? '70px' : '80px',
-              justifyContent: 'center',
-              boxShadow: '0 0 15px rgba(243, 34, 16, 0.4)',
-              textShadow: '0 0 5px rgba(243, 34, 16, 0.8)'
+              justifyContent: 'center'
             }}
           >
-            <span style={{
-              fontSize: isMobile ? '16px' : '18px',
-              animation: 'redNeonText 2s ease-in-out infinite'
-            }}>
-              ⚡
-            </span>
+            <img 
+              src={statCoinImg}
+              alt="Stat Points"
+              style={{
+                width: isMobile ? '24px' : '28px',
+                height: isMobile ? '24px' : '28px',
+                filter: 'none'
+              }}
+            />
             <span style={{
               fontWeight: 900,
-              animation: 'redNeonText 2s ease-in-out infinite'
+              color: '#F5F5DC'
             }}>
               {statPoints || 0}
+            </span>
+          </Box>
+
+          {/* Gold Coins */}
+          <Box
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: isMobile ? '6px' : '8px',
+              fontSize: isMobile ? '16px' : '18px',
+              fontWeight: 700,
+              backgroundColor: 'transparent',
+              color: '#FFD700',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              fontFamily: 'Anton, sans-serif',
+              minWidth: isMobile ? '70px' : '80px',
+              justifyContent: 'center'
+            }}
+          >
+            <img 
+              src={coinImg}
+              alt="Coin"
+              style={{
+                width: isMobile ? '24px' : '28px',
+                height: isMobile ? '24px' : '28px',
+                filter: 'none'
+              }}
+            />
+            <span style={{
+              fontWeight: 900
+            }}>
+              {coins || 0}
             </span>
           </Box>
         </Box>
@@ -142,6 +176,9 @@ const CurrencyBar = () => {
               0 0 6px #FFD700,
               0 0 9px rgba(255, 215, 0, 0.4),
               1px 1px 2px rgba(0,0,0,0.8);
+            filter: 
+              drop-shadow(0 0 3px rgba(255, 215, 0, 0.8))
+              drop-shadow(0 0 6px rgba(255, 215, 0, 0.6));
           }
           50% {
             text-shadow: 
@@ -150,6 +187,10 @@ const CurrencyBar = () => {
               0 0 15px rgba(255, 215, 0, 0.6),
               0 0 20px rgba(255, 215, 0, 0.3),
               1px 1px 2px rgba(0,0,0,0.8);
+            filter: 
+              drop-shadow(0 0 5px rgba(255, 215, 0, 1))
+              drop-shadow(0 0 10px rgba(255, 215, 0, 0.8))
+              drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
           }
           100% {
             text-shadow: 
@@ -157,6 +198,9 @@ const CurrencyBar = () => {
               0 0 6px #FFD700,
               0 0 9px rgba(255, 215, 0, 0.4),
               1px 1px 2px rgba(0,0,0,0.8);
+            filter: 
+              drop-shadow(0 0 3px rgba(255, 215, 0, 0.8))
+              drop-shadow(0 0 6px rgba(255, 215, 0, 0.6));
           }
         }
 

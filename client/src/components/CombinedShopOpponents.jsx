@@ -314,7 +314,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricEntry 0.8s ease-out",
         padding: isMobile ? "30px 15px 25px" : "50px 30px 40px",
         height: "100dvh",
         overflow: "hidden",
@@ -327,76 +327,14 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        animation: "fadeInSpray 0.7s ease-out 0.2s both",
+        animation: "electricTitle 0.8s ease-out 0.2s both",
         flexShrink: 0,
         paddingBottom: "30px",
         flexWrap: 'wrap',
         gap: '10px',
         width: '100%'
       }}>
-        {/* Left side: Coins and description text */}
-        <Box 
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            flex: 1,
-            cursor: 'pointer',
-            transition: 'all 0.3s ease'
-          }}
-          onClick={() => {
-            playButtonSound();
-            onBackClick();
-          }}
-          onMouseEnter={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1.02)";
-              e.target.style.opacity = "0.8";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1)";
-              e.target.style.opacity = "1";
-            }
-          }}
-        >
-          <Text style={{
-            fontSize: '30px',
-            fontWeight: 700,
-            color: 'rgb(255, 215, 0)',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '1px',
-            whiteSpace: 'nowrap'
-          }}>
-            Arcade Mode
-          </Text>
-          
-          <Text style={{
-            fontSize: '20px',
-            fontWeight: 400,
-            color: 'rgb(245, 245, 220)',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '0.5px',
-            marginTop: '4px',
-            lineHeight: 1.2
-          }}>
-            Beat opponents to win 1 coin
-          </Text>
 
-          <Text style={{
-            fontSize: '20px',
-            fontWeight: 400,
-            color: 'rgb(245, 245, 220)',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '0.5px',
-            marginTop: '4px',
-            lineHeight: 1.2
-          }}>
-            Arcade costs 1 coin
-          </Text>
-          
-        </Box>
 
         {/* Right side: Resource Indicators */}
 
@@ -414,7 +352,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         paddingRight: isMobile ? "5px" : "10px",
         paddingTop: "20px",
         paddingBottom: isMobile ? "20px" : "30px", // Added bottom padding for balance
-        animation: "fadeInSpray 0.7s ease-out 0.2s both",
+        animation: "electricFadeIn 0.8s ease-out 0.3s both",
         minHeight: 0,
         maxWidth: "100%", // ✅ Sin limitación de ancho para más espacio
         width: "100%",
@@ -561,7 +499,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                 key={opponent.id} 
                 span={4}
                 style={{
-                  animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`
+                  animation: `electricStatic 0.6s ease-out ${0.5 + index * 0.12}s both`
                 }}
               >
                 <Box style={{
@@ -631,7 +569,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             textAlign: 'center',
             lineHeight: 1.3,
             maxWidth: '300px',
-            animation: 'fadeInSpray 0.5s ease-out 0.6s both'
+            animation: 'electricFlicker 0.6s ease-out 0.8s both'
           }}>
             FIGHT THROUGH ALL OPPONENTS IN SEQUENCE TO UNLOCK THE NEXT ONE
           </Text>

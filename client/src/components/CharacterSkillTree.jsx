@@ -288,7 +288,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
       <Box
         className="fight-screen-container fight-screen-background"
         style={{
-          animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
+          animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricFadeIn 0.8s ease-out",
           padding: isMobile ? "20px" : "40px",
           display: "flex",
           flexDirection: "column",
@@ -325,7 +325,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricFadeIn 0.8s ease-out",
         padding: isMobile ? "10px" : "40px",
         minHeight: "100dvh",
         height: "auto",
@@ -336,69 +336,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         alignItems: "center"
       }}
     >
-      {/* Header with Arcade Mode info and close button */}
-      <Box style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        animation: "fadeInSpray 0.7s ease-out 0.2s both",
-        flexShrink: 0,
-        paddingTop: '15px',
-        paddingBottom: '30px',
-        flexWrap: 'wrap',
-        gap: '10px',
-        width: '100%'
-      }}>
-        <Box 
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            flex: '1 1 0%',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease'
-          }}
-          onClick={() => {
-            playButtonSound();
-            onBackClick();
-          }}
-          onMouseEnter={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1.02)";
-              e.target.style.opacity = "0.8";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1)";
-              e.target.style.opacity = "1";
-            }
-          }}
-        >
-          <Text style={{
-            fontSize: '24px',
-            fontWeight: 700,
-            color: '#FFD700',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '1px',
-            whiteSpace: 'nowrap'
-          }}>
-            Welcome to the Club
-          </Text>
-          <Text style={{
-            fontSize: '16px',
-            fontWeight: 400,
-            color: 'rgb(245, 245, 220)',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '0.5px',
-            marginTop: '4px',
-            lineHeight: 1.2
-          }}>
-            Get your fighters trained using stat points
-            </Text>
-        </Box>
 
-      </Box>
 
       {/* Character selection area */}
       <Box style={{
@@ -547,7 +485,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         maxWidth: '300px',
         margin: '0 auto',
         paddingBottom: '25px',
-        animation: 'fadeInSpray 0.5s ease-out 0.6s both'
+        animation: 'electricGlitch 0.6s ease-out 0.4s both'
       }}>
         TRAIN YOUR FIGHTER USING STAT POINTS
       </Text>
@@ -566,7 +504,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
-            animation: 'fadeInSpray 0.3s ease-out'
+            animation: 'electricPulse 0.5s ease-out'
           }}
           onClick={() => setShowNoCoinsModal(false)}
         >
@@ -578,7 +516,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               padding: isMobile ? '30px 20px' : '40px 30px',
               maxWidth: isMobile ? '90%' : '400px',
               textAlign: 'center',
-              animation: 'fadeInSpray 0.5s ease-out 0.1s both'
+              animation: 'electricEntry 0.6s ease-out 0.1s both'
             }}
             onClick={(e) => e.stopPropagation()}
           >

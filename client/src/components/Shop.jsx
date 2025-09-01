@@ -62,7 +62,7 @@ const Shop = ({ onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out",
+        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricEntry 0.8s ease-out",
         padding: isMobile ? "40px 20px 20px 20px" : "60px 40px 40px 40px",
         height: "100dvh",
         overflow: "hidden",
@@ -70,71 +70,7 @@ const Shop = ({ onBackClick }) => {
         flexDirection: "column"
       }}
     >
-      {/* Header with coins, stat points and back button */}
-      <Box style={{ 
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        animation: "fadeInSpray 0.7s ease-out 0.2s both",
-        flexShrink: 0,
-        paddingTop: "0",
-        paddingBottom: "30px",
-        flexWrap: 'wrap',
-        gap: '10px',
-        width: '100%'
-      }}>
-        <Box 
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            flex: '1 1 0%',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease'
-          }}
-          onClick={() => {
-            playButtonSound();
-            onBackClick();
-          }}
-          onMouseEnter={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1.02)";
-              e.target.style.opacity = "0.8";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1)";
-              e.target.style.opacity = "1";
-            }
-          }}
-        >
-          <Text style={{
-            fontSize: '30px',
-            fontWeight: 700,
-            color: 'rgb(255, 215, 0)',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '1px',
-            whiteSpace: 'nowrap'
-          }}>
-            🎁 Pack Store
-          </Text>
-          <Text style={{
-            fontSize: '20px',
-            fontWeight: 400,
-            color: 'rgb(245, 245, 220)',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '0.5px',
-            marginTop: '4px',
-            lineHeight: 1.2
-          }}>
-            Buy packs to get fighters & stat points!
-          </Text>
-        </Box>
-        
-        {/* Currency Display */}
 
-      </Box>
 
       {/* Main Content */}
       <Box style={{ 
@@ -144,7 +80,7 @@ const Shop = ({ onBackClick }) => {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '40px',
-        animation: "fadeInSpray 0.7s ease-out 0.2s both"
+        animation: "electricFadeIn 0.7s ease-out 0.4s both"
       }}>
         
         {/* Fighter Pack Card */}
@@ -246,7 +182,8 @@ const Shop = ({ onBackClick }) => {
               fontFamily: 'Anton, sans-serif',
               cursor: canAffordPack() ? 'pointer' : 'not-allowed',
               transition: 'all 0.3s ease',
-              opacity: canAffordPack() ? 1 : 0.6
+              opacity: canAffordPack() ? 1 : 0.6,
+              animation: "electricFlicker 0.6s ease-out 0.8s both"
             }}
             onMouseEnter={(e) => {
               if (!isMobile && canAffordPack()) {
