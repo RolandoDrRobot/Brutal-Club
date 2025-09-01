@@ -71,7 +71,7 @@ const GAME_CONFIG = {
   ],
   STAT_CONFIG: {
     MAX_LEVEL: 10,
-    UPGRADE_COST: 1,
+    UPGRADE_COST: 1, // Now using stat points instead of coins
     STAT_NAMES: {
       speed: 'SPEED',
       stamina: 'STAMINA', 
@@ -81,6 +81,19 @@ const GAME_CONFIG = {
       speed: 'SPD',
       stamina: 'STA', 
       strength: 'STR'
+    }
+  },
+  PACK_CONFIG: {
+    PACK_COST: 5, // Coins needed to buy one pack
+    PACK_CONTENTS: {
+      // Probabilities for pack contents (total should be 100)
+      STAT_POINTS_COMMON: 60,    // 60% chance for 3-5 stat points
+      STAT_POINTS_RARE: 30,      // 30% chance for 8-12 stat points  
+      CHARACTER_LEGENDARY: 10    // 10% chance for a character
+    },
+    STAT_POINTS_RANGES: {
+      COMMON: { min: 3, max: 5 },
+      RARE: { min: 8, max: 12 }
     }
   }
 };
@@ -92,17 +105,19 @@ export const GameStateProvider = ({ children }) => {
     localStorage.removeItem('fightClubGameState');
     
     const initialState = {
-      coins: 3,
+      coins: 10, // Start with more coins for buying packs
+      statPoints: 0, // New: stat points from packs
       defeatedOpponents: [], // IDs of defeated opponents
       purchasedCharacters: ['pete'], // Pete is free initially
       unlockedOpponents: ['tyler_1'], // Only first opponent available at start
       totalWins: 0,
       totalFights: 0,
+      packsOpened: 0, // Track total packs opened
       characterStats: {
         // Initialize stats for owned characters
         'pete': { speed: 1, stamina: 1, strength: 1 }
       },
-      version: 3 // Version to force updates if needed
+      version: 4 // Version to force updates if needed
     };
     
     return initialState;
@@ -223,7 +238,7 @@ export const GameStateProvider = ({ children }) => {
     return false;
   };
 
-  // Function to upgrade character stat
+  // Function to upgrade character stat (now uses stat points instead of coins)
   const upgradeCharacterStat = (characterId, statName) => {
     const currentStats = gameState.characterStats[characterId];
     if (!currentStats) return false;
@@ -232,14 +247,14 @@ export const GameStateProvider = ({ children }) => {
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
     
-    // Check if upgrade is possible
-    if (currentLevel >= maxLevel || gameState.coins < upgradeCost) {
+    // Check if upgrade is possible (now using stat points)
+    if (currentLevel >= maxLevel || gameState.statPoints < upgradeCost) {
       return false;
     }
     
     setGameState(prev => ({
       ...prev,
-      coins: prev.coins - upgradeCost,
+      statPoints: prev.statPoints - upgradeCost,
       characterStats: {
         ...prev.characterStats,
         [characterId]: {
@@ -249,6 +264,87 @@ export const GameStateProvider = ({ children }) => {
       }
     }));
     return true;
+  };
+
+  // Function to generate random pack contents
+  const generatePackContents = () => {
+    const { PACK_CONTENTS, STAT_POINTS_RANGES } = GAME_CONFIG.PACK_CONFIG;
+    const availableCharacters = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.filter(
+      char => char.price !== null && !gameState.purchasedCharacters.includes(char.id)
+    );
+    
+    const roll = Math.random() * 100;
+    
+    if (roll < PACK_CONTENTS.CHARACTER_LEGENDARY && availableCharacters.length > 0) {
+      // Legendary character pull!
+      const randomCharacter = availableCharacters[Math.floor(Math.random() * availableCharacters.length)];
+      return [{
+        type: 'character',
+        id: randomCharacter.id,
+        name: randomCharacter.name,
+        description: randomCharacter.description,
+        emoji: randomCharacter.emoji
+      }];
+    } else if (roll < PACK_CONTENTS.CHARACTER_LEGENDARY + PACK_CONTENTS.STAT_POINTS_RARE) {
+      // Rare stat points
+      const amount = Math.floor(Math.random() * (STAT_POINTS_RANGES.RARE.max - STAT_POINTS_RANGES.RARE.min + 1)) + STAT_POINTS_RANGES.RARE.min;
+      return [{
+        type: 'stat_points',
+        name: 'Rare Stat Points',
+        amount: amount
+      }];
+    } else {
+      // Common stat points
+      const amount = Math.floor(Math.random() * (STAT_POINTS_RANGES.COMMON.max - STAT_POINTS_RANGES.COMMON.min + 1)) + STAT_POINTS_RANGES.COMMON.min;
+      return [{
+        type: 'stat_points',
+        name: 'Stat Points',
+        amount: amount
+      }];
+    }
+  };
+
+  // Function to open a pack
+  const openPack = () => {
+    const packCost = GAME_CONFIG.PACK_CONFIG.PACK_COST;
+    
+    if (gameState.coins < packCost) {
+      return { success: false, reason: 'insufficient_coins' };
+    }
+    
+    const contents = generatePackContents();
+    
+    setGameState(prev => {
+      const newState = {
+        ...prev,
+        coins: prev.coins - packCost,
+        packsOpened: prev.packsOpened + 1
+      };
+      
+      // Process each item in the pack
+      contents.forEach(item => {
+        if (item.type === 'character') {
+          // Add character to purchased characters
+          newState.purchasedCharacters = [...prev.purchasedCharacters, item.id];
+          
+          // Initialize stats for new character
+          const character = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.find(c => c.id === item.id);
+          if (character) {
+            newState.characterStats = {
+              ...newState.characterStats,
+              [item.id]: character.baseStats
+            };
+          }
+        } else if (item.type === 'stat_points') {
+          // Add stat points
+          newState.statPoints = prev.statPoints + item.amount;
+        }
+      });
+      
+      return newState;
+    });
+    
+    return { success: true, contents };
   };
 
   // Function to get character stats
@@ -336,22 +432,28 @@ export const GameStateProvider = ({ children }) => {
   const contextValue = {
     // Game state
     coins: gameState.coins,
+    statPoints: gameState.statPoints,
     defeatedOpponents: gameState.defeatedOpponents,
     purchasedCharacters: gameState.purchasedCharacters,
     unlockedOpponents: gameState.unlockedOpponents,
     totalWins: gameState.totalWins,
     totalFights: gameState.totalFights,
+    packsOpened: gameState.packsOpened,
 
     // Coin management functions
     addCoins,
     spendCoins,
+
+    // Pack system functions
+    openPack,
+    generatePackContents,
 
     // Combat functions
     registerVictory,
     registerDefeat,
     startArcadeMode,
 
-    // Shop functions
+    // Shop functions (legacy - now mainly for pack system)
     purchaseCharacter,
     isCharacterPurchased,
     canAffordCharacter,

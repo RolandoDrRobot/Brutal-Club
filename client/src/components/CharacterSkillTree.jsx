@@ -8,6 +8,7 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import comboImg from '../assets/combo.png';
 import CharacterPreview from './CharacterPreview';
+import StatUpgradeModal from './StatUpgradeModal';
 
 const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -16,6 +17,13 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
   const { playButtonSound } = useButtonSound();
   const [selectedCharacter, setSelectedCharacter] = useState(0);
   const [showNoCoinsModal, setShowNoCoinsModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeModalData, setUpgradeModalData] = useState({
+    statName: '',
+    statDisplayName: '',
+    newLevel: 0,
+    characterName: ''
+  });
 
   // Use GameState to get purchased characters and stats
   const { 
@@ -23,6 +31,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     upgradeCharacterStat, 
     getCharacterStats, 
     coins,
+    statPoints,
     GAME_CONFIG 
   } = useGameState();
   
@@ -97,26 +106,36 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
       return;
     }
     
-    if (coins < upgradeCost) {
-      // Not enough coins - show modal
+    if (statPoints < upgradeCost) {
+      // Not enough stat points - show modal
       setShowNoCoinsModal(true);
       return;
     }
     
     const success = upgradeCharacterStat(characterId, statName);
-    if (!success) {
+    if (success) {
+      // Show upgrade success modal with animation
+      const newLevel = getStatLevel(statName) + 1; // This will be the new level after upgrade
+      setUpgradeModalData({
+        statName: statName,
+        statDisplayName: GAME_CONFIG.STAT_CONFIG.STAT_NAMES[statName],
+        newLevel: newLevel,
+        characterName: characters[selectedCharacter].name
+      });
+      setShowUpgradeModal(true);
+    } else {
       // Could add feedback for failed upgrade
       console.log(`Failed to upgrade ${statName} for ${characterId}`);
     }
-  }, [playButtonSound, characters, selectedCharacter, upgradeCharacterStat, coins, getStatLevel, GAME_CONFIG.STAT_CONFIG]);
+  }, [playButtonSound, characters, selectedCharacter, upgradeCharacterStat, statPoints, getStatLevel, GAME_CONFIG.STAT_CONFIG]);
 
   const canUpgrade = useCallback((statName) => {
     const currentLevel = getStatLevel(statName);
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
     // Verificación estricta: debe tener al menos el costo exacto de la mejora
-    return currentLevel < maxLevel && coins >= upgradeCost;
-  }, [getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL, GAME_CONFIG.STAT_CONFIG.UPGRADE_COST, coins]);
+    return currentLevel < maxLevel && statPoints >= upgradeCost;
+  }, [getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL, GAME_CONFIG.STAT_CONFIG.UPGRADE_COST, statPoints]);
 
   const isMaxLevel = useCallback((statName) => {
     const currentLevel = getStatLevel(statName);
@@ -239,7 +258,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               textAlign: 'center',
               textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
             }}>
-              COST: {upgradeCost} COIN{upgradeCost !== 1 ? 'S' : ''}
+              COST: {upgradeCost} STAT POINT{upgradeCost !== 1 ? 'S' : ''}
             </Text>
           )}
 
@@ -397,30 +416,60 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             marginTop: '4px',
             lineHeight: 1.2
           }}>
-            Get your fighters trained using your coins
+            Get your fighters trained using stat points
             </Text>
         </Box>
-        <Box style={{ flexShrink: 0 }}>
+        <Box style={{
+          display: 'flex',
+          gap: '10px',
+          flexShrink: 0
+        }}>
+          {/* Coins */}
           <Box
             style={{
               fontSize: '16px',
               fontWeight: 700,
-              padding: '12px 20px',
+              padding: '12px 15px',
               backgroundColor: 'transparent',
-              border: '3px solid #f32210',
+              border: '3px solid #FFD700',
               borderRadius: '10px',
-              color: '#f32210',
+              color: '#FFD700',
               textTransform: 'uppercase',
-              letterSpacing: '2px',
+              letterSpacing: '1px',
               fontFamily: 'Anton, sans-serif',
               height: '55px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minWidth: '80px'
+              minWidth: '70px',
+              gap: '5px'
             }}
           >
-            <span className="fight-button-text">{coins || 0}</span>
+            🪙 {coins || 0}
+          </Box>
+          
+          {/* Stat Points */}
+          <Box
+            style={{
+              fontSize: '16px',
+              fontWeight: 700,
+              padding: '12px 15px',
+              backgroundColor: 'transparent',
+              border: '3px solid #f32210',
+              borderRadius: '10px',
+              color: '#f32210',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              fontFamily: 'Anton, sans-serif',
+              height: '55px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: '70px',
+              gap: '5px'
+            }}
+          >
+            ⚡ {statPoints || 0}
           </Box>
         </Box>
       </Box>
@@ -574,7 +623,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         paddingBottom: '25px',
         animation: 'fadeInSpray 0.5s ease-out 0.6s both'
       }}>
-        TRAIN YOUR FIGHTER BY TAPPING THE BUTTON
+        TRAIN YOUR FIGHTER USING STAT POINTS
       </Text>
 
       {/* No Coins Modal */}
@@ -638,7 +687,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
                 textTransform: 'uppercase'
               }}
             >
-              NO COINS!
+              NO STAT POINTS!
             </Text>
 
             {/* Message */}
@@ -652,7 +701,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
                 lineHeight: 1.4
               }}
             >
-              You need 1 coin to upgrade your fighter's stats. Fight opponents to earn more coins!
+              You need 1 stat point to upgrade your fighter's stats. Buy packs from the store to get more stat points!
             </Text>
 
             {/* Close Button */}
@@ -690,6 +739,16 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           </Box>
         </Box>
       )}
+
+      {/* Stat Upgrade Success Modal */}
+      <StatUpgradeModal
+        isVisible={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        statName={upgradeModalData.statName}
+        statDisplayName={upgradeModalData.statDisplayName}
+        newLevel={upgradeModalData.newLevel}
+        characterName={upgradeModalData.characterName}
+      />
 
     </Box>
   );

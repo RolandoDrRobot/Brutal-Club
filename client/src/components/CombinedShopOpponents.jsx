@@ -10,6 +10,7 @@ import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
 import punchImg from "../assets/punch.png";
 import comboImg from "../assets/combo.png";
+import CharacterPurchaseModal from './CharacterPurchaseModal';
 
 const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -20,6 +21,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
     const {
     coins,
+    statPoints,
     purchaseCharacter, 
     getShopCharactersStatus, 
     getOpponentsStatus,
@@ -30,6 +32,13 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const { lazyLoadModel } = useModelLoader();
   const [loadingModels, setLoadingModels] = useState(new Set());
   const [loadedModels, setLoadedModels] = useState(new Set());
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [purchaseModalData, setPurchaseModalData] = useState({
+    characterName: '',
+    characterDescription: '',
+    characterEmoji: '',
+    coinsSpent: 0
+  });
 
   // Safety check - if coins is undefined, context is not ready yet
   if (coins === undefined) {
@@ -109,8 +118,17 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       const success = purchaseCharacter(character.id);
       if (success) {
         playButtonSound();
+        // Show purchase success modal with animation
+        setPurchaseModalData({
+          characterName: character.name,
+          characterDescription: character.description,
+          characterEmoji: character.emoji,
+          coinsSpent: character.price
+        });
+        setShowPurchaseModal(true);
       } else {
         // Purchase failed
+        console.log(`Failed to purchase ${character.name}`);
       }
     }
   };
@@ -380,31 +398,58 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           
         </Box>
 
-        {/* Right side: Back Button */}
+        {/* Right side: Resource Indicators */}
         <Box style={{
+          display: 'flex',
+          gap: '10px',
           flexShrink: 0
         }}>
+          {/* Coins */}
           <Box
             style={{
-              fontSize: "20px",
+              fontSize: '16px',
               fontWeight: 700,
-              padding: "12px 20px",
-              backgroundColor: "transparent",
-              borderColor: "#f32210",
-              border: "3px solid #f32210",
-              borderRadius: "10px",
-              color: "#f32210",
-              textTransform: "uppercase",
-              letterSpacing: "2px",
-              fontFamily: "Anton, sans-serif",
-              height: "55px",
+              padding: '12px 15px',
+              backgroundColor: 'transparent',
+              border: '3px solid #FFD700',
+              borderRadius: '10px',
+              color: '#FFD700',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              fontFamily: 'Anton, sans-serif',
+              height: '55px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minWidth: '80px'
+              minWidth: '70px',
+              gap: '5px'
             }}
           >
-            <span className="fight-button-text">{coins || 0}</span>
+            🪙 {coins || 0}
+          </Box>
+          
+          {/* Stat Points */}
+          <Box
+            style={{
+              fontSize: '16px',
+              fontWeight: 700,
+              padding: '12px 15px',
+              backgroundColor: 'transparent',
+              border: '3px solid #f32210',
+              borderRadius: '10px',
+              color: '#f32210',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              fontFamily: 'Anton, sans-serif',
+              height: '55px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: '70px',
+              gap: '5px'
+            }}
+          >
+            ⚡ {statPoints || 0}
           </Box>
         </Box>
       </Box>
@@ -646,6 +691,17 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
 
       </Box>
+
+      {/* Character Purchase Success Modal */}
+      <CharacterPurchaseModal
+        isVisible={showPurchaseModal}
+        onClose={() => setShowPurchaseModal(false)}
+        characterName={purchaseModalData.characterName}
+        characterDescription={purchaseModalData.characterDescription}
+        characterEmoji={purchaseModalData.characterEmoji}
+        coinsSpent={purchaseModalData.coinsSpent}
+      />
+
     </Box>
   );
 };

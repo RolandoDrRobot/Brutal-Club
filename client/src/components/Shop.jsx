@@ -8,6 +8,9 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
+import CharacterPurchaseModal from './CharacterPurchaseModal';
+import CoinPurchaseModal from './CoinPurchaseModal';
+import PackOpeningModal from './PackOpeningModal';
 
 const Shop = ({ onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -16,187 +19,44 @@ const Shop = ({ onBackClick }) => {
   const { playButtonSound } = useButtonSound();
   const { 
     coins,
+    statPoints,
     addCoins,
-    gameState = {}, 
-    purchaseCharacter = () => {}, 
-    getShopCharactersStatus = () => [], 
-    isCharacterPurchased = () => false, 
-    canAffordCharacter = () => false, 
-    clearSavedData = () => {} 
+    openPack,
+    GAME_CONFIG
   } = useGameState() || {};
-  const { setSelectedPlayer1Character } = useCharacterAnimations();
-  const { lazyLoadModel } = useModelLoader();
-  const [loadingModels, setLoadingModels] = useState(new Set());
-  const [loadedModels, setLoadedModels] = useState(new Set());
+  
+  // Modal states
+  const [showCoinPurchaseModal, setShowCoinPurchaseModal] = useState(false);
+  const [showPackOpeningModal, setShowPackOpeningModal] = useState(false);
+  const [packContents, setPackContents] = useState([]);
 
-  // Lazy load shop models when component mounts
-  useEffect(() => {
-    const loadShopModels = async () => {
-      setLoadingModels(new Set(['Vince', 'Bob']));
-      
-      const promises = [
-        lazyLoadModel('Vince'),
-        lazyLoadModel('Bob')
-      ];
-      
-      const results = await Promise.allSettled(promises);
-      const successful = new Set();
-      
-      results.forEach((result, index) => {
-        const modelName = ['Vince', 'Bob'][index];
-        if (result.status === 'fulfilled' && result.value) {
-          successful.add(modelName);
-        } else {
-          console.warn(`⚠️ Shop model failed: ${modelName}`);
-        }
-      });
-      
-      setLoadedModels(successful);
-      setLoadingModels(new Set());
-    };
-
-    loadShopModels();
-  }, [lazyLoadModel]);
-
-  // Get characters with their current status from GameState
-  const shopCharacters = getShopCharactersStatus();
-
-  const handlePurchase = (character) => {
-    if (character.price && character.canAfford && !character.isPurchased) {
-      const success = purchaseCharacter(character.id);
-      if (success) {
-        // Purchase successful
-      } else {
-        // Purchase failed
-      }
-    }
-  };
-
-  const getCharacterCardStyle = (character) => {
-    if (character.isPurchased) {
-      return {
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        border: '3px solid #f32210',
-        borderRadius: '15px',
-        padding: isMobile ? '15px' : '20px',
-        height: '200px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        position: 'relative',
-        cursor: 'default',
-        opacity: 1,
-        transition: 'all 0.3s ease',
-        boxShadow: `
-          0 0 10px #f32210,
-          0 0 20px rgba(243, 34, 16, 0.2),
-          inset 0 0 10px rgba(243, 34, 16, 0.05)
-        `,
-        overflow: 'hidden'
-      };
-    }
+  // Pack system functions
+  const handleBuyPack = () => {
+    if (!openPack) return;
     
-    // Character is locked if price is not null and not affordable, or if it has no price and isn't purchased
-    const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
-    
-    return {
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      border: '3px solid #f32210',
-      borderRadius: '15px',
-      padding: isMobile ? '15px' : '20px',
-      height: '200px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      position: 'relative',
-      cursor: isLocked ? 'not-allowed' : 'pointer',
-      opacity: isLocked ? 0.6 : 1,
-      transition: 'all 0.3s ease',
-      boxShadow: `
-        0 0 10px #f32210,
-        0 0 20px rgba(243, 34, 16, 0.2),
-        inset 0 0 10px rgba(243, 34, 16, 0.05)
-      `,
-      overflow: 'hidden'
-    };
-  };
-
-  const getButtonStyle = (character) => {
-    if (character.isPurchased) {
-      return {
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        color: '#FFD700',
-        border: 'none',
-        fontSize: isMobile ? '30px' : '35px',
-        fontWeight: 700,
-        padding: '0px',
-        borderRadius: '8px',
-        textTransform: 'uppercase',
-        letterSpacing: '2px',
-        fontFamily: 'Anton, sans-serif',
-        textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-        cursor: 'default',
-        boxShadow: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px'
-      };
-    }
-    
-    const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
-    
-    if (isLocked) {
-      return {
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        color: '#FFD700',
-        border: 'none',
-        fontSize: isMobile ? '30px' : '35px',
-        fontWeight: 700,
-        padding: '0px',
-        borderRadius: '8px',
-        textTransform: 'uppercase',
-        letterSpacing: '2px',
-        fontFamily: 'Anton, sans-serif',
-        textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-        cursor: 'not-allowed',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px'
-      };
+    const result = openPack();
+    if (result.success) {
+      playButtonSound();
+      setPackContents(result.contents);
+      setShowPackOpeningModal(true);
     } else {
-      return {
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        color: '#FFD700',
-        border: 'none',
-        fontSize: isMobile ? '30px' : '35px',
-        fontWeight: 700,
-        padding: '0px',
-        borderRadius: '8px',
-        textTransform: 'uppercase',
-        letterSpacing: '2px',
-        fontFamily: 'Anton, sans-serif',
-        textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-        cursor: 'pointer',
-        boxShadow: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px'
-      };
+      // Handle insufficient coins
+      console.log('Not enough coins for pack!');
     }
   };
 
-  const isModelLoading = (characterName) => {
-    return loadingModels.has(characterName);
+  const handleBuyCoins = (amount) => {
+    // In real app, this would process payment
+    // For demo, just add coins directly
+    addCoins(amount);
+    playButtonSound();
   };
 
-  const isModelLoaded = (characterName) => {
-    return loadedModels.has(characterName);
+  const canAffordPack = () => {
+    return coins >= (GAME_CONFIG?.PACK_CONFIG?.PACK_COST || 5);
   };
+
+  const packCost = GAME_CONFIG?.PACK_CONFIG?.PACK_COST || 5;
 
   return (
     <Box
@@ -210,7 +70,7 @@ const Shop = ({ onBackClick }) => {
         flexDirection: "column"
       }}
     >
-      {/* Header with coins, description and back button */}
+      {/* Header with coins, stat points and back button */}
       <Box style={{ 
         display: 'flex',
         justifyContent: 'space-between',
@@ -257,7 +117,7 @@ const Shop = ({ onBackClick }) => {
             letterSpacing: '1px',
             whiteSpace: 'nowrap'
           }}>
-            Recruite Fighters
+            🎁 Pack Store
           </Text>
           <Text style={{
             fontSize: '20px',
@@ -268,162 +128,208 @@ const Shop = ({ onBackClick }) => {
             marginTop: '4px',
             lineHeight: 1.2
           }}>
-            Unlock fighters to recruit once you defeat them
+            Buy packs to get fighters & stat points!
           </Text>
         </Box>
+        
+        {/* Currency Display */}
         <Box style={{
+          display: 'flex',
+          gap: '10px',
           flexShrink: 0
         }}>
+          {/* Coins */}
           <Box
             style={{
-              fontSize: '20px',
+              fontSize: '16px',
               fontWeight: 700,
-              padding: '12px 20px',
+              padding: '12px 15px',
               backgroundColor: 'transparent',
-              border: '3px solid #f32210',
+              border: '3px solid #FFD700',
               borderRadius: '10px',
-              color: '#f32210',
+              color: '#FFD700',
               textTransform: 'uppercase',
-              letterSpacing: '2px',
+              letterSpacing: '1px',
               fontFamily: 'Anton, sans-serif',
               height: '55px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minWidth: '80px'
+              minWidth: '70px',
+              gap: '5px'
             }}
           >
-            <span className="fight-button-text">{coins || 0}</span>
+            🪙 {coins || 0}
+          </Box>
+          
+          {/* Stat Points */}
+          <Box
+            style={{
+              fontSize: '16px',
+              fontWeight: 700,
+              padding: '12px 15px',
+              backgroundColor: 'transparent',
+              border: '3px solid #f32210',
+              borderRadius: '10px',
+              color: '#f32210',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              fontFamily: 'Anton, sans-serif',
+              height: '55px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: '70px',
+              gap: '5px'
+            }}
+          >
+            ⚡ {statPoints || 0}
           </Box>
         </Box>
       </Box>
 
-      {/* Scrollable Character Grid Container */}
+      {/* Main Content */}
       <Box style={{ 
         flex: 1,
-        overflowY: "auto",
-        overflowX: "hidden",
-        paddingRight: isMobile ? "5px" : "10px",
-        animation: "fadeInSpray 0.7s ease-out 0.2s both",
-        minHeight: 0 // Ensure flex child can shrink
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '40px',
+        animation: "fadeInSpray 0.7s ease-out 0.2s both"
       }}>
-        <Grid 
-          gutter={isMobile ? "md" : "lg"}
-          style={{ 
-            width: '100%',
-            maxWidth: '800px',
-            margin: '0 auto',
-            paddingBottom: isMobile ? "20px" : "30px",
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%'
-          }}
-        >
-          {shopCharacters.map((character, index) => (
-            <Grid.Col 
-              key={character.id} 
-              span={6}
-              style={{
-                animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`
-              }}
-            >
-              <Card
-                style={getCharacterCardStyle(character)}
-                onClick={() => {
-                  const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
-                  if (!isLocked && !character.isPurchased) {
-                    playButtonSound();
-                    handlePurchase(character);
-                  }
-                }}
-                onMouseEnter={(e) => {
-                  // No hover effects for clean appearance
-                }}
-                onMouseLeave={(e) => {
-                  // No hover effects for clean appearance
-                }}
-              >
-                {/* 3D Model as Background */}
-                {character.model && (
-                  <Box style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    zIndex: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <CharacterPreview
-                      characterName={character.name}
-                      style={{
-                        position: 'relative',
-                        left: '-13%',
-                        width: '100%',
-                        height: '100%',
-                        transform: 'scale(1.2)',
-                        margin: '0px',
-                        padding: '0px',
-                        border: 'none',
-                        outline: 'none',
-                        boxSizing: 'border-box',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        minWidth: '200px',
-                        minHeight: '200px'
-                      }}
-                    />
-                  </Box>
-                )}
+        
+        {/* Fighter Pack Card */}
+        <Box style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          border: '4px solid #f32210',
+          borderRadius: '20px',
+          padding: isMobile ? '30px 20px' : '40px 30px',
+          textAlign: 'center',
+          minWidth: isMobile ? '280px' : '350px',
+          maxWidth: '400px',
+          boxShadow: `
+            0 0 20px #f32210,
+            0 0 40px rgba(243, 34, 16, 0.3),
+            inset 0 0 20px rgba(243, 34, 16, 0.1)
+          `,
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          {/* Pack Icon */}
+          <Text style={{
+            fontSize: '80px',
+            marginBottom: '20px',
+            filter: 'drop-shadow(0 0 10px #f32210)'
+          }}>
+            📦
+          </Text>
+          
+          {/* Pack Title */}
+          <Text style={{
+            fontSize: isMobile ? '28px' : '32px',
+            fontWeight: 900,
+            color: '#FFD700',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            marginBottom: '15px'
+          }}>
+            Fighter Pack
+          </Text>
+          
+          {/* Pack Description */}
+          <Text style={{
+            fontSize: '16px',
+            fontWeight: 600,
+            color: '#F5F5DC',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '0.5px',
+            marginBottom: '20px',
+            lineHeight: 1.4
+          }}>
+            Contains fighters & stat points!
+          </Text>
+          
+          {/* Pack Probabilities */}
+          <Box style={{
+            marginBottom: '25px',
+            textAlign: 'left'
+          }}>
+            <Text style={{
+              fontSize: '14px',
+              fontWeight: 700,
+              color: '#FFD700',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              marginBottom: '10px'
+            }}>
+              DROP RATES:
+            </Text>
+            <Text style={{
+              fontSize: '12px',
+              fontWeight: 600,
+              color: '#FFD700',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '0.5px',
+              lineHeight: 1.3
+            }}>
+              🥊 LEGENDARY FIGHTER: 10%<br/>
+              ⚡ RARE STAT POINTS (8-12): 30%<br/>
+              ⚡ COMMON STAT POINTS (3-5): 60%
+            </Text>
+          </Box>
+          
+          {/* Buy Pack Button */}
+          <Button
+            onClick={handleBuyPack}
+            disabled={!canAffordPack()}
+            style={{
+              fontSize: isMobile ? '20px' : '24px',
+              fontWeight: 700,
+              padding: isMobile ? '15px 30px' : '18px 40px',
+              width: '100%',
+              backgroundColor: canAffordPack() ? 'transparent' : 'rgba(0, 0, 0, 0.5)',
+              border: `3px solid ${canAffordPack() ? '#FFD700' : '#666'}`,
+              borderRadius: '12px',
+              color: canAffordPack() ? '#FFD700' : '#666',
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
+              fontFamily: 'Anton, sans-serif',
+              cursor: canAffordPack() ? 'pointer' : 'not-allowed',
+              transition: 'all 0.3s ease',
+              opacity: canAffordPack() ? 1 : 0.6
+            }}
+            onMouseEnter={(e) => {
+              if (!isMobile && canAffordPack()) {
+                e.target.style.transform = 'scale(1.05)';
+                e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile && canAffordPack()) {
+                e.target.style.transform = 'scale(1)';
+                e.target.style.backgroundColor = 'transparent';
+              }
+            }}
+          >
+            🪙 BUY PACK ({packCost} COINS)
+          </Button>
+          
+          {!canAffordPack() && (
+            <Text style={{
+              fontSize: '12px',
+              fontWeight: 600,
+              color: '#f32210',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '0.5px',
+              marginTop: '10px'
+            }}>
+              Need {packCost - coins} more coins!
+            </Text>
+          )}
+        </Box>
 
-                {/* Character Info - Above the 3D model */}
-                <Stack spacing="xs" align="center" style={{ 
-                  flex: 0, 
-                  zIndex: 2, 
-                  position: 'relative',
-                  marginTop: 'auto'
-                }}>
-                  {/* Character name removed */}
-                </Stack>
-
-                {/* Action Button - Above the 3D model */}
-                <Button
-                  style={{
-                    ...getButtonStyle(character),
-                    zIndex: 2,
-                    position: 'relative'
-                  }}
-                  disabled={
-                    character.price === null || 
-                    !character.canAfford || 
-                    character.isPurchased
-                  }
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const isLocked = character.price === null || !character.canAfford || character.isPurchased;
-                    if (!isLocked) {
-                      playButtonSound();
-                      handlePurchase(character);
-                    }
-                  }}
-                >
-                  {character.isPurchased ? (
-                    <span>OWNED</span>
-                  ) : character.price === null ? (
-                    <span>LOCKED</span>
-                  ) : !character.canAfford ? (
-                    <span>LOCKED</span>
-                  ) : (
-                    `BUY ${character.price} COINS`
-                  )}
-                </Button>
-              </Card>
-            </Grid.Col>
-          ))}
-        </Grid>
       </Box>
 
       {/* Buy Coins Button */}
@@ -439,15 +345,15 @@ const Shop = ({ onBackClick }) => {
           size="xl"
           onClick={() => {
             playButtonSound();
-            addCoins(1); // Add 1 coin to balance
+            setShowCoinPurchaseModal(true);
           }}
           style={{
-            fontSize: isMobile ? "45px" : "60px",
+            fontSize: isMobile ? "40px" : "50px",
             fontWeight: 700,
-            padding: isMobile ? "20px 50px" : "25px 70px",
-            minHeight: isMobile ? "100px" : "120px",
-            minWidth: isMobile ? "280px" : "350px",
-            maxWidth: isMobile ? "calc(100vw - 40px)" : "350px",
+            padding: isMobile ? "20px 40px" : "25px 60px",
+            minHeight: isMobile ? "90px" : "110px",
+            minWidth: isMobile ? "260px" : "320px",
+            maxWidth: isMobile ? "calc(100vw - 40px)" : "320px",
             margin: "0",
             width: "100%",
             backgroundColor: "transparent",
@@ -455,10 +361,10 @@ const Shop = ({ onBackClick }) => {
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            borderColor: "#f32210",
-            border: "4px solid #f32210",
+            borderColor: "#FFD700",
+            border: "4px solid #FFD700",
             borderRadius: "15px",
-            color: "#f32210",
+            color: "#FFD700",
             textTransform: "uppercase",
             letterSpacing: "3px",
             fontFamily: "Anton, sans-serif",
@@ -472,9 +378,9 @@ const Shop = ({ onBackClick }) => {
               2px 2px 4px #000000
             `,
             boxShadow: `
-              0 0 20px #f32210,
-              0 0 40px rgba(243, 34, 16, 0.3),
-              inset 0 0 20px rgba(243, 34, 16, 0.1)
+              0 0 20px #FFD700,
+              0 0 40px rgba(255, 215, 0, 0.3),
+              inset 0 0 20px rgba(255, 215, 0, 0.1)
             `,
             transition: "all 0.3s ease",
             cursor: "pointer",
@@ -483,7 +389,7 @@ const Shop = ({ onBackClick }) => {
           onMouseEnter={(e) => {
             if (!isMobile) {
               e.target.style.transform = "scale(1.05)";
-              e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
+              e.target.style.backgroundColor = "rgba(255, 215, 0, 0.1)";
               e.target.style.animation = "impactShake 0.3s ease-out";
             }
           }}
@@ -496,73 +402,24 @@ const Shop = ({ onBackClick }) => {
           }}
         >
           <span className="fight-button-text">
-            BUY COINS
+            🪙 BUY COINS
           </span>
         </Button>
       </Box>
 
-      {/* Back Button - Hidden since it's now in header */}
-      <Box style={{
-        display: 'none'
-      }}>
-        <Button
-          variant="outline"
-          size="xl"
-          onClick={() => {
-            playButtonSound();
-            onBackClick();
-          }}
-          style={{
-            fontSize: isMobile ? "25px" : "30px",
-            fontWeight: 700,
-            padding: isMobile ? "15px 40px" : "20px 60px",
-            minHeight: isMobile ? "60px" : "80px",
-            minWidth: isMobile ? "200px" : "250px",
-            backgroundImage: `url(${mainButtonImg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: "transparent",
-            borderColor: "#f32210",
-            border: "4px solid #f32210",
-            borderRadius: "15px",
-            color: "#f32210",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-            textTransform: "uppercase",
-            letterSpacing: "3px",
-            fontFamily: "Anton, sans-serif",
-            boxShadow: `
-              0 0 20px #f32210,
-              0 0 40px rgba(243, 34, 16, 0.3),
-              inset 0 0 20px rgba(243, 34, 16, 0.1)
-            `,
-            transition: "all 0.3s ease",
-            cursor: "pointer"
-          }}
-          onMouseEnter={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1.05)";
-              e.target.style.boxShadow = `
-                0 0 30px #f32210,
-                0 0 60px rgba(243, 34, 16, 0.5),
-                inset 0 0 30px rgba(243, 34, 16, 0.2)
-              `;
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isMobile) {
-              e.target.style.transform = "scale(1)";
-              e.target.style.boxShadow = `
-                0 0 20px #f32210,
-                0 0 40px rgba(243, 34, 16, 0.3),
-                inset 0 0 20px rgba(243, 34, 16, 0.1)
-              `;
-            }
-          }}
-        >
-          BACK
-        </Button>
-      </Box>
+      {/* Modals */}
+      <CoinPurchaseModal
+        isVisible={showCoinPurchaseModal}
+        onClose={() => setShowCoinPurchaseModal(false)}
+        onPurchase={handleBuyCoins}
+      />
+
+      <PackOpeningModal
+        isVisible={showPackOpeningModal}
+        onClose={() => setShowPackOpeningModal(false)}
+        packContents={packContents}
+      />
+
     </Box>
   );
 };
