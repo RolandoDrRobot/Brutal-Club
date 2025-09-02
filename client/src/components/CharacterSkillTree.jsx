@@ -250,9 +250,9 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           {/* Cost Display */}
           {!isMaxLevel(statName) && (
             <Text style={{
-              fontSize: isMobile ? '12px' : '14px',
+              fontSize: '8px',
               fontWeight: 600,
-              color: canUpgrade(statName) ? '#FFD700' : '#f32210',
+              color: '#F5F5DC',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',

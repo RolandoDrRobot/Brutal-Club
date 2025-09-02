@@ -86,17 +86,11 @@ const Shop = ({ onBackClick }) => {
         {/* Fighter Pack Card */}
         <Box style={{
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          border: '4px solid #f32210',
           borderRadius: '0px',
           padding: isMobile ? '30px 20px' : '40px 30px',
           textAlign: 'center',
           minWidth: isMobile ? '280px' : '350px',
           maxWidth: '400px',
-          boxShadow: `
-            0 0 20px #f32210,
-            0 0 40px rgba(243, 34, 16, 0.3),
-            inset 0 0 20px rgba(243, 34, 16, 0.1)
-          `,
           position: 'relative',
           overflow: 'hidden'
         }}>
@@ -135,34 +129,7 @@ const Shop = ({ onBackClick }) => {
             Contains fighters & stat points!
           </Text>
           
-          {/* Pack Probabilities */}
-          <Box style={{
-            marginBottom: '25px',
-            textAlign: 'left'
-          }}>
-            <Text style={{
-              fontSize: '14px',
-              fontWeight: 700,
-              color: '#FFD700',
-              fontFamily: 'Anton, sans-serif',
-              letterSpacing: '1px',
-              marginBottom: '10px'
-            }}>
-              DROP RATES:
-            </Text>
-            <Text style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              color: '#FFD700',
-              fontFamily: 'Anton, sans-serif',
-              letterSpacing: '0.5px',
-              lineHeight: 1.3
-            }}>
-              🥊 LEGENDARY FIGHTER: 10%<br/>
-              ⚡ RARE STAT POINTS (8-12): 30%<br/>
-              ⚡ COMMON STAT POINTS (3-5): 60%
-            </Text>
-          </Box>
+
           
           {/* Buy Pack Button */}
           <Button

@@ -101,8 +101,8 @@ const GAME_CONFIG = {
 export const GameStateProvider = ({ children }) => {
   // Persistent game state
   const [gameState, setGameState] = useState(() => {
-    // Force reset to new progression system - remove this after testing
-    localStorage.removeItem('fightClubGameState');
+    // Try to load saved state from localStorage
+    const saved = localStorage.getItem('fightClubGameState');
     
     const initialState = {
       coins: 10, // Start with more coins for buying packs
@@ -119,6 +119,17 @@ export const GameStateProvider = ({ children }) => {
       },
       version: 4 // Version to force updates if needed
     };
+    
+    if (saved) {
+      try {
+        const parsedState = JSON.parse(saved);
+        // Merge saved state with initial state to handle new properties
+        return { ...initialState, ...parsedState };
+      } catch (error) {
+        console.warn('Failed to parse saved game state, starting fresh');
+        return initialState;
+      }
+    }
     
     return initialState;
   });
