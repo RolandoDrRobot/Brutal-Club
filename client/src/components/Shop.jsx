@@ -6,7 +6,7 @@ import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
-import packImg from '../assets/pack.png';
+import packImg from '../assets/optimized/pack.webp';
 import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
 import CharacterPurchaseModal from './CharacterPurchaseModal';
@@ -25,7 +25,6 @@ const Shop = ({ onBackClick }) => {
     openPack,
     GAME_CONFIG
   } = useGameState() || {};
-  
 
   const [showCoinPurchaseModal, setShowCoinPurchaseModal] = useState(false);
   const [showPackOpeningModal, setShowPackOpeningModal] = useState(false);

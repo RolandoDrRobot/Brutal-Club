@@ -4,9 +4,9 @@ import { useGameState } from '../contexts/GameState';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useMediaQuery } from '@mantine/hooks';
 import { useButtonSound } from '../hooks/useButtonSound';
-import coinImg from '../assets/coin.png';
-import statCoinImg from '../assets/statCoin.png';
-import homeImg from '../assets/home.png';
+import coinImg from '../assets/optimized/coin.webp';
+import statCoinImg from '../assets/optimized/statCoin.webp';
+import homeImg from '../assets/optimized/home.webp';
 import '../styles/fightAnimations.css';
 
 const CurrencyBar = () => {

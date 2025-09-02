@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text } from '@mantine/core';
-import coverbgImg from '../assets/coverbg.png';
+import coverbgImg from '../assets/optimized/coverbg.webp';
 
 const StatUpgradeModal = ({ 
   isVisible, 

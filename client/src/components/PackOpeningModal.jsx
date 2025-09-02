@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
-import packImg from '../assets/pack.png';
-import coverbgImg from '../assets/coverbg.png';
+import packImg from '../assets/optimized/pack.webp';
+import coverbgImg from '../assets/optimized/coverbg.webp';
 
 const PackOpeningModal = ({ 
   isVisible, 
