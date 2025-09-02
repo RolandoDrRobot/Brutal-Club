@@ -23,11 +23,10 @@ const ComponentFallback = () => (
     top: '50%', 
     left: '50%', 
     transform: 'translate(-50%, -50%)',
-    color: '#F5F5DC',
+    color: 'transparent',
     fontSize: '14px',
-    opacity: 0.7
+    opacity: 0
   }}>
-    Loading...
   </div>
 );
 

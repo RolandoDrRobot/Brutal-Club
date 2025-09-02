@@ -54,10 +54,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       >
         <Text style={{
                       fontSize: "30px",
-          color: "#f32210",
+          color: "transparent",
           fontFamily: "Anton, sans-serif"
         }}>
-          Loading...
         </Text>
       </Box>
     );
