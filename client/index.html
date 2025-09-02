@@ -73,32 +73,7 @@
         position: relative;
       }
       
-      /* Loading skeleton para evitar layout shift */
-      .app-skeleton {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #000000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-      }
-      
-      .skeleton-loader {
-        color: #F5F5DC;
-        font-family: 'Anton', 'Impact', sans-serif;
-        font-size: 18px;
-        opacity: 0.8;
-        animation: pulse 1.5s ease-in-out infinite alternate;
-      }
-      
-      @keyframes pulse {
-        from { opacity: 0.4; }
-        to { opacity: 0.8; }
-      }
+
       
       /* Optimización para evitar reflow */
       img {
@@ -117,73 +92,10 @@
     <title>Fight Club</title>
   </head>
   <body style="background-color: #000000 !important; background: #000000 !important; margin: 0; padding: 0;">
-    <!-- Skeleton loader inicial -->
-    <div id="app-skeleton" class="app-skeleton">
-      <div class="skeleton-loader">starting Fight Club...</div>
-    </div>
     
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     
-    <!-- Script para ocultar skeleton cuando React está listo -->
-    <script>
-      // Ocultar skeleton cuando React monte
-      document.addEventListener('DOMContentLoaded', () => {
-        const skeleton = document.getElementById('app-skeleton');
-        const root = document.getElementById('root');
-        
-        let hasRemoved = false;
-        
-        const removeSkeleton = () => {
-          if (hasRemoved || !skeleton.parentNode) return;
-          hasRemoved = true;
-          skeleton.style.opacity = '0';
-          skeleton.style.transition = 'opacity 0.3s ease-out';
-          setTimeout(() => {
-            if (skeleton.parentNode) skeleton.remove();
-          }, 300);
-        };
-        
-        // Observer para detectar cuando React renderiza
-        const observer = new MutationObserver((mutations) => {
-          for (const mutation of mutations) {
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-              // Check if any added node is a React component (has data-reactroot or children)
-              for (const node of mutation.addedNodes) {
-                if (node.nodeType === Node.ELEMENT_NODE && 
-                    (node.hasAttribute('data-reactroot') || node.children.length > 0)) {
-                  console.log('React app detected, removing skeleton');
-                  removeSkeleton();
-                  observer.disconnect();
-                  return;
-                }
-              }
-            }
-          }
-          
-          // Fallback: if root has any children, assume React has rendered
-          if (root.children.length > 0) {
-            console.log('React content detected, removing skeleton');
-            removeSkeleton();
-            observer.disconnect();
-          }
-        });
-        
-        observer.observe(root, { childList: true, subtree: true });
-        
-        // Fallback timeout más corto
-        setTimeout(() => {
-          console.log('Timeout reached, removing skeleton');
-          removeSkeleton();
-        }, 2000);
-        
-        // Additional check for immediate content
-        if (root.children.length > 0) {
-          console.log('Immediate React content detected');
-          removeSkeleton();
-        }
-      });
-    </script>
     
     <!-- PWA Service Worker Registration optimizado -->
     <script>

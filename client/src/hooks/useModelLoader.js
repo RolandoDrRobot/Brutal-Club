@@ -37,21 +37,21 @@ const OPTIONAL_AUDIO = [
 
 // 🎨 CRITICAL UI: Only what's visible immediately
 const CRITICAL_IMAGES = [
-  '/src/assets/punch.png',    
-  '/src/assets/kick.png',     
-  '/src/assets/combo.png',    
-  '/src/assets/cover.png',    
+  '/src/assets/optimized/punch.webp',    
+  '/src/assets/optimized/kick.webp',     
+  '/src/assets/optimized/combo.webp',    
+  '/src/assets/optimized/cover.webp',    
 ];
 
 // OPTIONAL UI: Loaded after critical
 const OPTIONAL_IMAGES = [
-  '/src/assets/dance.png',      
+  '/src/assets/optimized/dance.webp',      
   '/src/assets/mainbutton.jpeg', 
-  '/src/assets/button1.png',     
-  '/src/assets/button2.png',     
-  '/src/assets/button3.png',     
-  '/src/assets/button4.png',     
-  '/src/assets/music.png'        
+  '/src/assets/optimized/button1.webp',     
+  '/src/assets/optimized/button2.webp',     
+  '/src/assets/optimized/button3.webp',     
+  '/src/assets/optimized/button4.webp',     
+  '/src/assets/optimized/music.webp'        
 ];
 
 // 🚀 AGGRESSIVE TIMEOUTS FOR MOBILE

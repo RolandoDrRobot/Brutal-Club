@@ -131,7 +131,7 @@ export const CharacterAnimationsProvider = (props) => {
   
   // NUEVO: Sistema de navegación de pantallas
   // Posibles valores: 'dance', 'menu', 'combat', 'characterSelect'
-  const [currentScreen, setCurrentScreen] = useState('dance');
+  const [currentScreen, setCurrentScreen] = useState('menu');
   
   // NUEVO: Estado para animaciones de salida
   const [isExiting, setIsExiting] = useState(false);
