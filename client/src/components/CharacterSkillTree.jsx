@@ -176,7 +176,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           border: `2px solid ${isMaxLevel(statName) ? '#FFD700' : '#f32210'}`,
-          borderRadius: '0px',
+          borderRadius: '8px',
           boxShadow: isMaxLevel(statName) ? `
             0 0 15px rgba(255, 215, 0, 0.3),
             inset 0 0 15px rgba(255, 215, 0, 0.1)
@@ -327,12 +327,13 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
       style={{
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricFadeIn 0.8s ease-out",
         padding: isMobile ? "10px" : "40px",
+        paddingBottom: "40px",
         minHeight: "100dvh",
         height: "auto",
         overflowY: "auto",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between", // Distribuir espacios
+        justifyContent: "center",
         alignItems: "center"
       }}
     >
@@ -344,9 +345,10 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
+        height: '55dvh',
         maxWidth: isMobile ? '100%' : '800px',
         margin: '0 auto',
-        marginBottom: isMobile ? '20px' : '25px',
+        marginBottom: 0,
         flexShrink: 0
       }}>
         {/* Left Arrow */}
@@ -386,8 +388,9 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
 
         {/* Character Display */}
         <Box style={{
-          width: isMobile ? '180px' : '250px',
-          height: isMobile ? '280px' : '320px', // Aún más alta
+          width: '100%',
+          maxWidth: '500px',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -402,13 +405,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               width: '100%',
               height: '120%', // Aumentado para hacer el elemento más alto
               backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              border: '3px solid #f32210',
-              borderRadius: '0px',
-              marginBottom: '10px',
-              boxShadow: `
-                0 0 20px rgba(243, 34, 16, 0.3),
-                inset 0 0 20px rgba(243, 34, 16, 0.1)
-              `,
+              borderRadius: '8px',
               position: 'relative',
               overflow: 'hidden',
               display: 'flex',
@@ -473,22 +470,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         <StatUpgradeTree statName="strength" />
       </Box>
 
-      {/* Training Instructions Label */}
-      <Text style={{
-        fontSize: '18px',
-        fontWeight: 700,
-        color: 'rgb(255, 215, 0)',
-        fontFamily: 'Anton, sans-serif',
-        letterSpacing: '1px',
-        textAlign: 'center',
-        lineHeight: 1.3,
-        maxWidth: '300px',
-        margin: '0 auto',
-        paddingBottom: '25px',
-        animation: 'electricGlitch 0.6s ease-out 0.4s both'
-      }}>
-        TRAIN YOUR FIGHTER USING STAT POINTS
-      </Text>
+
 
       {/* No Coins Modal */}
       {showNoCoinsModal && (
@@ -512,7 +494,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0.95)',
               border: '3px solid #f32210',
-              borderRadius: '0px',
+              borderRadius: '8px',
               padding: isMobile ? '30px 20px' : '40px 30px',
               maxWidth: isMobile ? '90%' : '400px',
               textAlign: 'center',
@@ -526,7 +508,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
                 width: isMobile ? '60px' : '80px',
                 height: isMobile ? '60px' : '80px',
                 backgroundColor: '#FFD700',
-                borderRadius: '0px',
+                borderRadius: '8px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -577,7 +559,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
                 padding: isMobile ? '12px 25px' : '15px 30px',
                 backgroundColor: 'transparent',
                 border: '3px solid #f32210',
-                borderRadius: '0px',
+                borderRadius: '8px',
                 color: '#f32210',
                 textTransform: 'uppercase',
                 letterSpacing: '2px',
