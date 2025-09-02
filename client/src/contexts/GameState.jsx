@@ -325,12 +325,10 @@ export const GameStateProvider = ({ children }) => {
     const packCost = GAME_CONFIG.PACK_CONFIG.PACK_COST;
     
     if (gameState.coins < packCost) {
-      console.log('Not enough coins for pack:', { coins: gameState.coins, cost: packCost });
       return { success: false, reason: 'insufficient_coins' };
     }
     
     const contents = generatePackContents();
-    console.log('Generated pack contents:', contents);
     
     setGameState(prev => {
       const newState = {
@@ -362,7 +360,6 @@ export const GameStateProvider = ({ children }) => {
       return newState;
     });
     
-    console.log('Pack opened successfully, returning:', { success: true, contents });
     return { success: true, contents };
   };
 

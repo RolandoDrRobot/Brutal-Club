@@ -25,7 +25,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     characterName: ''
   });
 
-  // Use GameState to get purchased characters and stats
+
   const { 
     getShopCharactersStatus, 
     upgradeCharacterStat, 
@@ -35,13 +35,13 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     GAME_CONFIG 
   } = useGameState();
   
-  // Filter only purchased characters - Memoized for performance
+
   const purchasedCharacters = useMemo(() => 
     getShopCharactersStatus().filter(char => char.isPurchased),
     [getShopCharactersStatus]
   );
   
-  // Map to the expected format for character selection - Memoized to prevent re-renders
+
   const characters = useMemo(() => 
     purchasedCharacters.map(char => ({
       id: char.id,
@@ -57,7 +57,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     playButtonSound();
     const newIndex = selectedCharacter > 0 ? selectedCharacter - 1 : characters.length - 1;
     setSelectedCharacter(newIndex);
-    // Update active fighter
+
     if (characters[newIndex]) {
       setSelectedPlayer1Character(characters[newIndex].model);
     }
@@ -68,7 +68,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     playButtonSound();
     const newIndex = selectedCharacter < characters.length - 1 ? selectedCharacter + 1 : 0;
     setSelectedCharacter(newIndex);
-    // Update active fighter
+
     if (characters[newIndex]) {
       setSelectedPlayer1Character(characters[newIndex].model);
     }
@@ -100,21 +100,21 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
     
-    // Check if upgrade is possible
+
     if (currentLevel >= maxLevel) {
-      // Already at max level
+
       return;
     }
     
     if (statPoints < upgradeCost) {
-      // Not enough stat points - show modal
+
       setShowNoCoinsModal(true);
       return;
     }
     
     const success = upgradeCharacterStat(characterId, statName);
     if (success) {
-      // Show upgrade success modal with animation
+
       const newLevel = getStatLevel(statName) + 1; // This will be the new level after upgrade
       setUpgradeModalData({
         statName: statName,
@@ -124,8 +124,8 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
       });
       setShowUpgradeModal(true);
     } else {
-      // Could add feedback for failed upgrade
-      console.log(`Failed to upgrade ${statName} for ${characterId}`);
+
+
     }
   }, [playButtonSound, characters, selectedCharacter, upgradeCharacterStat, statPoints, getStatLevel, GAME_CONFIG.STAT_CONFIG]);
 

@@ -40,7 +40,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     coinsSpent: 0
   });
 
-  // Safety check - if coins is undefined, context is not ready yet
+
   if (coins === undefined) {
     return (
       <Box
@@ -63,7 +63,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     );
   }
 
-  // Lazy load shop models when component mounts
+
   useEffect(() => {
     const loadShopModels = async () => {
       setLoadingModels(new Set(['Vince', 'Bob']));
@@ -92,7 +92,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     loadShopModels();
   }, []); // Removed lazyLoadModel dependency to prevent infinite loop
 
-  // Get opponents with their current unlock status
+
   const opponents = getOpponentsStatus().map((opponent, index) => ({
     ...opponent,
     number: `${index + 1}.`,
@@ -100,10 +100,10 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     price: opponent.coinReward // Show coin reward for defeating
   }));
 
-  // Get characters with their current status from GameState
+
   const shopCharacters = getShopCharactersStatus();
 
-  // Get purchased characters for selection
+
   const allCharacters = getShopCharactersStatus();
   const ownedCharacters = allCharacters.filter(char => char.isPurchased).map(char => ({
     id: char.id,
@@ -118,7 +118,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       const success = purchaseCharacter(character.id);
       if (success) {
         playButtonSound();
-        // Show purchase success modal with animation
+
         setPurchaseModalData({
           characterName: character.name,
           characterDescription: character.description,
@@ -127,44 +127,39 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         });
         setShowPurchaseModal(true);
       } else {
-        // Purchase failed
-        console.log(`Failed to purchase ${character.name}`);
+
+
       }
     }
   };
 
   const handleOpponentSelect = (opponent) => {
-    // Check if opponent is available to fight
     const isLocked = opponent.isLocked;
     const isDefeated = opponent.isDefeated;
     const isFirstOpponent = opponent.id === 'tyler_1';
     const hasNoCoins = coins === 0;
     
-    // No permitir pelear contra oponentes bloqueados, derrotados, o sin monedas para el primer oponente
+
     if (!isLocked && !isDefeated && !(isFirstOpponent && hasNoCoins)) {
       playButtonSound();
       
-      // If fighting the first opponent, pay the arcade entry fee
+
       if (isFirstOpponent) {
-        startArcadeMode(); // Deduct 1 coin
+        startArcadeMode();
       }
       
       onChallengeClick(opponent);
     } else if (isFirstOpponent && hasNoCoins) {
-      // Could add a sound effect or visual feedback for "no coins"
-      console.log("Need at least 1 coin to start arcade mode!");
     } else if (isDefeated) {
-      // Could add a sound effect or visual feedback for "already defeated"
-      console.log("This opponent has already been defeated in this arcade run!");
     }
   };
 
-  // Character navigation functions
+
   const handlePreviousCharacter = () => {
     playButtonSound();
     const newIndex = selectedCharacter > 0 ? selectedCharacter - 1 : ownedCharacters.length - 1;
     setSelectedCharacter(newIndex);
-    // Cambiar directamente el personaje activo
+
     if (ownedCharacters[newIndex]) {
       setSelectedPlayer1Character(ownedCharacters[newIndex].model);
     }
@@ -174,7 +169,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     playButtonSound();
     const newIndex = selectedCharacter < ownedCharacters.length - 1 ? selectedCharacter + 1 : 0;
     setSelectedCharacter(newIndex);
-    // Cambiar directamente el personaje activo
+
     if (ownedCharacters[newIndex]) {
       setSelectedPlayer1Character(ownedCharacters[newIndex].model);
     }
@@ -203,7 +198,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     };
 
     if (isOpponent) {
-      // Opponent styling with 4 states
+
       const isLocked = character.isLocked;
       const isDefeated = character.isDefeated;
       const isFirstOpponent = character.id === 'tyler_1';
@@ -244,7 +239,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         ` : baseStyle.boxShadow
       };
     } else {
-      // Shop character styling
+
       if (character.isPurchased) {
         return {
           ...baseStyle,
@@ -284,7 +279,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     };
 
     if (isOpponent) {
-      // Opponent button styling
+
       const isLocked = character.isLocked;
       return {
         ...baseStyle,
@@ -292,7 +287,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         cursor: isLocked ? 'not-allowed' : 'pointer'
       };
     } else {
-      // Shop button styling
+
       if (character.isPurchased) {
         return {
           ...baseStyle,

@@ -13,11 +13,9 @@ const PackOpeningModal = ({
   const [revealedItems, setRevealedItems] = useState([]);
   const [particles, setParticles] = useState([]);
 
-  // Generate star particles for pack opening
+
   useEffect(() => {
-    console.log('PackOpeningModal useEffect:', { isVisible, currentStep, packContents });
     if (isVisible && currentStep === 'opening') {
-      console.log('Starting pack opening animation...');
       const newParticles = Array.from({ length: 40 }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
@@ -29,9 +27,8 @@ const PackOpeningModal = ({
       }));
       setParticles(newParticles);
 
-      // Start revealing items after pack opening animation
+
       const revealTimer = setTimeout(() => {
-        console.log('Transitioning to revealing step...');
         setCurrentStep('revealing');
         setRevealedItems(packContents);
       }, 3000);
@@ -42,7 +39,7 @@ const PackOpeningModal = ({
 
 
 
-  // Reset when modal closes
+
   useEffect(() => {
     if (!isVisible) {
       setCurrentStep('opening');
@@ -51,7 +48,7 @@ const PackOpeningModal = ({
     }
   }, [isVisible]);
 
-  // Particle variants
+
   const particleVariants = {
     hidden: { 
       scale: 0, 
@@ -151,7 +148,7 @@ const PackOpeningModal = ({
           }}
           onClick={currentStep === 'revealing' ? onClose : undefined}
         >
-          {/* Star particles */}
+
           {currentStep === 'opening' && particles.map((particle) => (
             <motion.div
               key={particle.id}
@@ -178,7 +175,7 @@ const PackOpeningModal = ({
             </motion.div>
           ))}
 
-          {/* Pack Opening Animation */}
+
           {currentStep === 'opening' && (
             <motion.div
               variants={packVariants}
@@ -200,7 +197,7 @@ const PackOpeningModal = ({
             </motion.div>
           )}
 
-          {/* Items Reveal */}
+
           {currentStep === 'revealing' && (
             <Box
               style={{
@@ -217,7 +214,7 @@ const PackOpeningModal = ({
                 maxWidth: '600px'
               }}
             >
-              {/* Header */}
+
               <motion.div
                 initial={{ y: -30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -238,7 +235,7 @@ const PackOpeningModal = ({
                 </Text>
               </motion.div>
 
-              {/* Items Grid */}
+
               <Box style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -259,7 +256,7 @@ const PackOpeningModal = ({
                       boxShadow: `0 0 15px ${getItemTypeColor(item.type)}40`
                     }}
                   >
-                    {/* Rarity Badge */}
+
                     <Box
                       style={{
                         position: 'absolute',
@@ -278,7 +275,7 @@ const PackOpeningModal = ({
                       {getRarityText(item.type)}
                     </Box>
 
-                    {/* Item Icon */}
+
                     {getItemTypeIcon(item.type) && (
                       <Text style={{
                         fontSize: '50px',
@@ -288,7 +285,7 @@ const PackOpeningModal = ({
                       </Text>
                     )}
 
-                    {/* Item Info */}
+
                     <Text
                       style={{
                         fontSize: '24px',
@@ -334,7 +331,7 @@ const PackOpeningModal = ({
                 ))}
               </Box>
 
-              {/* Continue button */}
+
               <motion.div
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}

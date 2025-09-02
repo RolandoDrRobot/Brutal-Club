@@ -26,32 +26,24 @@ const Shop = ({ onBackClick }) => {
     GAME_CONFIG
   } = useGameState() || {};
   
-  // Modal states
+
   const [showCoinPurchaseModal, setShowCoinPurchaseModal] = useState(false);
   const [showPackOpeningModal, setShowPackOpeningModal] = useState(false);
   const [packContents, setPackContents] = useState([]);
 
-  // Pack system functions
+
   const handleBuyPack = () => {
-    console.log('handleBuyPack called, openPack available:', !!openPack);
     if (!openPack) return;
     
     const result = openPack();
-    console.log('openPack result:', result);
     if (result.success) {
       playButtonSound();
       setPackContents(result.contents);
-      console.log('Setting pack contents and showing modal:', result.contents);
       setShowPackOpeningModal(true);
-    } else {
-      // Handle insufficient coins
-      console.log('Not enough coins for pack!');
     }
   };
 
   const handleBuyCoins = (amount) => {
-    // In real app, this would process payment
-    // For demo, just add coins directly
     addCoins(amount);
     playButtonSound();
   };
