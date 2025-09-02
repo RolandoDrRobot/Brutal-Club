@@ -184,7 +184,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     const baseStyle = {
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
       border: '3px solid #f32210',
-      borderRadius: '0px',
+      borderRadius: '8px',
       padding: isMobile ? '8px' : '12px',
       aspectRatio: '1',
       width: '100%',
@@ -322,23 +322,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         flexDirection: "column"
       }}
     >
-      {/* Header with coins and back button */}
-      <Box style={{ 
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        animation: "electricTitle 0.8s ease-out 0.2s both",
-        flexShrink: 0,
-        paddingBottom: "30px",
-        flexWrap: 'wrap',
-        gap: '10px',
-        width: '100%'
-      }}>
 
-
-        {/* Right side: Resource Indicators */}
-
-      </Box>
 
       {/* Scrollable Content Container - Vertically Centered */}
       <Box style={{ 
@@ -349,19 +333,14 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         alignItems: 'center',
         overflowY: "auto",
         overflowX: "hidden",
-        paddingRight: isMobile ? "5px" : "10px",
-        paddingTop: "20px",
-        paddingBottom: isMobile ? "20px" : "30px", // Added bottom padding for balance
         animation: "electricFadeIn 0.8s ease-out 0.3s both",
         minHeight: 0,
-        maxWidth: "100%", // ✅ Sin limitación de ancho para más espacio
-        width: "100%",
-        margin: "0 auto",
-        marginBottom: isMobile ? "10px" : "15px"
+        maxWidth: "100%",
+        width: "100%"
       }}>
         {/* CHARACTER SELECTION Section */}
         {ownedCharacters.length > 0 && (
-          <Box>
+          <Box style={{ width: '100%' }}>
 
 
             {/* Character Selection UI */}
@@ -369,8 +348,12 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: isMobile ? '10px' : '20px',
-              marginBottom: isMobile ? '20px' : '30px'
+              width: '100%',
+              height: '55dvh',
+              maxWidth: isMobile ? '100%' : '800px',
+              margin: '0 auto',
+              marginBottom: 0,
+              flexShrink: 0
             }}>
               {/* Left Arrow */}
               <Button
@@ -407,20 +390,22 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
               {/* Character Display */}
               <Box style={{
+                width: '100%',
+                maxWidth: '500px',
+                height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minWidth: isMobile ? '200px' : '250px'
+                margin: isMobile ? '0 10px' : '0 20px',
+                position: 'relative'
               }}>
                 {/* Character Preview */}
                 <Box style={{
-                  width: '195px',
-                  height: isMobile ? '33dvh' : '28vh',
+                  width: '100%',
+                  height: '120%',
                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                  border: '3px solid #f32210',
-                  borderRadius: '0px',
-                  marginBottom: '15px',
+                  borderRadius: '8px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -432,7 +417,11 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                     style={{
                       width: '120%',
                       height: '120%',
-                      transform: 'scale(1.2)'
+                      position: 'absolute',
+                      top: '55%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%) scale(1.2)',
+                      zIndex: 2
                     }}
                   />
                 </Box>
@@ -559,20 +548,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             ))}
           </Grid>
 
-          {/* Arcade Mechanic Label */}
-          <Text style={{
-            fontSize: '18px',
-            fontWeight: 700,
-            color: 'rgb(255, 215, 0)',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '1px',
-            textAlign: 'center',
-            lineHeight: 1.3,
-            maxWidth: '300px',
-            animation: 'electricFlicker 0.6s ease-out 0.8s both'
-          }}>
-            FIGHT THROUGH ALL OPPONENTS IN SEQUENCE TO UNLOCK THE NEXT ONE
-          </Text>
+
         </Box>
 
 
