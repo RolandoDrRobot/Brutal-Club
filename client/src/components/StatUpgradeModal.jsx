@@ -216,20 +216,6 @@ const StatUpgradeModal = ({
               }}
             />
 
-            {/* Success Icon */}
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.2, duration: 0.6, type: "spring", damping: 12 }}
-              style={{
-                fontSize: '60px',
-                marginBottom: '20px',
-                filter: `drop-shadow(0 0 10px ${statColor})`
-              }}
-            >
-              ⚡
-            </motion.div>
-
             {/* Stat Upgraded Text */}
             <motion.div
               variants={textVariants}
