@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text } from '@mantine/core';
+import coverbgImg from '../assets/coverbg.png';
 
 const CharacterPurchaseModal = ({ 
   isVisible, 
@@ -189,9 +190,11 @@ const CharacterPurchaseModal = ({
             animate="visible"
             exit="exit"
             style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.95)',
-              border: '4px solid #f32210',
-              borderRadius: '0px',
+              backgroundImage: `url(${coverbgImg})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              borderRadius: '10px',
+              margin: '15px',
               padding: '50px 40px',
               textAlign: 'center',
               position: 'relative',
@@ -377,7 +380,6 @@ const CharacterPurchaseModal = ({
                 left: 0,
                 right: 0,
                 bottom: 0,
-                border: '2px solid #f32210',
                 borderRadius: '0px',
                 pointerEvents: 'none'
               }}

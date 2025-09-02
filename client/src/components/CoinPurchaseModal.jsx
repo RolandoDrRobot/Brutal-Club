@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
+import coverbgImg from '../assets/coverbg.png';
 
 const CoinPurchaseModal = ({ 
   isVisible, 
@@ -171,9 +172,11 @@ const CoinPurchaseModal = ({
             animate="visible"
             exit="exit"
             style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.95)',
-              border: '4px solid #f32210',
-              borderRadius: '0px',
+              backgroundImage: `url(${coverbgImg})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              borderRadius: '10px',
+              margin: '15px',
               padding: '40px 30px',
               textAlign: 'center',
               position: 'relative',
@@ -241,9 +244,11 @@ const CoinPurchaseModal = ({
                     style={{
                       width: '100%',
                       height: '80px',
-                      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                      border: `3px solid ${pkg.color}`,
-                      borderRadius: '0px',
+                      backgroundImage: `url(${coverbgImg})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      borderRadius: '10px',
+                      margin: '15px',
                       padding: '15px 20px',
                       position: 'relative',
                       cursor: 'pointer',
@@ -364,7 +369,6 @@ const CoinPurchaseModal = ({
                   fontWeight: 700,
                   padding: '12px 30px',
                   backgroundColor: 'transparent',
-                  border: '2px solid #666',
                   borderRadius: '0px',
                   color: '#666',
                   textTransform: 'uppercase',

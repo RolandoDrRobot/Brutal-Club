@@ -2,50 +2,45 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
 import packImg from '../assets/pack.png';
+import coverbgImg from '../assets/coverbg.png';
 
 const PackOpeningModal = ({ 
   isVisible, 
   onClose, 
   packContents = []
 }) => {
-  const [currentStep, setCurrentStep] = useState('opening'); // 'opening', 'revealing', 'finished'
+  const [currentStep, setCurrentStep] = useState('opening'); // 'opening', 'revealing'
   const [revealedItems, setRevealedItems] = useState([]);
   const [particles, setParticles] = useState([]);
 
-  // Generate particles for pack opening
+  // Generate star particles for pack opening
   useEffect(() => {
+    console.log('PackOpeningModal useEffect:', { isVisible, currentStep, packContents });
     if (isVisible && currentStep === 'opening') {
-      const newParticles = Array.from({ length: 25 }, (_, i) => ({
+      console.log('Starting pack opening animation...');
+      const newParticles = Array.from({ length: 40 }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        delay: Math.random() * 1,
-        scale: 0.3 + Math.random() * 0.4,
+        delay: Math.random() * 1.5,
+        scale: 0.5 + Math.random() * 0.8,
         rotation: Math.random() * 360,
-        color: Math.random() > 0.5 ? '#FFD700' : '#f32210'
+        color: Math.random() > 0.3 ? '#FFD700' : '#FFF'
       }));
       setParticles(newParticles);
 
       // Start revealing items after pack opening animation
       const revealTimer = setTimeout(() => {
+        console.log('Transitioning to revealing step...');
         setCurrentStep('revealing');
         setRevealedItems(packContents);
-      }, 2000);
+      }, 3000);
 
       return () => clearTimeout(revealTimer);
     }
   }, [isVisible, currentStep, packContents]);
 
-  // Auto finish after showing items
-  useEffect(() => {
-    if (currentStep === 'revealing') {
-      const finishTimer = setTimeout(() => {
-        setCurrentStep('finished');
-      }, 3000);
 
-      return () => clearTimeout(finishTimer);
-    }
-  }, [currentStep]);
 
   // Reset when modal closes
   useEffect(() => {
@@ -65,13 +60,13 @@ const PackOpeningModal = ({
       y: 0
     },
     visible: (custom) => ({
-      scale: [0, custom.scale, 0],
-      opacity: [0, 1, 0],
-      y: [0, -80, -160],
-      x: [0, (Math.random() - 0.5) * 200],
-      rotate: [0, custom.rotation, custom.rotation * 2],
+      scale: [0, custom.scale, custom.scale * 0.5, 0],
+      opacity: [0, 1, 1, 0],
+      y: [0, -120, -200, -300],
+      x: [0, (Math.random() - 0.5) * 300],
+      rotate: [0, custom.rotation, custom.rotation * 3, custom.rotation * 4],
       transition: {
-        duration: 2.5,
+        duration: 3.5,
         delay: custom.delay,
         ease: "easeOut"
       }
@@ -120,9 +115,9 @@ const PackOpeningModal = ({
 
   const getItemTypeIcon = (type) => {
     switch (type) {
-      case 'character': return '🥊';
-      case 'stat_points': return '⚡';
-      default: return '🎁';
+      case 'character': return '';
+      case 'stat_points': return '';
+      default: return '';
     }
   };
 
@@ -154,9 +149,9 @@ const PackOpeningModal = ({
             zIndex: 10000,
             pointerEvents: 'auto'
           }}
-          onClick={currentStep === 'finished' ? onClose : undefined}
+          onClick={currentStep === 'revealing' ? onClose : undefined}
         >
-          {/* Explosion particles */}
+          {/* Star particles */}
           {currentStep === 'opening' && particles.map((particle) => (
             <motion.div
               key={particle.id}
@@ -166,16 +161,21 @@ const PackOpeningModal = ({
               animate="visible"
               style={{
                 position: 'absolute',
-                width: '8px',
-                height: '8px',
-                backgroundColor: particle.color,
-                borderRadius: '0px',
+                width: '16px',
+                height: '16px',
                 left: '50%',
                 top: '50%',
-                boxShadow: `0 0 10px ${particle.color}`,
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                fontSize: '16px',
+                color: particle.color,
+                textShadow: `0 0 10px ${particle.color}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
-            />
+            >
+              ⭐
+            </motion.div>
           ))}
 
           {/* Pack Opening Animation */}
@@ -187,15 +187,14 @@ const PackOpeningModal = ({
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                filter: 'drop-shadow(0 0 20px #f32210)'
+                filter: 'drop-shadow(0 0 20px #FFD700)'
               }}
             >
               <img 
                 src={packImg}
                 alt="Fighter Pack"
                 style={{
-                  width: '150px',
-                  height: '150px'
+                  height: '45dvh'
                 }}
               />
             </motion.div>
@@ -205,9 +204,11 @@ const PackOpeningModal = ({
           {currentStep === 'revealing' && (
             <Box
               style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                border: '4px solid #f32210',
-                borderRadius: '0px',
+                backgroundImage: `url(${coverbgImg})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '15px',
+                margin: '25px',
                 padding: '40px',
                 textAlign: 'center',
                 position: 'relative',
@@ -233,7 +234,7 @@ const PackOpeningModal = ({
                     marginBottom: '30px'
                   }}
                 >
-                  🎁 Pack Opened!
+                  Pack Opened!
                 </Text>
               </motion.div>
 
@@ -252,9 +253,7 @@ const PackOpeningModal = ({
                     initial="hidden"
                     animate="visible"
                     style={{
-                      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                      border: `3px solid ${getItemTypeColor(item.type)}`,
-                      borderRadius: '0px',
+                      borderRadius: '10px',
                       padding: '20px',
                       position: 'relative',
                       boxShadow: `0 0 15px ${getItemTypeColor(item.type)}40`
@@ -280,17 +279,19 @@ const PackOpeningModal = ({
                     </Box>
 
                     {/* Item Icon */}
-                    <Text style={{
-                      fontSize: '50px',
-                      marginBottom: '10px'
-                    }}>
-                      {getItemTypeIcon(item.type)}
-                    </Text>
+                    {getItemTypeIcon(item.type) && (
+                      <Text style={{
+                        fontSize: '50px',
+                        marginBottom: '10px'
+                      }}>
+                        {getItemTypeIcon(item.type)}
+                      </Text>
+                    )}
 
                     {/* Item Info */}
                     <Text
                       style={{
-                        fontSize: '18px',
+                        fontSize: '24px',
                         fontWeight: 700,
                         color: getItemTypeColor(item.type),
                         fontFamily: 'Anton, sans-serif',
@@ -305,7 +306,7 @@ const PackOpeningModal = ({
                     {item.type === 'stat_points' && (
                       <Text
                         style={{
-                          fontSize: '14px',
+                          fontSize: '18px',
                           fontWeight: 600,
                           color: '#F5F5DC',
                           fontFamily: 'Anton, sans-serif',
@@ -319,7 +320,7 @@ const PackOpeningModal = ({
                     {item.type === 'character' && (
                       <Text
                         style={{
-                          fontSize: '12px',
+                          fontSize: '16px',
                           fontWeight: 600,
                           color: '#F5F5DC',
                           fontFamily: 'Anton, sans-serif',
@@ -332,57 +333,36 @@ const PackOpeningModal = ({
                   </motion.div>
                 ))}
               </Box>
+
+              {/* Continue button */}
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 1.5, duration: 0.6 }}
+              >
+                <Button
+                  onClick={onClose}
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: 700,
+                    padding: '0',
+                    backgroundColor: 'transparent',
+                    borderRadius: '0px',
+                    color: '#FFD700',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    fontFamily: 'Anton, sans-serif',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  CONTINUE
+                </Button>
+              </motion.div>
             </Box>
           )}
 
-          {/* Finished State */}
-          {currentStep === 'finished' && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                border: '4px solid #FFD700',
-                borderRadius: '0px',
-                padding: '40px',
-                textAlign: 'center'
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: '24px',
-                  fontWeight: 700,
-                  color: '#FFD700',
-                  fontFamily: 'Anton, sans-serif',
-                  letterSpacing: '1px',
-                  textTransform: 'uppercase',
-                  marginBottom: '20px'
-                }}
-              >
-                Items added to your collection!
-              </Text>
-              
-              <Button
-                onClick={onClose}
-                style={{
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  padding: '12px 30px',
-                  backgroundColor: 'transparent',
-                  border: '3px solid #FFD700',
-                  borderRadius: '0px',
-                  color: '#FFD700',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px',
-                  fontFamily: 'Anton, sans-serif',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                CONTINUE
-              </Button>
-            </motion.div>
-          )}
+
         </motion.div>
       )}
     </AnimatePresence>

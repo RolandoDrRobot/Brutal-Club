@@ -33,12 +33,15 @@ const Shop = ({ onBackClick }) => {
 
   // Pack system functions
   const handleBuyPack = () => {
+    console.log('handleBuyPack called, openPack available:', !!openPack);
     if (!openPack) return;
     
     const result = openPack();
+    console.log('openPack result:', result);
     if (result.success) {
       playButtonSound();
       setPackContents(result.contents);
+      console.log('Setting pack contents and showing modal:', result.contents);
       setShowPackOpeningModal(true);
     } else {
       // Handle insufficient coins

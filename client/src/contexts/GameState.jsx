@@ -105,7 +105,7 @@ export const GameStateProvider = ({ children }) => {
     const saved = localStorage.getItem('fightClubGameState');
     
     const initialState = {
-      coins: 10, // Start with more coins for buying packs
+      coins: 100, // Start with 100 coins for buying packs
       statPoints: 0, // New: stat points from packs
       defeatedOpponents: [], // IDs of defeated opponents
       purchasedCharacters: ['pete'], // Pete is free initially
@@ -117,12 +117,17 @@ export const GameStateProvider = ({ children }) => {
         // Initialize stats for owned characters
         'pete': { speed: 1, stamina: 1, strength: 1 }
       },
-      version: 4 // Version to force updates if needed
+      version: 6 // Version to force updates if needed (incremented to apply coin update)
     };
     
     if (saved) {
       try {
         const parsedState = JSON.parse(saved);
+        // Check if we need to apply the coin bonus (version upgrade)
+        if (!parsedState.version || parsedState.version < 6) {
+          parsedState.coins = 100; // Set to 100 coins
+          parsedState.version = 6;
+        }
         // Merge saved state with initial state to handle new properties
         return { ...initialState, ...parsedState };
       } catch (error) {
@@ -320,10 +325,12 @@ export const GameStateProvider = ({ children }) => {
     const packCost = GAME_CONFIG.PACK_CONFIG.PACK_COST;
     
     if (gameState.coins < packCost) {
+      console.log('Not enough coins for pack:', { coins: gameState.coins, cost: packCost });
       return { success: false, reason: 'insufficient_coins' };
     }
     
     const contents = generatePackContents();
+    console.log('Generated pack contents:', contents);
     
     setGameState(prev => {
       const newState = {
@@ -355,6 +362,7 @@ export const GameStateProvider = ({ children }) => {
       return newState;
     });
     
+    console.log('Pack opened successfully, returning:', { success: true, contents });
     return { success: true, contents };
   };
 
