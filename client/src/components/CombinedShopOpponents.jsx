@@ -8,8 +8,8 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
-import punchImg from "../assets/punch.png";
-import comboImg from "../assets/combo.png";
+import punchImg from "../assets/optimized/punch.webp";
+import comboImg from "../assets/optimized/combo.webp";
 import CharacterPurchaseModal from './CharacterPurchaseModal';
 
 const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {

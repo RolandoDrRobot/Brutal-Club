@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "optimize": "node scripts/optimize-assets.js",
     "build:mobile": "yarn optimize && vite build",
-    "analyze": "vite build --mode analyze"
+    "analyze": "vite build --mode analyze",
+    "perf": "node scripts/performance-report.js"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",

@@ -7,22 +7,27 @@ const DYNAMIC_CACHE = 'fightclub-dynamic-v1.2.0';
 const CRITICAL_ASSETS = [
   '/',
   '/index.html',
-  '/src/assets/punch.png',
-  '/src/assets/kick.png',
-  '/src/assets/combo.png',
-  '/src/assets/cover.png',
+  '/src/assets/optimized/coin.webp',
+  '/src/assets/optimized/home.webp',
+  '/src/assets/optimized/statCoin.webp',
+  '/src/assets/optimized/punch.webp',
+  '/src/assets/optimized/kick.webp',
+  '/src/assets/optimized/combo.webp',
+  '/src/assets/optimized/cover.webp',
   '/music/punch.mp3'
 ];
 
 // 🎨 Static assets for UI
 const STATIC_ASSETS = [
-  '/src/assets/dance.png',
+  '/src/assets/optimized/dance.webp',
   '/src/assets/mainbutton.jpeg',
-  '/src/assets/button1.png',
-  '/src/assets/button2.png',
-  '/src/assets/button3.png',
-  '/src/assets/button4.png',
-  '/src/assets/music.png'
+  '/src/assets/optimized/button1.webp',
+  '/src/assets/optimized/button2.webp',
+  '/src/assets/optimized/button3.webp',
+  '/src/assets/optimized/button4.webp',
+  '/src/assets/optimized/music.webp',
+  '/src/assets/optimized/pack.webp',
+  '/src/assets/optimized/coverbg.webp'
 ];
 
 // 📦 3D Models (cached on demand)

@@ -6,7 +6,7 @@ import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
-import comboImg from '../assets/combo.png';
+import comboImg from '../assets/optimized/combo.webp';
 import CharacterPreview from './CharacterPreview';
 
 const CharacterSelect = ({ onSelectClick, onBackClick }) => {

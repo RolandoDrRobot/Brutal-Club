@@ -38,7 +38,16 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap"></noscript>
     
     <!-- Preload assets críticos para reducir CLS -->
-    <!-- Removed problematic preload links that were causing 404 errors -->
+    <link rel="preload" href="/src/assets/optimized/coin.webp" as="image" importance="high">
+    <link rel="preload" href="/src/assets/optimized/home.webp" as="image" importance="high">
+    <link rel="preload" href="/src/assets/optimized/statCoin.webp" as="image" importance="high">
+    <link rel="preload" href="/src/assets/optimized/button1.webp" as="image" importance="high">
+    <link rel="preload" href="/src/assets/optimized/button2.webp" as="image" importance="high">
+    <link rel="prefetch" href="/src/assets/optimized/punch.webp" as="image">
+    <link rel="prefetch" href="/src/assets/optimized/kick.webp" as="image">
+    <link rel="prefetch" href="/src/assets/optimized/combo.webp" as="image">
+    <link rel="prefetch" href="/src/assets/optimized/pack.webp" as="image">
+    <link rel="prefetch" href="/src/assets/optimized/coverbg.webp" as="image">
     
     <!-- Critical CSS inline para evitar FOUC -->
     <style>
@@ -178,7 +187,6 @@
     
     <!-- PWA Service Worker Registration optimizado -->
     <script>
-      /*
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js', {
@@ -197,7 +205,6 @@
             });
         });
       }
-      */
     </script>
   </body>
 </html>

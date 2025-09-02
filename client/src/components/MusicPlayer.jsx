@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Group, Text, Box } from '@mantine/core';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
-import musicIcon from '../assets/music.png';
-import danceIcon from '../assets/dance.png';
+import musicIcon from '../assets/optimized/music.webp';
+import danceIcon from '../assets/optimized/dance.webp';
 
 const MusicPlayer = () => {
   const { isCombatMode, triggerSyncAnimation, animations, currentScreen } = useCharacterAnimations();

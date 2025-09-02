@@ -7,10 +7,10 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 
 // Import button assets
-import button1 from '../assets/button1.png';
-import button2 from '../assets/button2.png';
-import button3 from '../assets/button3.png';
-import button4 from '../assets/button4.png';
+import button1 from '../assets/optimized/button1.webp';
+import button2 from '../assets/optimized/button2.webp';
+import button3 from '../assets/optimized/button3.webp';
+import button4 from '../assets/optimized/button4.webp';
 
 const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");

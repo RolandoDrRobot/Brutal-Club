@@ -9,12 +9,11 @@ const CharacterSkillTree = React.lazy(() => import("./CharacterSkillTree"));
 const CombinedShopOpponents = React.lazy(() => import("./CombinedShopOpponents"));
 const Shop = React.lazy(() => import("./Shop"));
 import '../styles/fightAnimations.css';
-import punchImg from "../assets/punch.png";     // ✅ Used in attack buttons
-import kickImg from "../assets/kick.png";       // ✅ Used in attack buttons
-import comboImg from "../assets/combo.png";     // ✅ Used in attack buttons
-import coverImg from "../assets/cover.png";     // ✅ Used in block button
-// ❌ REMOVED: resetImg - imported but never used in component
-import danceImg from "../assets/dance.png";     // ✅ Used in dance button
+import punchImg from "../assets/optimized/punch.webp";
+import kickImg from "../assets/optimized/kick.webp";
+import comboImg from "../assets/optimized/combo.webp";
+import coverImg from "../assets/optimized/cover.webp";
+import danceImg from "../assets/optimized/dance.webp";
 // ❌ REMOVED: fightImg - imported but never used in component
 import mainButtonImg from "../assets/mainbutton.jpeg"; // ✅ Used in multiple buttons
 import { useButtonSound } from '../hooks/useButtonSound';

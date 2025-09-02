@@ -12,6 +12,10 @@ const CrowdSound = React.lazy(() => import("./components/CrowdSound"));
 const PunchSound = React.lazy(() => import("./components/PunchSound"));
 const CurrencyBar = React.lazy(() => import("./components/CurrencyBar"));
 
+// 🚀 OPTIMIZATION: Lazy load even more components
+const MusicPlayer = React.lazy(() => import("./components/MusicPlayer"));
+const ParticleEffect = React.lazy(() => import("./components/ParticleEffect"));
+
 // Componente de fallback ligero para Suspense
 const ComponentFallback = () => (
   <div style={{ 
