@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
+import packImg from '../assets/pack.png';
 
 const PackOpeningModal = ({ 
   isVisible, 
@@ -183,11 +184,20 @@ const PackOpeningModal = ({
               variants={packVariants}
               animate="opening"
               style={{
-                fontSize: '150px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 filter: 'drop-shadow(0 0 20px #f32210)'
               }}
             >
-              📦
+              <img 
+                src={packImg}
+                alt="Fighter Pack"
+                style={{
+                  width: '150px',
+                  height: '150px'
+                }}
+              />
             </motion.div>
           )}
 

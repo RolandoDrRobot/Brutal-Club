@@ -6,6 +6,7 @@ import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
+import packImg from '../assets/pack.png';
 import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
 import CharacterPurchaseModal from './CharacterPurchaseModal';
@@ -95,13 +96,38 @@ const Shop = ({ onBackClick }) => {
           overflow: 'hidden'
         }}>
           {/* Pack Icon */}
-          <Text style={{
-            fontSize: '80px',
+          <Box style={{
             marginBottom: '20px',
-            filter: 'drop-shadow(0 0 10px #f32210)'
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}>
-            📦
-          </Text>
+            <img 
+              src={packImg}
+              alt="Fighter Pack"
+              style={{
+                height: '45dvh',
+                animation: 'packFloat 3s ease-in-out infinite, packGlow 2s ease-in-out infinite',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.target.style.animation = 'packHover 0.3s ease-out forwards';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.target.style.animation = 'packFloat 3s ease-in-out infinite, packGlow 2s ease-in-out infinite';
+                }
+              }}
+              onClick={() => {
+                if (canAffordPack()) {
+                  handleBuyPack();
+                }
+              }}
+            />
+          </Box>
           
           {/* Pack Title */}
           <Text style={{
@@ -123,63 +149,30 @@ const Shop = ({ onBackClick }) => {
             color: '#F5F5DC',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.5px',
-            marginBottom: '20px',
+            marginBottom: !canAffordPack() ? '10px' : '20px',
             lineHeight: 1.4
           }}>
             Contains fighters & stat points!
           </Text>
           
-
-          
-          {/* Buy Pack Button */}
-          <Button
-            onClick={handleBuyPack}
-            disabled={!canAffordPack()}
-            style={{
-              fontSize: isMobile ? '20px' : '24px',
-              fontWeight: 700,
-              padding: isMobile ? '15px 30px' : '18px 40px',
-              width: '100%',
-              backgroundColor: canAffordPack() ? 'transparent' : 'rgba(0, 0, 0, 0.5)',
-              border: `3px solid ${canAffordPack() ? '#FFD700' : '#666'}`,
-              borderRadius: '0px',
-              color: canAffordPack() ? '#FFD700' : '#666',
-              textTransform: 'uppercase',
-              letterSpacing: '2px',
-              fontFamily: 'Anton, sans-serif',
-              cursor: canAffordPack() ? 'pointer' : 'not-allowed',
-              transition: 'all 0.3s ease',
-              opacity: canAffordPack() ? 1 : 0.6,
-              animation: "electricFlicker 0.6s ease-out 0.8s both"
-            }}
-            onMouseEnter={(e) => {
-              if (!isMobile && canAffordPack()) {
-                e.target.style.transform = 'scale(1.05)';
-                e.target.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isMobile && canAffordPack()) {
-                e.target.style.transform = 'scale(1)';
-                e.target.style.backgroundColor = 'transparent';
-              }
-            }}
-          >
-            🪙 BUY PACK ({packCost} COINS)
-          </Button>
-          
+          {/* Insufficient Coins Message */}
           {!canAffordPack() && (
             <Text style={{
-              fontSize: '12px',
+              fontSize: '14px',
               fontWeight: 600,
               color: '#f32210',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '0.5px',
-              marginTop: '10px'
+              marginBottom: '20px',
+              textAlign: 'center',
+              animation: "electricFlicker 0.6s ease-out 0.8s both"
             }}>
-              Need {packCost - coins} more coins!
+              Need {packCost - coins} more coins to open!
             </Text>
           )}
+          
+
+
         </Box>
 
       </Box>
