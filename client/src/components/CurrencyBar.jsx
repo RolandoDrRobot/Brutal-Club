@@ -25,7 +25,7 @@ const CurrencyBar = () => {
     if (setCoins) {
       setCoins(currentCoins => currentCoins + packageData.coins);
     }
-    setShowCoinPurchaseModal(false);
+    // Don't close modal here - let the modal handle its own flow
   };
 
   // 🎵 MUSIC PLAYER FUNCTIONALITY

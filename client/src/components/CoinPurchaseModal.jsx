@@ -6,6 +6,7 @@ import coinImg from '../assets/optimized/coin.webp';
 import pack1Img from '../assets/optimized/pack1.webp';
 import pack2Img from '../assets/optimized/pack2.webp';
 import pack3Img from '../assets/optimized/pack3.webp';
+import CoinPurchaseResultModal from './CoinPurchaseResultModal';
 
 const CoinPurchaseModal = ({ 
   isVisible, 
@@ -13,10 +14,14 @@ const CoinPurchaseModal = ({
   onPurchase
 }) => {
   const [particles, setParticles] = useState([]);
+  const [currentStep, setCurrentStep] = useState('selection'); // 'selection', 'purchasing'
+  const [purchasedPackage, setPurchasedPackage] = useState(null);
+  const [purchaseParticles, setPurchaseParticles] = useState([]);
+  const [showResultModal, setShowResultModal] = useState(false);
 
   // Generate particles for animation
   useEffect(() => {
-    if (isVisible) {
+    if (isVisible && currentStep === 'selection') {
       const newParticles = Array.from({ length: 12 }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
@@ -26,6 +31,42 @@ const CoinPurchaseModal = ({
         rotation: Math.random() * 360
       }));
       setParticles(newParticles);
+    }
+  }, [isVisible, currentStep]);
+
+  // Generate purchase particles animation
+  useEffect(() => {
+    if (currentStep === 'purchasing') {
+      const newPurchaseParticles = Array.from({ length: 30 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        delay: Math.random() * 1.0,
+        scale: 0.8 + Math.random() * 0.6,
+        rotation: Math.random() * 360,
+        color: Math.random() > 0.4 ? '#FFD700' : '#FFF'
+      }));
+      setPurchaseParticles(newPurchaseParticles);
+
+      // Auto transition to result modal after 2.5 seconds
+      const resultTimer = setTimeout(() => {
+        setShowResultModal(true);
+        // Keep currentStep as 'purchasing' while result modal is showing
+        // Only return to 'selection' when result modal closes
+      }, 2500);
+
+      return () => clearTimeout(resultTimer);
+    }
+  }, [currentStep]);
+
+  // Reset modal state when closing
+  useEffect(() => {
+    if (!isVisible) {
+      setCurrentStep('selection');
+      setPurchasedPackage(null);
+      setParticles([]);
+      setPurchaseParticles([]);
+      setShowResultModal(false);
     }
   }, [isVisible]);
 
@@ -173,13 +214,59 @@ const CoinPurchaseModal = ({
     }
   };
 
+  // Purchase animation variants
+  const purchaseParticleVariants = {
+    hidden: { 
+      scale: 0, 
+      opacity: 0,
+      x: 0,
+      y: 0
+    },
+    visible: (custom) => ({
+      scale: [0, custom.scale, custom.scale * 0.5, 0],
+      opacity: [0, 1, 1, 0],
+      y: [0, -150, -250, -350],
+      x: [0, (Math.random() - 0.5) * 400],
+      rotate: [0, custom.rotation, custom.rotation * 2, custom.rotation * 3],
+      transition: {
+        duration: 3.0,
+        delay: custom.delay,
+        ease: "easeOut"
+      }
+    })
+  };
+
+  const purchasePackVariants = {
+    purchasing: {
+      scale: [1, 1.3, 0.9, 1.6, 0],
+      rotate: [0, 8, -8, 15, -15, 0],
+      opacity: [1, 1, 1, 1, 0],
+      transition: {
+        duration: 2.5,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   const handlePurchase = (packageData) => {
-    onPurchase(packageData);
+    setPurchasedPackage(packageData);
+    setCurrentStep('purchasing');
+    
+    // Execute purchase after animation delay
+    setTimeout(() => {
+      onPurchase(packageData);
+    }, 1000);
+  };
+
+  const handleResultModalClose = () => {
+    setShowResultModal(false);
+    setCurrentStep('selection'); // Return to selection screen
+    // User can now close the main modal if they want by clicking Cancel or outside
   };
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {isVisible && !showResultModal && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -198,10 +285,10 @@ const CoinPurchaseModal = ({
             pointerEvents: 'auto',
             overflow: 'hidden'
           }}
-          onClick={onClose}
+          onClick={currentStep === 'selection' ? onClose : undefined}
         >
-          {/* Gold coin particles */}
-          {particles.map((particle) => (
+          {/* Gold coin particles for selection */}
+          {currentStep === 'selection' && particles.map((particle) => (
             <motion.div
               key={particle.id}
               custom={particle}
@@ -222,7 +309,60 @@ const CoinPurchaseModal = ({
             />
           ))}
 
-          {/* Main Modal */}
+          {/* Purchase particles */}
+          {currentStep === 'purchasing' && purchaseParticles.map((particle) => (
+            <motion.div
+              key={particle.id}
+              custom={particle}
+              variants={purchaseParticleVariants}
+              initial="hidden"
+              animate="visible"
+              style={{
+                position: 'absolute',
+                width: '20px',
+                height: '20px',
+                left: '50%',
+                top: '50%',
+                pointerEvents: 'none',
+                fontSize: '20px',
+                color: particle.color,
+                textShadow: `0 0 15px ${particle.color}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              💰
+            </motion.div>
+          ))}
+
+          {/* Purchase pack animation */}
+          {currentStep === 'purchasing' && purchasedPackage && (
+            <motion.div
+              variants={purchasePackVariants}
+              animate="purchasing"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                filter: 'drop-shadow(0 0 30px #FFD700)'
+              }}
+            >
+              <img 
+                src={purchasedPackage.image}
+                alt={`${purchasedPackage.label} Pack`}
+                style={{
+                  height: '50dvh',
+                  maxHeight: '400px'
+                }}
+              />
+            </motion.div>
+          )}
+
+
+
+          {/* Main Modal - Selection Screen */}
+          {currentStep === 'selection' && (
           <motion.div
             variants={modalVariants}
             initial="hidden"
@@ -454,8 +594,18 @@ const CoinPurchaseModal = ({
               </Button>
             </motion.div>
           </motion.div>
+          )}
+
         </motion.div>
       )}
+      
+      {/* Coin Purchase Result Modal */}
+      <CoinPurchaseResultModal
+        isVisible={showResultModal}
+        onClose={handleResultModalClose}
+        coinAmount={purchasedPackage?.coins}
+        packageName={purchasedPackage?.label}
+      />
     </AnimatePresence>
   );
 };
