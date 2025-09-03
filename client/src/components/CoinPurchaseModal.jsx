@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
 import coverbgImg from '../assets/optimized/coverbg.webp';
 import coinImg from '../assets/optimized/coin.webp';
+import pack1Img from '../assets/optimized/pack1.webp';
+import pack2Img from '../assets/optimized/pack2.webp';
+import pack3Img from '../assets/optimized/pack3.webp';
 
 const CoinPurchaseModal = ({ 
   isVisible, 
@@ -34,7 +37,8 @@ const CoinPurchaseModal = ({
       price: '$2.99',
       color: '#FFD700',
       label: 'STARTER PACK',
-      description: 'Perfect to get started'
+      description: 'Perfect to get started',
+      image: pack1Img
     },
     {
       id: 'medium', 
@@ -43,7 +47,8 @@ const CoinPurchaseModal = ({
       color: '#FF6B35',
       label: 'VALUE PACK',
       description: 'Best value for money',
-      popular: true
+      popular: true,
+      image: pack2Img
     },
     {
       id: 'large',
@@ -51,7 +56,8 @@ const CoinPurchaseModal = ({
       price: '$6.99', 
       color: '#f32210',
       label: 'MEGA PACK',
-      description: 'Maximum coins!'
+      description: 'Maximum coins!',
+      image: pack3Img
     }
   ];
 
@@ -115,6 +121,56 @@ const CoinPurchaseModal = ({
         ease: "easeOut"
       }
     })
+  };
+
+  // Pack image animations
+  const packImageVariants = {
+    initial: {
+      scale: 1,
+      rotate: 0,
+      y: 0
+    },
+    animate: {
+      scale: [1, 1.05, 1],
+      rotate: [0, -2, 2, 0],
+      y: [0, -4, 0],
+      transition: {
+        duration: 3,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "reverse"
+      }
+    },
+    hover: {
+      scale: 1.15,
+      rotate: [0, -5, 5, 0],
+      y: -8,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    },
+    tap: {
+      scale: 0.95,
+      transition: {
+        duration: 0.1
+      }
+    }
+  };
+
+  // Coin image animations (header)
+  const coinImageVariants = {
+    initial: { rotate: 0 },
+    animate: {
+      rotate: [0, 15, -15, 0],
+      scale: [1, 1.1, 1],
+      transition: {
+        duration: 2,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "reverse"
+      }
+    }
   };
 
   const handlePurchase = (packageData) => {
@@ -202,13 +258,16 @@ const CoinPurchaseModal = ({
                 gap: '8px',
                 marginBottom: '10px'
               }}>
-                <img 
+                <motion.img 
                   src={coinImg}
                   alt="Coin"
+                  variants={coinImageVariants}
+                  initial="initial"
+                  animate="animate"
                   style={{
                     width: '32px',
                     height: '32px',
-                    filter: 'none'
+                    filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.5))'
                   }}
                 />
                 <Text
@@ -261,10 +320,10 @@ const CoinPurchaseModal = ({
                     onClick={() => handlePurchase(pkg)}
                     style={{
                       width: '100%',
-                      height: '80px',
+                      height: '85px',
                       backgroundColor: 'rgba(0, 0, 0, 0.7)',
                       borderRadius: '10px',
-                      padding: '15px 20px',
+                      padding: '0 20px',
                       position: 'relative',
                       cursor: 'pointer',
                       transition: 'all 0.3s ease'
@@ -303,13 +362,19 @@ const CoinPurchaseModal = ({
                         alignItems: 'center',
                         gap: '10px'
                       }}>
-                        <img 
-                          src={coinImg}
-                          alt="Coin"
+                        <motion.img 
+                          src={pkg.image}
+                          alt="Pack"
+                          variants={packImageVariants}
+                          initial="initial"
+                          animate="animate"
+                          whileHover="hover"
+                          whileTap="tap"
                           style={{
-                            width: '40px',
-                            height: '40px',
-                            filter: 'none'
+                            height: '60px',
+                            marginRight: '10px',
+                            filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.3))',
+                            cursor: 'pointer'
                           }}
                         />
                         <Box>
