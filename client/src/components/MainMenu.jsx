@@ -146,6 +146,39 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             padding: "0 15px"
           }}
         >
+          {/* FIGHT button - Full width */}
+          <Button
+            variant="outline"
+            size="xl"
+            onClick={() => {
+              playButtonSound();
+              onStartClick();
+            }}
+            style={{
+              ...getMenuButtonStyle(mainButtonImg),
+              width: "100%",
+              minWidth: "100%",
+              animation: "electricEntry 0.8s ease-out 0.8s both",
+              boxShadow: "none"
+            }}
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1.05) rotate(1deg)";
+                e.target.style.boxShadow = "none";
+                e.target.style.animation = "screenShake 0.5s ease-in-out";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = "scale(1) rotate(0deg)";
+                e.target.style.boxShadow = "none";
+                e.target.style.animation = "none";
+              }
+            }}
+          >
+            FIGHT
+          </Button>
+
           {/* CLUB and PACKS buttons - Row */}
           <Box
             style={{
@@ -216,39 +249,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
               PACKS
             </Button>
           </Box>
-
-          {/* FIGHT button - Full width */}
-          <Button
-            variant="outline"
-            size="xl"
-            onClick={() => {
-              playButtonSound();
-              onStartClick();
-            }}
-            style={{
-              ...getMenuButtonStyle(mainButtonImg),
-              width: "100%",
-              minWidth: "100%",
-              animation: "electricEntry 0.8s ease-out 0.8s both",
-              boxShadow: "none"
-            }}
-            onMouseEnter={(e) => {
-              if (!isMobile) {
-                e.target.style.transform = "scale(1.05) rotate(1deg)";
-                e.target.style.boxShadow = "none";
-                e.target.style.animation = "screenShake 0.5s ease-in-out";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isMobile) {
-                e.target.style.transform = "scale(1) rotate(0deg)";
-                e.target.style.boxShadow = "none";
-                e.target.style.animation = "none";
-              }
-            }}
-          >
-            FIGHT
-          </Button>
 
         </Box>
       </Box>
