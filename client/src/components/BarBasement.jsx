@@ -24,7 +24,7 @@ const BarBasement = () => {
   const materials = useMemo(() => ({
     // Basic structure materials
     floor: new THREE.MeshStandardMaterial({
-      color: '#2a1f14', // Dark brown/café floor color
+      color: '#4a2f1a', // More brown/marrón floor color
       roughness: 0.8,
       metalness: 0.1
     }),
@@ -34,7 +34,7 @@ const BarBasement = () => {
       metalness: 0.05
     }),
     wall: new THREE.MeshStandardMaterial({
-      color: '#2d2822',
+      color: '#4a2f1a', // Same brown color as floor
       roughness: 0.7,
       metalness: 0.1
     }),
@@ -149,7 +149,14 @@ const BarBasement = () => {
   return (
     <group scale={[0.4, 0.4, 0.4]}>
 
-
+      {/* Floor */}
+      <mesh 
+        geometry={geometries.floor} 
+        material={materials.floor}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, -3, 0]}
+        receiveShadow
+      />
 
       {/* Ceiling */}
       <mesh 
@@ -161,10 +168,10 @@ const BarBasement = () => {
       />
 
       {/* Walls */}
-      <mesh geometry={geometries.wall} material={materials.wall} position={[0, 0.5, -12.5]} receiveShadow />
-      <mesh geometry={geometries.wall} material={materials.wall} position={[0, 0.5, 12.5]} rotation={[0, Math.PI, 0]} receiveShadow />
-      <mesh geometry={geometries.wall} material={materials.wall} position={[-12.5, 0.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow />
-      <mesh geometry={geometries.wall} material={materials.wall} position={[12.5, 0.5, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow />
+      <mesh geometry={geometries.wall} material={materials.wall} position={[0, 0, -12.5]} receiveShadow />
+      <mesh geometry={geometries.wall} material={materials.wall} position={[0, 0, 12.5]} rotation={[0, Math.PI, 0]} receiveShadow />
+      <mesh geometry={geometries.wall} material={materials.wall} position={[-12.5, 0, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow />
+      <mesh geometry={geometries.wall} material={materials.wall} position={[12.5, 0, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow />
 
       {/* Blood stains on the floor */}
       {elementPositions.bloodStains.map((stain, index) => (
