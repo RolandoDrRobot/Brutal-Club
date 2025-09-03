@@ -1264,7 +1264,7 @@ export const CharacterAnimationsProvider = (props) => {
   const executeAttackSequence = (attackerPlayer, attackType, defenderPlayer) => {
     const timing = ATTACK_TIMINGS[attackType];
     if (!timing) {
-      console.error(`No timing found for attack type: ${attackType}`);
+
       return;
     }
     

@@ -17,19 +17,19 @@ const CurrencyBar = () => {
   const { playButtonSound } = useButtonSound();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  // 💰 COIN PURCHASE MODAL STATE
+
   const [showCoinPurchaseModal, setShowCoinPurchaseModal] = useState(false);
 
-  // Handle coin purchase
+
   const handleCoinPurchase = (packageData) => {
     if (setCoins) {
       setCoins(currentCoins => currentCoins + packageData.coins);
     }
-    // Don't close modal here - let the modal handle its own flow
+
   };
 
-  // 🎵 MUSIC PLAYER FUNCTIONALITY
-  // Song list (only existing files to prevent loading delays)
+
+
   const songs = [
     { id: 0, name: "No Music", artist: "", file: null },
     { id: 1, name: "Nine Thou", artist: "Styles Of Beyond", file: "/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3" },
@@ -40,7 +40,7 @@ const CurrencyBar = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
-  // Function to go to the next song
+
   const nextSong = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -71,7 +71,7 @@ const CurrencyBar = () => {
     }
   };
 
-  // Auto-play when the song changes
+
   useEffect(() => {
     if (songs[currentSongIndex].file && audioRef.current) {
       audioRef.current.load();
@@ -95,7 +95,7 @@ const CurrencyBar = () => {
     }
   }, [currentSongIndex]);
 
-  // Auto-play when component mounts (start music with the game)
+
   useEffect(() => {
     const handleStartMusic = () => {
       if (currentSongIndex === 1 && audioRef.current && songs[1].file) {
@@ -153,7 +153,7 @@ const CurrencyBar = () => {
     };
   }, []);
 
-  // Configure volume according to mode
+
   useEffect(() => {
     if (audioRef.current && songs[currentSongIndex].file) {
       const targetVolume = isCombatMode ? 0.6 : 0.5;
@@ -196,7 +196,7 @@ const CurrencyBar = () => {
           margin: '0 auto'
         }}
       >
-        {/* Left side - ROLOXWORLD */}
+
         <Box
           style={{
             fontSize: isMobile ? '18px' : '22px',
@@ -212,7 +212,7 @@ const CurrencyBar = () => {
           ROLOXWORLD
         </Box>
 
-        {/* Center - Home and Music icons */}
+
         <Box
           style={{
             display: 'flex',
@@ -221,7 +221,7 @@ const CurrencyBar = () => {
             gap: isMobile ? '8px' : '12px'
           }}
         >
-          {/* Home button */}
+
           <Box
             style={{
               display: 'flex',
@@ -258,7 +258,7 @@ const CurrencyBar = () => {
             />
           </Box>
 
-          {/* Music button */}
+
           <Box
             style={{
               display: 'flex',
@@ -296,7 +296,7 @@ const CurrencyBar = () => {
           </Box>
         </Box>
 
-        {/* Right side - Currency elements */}
+
         <Box
           style={{
             display: 'flex',
@@ -304,7 +304,7 @@ const CurrencyBar = () => {
             justifyContent: 'flex-end'
           }}
         >
-          {/* Skill Points */}
+
           <Box
             style={{
               display: 'flex',
@@ -339,7 +339,7 @@ const CurrencyBar = () => {
             </span>
           </Box>
 
-          {/* Gold Coins - Clickeable to open purchase modal */}
+
           <Box
             style={{
               display: 'flex',
@@ -391,7 +391,7 @@ const CurrencyBar = () => {
         </Box>
       </Box>
 
-      {/* CSS Animations */}
+
       <style jsx>{`
         @keyframes goldNeonText {
           0% {
@@ -454,7 +454,7 @@ const CurrencyBar = () => {
         }
       `}</style>
 
-      {/* 🎵 AUDIO ELEMENT */}
+
       {songs[currentSongIndex].file && (
         <audio
           ref={audioRef}
@@ -466,7 +466,7 @@ const CurrencyBar = () => {
       )}
     </Box>
 
-    {/* 💰 COIN PURCHASE MODAL - Rendered outside of CurrencyBar Box for proper z-index */}
+
     <CoinPurchaseModal
       isVisible={showCoinPurchaseModal}
       onClose={() => setShowCoinPurchaseModal(false)}

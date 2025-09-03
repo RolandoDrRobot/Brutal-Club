@@ -49,27 +49,27 @@ const AUDIO_ASSETS = [
 
 // Install event - cache critical assets
 self.addEventListener('install', (event) => {
-  console.log('🚀 Service Worker installing...');
+
   
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('📦 Caching critical assets...');
+
         return cache.addAll(CRITICAL_ASSETS);
       })
       .then(() => {
-        console.log('✅ Critical assets cached successfully');
+
         return self.skipWaiting();
       })
       .catch((error) => {
-        console.error('❌ Failed to cache critical assets:', error);
+
       })
   );
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('🔄 Service Worker activating...');
+
   
   event.waitUntil(
     caches.keys()
@@ -79,14 +79,14 @@ self.addEventListener('activate', (event) => {
             if (cacheName !== CACHE_NAME && 
                 cacheName !== STATIC_CACHE && 
                 cacheName !== DYNAMIC_CACHE) {
-              console.log('🗑️ Deleting old cache:', cacheName);
+
               return caches.delete(cacheName);
             }
           })
         );
       })
       .then(() => {
-        console.log('✅ Service Worker activated');
+
         return self.clients.claim();
       })
   );
@@ -140,7 +140,7 @@ async function cacheFirst(request, cacheName) {
     
     return networkResponse;
   } catch (error) {
-    console.warn('Cache first failed:', error);
+
     return new Response('Offline content not available', { status: 503 });
   }
 }
@@ -155,7 +155,7 @@ async function networkFirst(request, cacheName) {
     }
     return networkResponse;
   } catch (error) {
-    console.warn('Network first failed, trying cache:', error);
+
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
       return cachedResponse;
@@ -167,7 +167,7 @@ async function networkFirst(request, cacheName) {
 // 🚀 MOBILE OPTIMIZATION: Background sync for offline actions
 self.addEventListener('sync', (event) => {
   if (event.tag === 'background-sync') {
-    console.log('🔄 Background sync triggered');
+
     event.waitUntil(doBackgroundSync());
   }
 });
@@ -175,9 +175,9 @@ self.addEventListener('sync', (event) => {
 async function doBackgroundSync() {
   try {
     // Perform any background tasks here
-    console.log('✅ Background sync completed');
+
   } catch (error) {
-    console.error('❌ Background sync failed:', error);
+
   }
 }
 
@@ -211,4 +211,4 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-console.log('🚀 Service Worker loaded successfully'); 
+ 

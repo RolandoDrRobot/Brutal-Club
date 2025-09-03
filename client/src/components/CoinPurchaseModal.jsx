@@ -20,7 +20,7 @@ const CoinPurchaseModal = ({
   const [purchaseParticles, setPurchaseParticles] = useState([]);
   const [showResultModal, setShowResultModal] = useState(false);
 
-  // Generate particles for animation
+
   useEffect(() => {
     if (isVisible && currentStep === 'selection') {
       const newParticles = Array.from({ length: 12 }, (_, i) => ({
@@ -35,7 +35,7 @@ const CoinPurchaseModal = ({
     }
   }, [isVisible, currentStep]);
 
-  // Generate purchase particles animation
+
   useEffect(() => {
     if (currentStep === 'purchasing') {
       const newPurchaseParticles = Array.from({ length: 30 }, (_, i) => ({
@@ -49,18 +49,17 @@ const CoinPurchaseModal = ({
       }));
       setPurchaseParticles(newPurchaseParticles);
 
-      // Auto transition to result modal after 2.5 seconds
+
       const resultTimer = setTimeout(() => {
         setShowResultModal(true);
-        // Keep currentStep as 'purchasing' while result modal is showing
-        // Only return to 'selection' when result modal closes
+
       }, 2500);
 
       return () => clearTimeout(resultTimer);
     }
   }, [currentStep]);
 
-  // Reset modal state when closing
+
   useEffect(() => {
     if (!isVisible) {
       setCurrentStep('selection');
@@ -71,7 +70,7 @@ const CoinPurchaseModal = ({
     }
   }, [isVisible]);
 
-  // Coin packages data
+
   const coinPackages = [
     {
       id: 'small',
@@ -103,7 +102,7 @@ const CoinPurchaseModal = ({
     }
   ];
 
-  // Particle variants
+
   const particleVariants = {
     hidden: { 
       scale: 0, 
@@ -165,7 +164,7 @@ const CoinPurchaseModal = ({
     })
   };
 
-  // Pack image animations
+
   const packImageVariants = {
     initial: {
       scale: 1,
@@ -200,7 +199,7 @@ const CoinPurchaseModal = ({
     }
   };
 
-  // Coin image animations (header)
+
   const coinImageVariants = {
     initial: { rotate: 0 },
     animate: {
@@ -215,7 +214,7 @@ const CoinPurchaseModal = ({
     }
   };
 
-  // Purchase animation variants
+
   const purchaseParticleVariants = {
     hidden: { 
       scale: 0, 
@@ -253,7 +252,7 @@ const CoinPurchaseModal = ({
     setPurchasedPackage(packageData);
     setCurrentStep('purchasing');
     
-    // Execute purchase after animation delay
+
     setTimeout(() => {
       onPurchase(packageData);
     }, 1000);
@@ -262,7 +261,7 @@ const CoinPurchaseModal = ({
   const handleResultModalClose = () => {
     setShowResultModal(false);
     setCurrentStep('selection'); // Return to selection screen
-    // User can now close the main modal if they want by clicking Cancel or outside
+
   };
 
   return (
@@ -288,7 +287,7 @@ const CoinPurchaseModal = ({
           }}
           onClick={currentStep === 'selection' ? onClose : undefined}
         >
-          {/* Gold coin particles for selection */}
+
           {currentStep === 'selection' && particles.map((particle) => (
             <motion.div
               key={particle.id}
@@ -310,7 +309,7 @@ const CoinPurchaseModal = ({
             />
           ))}
 
-          {/* Purchase particles */}
+
           {currentStep === 'purchasing' && purchaseParticles.map((particle) => (
             <motion.div
               key={particle.id}
@@ -337,7 +336,7 @@ const CoinPurchaseModal = ({
             </motion.div>
           ))}
 
-          {/* Purchase pack animation */}
+
           {currentStep === 'purchasing' && purchasedPackage && (
             <motion.div
               variants={purchasePackVariants}
@@ -362,7 +361,7 @@ const CoinPurchaseModal = ({
 
 
 
-          {/* Main Modal - Selection Screen */}
+
           {currentStep === 'selection' && (
           <div
             style={{
@@ -383,7 +382,7 @@ const CoinPurchaseModal = ({
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
+
             <div
               style={{
                 animation: 'electricFadeIn 0.7s ease-out 0.2s both'
@@ -436,7 +435,7 @@ const CoinPurchaseModal = ({
               </Text>
             </div>
 
-            {/* Coin Packages */}
+
             <Box style={{
               display: 'flex',
               flexDirection: 'column',
@@ -478,7 +477,7 @@ const CoinPurchaseModal = ({
                       transition: 'all 0.3s ease'
                     }}
                   >
-                    {/* Popular Badge */}
+
                     {pkg.popular && (
                       <Box
                         style={{
@@ -505,7 +504,7 @@ const CoinPurchaseModal = ({
                       justifyContent: 'space-between',
                       width: '100%'
                     }}>
-                      {/* Left side - Coins */}
+
                       <Box style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -557,7 +556,7 @@ const CoinPurchaseModal = ({
                         </Box>
                       </Box>
 
-                      {/* Right side - Price */}
+
                       <Box style={{
                         textAlign: 'right'
                       }}>
@@ -580,7 +579,7 @@ const CoinPurchaseModal = ({
               ))}
             </Box>
 
-            {/* Close Button */}
+
             <div
               style={{
                 animation: 'electricEntry 0.8s ease-out 1.0s both'
@@ -622,7 +621,7 @@ const CoinPurchaseModal = ({
         </motion.div>
       )}
       
-      {/* Coin Purchase Result Modal */}
+
       <CoinPurchaseResultModal
         isVisible={showResultModal}
         onClose={handleResultModalClose}

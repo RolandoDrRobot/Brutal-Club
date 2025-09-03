@@ -26,7 +26,7 @@ const Experience = () => {
           await loadOpponentModel(selectedPlayer2Character);
           setLoadedModels(prev => new Set([...prev, selectedPlayer2Character.toLowerCase()]));
         } catch (error) {
-          console.warn('Failed to load opponent model:', error);
+
         }
       }
     };

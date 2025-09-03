@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
+
 export default defineConfig({
   plugins: [
     react()
@@ -11,15 +11,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    // CRITICAL: Disable inlining for all assets to avoid MIME type issues
+
     assetsInlineLimit: 0,
     sourcemap: false, // Disable sourcemaps in production
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console.logs in production
+        drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug'], // Remove more console calls
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
         passes: 2, // Multiple passes for better compression
       },
       mangle: {
@@ -28,7 +28,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // OPTIMIZED: Advanced code splitting for better caching and load times
+
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');
           const extType = info[info.length - 1];
@@ -49,7 +49,7 @@ export default defineConfig({
           return `assets/[name]-[hash][extname]`;
         },
         chunkFileNames: (chunkInfo) => {
-          // Create separate chunks for different types of components
+
           if (chunkInfo.name.includes('three')) return 'assets/js/three-[hash].js';
           if (chunkInfo.name.includes('mantine')) return 'assets/js/ui-[hash].js';
           if (chunkInfo.name.includes('Experience') || chunkInfo.name.includes('3D')) return 'assets/js/3d-[hash].js';

@@ -13,7 +13,7 @@ const CoinPurchaseResultModal = ({
 }) => {
   const [particles, setParticles] = useState([]);
 
-  // Generate particles for animation
+
   useEffect(() => {
     if (isVisible) {
       const newParticles = Array.from({ length: 20 }, (_, i) => ({
@@ -26,7 +26,7 @@ const CoinPurchaseResultModal = ({
       }));
       setParticles(newParticles);
 
-      // Auto close after 4 seconds
+
       const timer = setTimeout(() => {
         onClose();
       }, 4000);
@@ -35,7 +35,7 @@ const CoinPurchaseResultModal = ({
     }
   }, [isVisible, onClose]);
 
-  // Particle variants for coin animations
+
   const particleVariants = {
     hidden: { 
       scale: 0, 
@@ -149,7 +149,7 @@ const CoinPurchaseResultModal = ({
           }}
           onClick={onClose}
         >
-          {/* Golden coin particles */}
+
           {particles.map((particle) => (
             <motion.div
               key={particle.id}
@@ -171,7 +171,7 @@ const CoinPurchaseResultModal = ({
             />
           ))}
 
-          {/* Main Modal */}
+
           <div
             style={{
               backgroundImage: `url(${coverbgImg})`,
@@ -191,7 +191,7 @@ const CoinPurchaseResultModal = ({
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Success Text */}
+
             <div
               style={{
                 animation: 'electricTitle 0.8s ease-out 0.2s both'
@@ -212,7 +212,7 @@ const CoinPurchaseResultModal = ({
               </Text>
             </div>
 
-            {/* Coin Display */}
+
             <div
               style={{
                 display: 'flex',
@@ -245,7 +245,7 @@ const CoinPurchaseResultModal = ({
               </Text>
             </div>
 
-            {/* Package name */}
+
             <div
               style={{
                 animation: 'electricGlitch 0.7s ease-out 0.8s both'

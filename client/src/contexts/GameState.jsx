@@ -131,7 +131,7 @@ export const GameStateProvider = ({ children }) => {
         // Merge saved state with initial state to handle new properties
         return { ...initialState, ...parsedState };
       } catch (error) {
-        console.warn('Failed to parse saved game state, starting fresh');
+
         return initialState;
       }
     }

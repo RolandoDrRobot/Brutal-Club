@@ -20,7 +20,7 @@ export const useShopModels = (lazyLoadModel) => {
         if (result.status === 'fulfilled' && result.value) {
           successful.add(modelName);
         } else {
-          console.warn(`⚠️ Shop model failed: ${modelName}`);
+
         }
       });
       

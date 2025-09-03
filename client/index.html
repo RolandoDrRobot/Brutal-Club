@@ -75,13 +75,13 @@
       
 
       
-      /* Optimización para evitar reflow */
+
       img {
         max-width: 100%;
         height: auto;
       }
       
-      /* Smooth font rendering */
+
       body {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -106,14 +106,14 @@
             updateViaCache: 'imports'
           })
             .then((registration) => {
-              console.log('SW registered: ', registration);
-              // Check for updates
+
+
               registration.addEventListener('updatefound', () => {
-                console.log('New SW version available');
+
               });
             })
             .catch((registrationError) => {
-              console.log('SW registration failed: ', registrationError);
+
             });
         });
       }

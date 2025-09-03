@@ -45,7 +45,7 @@ const Shop = ({ onBackClick }) => {
   const handleBuyCoins = (packageData) => {
     addCoins(packageData.coins);
     playButtonSound();
-    // Don't close modal here - let the modal handle its own flow
+
   };
 
   const canAffordPack = () => {
@@ -68,7 +68,7 @@ const Shop = ({ onBackClick }) => {
     >
 
 
-      {/* Main Content */}
+
       <Box style={{ 
         flex: 1,
         display: 'flex',
@@ -79,7 +79,7 @@ const Shop = ({ onBackClick }) => {
         animation: "electricFadeIn 0.7s ease-out 0.4s both"
       }}>
         
-        {/* Fighter Pack Card */}
+
         <Box style={{
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
           borderRadius: '0px',
@@ -90,7 +90,7 @@ const Shop = ({ onBackClick }) => {
           position: 'relative',
           overflow: 'hidden'
         }}>
-          {/* Pack Icon */}
+
           <Box style={{
             marginBottom: '20px',
             display: 'flex',
@@ -124,7 +124,7 @@ const Shop = ({ onBackClick }) => {
             />
           </Box>
           
-          {/* Pack Title */}
+
           <Text style={{
             fontSize: isMobile ? '28px' : '32px',
             fontWeight: 900,
@@ -137,7 +137,7 @@ const Shop = ({ onBackClick }) => {
             Fighter Pack
           </Text>
           
-          {/* Pack Description */}
+
           <Text style={{
             fontSize: '16px',
             fontWeight: 600,
@@ -150,7 +150,7 @@ const Shop = ({ onBackClick }) => {
             Contains fighters & stat points!
           </Text>
           
-          {/* Insufficient Coins Message */}
+
           {!canAffordPack() && (
             <Text style={{
               fontSize: '14px',
@@ -174,7 +174,7 @@ const Shop = ({ onBackClick }) => {
 
 
 
-      {/* Modals */}
+
       <CoinPurchaseModal
         isVisible={showCoinPurchaseModal}
         onClose={() => setShowCoinPurchaseModal(false)}

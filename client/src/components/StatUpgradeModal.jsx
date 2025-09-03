@@ -14,7 +14,7 @@ const StatUpgradeModal = ({
 }) => {
   const [particles, setParticles] = useState([]);
 
-  // Generate particles for animation
+
   useEffect(() => {
     if (isVisible) {
       const newParticles = Array.from({ length: 15 }, (_, i) => ({
@@ -27,7 +27,7 @@ const StatUpgradeModal = ({
       }));
       setParticles(newParticles);
 
-      // Auto close after 3 seconds
+
       const timer = setTimeout(() => {
         onClose();
       }, 3000);
@@ -36,14 +36,14 @@ const StatUpgradeModal = ({
     }
   }, [isVisible, onClose]);
 
-  // Use red for all stats as requested
+
   const getStatColor = (stat) => {
     return '#f32210'; // Player red for all stats
   };
 
   const statColor = getStatColor(statName);
 
-  // Particle variants for different animations
+
   const particleVariants = {
     hidden: { 
       scale: 0, 
@@ -156,7 +156,7 @@ const StatUpgradeModal = ({
           }}
           onClick={onClose}
         >
-          {/* Particles */}
+
           {particles.map((particle) => (
             <motion.div
               key={particle.id}
@@ -178,7 +178,7 @@ const StatUpgradeModal = ({
             />
           ))}
 
-          {/* Main Modal */}
+
           <div
             style={{
               backgroundImage: `url(${coverbgImg})`,
@@ -198,7 +198,7 @@ const StatUpgradeModal = ({
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Upgraded Text */}
+
             <div
               style={{
                 animation: 'electricTitle 0.8s ease-out 0.2s both'
@@ -221,7 +221,7 @@ const StatUpgradeModal = ({
 
 
 
-            {/* Level Display */}
+
             <div
               style={{
                 display: 'flex',
