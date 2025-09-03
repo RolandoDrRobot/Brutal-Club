@@ -146,7 +146,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             padding: "0 15px"
           }}
         >
-          {/* CLUB and SHOP buttons - Row */}
+          {/* CLUB and PACKS buttons - Row */}
           <Box
             style={{
               display: "flex",
@@ -213,7 +213,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
                 }
               }}
             >
-              SHOP
+              PACKS
             </Button>
           </Box>
 
