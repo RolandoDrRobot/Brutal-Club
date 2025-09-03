@@ -63,8 +63,8 @@ function App() {
 
   return (
     <>
-      {/* Pantalla de carga - se muestra mientras cargan los modelos y audio */}
-      {isLoading && <LoadingScreen progress={loadingProgress} status={loadingStatus} />}
+      {/* Pantalla de carga - se muestra hasta completar la carga al 100% */}
+      {(isLoading || loadingProgress < 100) && <LoadingScreen progress={loadingProgress} status={loadingStatus} />}
       
       <div style={{
         position: 'fixed',
