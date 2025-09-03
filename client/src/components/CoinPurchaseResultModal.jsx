@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text } from '@mantine/core';
+import '../styles/fightAnimations.css';
 import coverbgImg from '../assets/optimized/coverbg.webp';
 import coinImg from '../assets/optimized/coin.webp';
 
@@ -171,11 +172,7 @@ const CoinPurchaseResultModal = ({
           ))}
 
           {/* Main Modal */}
-          <motion.div
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+          <div
             style={{
               backgroundImage: `url(${coverbgImg})`,
               backgroundSize: 'cover',
@@ -189,34 +186,16 @@ const CoinPurchaseResultModal = ({
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              animation: 'electricEntry 0.8s ease-out'
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Background Glow */}
-            <motion.div
-              variants={glowVariants}
-              initial="hidden"
-              animate="visible"
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: '250px',
-                height: '250px',
-                background: 'radial-gradient(circle, #FFD70030 0%, transparent 70%)',
-                transform: 'translate(-50%, -50%)',
-                borderRadius: '50%',
-                pointerEvents: 'none'
-              }}
-            />
-
             {/* Success Text */}
-            <motion.div
-              variants={textVariants}
-              initial="hidden"
-              animate="visible"
-              custom={0.1}
+            <div
+              style={{
+                animation: 'electricTitle 0.8s ease-out 0.2s both'
+              }}
             >
               <Text
                 style={{
@@ -231,19 +210,17 @@ const CoinPurchaseResultModal = ({
               >
                 Coins Obtained!
               </Text>
-            </motion.div>
+            </div>
 
             {/* Coin Display */}
-            <motion.div
-              variants={coinVariants}
-              initial="hidden"
-              animate="visible"
+            <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '15px',
-                marginBottom: '15px'
+                marginBottom: '15px',
+                animation: 'electricFadeIn 0.8s ease-out 0.4s both'
               }}
             >
               <img
@@ -260,19 +237,19 @@ const CoinPurchaseResultModal = ({
                   fontWeight: 900,
                   color: '#FFD700',
                   fontFamily: 'Anton, sans-serif',
-                  letterSpacing: '3px'
+                  letterSpacing: '3px',
+                  animation: 'electricPulse 0.7s ease-out 0.6s both'
                 }}
               >
                 +{coinAmount}
               </Text>
-            </motion.div>
+            </div>
 
             {/* Package name */}
-            <motion.div
-              variants={textVariants}
-              initial="hidden"
-              animate="visible"
-              custom={0.3}
+            <div
+              style={{
+                animation: 'electricGlitch 0.7s ease-out 0.8s both'
+              }}
             >
               <Text
                 style={{
@@ -286,30 +263,9 @@ const CoinPurchaseResultModal = ({
               >
                 {packageName}
               </Text>
-            </motion.div>
+            </div>
 
-            {/* Continuous pulse effect */}
-            <motion.div
-              animate={{
-                scale: [1, 1.05, 1],
-                opacity: [0.2, 0.4, 0.2]
-              }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'radial-gradient(circle, #FFD70010 20%, transparent 50%)',
-                pointerEvents: 'none'
-              }}
-            />
-          </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

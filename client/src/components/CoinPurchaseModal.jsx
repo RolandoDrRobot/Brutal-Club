@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
+import '../styles/fightAnimations.css';
 import coverbgImg from '../assets/optimized/coverbg.webp';
 import coinImg from '../assets/optimized/coin.webp';
 import pack1Img from '../assets/optimized/pack1.webp';
@@ -363,11 +364,7 @@ const CoinPurchaseModal = ({
 
           {/* Main Modal - Selection Screen */}
           {currentStep === 'selection' && (
-          <motion.div
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+          <div
             style={{
               backgroundImage: `url(${coverbgImg})`,
               backgroundSize: 'cover',
@@ -381,15 +378,16 @@ const CoinPurchaseModal = ({
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              animation: 'electricEntry 0.8s ease-out'
             }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+            <div
+              style={{
+                animation: 'electricFadeIn 0.7s ease-out 0.2s both'
+              }}
             >
               <Box style={{ 
                 display: 'flex', 
@@ -398,16 +396,13 @@ const CoinPurchaseModal = ({
                 gap: '8px',
                 marginBottom: '10px'
               }}>
-                <motion.img 
+                <img 
                   src={coinImg}
                   alt="Coin"
-                  variants={coinImageVariants}
-                  initial="initial"
-                  animate="animate"
                   style={{
                     width: '32px',
                     height: '32px',
-                    filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.5))'
+                    animation: 'electricFlicker 0.8s ease-out 0.4s both'
                   }}
                 />
                 <Text
@@ -417,7 +412,8 @@ const CoinPurchaseModal = ({
                     color: '#FFD700',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
-                    textTransform: 'uppercase'
+                    textTransform: 'uppercase',
+                    animation: 'electricTitle 0.8s ease-out 0.3s both'
                   }}
                 >
                   Buy Coins
@@ -432,12 +428,13 @@ const CoinPurchaseModal = ({
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '0.5px',
                   marginBottom: '30px',
-                  lineHeight: 1.3
+                  lineHeight: 1.3,
+                  animation: 'electricGlitch 0.7s ease-out 0.5s both'
                 }}
               >
                 Choose your coin package to buy packs!
               </Text>
-            </motion.div>
+            </div>
 
             {/* Coin Packages */}
             <Box style={{
@@ -447,14 +444,26 @@ const CoinPurchaseModal = ({
               marginBottom: '25px'
             }}>
               {coinPackages.map((pkg, index) => (
-                <motion.div
+                <div
                   key={pkg.id}
-                  variants={packageVariants}
-                  initial="hidden"
-                  animate="visible"
-                  custom={index * 0.1}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    animation: `electricStatic 0.6s ease-out ${0.6 + index * 0.15}s both`,
+                    transition: 'transform 0.3s ease, filter 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = 'scale(1.02)';
+                    e.target.style.filter = 'brightness(1.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = 'scale(1)';
+                    e.target.style.filter = 'brightness(1)';
+                  }}
+                  onMouseDown={(e) => {
+                    e.target.style.transform = 'scale(0.98)';
+                  }}
+                  onMouseUp={(e) => {
+                    e.target.style.transform = 'scale(1.02)';
+                  }}
                 >
                   <Button
                     onClick={() => handlePurchase(pkg)}
@@ -502,19 +511,23 @@ const CoinPurchaseModal = ({
                         alignItems: 'center',
                         gap: '10px'
                       }}>
-                        <motion.img 
+                        <img 
                           src={pkg.image}
                           alt="Pack"
-                          variants={packImageVariants}
-                          initial="initial"
-                          animate="animate"
-                          whileHover="hover"
-                          whileTap="tap"
                           style={{
                             height: '60px',
                             marginRight: '10px',
-                            filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.3))',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            animation: `electricPulse 0.7s ease-out ${0.8 + index * 0.1}s both`,
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.transform = 'scale(1.15) rotate(5deg)';
+                            e.target.style.filter = 'brightness(1.2) drop-shadow(0 0 15px rgba(255, 215, 0, 0.6))';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = 'scale(1) rotate(0deg)';
+                            e.target.style.filter = 'brightness(1) drop-shadow(0 0 8px rgba(255, 215, 0, 0.3))';
                           }}
                         />
                         <Box>
@@ -563,15 +576,15 @@ const CoinPurchaseModal = ({
                       </Box>
                     </Box>
                   </Button>
-                </motion.div>
+                </div>
               ))}
             </Box>
 
             {/* Close Button */}
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.8, duration: 0.5 }}
+            <div
+              style={{
+                animation: 'electricEntry 0.8s ease-out 1.0s both'
+              }}
             >
               <Button
                 onClick={onClose}
@@ -589,11 +602,21 @@ const CoinPurchaseModal = ({
                   cursor: 'pointer',
                   transition: 'all 0.3s ease'
                 }}
+                onMouseEnter={(e) => {
+                  e.target.style.animation = 'electricFlicker 0.4s ease-out';
+                  e.target.style.transform = 'scale(1.05)';
+                  e.target.style.filter = 'brightness(1.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.animation = '';
+                  e.target.style.transform = 'scale(1)';
+                  e.target.style.filter = 'brightness(1)';
+                }}
               >
                 CANCEL
               </Button>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
           )}
 
         </motion.div>

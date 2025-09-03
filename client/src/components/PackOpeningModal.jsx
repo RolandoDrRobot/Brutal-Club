@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
+import '../styles/fightAnimations.css';
 import packImg from '../assets/optimized/pack.webp';
 import coverbgImg from '../assets/optimized/coverbg.webp';
 
@@ -213,14 +214,15 @@ const PackOpeningModal = ({
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                animation: 'electricEntry 0.8s ease-out'
               }}
             >
 
-              <motion.div
-                initial={{ y: -30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6 }}
+              <div
+                style={{
+                  animation: 'electricTitle 0.8s ease-out 0.2s both'
+                }}
               >
                 <Text
                   style={{
@@ -235,7 +237,7 @@ const PackOpeningModal = ({
                 >
                   Pack Opened!
                 </Text>
-              </motion.div>
+              </div>
 
 
               <Box style={{
@@ -245,17 +247,14 @@ const PackOpeningModal = ({
                 marginBottom: '30px'
               }}>
                 {revealedItems.map((item, index) => (
-                  <motion.div
+                  <div
                     key={index}
-                    custom={index}
-                    variants={itemVariants}
-                    initial="hidden"
-                    animate="visible"
                     style={{
                       borderRadius: '10px',
                       padding: '20px',
                       position: 'relative',
-                      boxShadow: `0 0 15px ${getItemTypeColor(item.type)}40`
+                      boxShadow: `0 0 15px ${getItemTypeColor(item.type)}40`,
+                      animation: `electricStatic 0.6s ease-out ${0.4 + index * 0.2}s both`
                     }}
                   >
 
@@ -296,7 +295,8 @@ const PackOpeningModal = ({
                         fontFamily: 'Anton, sans-serif',
                         letterSpacing: '1px',
                         textTransform: 'uppercase',
-                        marginBottom: '5px'
+                        marginBottom: '5px',
+                        animation: `electricPulse 0.7s ease-out ${0.6 + index * 0.15}s both`
                       }}
                     >
                       {item.name}
@@ -309,7 +309,8 @@ const PackOpeningModal = ({
                           fontWeight: 600,
                           color: '#F5F5DC',
                           fontFamily: 'Anton, sans-serif',
-                          letterSpacing: '0.5px'
+                          letterSpacing: '0.5px',
+                          animation: `electricGlitch 0.7s ease-out ${0.8 + index * 0.1}s both`
                         }}
                       >
                         +{item.amount} stat points
@@ -323,21 +324,22 @@ const PackOpeningModal = ({
                           fontWeight: 600,
                           color: '#F5F5DC',
                           fontFamily: 'Anton, sans-serif',
-                          letterSpacing: '0.5px'
+                          letterSpacing: '0.5px',
+                          animation: `electricGlitch 0.7s ease-out ${0.8 + index * 0.1}s both`
                         }}
                       >
                         {item.description}
                       </Text>
                     )}
-                  </motion.div>
+                  </div>
                 ))}
               </Box>
 
 
-              <motion.div
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 1.5, duration: 0.6 }}
+              <div
+                style={{
+                  animation: 'electricEntry 0.8s ease-out 1.5s both'
+                }}
               >
                 <Button
                   onClick={onClose}
@@ -354,10 +356,20 @@ const PackOpeningModal = ({
                     cursor: 'pointer',
                     transition: 'all 0.3s ease'
                   }}
+                  onMouseEnter={(e) => {
+                    e.target.style.animation = 'electricFlicker 0.4s ease-out';
+                    e.target.style.transform = 'scale(1.05)';
+                    e.target.style.filter = 'brightness(1.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.animation = '';
+                    e.target.style.transform = 'scale(1)';
+                    e.target.style.filter = 'brightness(1)';
+                  }}
                 >
                   CONTINUE
                 </Button>
-              </motion.div>
+              </div>
             </Box>
           )}
 

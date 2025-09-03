@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text } from '@mantine/core';
+import '../styles/fightAnimations.css';
 import coverbgImg from '../assets/optimized/coverbg.webp';
 
 const StatUpgradeModal = ({ 
@@ -178,11 +179,7 @@ const StatUpgradeModal = ({
           ))}
 
           {/* Main Modal */}
-          <motion.div
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+          <div
             style={{
               backgroundImage: `url(${coverbgImg})`,
               backgroundSize: 'cover',
@@ -196,36 +193,16 @@ const StatUpgradeModal = ({
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              animation: 'electricEntry 0.8s ease-out'
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Background Glow */}
-            <motion.div
-              variants={glowVariants}
-              initial="hidden"
-              animate="visible"
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: '200px',
-                height: '200px',
-                background: `radial-gradient(circle, ${statColor}20 0%, transparent 70%)`,
-                transform: 'translate(-50%, -50%)',
-                borderRadius: '0px',
-                pointerEvents: 'none'
-              }}
-            />
-
-
-
             {/* Upgraded Text */}
-            <motion.div
-              variants={textVariants}
-              initial="hidden"
-              animate="visible"
-              custom={0.1}
+            <div
+              style={{
+                animation: 'electricTitle 0.8s ease-out 0.2s both'
+              }}
             >
               <Text
                 style={{
@@ -240,20 +217,18 @@ const StatUpgradeModal = ({
               >
                 UPGRADED!
               </Text>
-            </motion.div>
+            </div>
 
 
 
             {/* Level Display */}
-            <motion.div
-              variants={levelNumberVariants}
-              initial="hidden"
-              animate="visible"
+            <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '15px'
+                gap: '15px',
+                animation: 'electricPulse 0.8s ease-out 0.4s both'
               }}
             >
               <Text
@@ -267,30 +242,9 @@ const StatUpgradeModal = ({
               >
                 LEVEL {newLevel}
               </Text>
-            </motion.div>
+            </div>
 
-            {/* Pulse Effect */}
-            <motion.div
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.3, 0.6, 0.3]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                borderRadius: '0px',
-                pointerEvents: 'none'
-              }}
-            />
-          </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
