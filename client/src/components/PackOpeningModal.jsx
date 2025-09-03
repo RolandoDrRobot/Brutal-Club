@@ -24,7 +24,7 @@ const PackOpeningModal = ({
         delay: Math.random() * 1.5,
         scale: 0.5 + Math.random() * 0.8,
         rotation: Math.random() * 360,
-        color: Math.random() > 0.3 ? '#FFD700' : '#FFF'
+        color: Math.random() > 0.3 ? '#F5F5DC' : '#FFF'
       }));
       setParticles(newParticles);
 
@@ -105,7 +105,7 @@ const PackOpeningModal = ({
 
   const getItemTypeColor = (type) => {
     switch (type) {
-      case 'character': return '#FFD700'; // Gold for characters (rare)
+      case 'character': return '#F5F5DC'; // Bone color for characters (rare)
       case 'stat_points': return '#f32210'; // Red for stat points
       default: return '#F5F5DC';
     }
@@ -185,7 +185,7 @@ const PackOpeningModal = ({
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                filter: 'drop-shadow(0 0 20px #FFD700)'
+                filter: 'drop-shadow(0 0 20px #F5F5DC)'
               }}
             >
               <img 
@@ -228,7 +228,7 @@ const PackOpeningModal = ({
                   style={{
                     fontSize: '36px',
                     fontWeight: 900,
-                    color: '#FFD700',
+                    color: '#F5F5DC',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
                     textTransform: 'uppercase',
@@ -349,7 +349,7 @@ const PackOpeningModal = ({
                     padding: '0',
                     backgroundColor: 'transparent',
                     borderRadius: '0px',
-                    color: '#FFD700',
+                    color: '#F5F5DC',
                     textTransform: 'uppercase',
                     letterSpacing: '1px',
                     fontFamily: 'Anton, sans-serif',

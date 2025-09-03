@@ -19,12 +19,21 @@ const BarBasement = () => {
     box: new THREE.BoxGeometry(1.2, 1.2, 1.2),
     smallBox: new THREE.BoxGeometry(0.8, 0.8, 0.8),
     crate: new THREE.BoxGeometry(1.5, 1.0, 1.0),
+    barrel: new THREE.CylinderGeometry(0.6, 0.6, 2.2, 8),
+    
+    // Basement infrastructure elements
+    lightBulb: new THREE.SphereGeometry(0.15, 16, 12), // Light bulb
+    lightSocket: new THREE.CylinderGeometry(0.1, 0.12, 0.2, 8), // Bulb socket
+    lightCable: new THREE.CylinderGeometry(0.02, 0.02, 1.5, 6), // Hanging cable
+    buildingPipe: new THREE.CylinderGeometry(0.08, 0.08, 12, 8), // Building pipes
+    pipeJoint: new THREE.SphereGeometry(0.12, 8, 6), // Pipe joints/connections
+    pipeSupport: new THREE.BoxGeometry(0.3, 0.1, 0.1), // Pipe support brackets
   }), []);
 
   const materials = useMemo(() => ({
     // Basic structure materials
     floor: new THREE.MeshStandardMaterial({
-      color: '#4a2f1a', // More brown/marrón floor color
+      color: '#404850', // Darker gray than walls
       roughness: 0.8,
       metalness: 0.1
     }),
@@ -34,7 +43,7 @@ const BarBasement = () => {
       metalness: 0.05
     }),
     wall: new THREE.MeshStandardMaterial({
-      color: '#4a2f1a', // Same brown color as floor
+      color: '#5a6b7a', // Blue-gray color for walls
       roughness: 0.7,
       metalness: 0.1
     }),
@@ -62,46 +71,87 @@ const BarBasement = () => {
       color: '#A0522D', // Sienna wood color
       roughness: 0.7,
       metalness: 0.2
+    }),
+    barrel: new THREE.MeshStandardMaterial({
+      color: '#808080', // Gray barrel
+      roughness: 0.8,
+      metalness: 0.6
+    }),
+    
+    // Basement infrastructure materials
+    lightBulb: new THREE.MeshStandardMaterial({
+      color: '#ffffff', // White glass bulb
+      roughness: 0.1,
+      metalness: 0.0,
+      transparent: true,
+      opacity: 0.9,
+      emissive: '#7788aa', // Muted gray-blue glow
+      emissiveIntensity: 0.3
+    }),
+    lightSocket: new THREE.MeshStandardMaterial({
+      color: '#2c2c2c', // Dark socket
+      roughness: 0.6,
+      metalness: 0.4
+    }),
+    lightCable: new THREE.MeshStandardMaterial({
+      color: '#1a1a1a', // Black electrical cable
+      roughness: 0.8,
+      metalness: 0.1
+    }),
+    buildingPipe: new THREE.MeshStandardMaterial({
+      color: '#4a4a4a', // Galvanized steel pipe
+      roughness: 0.4,
+      metalness: 0.7
+    }),
+    pipeJoint: new THREE.MeshStandardMaterial({
+      color: '#5a5a5a', // Slightly lighter for joints
+      roughness: 0.3,
+      metalness: 0.8
+    }),
+    pipeSupport: new THREE.MeshStandardMaterial({
+      color: '#666666', // Steel support brackets
+      roughness: 0.5,
+      metalness: 0.6
     })
   }), []);
 
   // Generate positions for essential elements only
   const elementPositions = useMemo(() => ({
     
-    // Blood stains simulating a real fight pattern - expanded coverage
+    // Blood stains simulating a real fight pattern - on the floor
     bloodStains: [
       // Main impact area - where the fight is most intense
-      { pos: [0.0, -2.99, 0.0], scale: [3.2, 3.2, 3.2] }, // Central large pool
-      { pos: [0.4, -2.99, -0.3], scale: [1.8, 1.8, 1.8] }, // Splatter from main pool
-      { pos: [-0.3, -2.99, 0.5], scale: [1.6, 1.6, 1.6] }, // Another splatter
+      { pos: [0.0, -2.98, 0.0], scale: [3.2, 3.2, 3.2] }, // Central large pool
+      { pos: [0.4, -2.98, -0.3], scale: [1.8, 1.8, 1.8] }, // Splatter from main pool
+      { pos: [-0.3, -2.98, 0.5], scale: [1.6, 1.6, 1.6] }, // Another splatter
       
       // Extended blood trails from movement during the fight
-      { pos: [1.2, -2.99, 0.8], scale: [1.1, 1.1, 1.1] }, // Trail 1
-      { pos: [1.8, -2.99, 0.4], scale: [0.9, 0.9, 0.9] }, // Trail 2
-      { pos: [-1.2, -2.99, -1.0], scale: [1.3, 1.3, 1.3] }, // Trail 3
-      { pos: [-1.6, -2.99, -0.6], scale: [1.0, 1.0, 1.0] }, // Trail 4
-      { pos: [2.0, -2.99, -0.8], scale: [1.2, 1.2, 1.2] }, // Trail 5
-      { pos: [-2.0, -2.99, 0.8], scale: [1.1, 1.1, 1.1] }, // Trail 6
+      { pos: [1.2, -2.98, 0.8], scale: [1.1, 1.1, 1.1] }, // Trail 1
+      { pos: [1.8, -2.98, 0.4], scale: [0.9, 0.9, 0.9] }, // Trail 2
+      { pos: [-1.2, -2.98, -1.0], scale: [1.3, 1.3, 1.3] }, // Trail 3
+      { pos: [-1.6, -2.98, -0.6], scale: [1.0, 1.0, 1.0] }, // Trail 4
+      { pos: [2.0, -2.98, -0.8], scale: [1.2, 1.2, 1.2] }, // Trail 5
+      { pos: [-2.0, -2.98, 0.8], scale: [1.1, 1.1, 1.1] }, // Trail 6
       
       // Impact splatters from punches/kicks - expanded area
-      { pos: [0.8, -2.99, -0.8], scale: [1.4, 1.4, 1.4] }, // Impact 1
-      { pos: [-0.6, -2.99, 1.2], scale: [1.2, 1.2, 1.2] }, // Impact 2
-      { pos: [1.4, -2.99, -0.4], scale: [1.1, 1.1, 1.1] }, // Impact 3
-      { pos: [-1.0, -2.99, 0.4], scale: [1.3, 1.3, 1.3] }, // Impact 4
-      { pos: [0.6, -2.99, 1.4], scale: [1.0, 1.0, 1.0] }, // Impact 5
-      { pos: [-0.8, -2.99, -1.2], scale: [1.2, 1.2, 1.2] }, // Impact 6
+      { pos: [0.8, -2.98, -0.8], scale: [1.4, 1.4, 1.4] }, // Impact 1
+      { pos: [-0.6, -2.98, 1.2], scale: [1.2, 1.2, 1.2] }, // Impact 2
+      { pos: [1.4, -2.98, -0.4], scale: [1.1, 1.1, 1.1] }, // Impact 3
+      { pos: [-1.0, -2.98, 0.4], scale: [1.3, 1.3, 1.3] }, // Impact 4
+      { pos: [0.6, -2.98, 1.4], scale: [1.0, 1.0, 1.0] }, // Impact 5
+      { pos: [-0.8, -2.98, -1.2], scale: [1.2, 1.2, 1.2] }, // Impact 6
       
       // Smaller drops from movement and sweat - wider distribution
-      { pos: [0.4, -2.99, 0.8], scale: [0.8, 0.8, 0.8] }, // Drop 1
-      { pos: [-0.5, -2.99, -0.8], scale: [0.7, 0.7, 0.7] }, // Drop 2
-      { pos: [1.0, -2.99, 0.2], scale: [0.9, 0.9, 0.9] }, // Drop 3
-      { pos: [-0.2, -2.99, -1.4], scale: [0.8, 0.8, 0.8] }, // Drop 4
-      { pos: [0.8, -2.99, -0.6], scale: [0.7, 0.7, 0.7] }, // Drop 5
-      { pos: [-1.4, -2.99, 0.2], scale: [0.6, 0.6, 0.6] }, // Drop 6
-      { pos: [1.6, -2.99, 0.6], scale: [0.8, 0.8, 0.8] }, // Drop 7
-      { pos: [-0.4, -2.99, 1.6], scale: [0.7, 0.7, 0.7] }, // Drop 8
-      { pos: [0.2, -2.99, -1.0], scale: [0.6, 0.6, 0.6] }, // Drop 9
-      { pos: [-1.8, -2.99, -0.2], scale: [0.8, 0.8, 0.8] }, // Drop 10
+      { pos: [0.4, -2.98, 0.8], scale: [0.8, 0.8, 0.8] }, // Drop 1
+      { pos: [-0.5, -2.98, -0.8], scale: [0.7, 0.7, 0.7] }, // Drop 2
+      { pos: [1.0, -2.98, 0.2], scale: [0.9, 0.9, 0.9] }, // Drop 3
+      { pos: [-0.2, -2.98, -1.4], scale: [0.8, 0.8, 0.8] }, // Drop 4
+      { pos: [0.8, -2.98, -0.6], scale: [0.7, 0.7, 0.7] }, // Drop 5
+      { pos: [-1.4, -2.98, 0.2], scale: [0.6, 0.6, 0.6] }, // Drop 6
+      { pos: [1.6, -2.98, 0.6], scale: [0.8, 0.8, 0.8] }, // Drop 7
+      { pos: [-0.4, -2.98, 1.6], scale: [0.7, 0.7, 0.7] }, // Drop 8
+      { pos: [0.2, -2.98, -1.0], scale: [0.6, 0.6, 0.6] }, // Drop 9
+      { pos: [-1.8, -2.98, -0.2], scale: [0.8, 0.8, 0.8] }, // Drop 10
     ],
     
     // Boxes scattered around the basement
@@ -120,6 +170,97 @@ const BarBasement = () => {
       { pos: [10, -1.9, 6], rot: [0, Math.PI, 0], type: 'crate' },
     ],
     
+    // Gray barrels scattered around the basement
+    barrels: [
+      { pos: [-9, -1.9, -7], rot: [0, 0, 0] },
+      { pos: [9, -1.9, 7], rot: [0, Math.PI/3, 0] },
+      { pos: [-7, -1.9, 9], rot: [0, -Math.PI/4, 0] },
+      { pos: [8, -1.9, -9], rot: [0, Math.PI/2, 0] },
+    ],
+    
+    // Basement infrastructure - lighting and piping
+    
+    // Hanging light bulbs from ceiling
+    ceilingLights: [
+      {
+        bulbPos: [-4, 2.2, -4],
+        socketPos: [-4, 2.4, -4],
+        cablePos: [-4, 2.9, -4]
+      },
+      {
+        bulbPos: [4, 2.2, -4],
+        socketPos: [4, 2.4, -4],
+        cablePos: [4, 2.9, -4]
+      },
+      {
+        bulbPos: [-4, 2.2, 4],
+        socketPos: [-4, 2.4, 4],
+        cablePos: [-4, 2.9, 4]
+      },
+      {
+        bulbPos: [4, 2.2, 4],
+        socketPos: [4, 2.4, 4],
+        cablePos: [4, 2.9, 4]
+      }
+    ],
+    
+    // Horizontal building pipes crossing the ceiling
+    buildingPipes: [
+      // Main horizontal pipes
+      {
+        pipePos: [0, 2.7, -8],
+        pipeRot: [0, 0, Math.PI/2], // Horizontal along X axis
+        joints: [
+          { pos: [-6, 2.7, -8] },
+          { pos: [6, 2.7, -8] }
+        ],
+        supports: [
+          { pos: [-6, 2.8, -8], rot: [0, 0, 0] },
+          { pos: [0, 2.8, -8], rot: [0, 0, 0] },
+          { pos: [6, 2.8, -8], rot: [0, 0, 0] }
+        ]
+      },
+      {
+        pipePos: [0, 2.5, 6],
+        pipeRot: [0, 0, Math.PI/2], // Horizontal along X axis
+        joints: [
+          { pos: [-6, 2.5, 6] },
+          { pos: [6, 2.5, 6] }
+        ],
+        supports: [
+          { pos: [-6, 2.6, 6], rot: [0, 0, 0] },
+          { pos: [0, 2.6, 6], rot: [0, 0, 0] },
+          { pos: [6, 2.6, 6], rot: [0, 0, 0] }
+        ]
+      },
+      // Cross pipes
+      {
+        pipePos: [-8, 2.6, 0],
+        pipeRot: [Math.PI/2, 0, 0], // Horizontal along Z axis
+        joints: [
+          { pos: [-8, 2.6, -6] },
+          { pos: [-8, 2.6, 6] }
+        ],
+        supports: [
+          { pos: [-8, 2.7, -6], rot: [0, Math.PI/2, 0] },
+          { pos: [-8, 2.7, 0], rot: [0, Math.PI/2, 0] },
+          { pos: [-8, 2.7, 6], rot: [0, Math.PI/2, 0] }
+        ]
+      },
+      {
+        pipePos: [8, 2.4, 0],
+        pipeRot: [Math.PI/2, 0, 0], // Horizontal along Z axis
+        joints: [
+          { pos: [8, 2.4, -6] },
+          { pos: [8, 2.4, 6] }
+        ],
+        supports: [
+          { pos: [8, 2.5, -6], rot: [0, Math.PI/2, 0] },
+          { pos: [8, 2.5, 0], rot: [0, Math.PI/2, 0] },
+          { pos: [8, 2.5, 6], rot: [0, Math.PI/2, 0] }
+        ]
+      }
+    ],
 
   }), []);
 
@@ -150,8 +291,8 @@ const BarBasement = () => {
     <group scale={[0.4, 0.4, 0.4]}>
 
       {/* Floor */}
-      <mesh 
-        geometry={geometries.floor} 
+      <mesh
+        geometry={geometries.floor}
         material={materials.floor}
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, -3, 0]}
@@ -199,35 +340,116 @@ const BarBasement = () => {
         />
       ))}
 
+      {/* Gray barrels scattered around */}
+      {elementPositions.barrels.map((barrel, index) => (
+        <mesh
+          key={`barrel-${index}`}
+          geometry={geometries.barrel}
+          material={materials.barrel}
+          position={barrel.pos}
+          rotation={barrel.rot}
+          castShadow
+          receiveShadow
+        />
+      ))}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      {/* ATMOSPHERIC FOG INSIDE BASEMENT */}
-      <fog attach="fog" args={['#2a2318', 1.5, 8]} />
-
-      {/* BRIGHTER TAVERN BASEMENT LIGHTING SYSTEM */}
-      {/* Brighter ambient light */}
-      <ambientLight intensity={0.45} color="#4d4538" />
+      {/* BASEMENT INFRASTRUCTURE */}
       
-      {/* Main overhead lighting - brighter */}
+      {/* Hanging ceiling light bulbs */}
+      {elementPositions.ceilingLights.map((light, index) => (
+        <group key={`ceiling-light-${index}`}>
+          {/* Hanging cable */}
+          <mesh
+            geometry={geometries.lightCable}
+            material={materials.lightCable}
+            position={light.cablePos}
+            castShadow
+          />
+          {/* Light socket */}
+          <mesh
+            geometry={geometries.lightSocket}
+            material={materials.lightSocket}
+            position={light.socketPos}
+            castShadow
+          />
+          {/* Light bulb */}
+          <mesh
+            geometry={geometries.lightBulb}
+            material={materials.lightBulb}
+            position={light.bulbPos}
+          />
+        </group>
+      ))}
+
+      {/* Building pipes system */}
+      {elementPositions.buildingPipes.map((pipeSystem, index) => (
+        <group key={`pipe-system-${index}`}>
+          {/* Main pipe */}
+          <mesh
+            geometry={geometries.buildingPipe}
+            material={materials.buildingPipe}
+            position={pipeSystem.pipePos}
+            rotation={pipeSystem.pipeRot}
+            castShadow
+            receiveShadow
+          />
+          
+          {/* Pipe joints */}
+          {pipeSystem.joints.map((joint, jointIndex) => (
+            <mesh
+              key={`joint-${index}-${jointIndex}`}
+              geometry={geometries.pipeJoint}
+              material={materials.pipeJoint}
+              position={joint.pos}
+              castShadow
+              receiveShadow
+            />
+          ))}
+          
+          {/* Pipe supports/brackets */}
+          {pipeSystem.supports.map((support, supportIndex) => (
+            <mesh
+              key={`support-${index}-${supportIndex}`}
+              geometry={geometries.pipeSupport}
+              material={materials.pipeSupport}
+              position={support.pos}
+              rotation={support.rot}
+              castShadow
+              receiveShadow
+            />
+          ))}
+        </group>
+      ))}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      {/* ATMOSPHERIC FOG INSIDE BASEMENT - DARK INDUSTRIAL */}
+      <fog attach="fog" args={['#1a1d22', 1.5, 8]} />
+
+      {/* DARK INDUSTRIAL BASEMENT LIGHTING SYSTEM */}
+      {/* Dark ambient light */}
+      <ambientLight intensity={0.35} color="#3a3d42" />
+      
+      {/* Main overhead lighting - muted industrial */}
       <directionalLight
         position={[0, 8, 0]}
-        intensity={0.85}
-        color="#6a5d46"
+        intensity={0.65}
+        color="#4a4d52"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -240,14 +462,14 @@ const BarBasement = () => {
         shadow-camera-far={30}
       />
 
-      {/* Fixed ceiling spotlights for ambient lighting - brighter */}
+      {/* Fixed ceiling spotlights for ambient lighting - muted industrial */}
       <spotLight
         ref={flickerLight1Ref}
         position={[-5, 3.8, -5]}
-        intensity={2.8}
+        intensity={2.2}
         angle={0.8}
         penumbra={0.6}
-        color="#ccaa66"
+        color="#6a7580"
         castShadow
         target-position={[0, 0, 0]}
       />
@@ -255,45 +477,45 @@ const BarBasement = () => {
       <spotLight
         ref={flickerLight2Ref}
         position={[5, 3.8, 5]}
-        intensity={2.8}
+        intensity={2.2}
         angle={0.8}
         penumbra={0.6}
-        color="#ccaa66"
+        color="#6a7580"
         castShadow
         target-position={[0, 0, 0]}
       />
 
-      {/* Additional atmospheric lighting - brighter */}
+      {/* Additional atmospheric lighting - muted industrial */}
       <directionalLight
         position={[-8, 3, 0]}
-        intensity={0.35}
-        color="#665544"
+        intensity={0.25}
+        color="#444955"
       />
       
       <directionalLight
         position={[8, 3, 0]}
-        intensity={0.3}
-        color="#665544"
+        intensity={0.2}
+        color="#444955"
       />
 
-      {/* Rim lighting for atmosphere - brighter */}
+      {/* Rim lighting for atmosphere - dark gray tones */}
       <directionalLight
         position={[0, 1, -12]}
-        intensity={0.2}
-        color="#554433"
+        intensity={0.15}
+        color="#373b44"
       />
       
       <directionalLight
         position={[0, 1, 12]}
-        intensity={0.2}
-        color="#554433"
+        intensity={0.15}
+        color="#373b44"
       />
 
-      {/* Underground atmosphere */}
+      {/* Underground atmosphere - very dark */}
       <directionalLight
         position={[0, -1, 0]}
-        intensity={0.08}
-        color="#332211"
+        intensity={0.05}
+        color="#282c35"
       />
     </group>
   );

@@ -147,7 +147,6 @@ const StatUpgradeModal = ({
             left: 0,
             width: '100vw',
             height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -208,7 +207,7 @@ const StatUpgradeModal = ({
                 style={{
                   fontSize: '20px',
                   fontWeight: 700,
-                  color: '#FFD700',
+                  color: '#F5F5DC',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px',
                   textTransform: 'uppercase',
@@ -235,7 +234,7 @@ const StatUpgradeModal = ({
                 style={{
                   fontSize: '48px',
                   fontWeight: 900,
-                  color: '#FFD700',
+                  color: '#F5F5DC',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '2px'
                 }}

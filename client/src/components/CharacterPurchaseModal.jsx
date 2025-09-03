@@ -152,7 +152,6 @@ const CharacterPurchaseModal = ({
             left: 0,
             width: '100vw',
             height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -173,11 +172,11 @@ const CharacterPurchaseModal = ({
                 position: 'absolute',
                 width: '12px',
                 height: '12px',
-                backgroundColor: '#FFD700',
+                backgroundColor: '#F5F5DC',
                 borderRadius: '0px',
                 left: `${particle.x}%`,
                 top: `${particle.y}%`,
-                boxShadow: '0 0 15px #FFD700',
+                boxShadow: '0 0 15px #F5F5DC',
                 pointerEvents: 'none'
               }}
             />
@@ -268,7 +267,7 @@ const CharacterPurchaseModal = ({
                 style={{
                   fontSize: '28px',
                   fontWeight: 800,
-                  color: '#FFD700',
+                  color: '#F5F5DC',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px',
                   textTransform: 'uppercase',
@@ -319,7 +318,7 @@ const CharacterPurchaseModal = ({
                 style={{
                   fontSize: '18px',
                   fontWeight: 700,
-                  color: '#FFD700',
+                  color: '#F5F5DC',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px'
                 }}

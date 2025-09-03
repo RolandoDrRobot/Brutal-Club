@@ -562,7 +562,7 @@ const Interface = () => {
                   <div style={{
                     width: isMobile ? '30px' : '60px',
                     height: isMobile ? '30px' : '60px',
-                    backgroundColor: '#FFD700',
+                    backgroundColor: '#4a6b8a',
                     borderRadius: '0px',
                     display: 'flex',
                     alignItems: 'center',
@@ -578,7 +578,7 @@ const Interface = () => {
                   <div style={{
                     fontSize: isMobile ? '20px' : '36px',
                     fontWeight: 900,
-                    color: '#FFD700',
+                    color: '#4a6b8a',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'

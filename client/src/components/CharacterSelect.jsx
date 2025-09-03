@@ -207,7 +207,6 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             style={{
               width: '100%',
               height: '80%',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
               border: '3px solid #f32210',
               borderRadius: '0px',
               marginBottom: '15px',

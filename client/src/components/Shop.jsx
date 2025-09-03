@@ -81,7 +81,6 @@ const Shop = ({ onBackClick }) => {
         
 
         <Box style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.9)',
           borderRadius: '0px',
           padding: isMobile ? '30px 20px' : '40px 30px',
           textAlign: 'center',
@@ -128,7 +127,7 @@ const Shop = ({ onBackClick }) => {
           <Text style={{
             fontSize: isMobile ? '28px' : '32px',
             fontWeight: 900,
-            color: '#FFD700',
+            color: '#f32210',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             textTransform: 'uppercase',

@@ -123,7 +123,7 @@ const VinceAudience = ({ position, rotation, ...props }) => (
 function Audience() {
   const { animations } = useCharacterAnimations();
   
-  // Create a simplified audience circle with fewer members for better performance
+  // Create a simplified audience circle with original configuration
   const audienceMembers = useMemo(() => {
     const members = [];
     const audienceTypes = [
@@ -133,9 +133,9 @@ function Audience() {
       { component: 'Vince', model: 'Vince.glb', name: 'Vince' }
     ];
     
-    const numMembers = audienceTypes.length; // 4 audience members for better performance
+    const numMembers = audienceTypes.length; // 4 audience members
     const radius = 2.8; // Closer distance from center where the fighters are
-    const centerY = -1.2; // Same level as main characters
+    const centerY = -1.2; // Same level as main characters (adjusted for floor)
     
     audienceTypes.forEach((type, i) => {
       // Distribute evenly around the circle
@@ -159,7 +159,7 @@ function Audience() {
         name: type.name,
         position: [x + randomOffset.x, centerY + randomOffset.y, z + randomOffset.z],
         rotation: [0, rotationY + (Math.random() - 0.5) * 0.1, 0],
-        scale: 0.85 + Math.random() * 0.3 // Random scale between 0.85 and 1.15
+        scale: 1.0 // Uniform scale for all audience members
       });
     });
     

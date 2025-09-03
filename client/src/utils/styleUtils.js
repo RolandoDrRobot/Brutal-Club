@@ -106,7 +106,7 @@ export const getCharacterCardStyle = (character, options = {}) => {
         ...baseStyle,
         cursor: 'default',
         opacity: 1,
-        border: '3px solid #FFD700'
+        border: '3px solid #4a6b8a'
       };
     }
     

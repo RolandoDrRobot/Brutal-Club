@@ -119,8 +119,12 @@ const Experience = () => {
       <BloodFloor />
       
       <group position={[0, 0, 0]}>
-        {renderCharacter(selectedPlayer1Character, 1, transforms.player1.position, transforms.player1.rotation)}
-        {renderCharacter(selectedPlayer2Character, 2, transforms.player2.position, transforms.player2.rotation)}
+        <group scale={[1.0, 1.0, 1.0]}>
+          {renderCharacter(selectedPlayer1Character, 1, transforms.player1.position, transforms.player1.rotation)}
+        </group>
+        <group scale={[1.0, 1.0, 1.0]}>
+          {renderCharacter(selectedPlayer2Character, 2, transforms.player2.position, transforms.player2.rotation)}
+        </group>
       </group>
     </>
   );

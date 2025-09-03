@@ -33,7 +33,7 @@ export const SHOP_MODELS = ['Vince', 'Bob'];
 export const THEME = {
   colors: {
     primary: '#f32210',
-    gold: '#FFD700',
+    gold: '#4a6b8a',
     white: '#F5F5DC',
     black: '#000000',
     gray: '#666'

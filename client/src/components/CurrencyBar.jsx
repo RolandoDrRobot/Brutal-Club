@@ -176,9 +176,6 @@ const CurrencyBar = () => {
         left: 0,
         right: 0,
         zIndex: 9999,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-
-
         padding: isMobile ? '8px 15px' : '10px 20px',
         backdropFilter: 'blur(10px)',
         boxShadow: '0 -4px 15px rgba(0, 0, 0, 0.7), 0 0 20px rgba(243, 34, 16, 0.3)',
@@ -348,7 +345,7 @@ const CurrencyBar = () => {
               fontSize: isMobile ? '16px' : '18px',
               fontWeight: 700,
               backgroundColor: 'transparent',
-              color: '#FFD700',
+              color: '#F5F5DC',
               textTransform: 'uppercase',
               letterSpacing: '1px',
               fontFamily: 'Anton, sans-serif',

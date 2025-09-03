@@ -18,7 +18,7 @@ const BloodFloor = () => {
       const fightCenterZ = 0; // Center Z where fighters are
       
       positions[i * 3] = fightCenterX + (Math.random() - 0.5) * 1.0; // x - around fight area
-      positions[i * 3 + 1] = -2.48; // y - just above the floor (floor is at -2.5)
+      positions[i * 3 + 1] = -2.98; // y - just above the floor level (floor at -3.0)
       positions[i * 3 + 2] = fightCenterZ + (Math.random() - 0.5) * 0.8; // z - around fight center
       
       // More visible puddles
@@ -80,7 +80,7 @@ const BloodFloor = () => {
           key={`splatter-${index}`}
           position={[
             (Math.random() - 0.5) * 1.5, // Around fighter area
-            -2.47, // Higher than main puddles to avoid z-fighting
+            -2.97, // Higher than main puddles to avoid z-fighting
             (Math.random() - 0.5) * 1.0   // Around fight area
           ]}
           rotation={[-Math.PI / 2, 0, Math.random() * Math.PI * 2]}

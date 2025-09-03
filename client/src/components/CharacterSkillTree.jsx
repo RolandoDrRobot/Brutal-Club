@@ -5,7 +5,6 @@ import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
-import mainButtonImg from '../assets/mainbutton.jpeg';
 import comboImg from '../assets/optimized/combo.webp';
 import CharacterPreview from './CharacterPreview';
 import StatUpgradeModal from './StatUpgradeModal';
@@ -159,27 +158,23 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         onMouseEnter={(e) => {
           if (canUpgrade(statName) && !isMobile) {
             e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+            e.currentTarget.style.backgroundColor = 'rgba(74, 107, 138, 0.1)';
           }
         }}
         onMouseLeave={(e) => {
           if (canUpgrade(statName) && !isMobile) {
             e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+            e.currentTarget.style.backgroundColor = '#000000';
           }
         }}
         style={{
           padding: isMobile ? '15px' : '25px',
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-          backgroundImage: `url(${mainButtonImg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          border: `2px solid ${isMaxLevel(statName) ? '#FFD700' : '#f32210'}`,
+          backgroundColor: '#000000',
+          border: `2px solid ${isMaxLevel(statName) ? '#4a6b8a' : '#f32210'}`,
           borderRadius: '8px',
           boxShadow: isMaxLevel(statName) ? `
-            0 0 15px rgba(255, 215, 0, 0.3),
-            inset 0 0 15px rgba(255, 215, 0, 0.1)
+            0 0 15px rgba(74, 107, 138, 0.3),
+            inset 0 0 15px rgba(74, 107, 138, 0.1)
           ` : `
             0 0 15px rgba(243, 34, 16, 0.3),
             inset 0 0 15px rgba(243, 34, 16, 0.1)
@@ -218,7 +213,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           <Box style={{ width: '100%', marginBottom: isMobile ? '6px' : '10px' }}>
             <Progress
               value={progress}
-              color="#FFD700"
+              color="#f32210"
               size={isMobile ? 'sm' : 'lg'}
               radius="md"
               style={{
@@ -227,8 +222,8 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               }}
               styles={{
                 bar: {
-                  background: `linear-gradient(90deg, #FFD700, #FFA500)`,
-                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.5)'
+                  background: `linear-gradient(90deg, #f32210, #ff4530)`,
+                  boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)'
                 }
               }}
             />
@@ -238,7 +233,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           <Text style={{
             fontSize: isMobile ? '14px' : '16px',
             fontWeight: 700,
-            color: '#FFD700',
+            color: '#4a6b8a',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'center',
@@ -267,7 +262,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             <Text style={{
               fontSize: isMobile ? '12px' : '14px',
               fontWeight: 600,
-              color: '#FFD700',
+              color: '#4a6b8a',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',
@@ -404,7 +399,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             style={{
               width: '100%',
               height: '120%', // Aumentado para hacer el elemento más alto
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
               borderRadius: '8px',
               position: 'relative',
               overflow: 'hidden',
@@ -481,7 +475,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             left: 0,
             width: '100vw',
             height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -507,7 +500,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               style={{
                 width: isMobile ? '60px' : '80px',
                 height: isMobile ? '60px' : '80px',
-                backgroundColor: '#FFD700',
+                backgroundColor: '#4a6b8a',
                 borderRadius: '8px',
                 display: 'flex',
                 alignItems: 'center',

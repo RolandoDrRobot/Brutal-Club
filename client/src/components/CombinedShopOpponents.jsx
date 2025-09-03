@@ -217,7 +217,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         opacity = 0.4;
         cursor = 'not-allowed';
       } else if (isActive) {
-        borderColor = '#FFD700'; // Active/Available: yellow
+        borderColor = '#4a6b8a'; // Active/Available: dark blue
         opacity = 1;
         cursor = 'pointer';
       }
@@ -244,7 +244,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           ...baseStyle,
           cursor: 'default',
           opacity: 1,
-          border: '3px solid #FFD700'
+          border: '3px solid #4a6b8a'
         };
       }
       
@@ -290,7 +290,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       if (character.isPurchased) {
         return {
           ...baseStyle,
-          color: '#FFD700',
+          color: '#4a6b8a',
           cursor: 'default'
         };
       }
@@ -298,7 +298,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
       return {
         ...baseStyle,
-        color: isLocked ? '#666' : '#FFD700',
+        color: isLocked ? '#666' : '#4a6b8a',
         cursor: isLocked ? 'not-allowed' : 'pointer'
       };
     }
@@ -398,7 +398,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                 <Box style={{
                   width: '100%',
                   height: '120%',
-                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
                   borderRadius: '8px',
                   display: 'flex',
                   alignItems: 'center',
