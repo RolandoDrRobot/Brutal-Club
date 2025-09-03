@@ -200,8 +200,8 @@ const MusicPlayer = () => {
 
   const currentSong = songs[currentSongIndex];
 
-  // Solo mostrar en la pantalla de dance (cover)
-  const isVisible = currentScreen === 'dance';
+  // Mostrar en todas las pantallas
+  const isVisible = true;
 
   return (
     <Box style={{

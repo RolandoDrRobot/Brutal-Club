@@ -115,8 +115,8 @@ function App() {
         </Suspense>
       )}
       
-      {/* Persistent Currency Bar - Visible on all screens except cover/dance */}
-      {uiReady && currentScreen !== 'dance' && (
+      {/* Persistent Currency Bar - Visible on all screens */}
+      {uiReady && (
         <Suspense fallback={null}>
           <CurrencyBar />
         </Suspense>

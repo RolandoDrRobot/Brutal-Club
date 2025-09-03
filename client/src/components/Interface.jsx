@@ -153,7 +153,7 @@ const Interface = () => {
   const isTablet = useMediaQuery("(max-width: 1024px)");
 
   // State to show/hide the music player
-  const [showMusicPlayer, setShowMusicPlayer] = useState(true);
+  const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   
   // State to handle fight transition
   const [fightTransition, setFightTransition] = useState(false);
@@ -480,126 +480,7 @@ const Interface = () => {
         </Suspense>
       )}
 
-      {/* Pantalla de baile - currentScreen 'dance' */}
-      {currentScreen === 'dance' && (
-        <>
-          {/* Título Fight Club - ARRIBA CENTRO */}
-          <Affix position={{ 
-            top: 25, 
-            left: "50%",
-            transform: "translateX(-50%)"
-          }}>
-            <div style={{ 
-              textAlign: "center",
-              animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.5s ease-out 0.2s both"
-            }}>
-              <div 
-                className="fight-title"
-                onClick={() => {
-                  playButtonSound();
-                  navigateBackToDance();
-                }}
-                style={{
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  fontSize: '60px'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = "scale(1.05)";
-                  e.target.style.opacity = "0.8";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = "scale(1)";
-                  e.target.style.opacity = "1";
-                }}
-              >
-                FIGHT CLUB
-              </div>
-              
 
-            </div>
-          </Affix>
-
-          {/* Botón para ir al menú principal - ABAJO CENTRO */}
-          <Affix position={{ 
-            bottom: isMobile ? 90 : 110,
-            left: "50%",
-            transform: "translateX(-50%)"
-          }}>
-            <Button
-              variant="outline"
-              size="xl"
-              onClick={() => {
-                playButtonSound();
-                handleNavigateToMenu();
-              }}
-              disabled={fightTransition}
-              style={{
-                fontSize: isMobile ? "30px" : "40px",
-                fontWeight: 700,
-                padding: isMobile ? "15px 40px" : "20px 55px",
-                minHeight: isMobile ? "80px" : "95px",
-                minWidth: isMobile ? "240px" : "300px",
-                maxWidth: isMobile ? "calc(100vw - 40px)" : "300px",
-                margin: "0",
-                width: "100%",
-                backgroundColor: fightTransition ? "rgba(243, 34, 16, 0.2)" : "transparent",
-                backgroundImage: `url(${mainButtonImg})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                border: "2px solid #000000",
-                borderRadius: "10px",
-                color: "#f32210",
-                textTransform: "uppercase",
-                letterSpacing: "3px",
-                fontFamily: "Anton, sans-serif",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textShadow: `
-                  0 0 10px #000000,
-                  0 0 20px #000000,
-                  2px 2px 4px #000000
-                `,
-                boxShadow: fightTransition ? `
-                  0 0 40px #f32210,
-                  0 0 80px rgba(243, 34, 16, 0.8),
-                  0 0 120px rgba(243, 34, 16, 0.4),
-                  inset 0 0 40px rgba(243, 34, 16, 0.3)
-                ` : `
-                  0 0 20px #f32210,
-                  0 0 40px rgba(243, 34, 16, 0.3),
-                  inset 0 0 20px rgba(243, 34, 16, 0.1)
-                `,
-                transition: "all 0.3s ease",
-                cursor: fightTransition ? "not-allowed" : "pointer",
-                animation: isExiting ? "fadeOutSpray 0.4s ease-out" : (fightTransition ? "buttonPowerUp 0.6s ease-out" : "fadeInSpray 0.5s ease-out 0.4s both"),
-                opacity: fightTransition ? 0.8 : 1
-              }}
-              onMouseEnter={(e) => {
-                if (!isMobile && !fightTransition) {
-                  e.target.style.transform = "scale(1.05)";
-                  e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
-                  e.target.style.animation = "impactShake 0.3s ease-out";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isMobile && !fightTransition) {
-                  e.target.style.transform = "scale(1)";
-                  e.target.style.backgroundColor = "transparent";
-                  e.target.style.animation = "none";
-                }
-              }}
-            >
-              <span className="fight-button-text">
-                PRESS START
-              </span>
-            </Button>
-          </Affix>
-        </>
-      )}
 
       {/* Modo de combate - currentScreen 'combat' */}
       {currentScreen === 'combat' && (
@@ -934,92 +815,9 @@ const Interface = () => {
                 {/* Music icon */}
               </Button>
 
-              {/* Botón de Baile - SOLO EN COVER PAGE */}
-              {currentScreen === 'dance' && (
-                <Affix position={{ 
-                  bottom: isMobile ? 70 : 90, 
-                  right: isMobile ? 30 : 40 
-                }}>
-                  {/* Icono de baile */}
-                  <Button
-                    variant="unstyled"
-                    onClick={() => {
-                      playButtonSound();
-                      toggleDanceCombo();
-                    }}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      stopCombo();
-                    }}
-                    style={{
-                      width: isMobile ? "80px" : "100px",
-                      height: isMobile ? "80px" : "100px",
-                      borderRadius: "0px",
-                      backgroundColor: isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)",
-                      border: "3px solid #f32210",
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      transition: "all 0.3s ease",
-                      boxShadow: `
-                        0 0 15px #f32210,
-                        0 0 25px rgba(243, 34, 16, 0.3)
-                      `,
-                      animation: isPlayingCombo ? "pulse 1s ease-in-out infinite" : "none"
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isMobile) {
-                        e.target.style.transform = "scale(1.1)";
-                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.4)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isMobile) {
-                        e.target.style.transform = "scale(1)";
-                        e.target.style.backgroundColor = isPlayingCombo ? "rgba(243, 34, 16, 0.4)" : "rgba(243, 34, 16, 0.2)";
-                      }
-                    }}
-                  >
-                    <img 
-                      src={danceImg}
-                      alt="Dance"
-                      style={{
-                        width: isMobile ? "40px" : "50px",
-                        height: isMobile ? "40px" : "50px",
-                        objectFit: "contain",
-                        pointerEvents: "none",
-                        filter: "brightness(0) saturate(100%) invert(23%) sepia(89%) saturate(2700%) hue-rotate(355deg) brightness(102%) contrast(93%)"
-                      }}
-                    />
-                  </Button>
-                </Affix>
-              )}
 
-              {/* Información del combo actual (solo si está reproduciéndose) - SOLO EN COVER PAGE */}
-              {isPlayingCombo && currentScreen === 'dance' && (
-                <Affix position={{ 
-                  bottom: isMobile ? 160 : 190, 
-                  right: isMobile ? 30 : 40 
-                }}>
-                  <div style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.8)",
-                    border: "2px solid #f32210",
-                    borderRadius: "0px",
-                    padding: "8px 12px",
-                    color: "#f32210",
-                    fontSize: "12px",
-                    fontFamily: "Anton, sans-serif",
-                    textAlign: "center",
-                    boxShadow: "0 0 10px rgba(243, 34, 16, 0.5)"
-                  }}>
-                    <div>{danceCombinations[currentComboIndex].name}</div>
-                    <div style={{ fontSize: "10px", opacity: 0.8 }}>
-                      {currentDanceInCombo + 1}/{danceCombinations[currentComboIndex].dances.length}
-                    </div>
-                  </div>
-                </Affix>
-              )}
+
+
             </>
           )}
 

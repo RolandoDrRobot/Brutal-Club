@@ -131,7 +131,8 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
           width: "100%",
           maxWidth: "400px",
           margin: "0 auto",
-          padding: "60px 0 90px",
+          position: "relative",
+          bottom: "80px",
           animation: "electricFadeIn 0.9s ease-out 0.3s both"
         }}
       >

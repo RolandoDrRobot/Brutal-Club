@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Box } from '@mantine/core';
 import { useGameState } from '../contexts/GameState';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
@@ -7,13 +7,153 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import coinImg from '../assets/optimized/coin.webp';
 import statCoinImg from '../assets/optimized/statCoin.webp';
 import homeImg from '../assets/optimized/home.webp';
+import musicImg from '../assets/optimized/music.webp';
 import '../styles/fightAnimations.css';
 
 const CurrencyBar = () => {
   const { coins, statPoints } = useGameState() || {};
-  const { navigateToMenu } = useCharacterAnimations();
+  const { navigateToMenu, isCombatMode } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  // 🎵 MUSIC PLAYER FUNCTIONALITY
+  // Song list (only existing files to prevent loading delays)
+  const songs = [
+    { id: 0, name: "No Music", artist: "", file: null },
+    { id: 1, name: "Nine Thou", artist: "Styles Of Beyond", file: "/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3" },
+    { id: 2, name: "Another", artist: "Full On The Mouth", file: "/music/Full On The Mouth - Another.mp3" }
+  ];
+
+  const [currentSongIndex, setCurrentSongIndex] = useState(1);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+
+  // Function to go to the next song
+  const nextSong = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    
+    const nextIndex = (currentSongIndex + 1) % songs.length;
+    setCurrentSongIndex(nextIndex);
+    setIsPlaying(false);
+    
+    if (songs[nextIndex].file) {
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
+          
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                setIsPlaying(true);
+              })
+              .catch(() => {
+                setIsPlaying(false);
+              });
+          }
+        }
+      }, 200);
+    }
+  };
+
+  // Auto-play when the song changes
+  useEffect(() => {
+    if (songs[currentSongIndex].file && audioRef.current) {
+      audioRef.current.load();
+      
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
+          
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                setIsPlaying(true);
+              })
+              .catch(() => {
+                setIsPlaying(false);
+              });
+          }
+        }
+      }, 300);
+    }
+  }, [currentSongIndex]);
+
+  // Auto-play when component mounts (start music with the game)
+  useEffect(() => {
+    const handleStartMusic = () => {
+      if (currentSongIndex === 1 && audioRef.current && songs[1].file) {
+        audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
+        
+        const attemptPlay = (attempts = 0) => {
+          if (attempts >= 5) return;
+          
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                setIsPlaying(true);
+              })
+              .catch(() => {
+                setTimeout(() => attemptPlay(attempts + 1), 1000);
+              });
+          }
+        };
+        
+        setTimeout(() => {
+          attemptPlay();
+        }, 500);
+      }
+    };
+    
+    window.addEventListener('startMusic', handleStartMusic);
+    
+    const timer = setTimeout(() => {
+      if (audioRef.current && songs[1].file && currentSongIndex === 1 && !isPlaying) {
+        audioRef.current.volume = isCombatMode ? 0.6 : 0.5;
+        
+        const attemptPlay = (attempts = 0) => {
+          if (attempts >= 5) return;
+          
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                setIsPlaying(true);
+              })
+              .catch(() => {
+                setTimeout(() => attemptPlay(attempts + 1), 1000);
+              });
+          }
+        };
+        
+        attemptPlay();
+      }
+    }, 2000);
+    
+    return () => {
+      window.removeEventListener('startMusic', handleStartMusic);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  // Configure volume according to mode
+  useEffect(() => {
+    if (audioRef.current && songs[currentSongIndex].file) {
+      const targetVolume = isCombatMode ? 0.6 : 0.5;
+      audioRef.current.volume = targetVolume;
+      
+      if (audioRef.current.paused && isPlaying) {
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(() => {});
+      }
+    }
+  }, [isCombatMode]);
 
   return (
     <Box
@@ -59,49 +199,96 @@ const CurrencyBar = () => {
           ROLOXWORLD
         </Box>
 
-        {/* Center - Home icon */}
+        {/* Center - Home and Music icons */}
         <Box
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            padding: '4px',
-            borderRadius: '50%',
-            animation: 'electricPulse 0.7s ease-out 0.6s both'
-          }}
-          onClick={() => {
-            playButtonSound();
-            navigateToMenu();
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.transform = "scale(1.1)";
-            e.target.style.opacity = "0.8";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.transform = "scale(1)";
-            e.target.style.opacity = "1";
+            gap: isMobile ? '8px' : '12px'
           }}
         >
-          <img 
-            src={homeImg}
-            alt="Home"
+          {/* Home button */}
+          <Box
             style={{
-              width: isMobile ? '32px' : '40px',
-              height: isMobile ? '32px' : '40px',
-              filter: 'none',
-              pointerEvents: 'none'
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              padding: '4px',
+              borderRadius: '50%',
+              animation: 'electricPulse 0.7s ease-out 0.6s both'
             }}
-          />
+            onClick={() => {
+              playButtonSound();
+              navigateToMenu();
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "scale(1.1)";
+              e.target.style.opacity = "0.8";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "scale(1)";
+              e.target.style.opacity = "1";
+            }}
+          >
+            <img 
+              src={homeImg}
+              alt="Home"
+              style={{
+                width: isMobile ? '32px' : '40px',
+                height: isMobile ? '32px' : '40px',
+                filter: 'none',
+                pointerEvents: 'none'
+              }}
+            />
+          </Box>
+
+          {/* Music button */}
+          <Box
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              padding: '4px',
+              borderRadius: '50%',
+              animation: 'electricStatic 0.7s ease-out 0.7s both'
+            }}
+            onClick={() => {
+              playButtonSound();
+              nextSong();
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "scale(1.1)";
+              e.target.style.opacity = "0.8";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "scale(1)";
+              e.target.style.opacity = "1";
+            }}
+          >
+            <img 
+              src={musicImg}
+              alt="Music"
+              style={{
+                width: isMobile ? '32px' : '40px',
+                height: isMobile ? '32px' : '40px',
+                filter: 'none',
+                pointerEvents: 'none'
+              }}
+            />
+          </Box>
         </Box>
 
         {/* Right side - Currency elements */}
         <Box
           style={{
             display: 'flex',
-            gap: isMobile ? '10px' : '15px',
-            alignItems: 'center'
+            alignItems: 'center',
+            justifyContent: 'flex-end'
           }}
         >
           {/* Skill Points */}
@@ -237,6 +424,17 @@ const CurrencyBar = () => {
           }
         }
       `}</style>
+
+      {/* 🎵 AUDIO ELEMENT */}
+      {songs[currentSongIndex].file && (
+        <audio
+          ref={audioRef}
+          src={songs[currentSongIndex].file}
+          preload="auto"
+          autoPlay
+          style={{ display: 'none' }}
+        />
+      )}
     </Box>
   );
 };
