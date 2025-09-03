@@ -204,14 +204,16 @@ const PackOpeningModal = ({
                 backgroundImage: `url(${coverbgImg})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                borderRadius: '15px',
-                margin: '25px',
+                width: '100vw',
+                height: '100vh',
                 padding: '40px',
                 textAlign: 'center',
                 position: 'relative',
                 overflow: 'hidden',
-                minWidth: '400px',
-                maxWidth: '600px'
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
               }}
             >
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
 import coverbgImg from '../assets/optimized/coverbg.webp';
+import coinImg from '../assets/optimized/coin.webp';
 
 const CoinPurchaseModal = ({ 
   isVisible, 
@@ -117,8 +118,7 @@ const CoinPurchaseModal = ({
   };
 
   const handlePurchase = (packageData) => {
-    onPurchase(packageData.coins);
-    onClose();
+    onPurchase(packageData);
   };
 
   return (
@@ -133,13 +133,14 @@ const CoinPurchaseModal = ({
             top: 0,
             left: 0,
             width: '100vw',
-            height: '100vh',
+            height: '100dvh',
             backgroundColor: 'rgba(0, 0, 0, 0.85)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 10000,
-            pointerEvents: 'auto'
+            zIndex: 99999,
+            pointerEvents: 'auto',
+            overflow: 'hidden'
           }}
           onClick={onClose}
         >
@@ -175,15 +176,16 @@ const CoinPurchaseModal = ({
               backgroundImage: `url(${coverbgImg})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              borderRadius: '10px',
-              margin: '15px',
+              width: '100vw',
+              height: '100vh',
               padding: '40px 30px',
               textAlign: 'center',
               position: 'relative',
               overflow: 'hidden',
-              minWidth: '350px',
-              maxWidth: '500px',
-              width: '90%'
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -193,19 +195,35 @@ const CoinPurchaseModal = ({
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              <Text
-                style={{
-                  fontSize: '32px',
-                  fontWeight: 900,
-                  color: '#FFD700',
-                  fontFamily: 'Anton, sans-serif',
-                  letterSpacing: '2px',
-                  textTransform: 'uppercase',
-                  marginBottom: '10px'
-                }}
-              >
-                🪙 Buy Coins
-              </Text>
+              <Box style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                gap: '8px',
+                marginBottom: '10px'
+              }}>
+                <img 
+                  src={coinImg}
+                  alt="Coin"
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    filter: 'none'
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: '32px',
+                    fontWeight: 900,
+                    color: '#FFD700',
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '2px',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  Buy Coins
+                </Text>
+              </Box>
               
               <Text
                 style={{
@@ -244,16 +262,12 @@ const CoinPurchaseModal = ({
                     style={{
                       width: '100%',
                       height: '80px',
-                      backgroundImage: `url(${coverbgImg})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
+                      backgroundColor: 'rgba(0, 0, 0, 0.7)',
                       borderRadius: '10px',
-                      margin: '15px',
                       padding: '15px 20px',
                       position: 'relative',
                       cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      boxShadow: pkg.popular ? `0 0 20px ${pkg.color}60` : `0 0 10px ${pkg.color}30`
+                      transition: 'all 0.3s ease'
                     }}
                   >
                     {/* Popular Badge */}
@@ -289,17 +303,21 @@ const CoinPurchaseModal = ({
                         alignItems: 'center',
                         gap: '10px'
                       }}>
-                        <Text style={{
-                          fontSize: '40px'
-                        }}>
-                          🪙
-                        </Text>
+                        <img 
+                          src={coinImg}
+                          alt="Coin"
+                          style={{
+                            width: '40px',
+                            height: '40px',
+                            filter: 'none'
+                          }}
+                        />
                         <Box>
                           <Text
                             style={{
                               fontSize: '24px',
                               fontWeight: 900,
-                              color: pkg.color,
+                              color: '#F5F5DC',
                               fontFamily: 'Anton, sans-serif',
                               letterSpacing: '1px',
                               lineHeight: 1
@@ -311,7 +329,7 @@ const CoinPurchaseModal = ({
                             style={{
                               fontSize: '12px',
                               fontWeight: 600,
-                              color: '#F5F5DC',
+                              color: '#f32210',
                               fontFamily: 'Anton, sans-serif',
                               letterSpacing: '0.5px'
                             }}
@@ -337,18 +355,6 @@ const CoinPurchaseModal = ({
                         >
                           {pkg.price}
                         </Text>
-                        <Text
-                          style={{
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            color: pkg.color,
-                            fontFamily: 'Anton, sans-serif',
-                            letterSpacing: '1px',
-                            textTransform: 'uppercase'
-                          }}
-                        >
-                          {pkg.label}
-                        </Text>
                       </Box>
                     </Box>
                   </Button>
@@ -365,12 +371,13 @@ const CoinPurchaseModal = ({
               <Button
                 onClick={onClose}
                 style={{
-                  fontSize: '16px',
+                  fontSize: '20px',
                   fontWeight: 700,
+                  height: '50px',
                   padding: '12px 30px',
                   backgroundColor: 'transparent',
                   borderRadius: '0px',
-                  color: '#666',
+                  color: '#F5F5DC',
                   textTransform: 'uppercase',
                   letterSpacing: '1px',
                   fontFamily: 'Anton, sans-serif',

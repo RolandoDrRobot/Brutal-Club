@@ -4,6 +4,7 @@ import { useGameState } from '../contexts/GameState';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useMediaQuery } from '@mantine/hooks';
 import { useButtonSound } from '../hooks/useButtonSound';
+import CoinPurchaseModal from './CoinPurchaseModal';
 import coinImg from '../assets/optimized/coin.webp';
 import statCoinImg from '../assets/optimized/statCoin.webp';
 import homeImg from '../assets/optimized/home.webp';
@@ -11,10 +12,21 @@ import musicImg from '../assets/optimized/music.webp';
 import '../styles/fightAnimations.css';
 
 const CurrencyBar = () => {
-  const { coins, statPoints } = useGameState() || {};
+  const { coins, statPoints, setCoins } = useGameState() || {};
   const { navigateToMenu, isCombatMode } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  // 💰 COIN PURCHASE MODAL STATE
+  const [showCoinPurchaseModal, setShowCoinPurchaseModal] = useState(false);
+
+  // Handle coin purchase
+  const handleCoinPurchase = (packageData) => {
+    if (setCoins) {
+      setCoins(currentCoins => currentCoins + packageData.coins);
+    }
+    setShowCoinPurchaseModal(false);
+  };
 
   // 🎵 MUSIC PLAYER FUNCTIONALITY
   // Song list (only existing files to prevent loading delays)
@@ -156,6 +168,7 @@ const CurrencyBar = () => {
   }, [isCombatMode]);
 
   return (
+    <>
     <Box
       style={{
         position: 'fixed',
@@ -326,7 +339,7 @@ const CurrencyBar = () => {
             </span>
           </Box>
 
-          {/* Gold Coins */}
+          {/* Gold Coins - Clickeable to open purchase modal */}
           <Box
             style={{
               display: 'flex',
@@ -341,7 +354,23 @@ const CurrencyBar = () => {
               fontFamily: 'Anton, sans-serif',
               minWidth: isMobile ? '70px' : '80px',
               justifyContent: 'center',
-              animation: 'electricFlicker 0.7s ease-out 0.8s both'
+              animation: 'electricFlicker 0.7s ease-out 0.8s both',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              borderRadius: '8px',
+              padding: '4px 8px'
+            }}
+            onClick={() => {
+              playButtonSound();
+              setShowCoinPurchaseModal(true);
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "scale(1.05)";
+              e.target.style.backgroundColor = "rgba(255, 215, 0, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "scale(1)";
+              e.target.style.backgroundColor = "transparent";
             }}
           >
             <img 
@@ -436,6 +465,14 @@ const CurrencyBar = () => {
         />
       )}
     </Box>
+
+    {/* 💰 COIN PURCHASE MODAL - Rendered outside of CurrencyBar Box for proper z-index */}
+    <CoinPurchaseModal
+      isVisible={showCoinPurchaseModal}
+      onClose={() => setShowCoinPurchaseModal(false)}
+      onPurchase={handleCoinPurchase}
+    />
+  </>
   );
 };
 

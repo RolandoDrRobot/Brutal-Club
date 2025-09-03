@@ -187,14 +187,16 @@ const StatUpgradeModal = ({
               backgroundImage: `url(${coverbgImg})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              borderRadius: '10px',
-              margin: '15px',
+              width: '100vw',
+              height: '100vh',
               padding: '40px',
               textAlign: 'center',
               position: 'relative',
               overflow: 'hidden',
-              minWidth: '300px',
-              maxWidth: '400px'
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -216,28 +218,7 @@ const StatUpgradeModal = ({
               }}
             />
 
-            {/* Stat Upgraded Text */}
-            <motion.div
-              variants={textVariants}
-              initial="hidden"
-              animate="visible"
-              custom={0}
-            >
-              <Text
-                style={{
-                  fontSize: '28px',
-                  fontWeight: 900,
-                  color: statColor,
-                  fontFamily: 'Anton, sans-serif',
-                  letterSpacing: '2px',
-                  textTransform: 'uppercase',
-                  textShadow: `0 0 10px ${statColor}`,
-                  marginBottom: '10px'
-                }}
-              >
-                {statDisplayName}
-              </Text>
-            </motion.div>
+
 
             {/* Upgraded Text */}
             <motion.div
@@ -261,26 +242,7 @@ const StatUpgradeModal = ({
               </Text>
             </motion.div>
 
-            {/* Character Name */}
-            <motion.div
-              variants={textVariants}
-              initial="hidden"
-              animate="visible"
-              custom={0.2}
-            >
-              <Text
-                style={{
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  color: '#F5F5DC', // Using app's bone white color
-                  fontFamily: 'Anton, sans-serif',
-                  letterSpacing: '1px',
-                  marginBottom: '20px'
-                }}
-              >
-                {characterName}
-              </Text>
-            </motion.div>
+
 
             {/* Level Display */}
             <motion.div
