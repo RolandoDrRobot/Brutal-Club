@@ -40,9 +40,9 @@ const LoadingScreen = ({ progress = 0, status = '' }) => {
           style={{
             width: `${Math.max(0, Math.min(100, progress))}%`,
             height: '100%',
-            backgroundColor: '#4a6b8a',
+            backgroundColor: '#F5F5DC',
             transition: 'width 0.3s ease-out',
-            boxShadow: '0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.4)',
+            boxShadow: '0 0 10px rgba(245, 245, 220, 0.8), 0 0 20px rgba(245, 245, 220, 0.4)',
           }}
         />
       </div>

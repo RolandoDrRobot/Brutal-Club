@@ -217,7 +217,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         opacity = 0.4;
         cursor = 'not-allowed';
       } else if (isActive) {
-        borderColor = '#4a6b8a'; // Active/Available: dark blue
+        borderColor = '#F5F5DC'; // Active/Available: bone white
         opacity = 1;
         cursor = 'pointer';
       }
@@ -229,8 +229,8 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         border: `3px solid ${borderColor}`,
         boxShadow: isActive ? `
           0 0 10px ${borderColor},
-          0 0 20px rgba(255, 215, 0, 0.3),
-          inset 0 0 10px rgba(255, 215, 0, 0.1)
+          0 0 20px rgba(245, 245, 220, 0.3),
+          inset 0 0 10px rgba(245, 245, 220, 0.1)
         ` : isDefeated ? `
           0 0 10px ${borderColor},
           0 0 20px rgba(243, 34, 16, 0.2),
@@ -244,7 +244,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           ...baseStyle,
           cursor: 'default',
           opacity: 1,
-          border: '3px solid #4a6b8a'
+          border: '3px solid #F5F5DC'
         };
       }
       
@@ -290,7 +290,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       if (character.isPurchased) {
         return {
           ...baseStyle,
-          color: '#4a6b8a',
+          color: '#F5F5DC',
           cursor: 'default'
         };
       }
@@ -298,7 +298,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
       return {
         ...baseStyle,
-        color: isLocked ? '#666' : '#4a6b8a',
+        color: isLocked ? '#666' : '#F5F5DC',
         cursor: isLocked ? 'not-allowed' : 'pointer'
       };
     }

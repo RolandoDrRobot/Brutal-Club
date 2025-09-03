@@ -248,12 +248,12 @@ const CharacterPreview = ({ characterName, style }) => {
           resize={{ scroll: false, debounce: { scroll: 50, resize: 0 } }}
         >
           {/* Iluminación neón cálida - MENOS SEPIA, MÁS ILUMINADO */}
-          <ambientLight intensity={0.5} color="#5a7a9a" />
+          <ambientLight intensity={0.6} color="#5a7a9a" />
           
           {/* Foco principal menos amarillento */}
           <spotLight
             position={[0, 6, 0]}
-            intensity={1.4}
+            intensity={1.6}
             angle={Math.PI / 3}
             penumbra={0.8}
             color="#5a7a9a"
@@ -267,7 +267,7 @@ const CharacterPreview = ({ characterName, style }) => {
           {/* Focos laterales menos saturados */}
           <spotLight
             position={[-3, 3, 2]}
-            intensity={0.7}
+            intensity={0.8}
             angle={Math.PI / 4}
             penumbra={0.9}
             color="#4a6a8a"
@@ -275,7 +275,7 @@ const CharacterPreview = ({ characterName, style }) => {
           
           <spotLight
             position={[3, 3, 2]}
-            intensity={0.7}
+            intensity={0.8}
             angle={Math.PI / 4}
             penumbra={0.9}
             color="#5a7a9a"
@@ -284,7 +284,7 @@ const CharacterPreview = ({ characterName, style }) => {
           {/* Ambiente trasero más claro */}
           <directionalLight
             position={[0, 2, -5]}
-            intensity={0.2}
+            intensity={0.25}
             color="#DDAA66"
           />
           
