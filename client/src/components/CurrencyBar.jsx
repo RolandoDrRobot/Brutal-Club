@@ -201,11 +201,11 @@ const CurrencyBar = () => {
           style={{
             fontSize: isMobile ? '18px' : '22px',
             fontWeight: 700,
-            color: '#FFD700',
+            color: '#f32210',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             textTransform: 'uppercase',
-            textShadow: '0 0 5px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8)',
+            textShadow: '0 0 5px rgba(243, 34, 16, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8)',
             animation: 'electricGlitch 0.7s ease-out 0.5s both'
           }}
         >
