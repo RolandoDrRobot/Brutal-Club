@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useGLTF } from '@react-three/drei';
 
 
 const CRITICAL_MODELS = [

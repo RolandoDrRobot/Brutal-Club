@@ -1,7 +1,7 @@
 import React from 'react';
 import coverbgImg from '../assets/optimized/coverbg.webp';
 
-const LoadingScreen = ({ progress = 0, status = '' }) => {
+const LoadingScreen = ({ progress = 0 }) => {
   return (
     <div
       style={{
