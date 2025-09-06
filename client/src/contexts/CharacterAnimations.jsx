@@ -1257,13 +1257,6 @@ export const CharacterAnimationsProvider = (props) => {
         togglePlayer1Block,
         togglePlayer2Block,
         
-        isAIEnabled,
-        setIsAIEnabled,
-        aiDifficulty,
-        setAIDifficulty,
-        startAI,
-        stopAI,
-        makeAIDecision,
         
         staminaCosts,
         

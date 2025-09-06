@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 
 export const useButtonSound = () => {
   const playButtonSound = () => {
@@ -12,9 +11,3 @@ export const useButtonSound = () => {
 
   return { playButtonSound };
 };
-
-try {
-  new Audio('/music/button.mp3');
-} catch (error) {
-
-} 

@@ -5,7 +5,7 @@ import musicIcon from '../assets/optimized/music.webp';
 import danceIcon from '../assets/optimized/dance.webp';
 
 const MusicPlayer = () => {
-  const { isCombatMode, triggerSyncAnimation, animations, currentScreen } = useCharacterAnimations();
+  const { isCombatMode, triggerSyncAnimation, animations } = useCharacterAnimations();
   
   const songs = [
     { id: 0, name: "No Music", artist: "", file: null },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Box, Text, Stack, Grid, Card, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
@@ -8,7 +8,6 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import packImg from '../assets/optimized/pack.webp';
 import CharacterPreview from './CharacterPreview';
-import CharacterPurchaseModal from './CharacterPurchaseModal';
 import CoinPurchaseModal from './CoinPurchaseModal';
 import PackOpeningModal from './PackOpeningModal';
 
@@ -18,7 +17,6 @@ const Shop = ({ onBackClick }) => {
   const { playButtonSound } = useButtonSound();
   const { 
     coins,
-    statPoints,
     addCoins,
     openPack,
     GAME_CONFIG
