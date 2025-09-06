@@ -1,13 +1,8 @@
 
-export const useButtonSound = () => {
-  const playButtonSound = () => {
-    try {
-      const audio = new Audio('/music/button.mp3');
-      audio.volume = 0.3;
-      audio.play();
-    } catch (error) {
-    }
-  };
+import { useSoundEffects } from './useAudio';
 
+export const useButtonSound = () => {
+  const { playButtonSound } = useSoundEffects();
+  
   return { playButtonSound };
 };

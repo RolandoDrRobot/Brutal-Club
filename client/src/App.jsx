@@ -4,6 +4,7 @@ import Experience from "./components/Experience";
 import LoadingScreen from "./components/LoadingScreen";
 import { useModelLoader } from "./hooks/useModelLoader";
 import { useCharacterAnimations } from "./contexts/CharacterAnimations";
+import { AudioProvider } from "./contexts/AudioContext";
 
 const Interface = React.lazy(() => import("./components/Interface"));
 const HealthBars = React.lazy(() => import("./components/HealthBars"));
@@ -53,7 +54,7 @@ function App() {
   }, [uiReady]);
 
   return (
-    <>
+    <AudioProvider>
       {(isLoading || loadingProgress < 100) && <LoadingScreen progress={loadingProgress} status={loadingStatus} />}
       
       <div style={{
@@ -104,7 +105,7 @@ function App() {
           <CurrencyBar />
         </Suspense>
       )}
-    </>
+    </AudioProvider>
   );
 }
 

@@ -1,37 +1,18 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
+import { useSoundEffects } from '../hooks/useAudio';
 
 const PunchSound = () => {
-  const audioRef = useRef(null);
-  const soundTimeoutRef = useRef(null);
+  const { playCombatSound } = useSoundEffects();
   const { 
     player1AnimationIndex, 
     player2AnimationIndex, 
     isCombatMode,
     animations 
   } = useCharacterAnimations();
-  
-  const playPunchSound = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.volume = 0.7;
-      
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {})
-          .catch(() => {});
-      }
-    }
-  };
 
   useEffect(() => {
     if (!isCombatMode || !animations.length) return;
-    
-    if (soundTimeoutRef.current) {
-      clearTimeout(soundTimeoutRef.current);
-      soundTimeoutRef.current = null;
-    }
     
     const player1AnimationName = animations[player1AnimationIndex];
     const player2AnimationName = animations[player2AnimationIndex];
@@ -43,45 +24,12 @@ const PunchSound = () => {
     
     if (player1IsAttacking || player2IsAttacking) {
       const attackingAnimation = player1IsAttacking ? player1AnimationName : player2AnimationName;
-      
-      let delay = 800;
-      
-      switch(attackingAnimation) {
-        case 'punch':
-          delay = 600;
-          break;
-        case 'kick':
-          delay = 800;
-          break;
-        case 'punches':
-          delay = 1200;
-          break;
-      }
-      
-      soundTimeoutRef.current = setTimeout(() => {
-        playPunchSound();
-      }, delay);
+      playCombatSound(attackingAnimation);
     }
     
-  }, [player1AnimationIndex, player2AnimationIndex, isCombatMode, animations]);
+  }, [player1AnimationIndex, player2AnimationIndex, isCombatMode, animations, playCombatSound]);
 
-  useEffect(() => {
-    return () => {
-      if (soundTimeoutRef.current) {
-        clearTimeout(soundTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  return (
-    <audio
-      ref={audioRef}
-      src="/music/punch.mp3"
-      preload="auto"
-      style={{ display: 'none' }}
-      onError={() => {}}
-    />
-  );
+  return null;
 };
 
 export default PunchSound; 
