@@ -1,31 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text } from '@mantine/core';
+import { useParticleEffects, useModalEffects } from '../hooks/useEffects';
 import '../styles/fightAnimations.css';
 import coverbgImg from '../assets/optimized/coverbg.webp';
 
 const StatUpgradeModal = ({ 
   isVisible, 
   onClose, 
-  statName, 
-  newLevel, 
-  characterName,
-  statDisplayName 
+  newLevel
 }) => {
+  const { createStatUpgradeEffect } = useParticleEffects();
+  const { createDefaultModal, getTextVariants } = useModalEffects();
+  
   const [particles, setParticles] = useState([]);
 
   useEffect(() => {
     if (isVisible) {
-      const newParticles = Array.from({ length: 15 }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        delay: Math.random() * 0.5,
-        scale: 0.5 + Math.random() * 0.5,
-        rotation: Math.random() * 360
-      }));
-      setParticles(newParticles);
-
+      const effect = createStatUpgradeEffect();
+      setParticles(effect.particles);
 
       const timer = setTimeout(() => {
         onClose();
@@ -35,77 +28,10 @@ const StatUpgradeModal = ({
     }
   }, [isVisible, onClose]);
 
-
-  const getStatColor = (stat) => {
-    return '#f32210';
-  };
-
-  const statColor = getStatColor(statName);
-
-
-  const particleVariants = {
-    hidden: { 
-      scale: 0, 
-      opacity: 0,
-      y: 20
-    },
-    visible: (custom) => ({
-      scale: [0, custom.scale, 0],
-      opacity: [0, 1, 0],
-      y: [20, -50, -100],
-      x: [0, (custom.x - 50) * 2],
-      rotate: custom.rotation,
-      transition: {
-        duration: 2,
-        delay: custom.delay,
-        ease: "easeOut"
-      }
-    })
-  };
-
-  const modalVariants = {
-    hidden: {
-      scale: 0,
-      opacity: 0,
-      rotate: -10,
-      y: 100
-    },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      rotate: 0,
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 15,
-        stiffness: 300,
-        duration: 0.6
-      }
-    },
-    exit: {
-      scale: 0,
-      opacity: 0,
-      rotate: 10,
-      y: -100,
-      transition: {
-        duration: 0.4,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const textVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: (delay = 0) => ({
-      y: 0,
-      opacity: 1,
-      transition: {
-        delay: 0.3 + delay,
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    })
-  };
+  const particleVariants = createStatUpgradeEffect().variants;
+  const modalVariants = createDefaultModal();
+  const textVariants = getTextVariants();
+  const statColor = '#f32210';
 
   const levelNumberVariants = {
     hidden: { scale: 0, opacity: 0 },

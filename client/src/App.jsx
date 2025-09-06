@@ -6,6 +6,7 @@ import { useModelLoader } from "./hooks/useModelLoader";
 import { useCharacterAnimations } from "./contexts/CharacterAnimations";
 import { AudioProvider } from "./contexts/AudioContext";
 import { InputProvider } from "./contexts/InputContext";
+import { EffectProvider } from "./contexts/EffectContext";
 
 const Interface = React.lazy(() => import("./components/Interface"));
 const HealthBars = React.lazy(() => import("./components/HealthBars"));
@@ -57,7 +58,8 @@ function App() {
   return (
     <AudioProvider>
       <InputProvider>
-        {(isLoading || loadingProgress < 100) && <LoadingScreen progress={loadingProgress} status={loadingStatus} />}
+        <EffectProvider>
+          {(isLoading || loadingProgress < 100) && <LoadingScreen progress={loadingProgress} status={loadingStatus} />}
       
       <div style={{
         position: 'fixed',
@@ -107,6 +109,7 @@ function App() {
           <CurrencyBar />
         </Suspense>
       )}
+        </EffectProvider>
       </InputProvider>
     </AudioProvider>
   );

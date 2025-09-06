@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
+import { useParticleEffects } from '../hooks/useEffects';
 import '../styles/fightAnimations.css';
 import packImg from '../assets/optimized/pack.webp';
 import coverbgImg from '../assets/optimized/coverbg.webp';
@@ -10,23 +11,16 @@ const PackOpeningModal = ({
   onClose, 
   packContents = []
 }) => {
+  const { createPackOpeningEffect } = useParticleEffects();
+  
   const [currentStep, setCurrentStep] = useState('opening');
   const [revealedItems, setRevealedItems] = useState([]);
   const [particles, setParticles] = useState([]);
 
   useEffect(() => {
     if (isVisible && currentStep === 'opening') {
-      const newParticles = Array.from({ length: 40 }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        delay: Math.random() * 1.5,
-        scale: 0.5 + Math.random() * 0.8,
-        rotation: Math.random() * 360,
-        color: Math.random() > 0.3 ? '#F5F5DC' : '#FFF'
-      }));
-      setParticles(newParticles);
-
+      const effect = createPackOpeningEffect();
+      setParticles(effect.particles);
 
       const revealTimer = setTimeout(() => {
         setCurrentStep('revealing');
@@ -37,9 +31,6 @@ const PackOpeningModal = ({
     }
   }, [isVisible, currentStep, packContents]);
 
-
-
-
   useEffect(() => {
     if (!isVisible) {
       setCurrentStep('opening');
@@ -48,28 +39,7 @@ const PackOpeningModal = ({
     }
   }, [isVisible]);
 
-
-  const particleVariants = {
-    hidden: { 
-      scale: 0, 
-      opacity: 0,
-      x: 0,
-      y: 0
-    },
-    visible: (custom) => ({
-      scale: [0, custom.scale, custom.scale * 0.5, 0],
-      opacity: [0, 1, 1, 0],
-      y: [0, -120, -200, -300],
-      x: [0, (Math.random() - 0.5) * 300],
-      rotate: [0, custom.rotation, custom.rotation * 3, custom.rotation * 4],
-      transition: {
-        duration: 3.5,
-        delay: custom.delay,
-        ease: "easeOut"
-      }
-    })
-  };
-
+  const particleVariants = createPackOpeningEffect().variants;
   const packVariants = {
     opening: {
       scale: [1, 1.2, 0.8, 1.5, 0],
