@@ -1,0 +1,111 @@
+# Cursor AI Code Generation Rules
+
+## 🚫 STRICT PROHIBITIONS
+- **NEVER add comments** - Code must be self-explanatory through clear naming
+- **NEVER use Spanish** - All code, variables, functions, and messages in English only
+- **NEVER create duplicate functionality** - Always check existing code first
+
+## 🔍 MANDATORY CHECKS BEFORE CODING
+1. **Scan existing components/functions** - Always search for reusable code
+2. **Check similar patterns** - Look for established architectural patterns
+3. **Verify naming conventions** - Follow existing naming patterns exactly
+4. **Review file structure** - Understand current organization before adding
+
+## 📐 ARCHITECTURE PRINCIPLES
+- **Single Responsibility** - Each function/component does ONE thing perfectly
+- **Composition over Inheritance** - Build with small, reusable pieces
+- **Pure Functions** - Avoid side effects, predictable inputs/outputs
+- **Immutability** - Never mutate existing objects/arrays
+
+## 🏗️ MAINTAINABILITY REQUIREMENTS
+- **Extensible Design** - Code must easily accommodate future features
+- **Modular Structure** - Each piece should work independently
+- **Clear Dependencies** - Minimize and make dependencies explicit
+- **Consistent Patterns** - Follow established project patterns religiously
+
+## 🎯 NAMING CONVENTIONS
+- **Functions**: `camelCase` - verbs that describe action (`handleUserClick`, `fetchUserData`)
+- **Variables**: `camelCase` - nouns that describe content (`userData`, `isLoading`)
+- **Components**: `PascalCase` - clear, descriptive nouns (`UserProfile`, `NavigationMenu`)
+- **Constants**: `UPPER_SNAKE_CASE` - descriptive and grouped (`API_ENDPOINTS`, `COMBAT_STATES`)
+- **Files**: `PascalCase` for components, `camelCase` for utilities
+
+## 🧩 CODE REUSABILITY CHECKLIST
+- [ ] Search for existing similar functionality
+- [ ] Check hooks directory for reusable logic
+- [ ] Review utils for helper functions
+- [ ] Examine contexts for shared state
+- [ ] Look for established patterns in components
+
+## 🔧 TECHNICAL STANDARDS
+- **TypeScript-like precision** - Even in JS, think about types
+- **Error handling** - Always handle edge cases gracefully
+- **Performance first** - Optimize for performance from day one
+- **Memory efficiency** - Clean up resources, avoid memory leaks
+- **Bundle size awareness** - Minimize dependencies, use tree shaking
+
+## 🎨 COMPONENT DESIGN RULES
+- **Props interface** - Clear, minimal, well-defined props
+- **Default values** - Provide sensible defaults for all props
+- **Composability** - Components should work together seamlessly
+- **Responsive design** - Mobile-first, scalable approach
+- **Accessibility** - WCAG compliant from the start
+
+## 📱 STATE MANAGEMENT
+- **Local state first** - Use component state when possible
+- **Context sparingly** - Only for truly global state
+- **State normalization** - Flat, predictable state structure
+- **Immutable updates** - Never mutate state directly
+
+## 🚀 FEATURE EXPANSION READINESS
+- **Plugin architecture** - New features should plug in, not rewrite
+- **Configuration driven** - Use config objects for feature flags
+- **Event-driven design** - Loose coupling through events
+- **API-ready structure** - Assume data will come from APIs later
+
+## 📋 CODE REVIEW CHECKLIST
+Before submitting code, ensure:
+- [ ] No comments exist (code is self-documenting)
+- [ ] All text in English
+- [ ] Reused existing functionality where possible
+- [ ] Follows established patterns
+- [ ] Easily extendable for future features
+- [ ] Handles edge cases gracefully
+- [ ] No performance bottlenecks
+- [ ] Clean, minimal dependencies
+
+## 🎯 EXAMPLE PATTERNS TO FOLLOW
+```javascript
+// ✅ GOOD - Self-explanatory, reusable, extensible
+const usePlayerActions = (playerId) => {
+  const executeAttack = useCallback((attackType) => {
+    if (!canPlayerAttack(playerId)) return false;
+    return performCombatAction(playerId, attackType);
+  }, [playerId]);
+  
+  return { executeAttack };
+};
+
+// ❌ BAD - Comments, unclear naming, not reusable
+const doStuff = (id) => {
+  // Check if player can attack
+  if (id === 1) {
+    // Do player 1 attack
+  }
+};
+```
+
+## 🧪 TESTING MINDSET
+- Write code that's easy to test
+- Pure functions are easily testable
+- Mock external dependencies
+- Think about edge cases upfront
+
+## 📊 PERFORMANCE PRIORITIES
+1. **Runtime efficiency** - Fast execution
+2. **Memory usage** - Minimal footprint  
+3. **Bundle size** - Lean dependencies
+4. **Render optimization** - Avoid unnecessary re-renders
+5. **Network efficiency** - Minimize API calls
+
+Remember: **Clean, English-only, reusable, maintainable code with zero comments.**
