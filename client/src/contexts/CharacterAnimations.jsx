@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useRef, useEffect, useMemo } from "react";
 import { useGameState } from './GameState';
+import { useRewards } from '../hooks/useEconomy';
 
 const CharacterAnimationsContext = createContext({});
 
@@ -168,6 +169,7 @@ export const CharacterAnimationsProvider = (props) => {
   const aiActionTimeoutRef = useRef(null);
 
   const { registerVictory, registerDefeat, getOpponentsStatus } = useGameState();
+  const { giveVictoryReward } = useRewards();
 
   const findAnimationIndex = (animationName, player = 1) => {
     const index = animations.findIndex(anim => anim === animationName);
@@ -998,13 +1000,15 @@ export const CharacterAnimationsProvider = (props) => {
         if (selectedOpponent) {
           const opponentId = selectedOpponent.id;
           registerVictory(opponentId);
+          giveVictoryReward(opponentId);
         } else if (selectedPlayer2Character) {
           const opponentId = selectedPlayer2Character.toLowerCase();
           registerVictory(opponentId);
+          giveVictoryReward(opponentId);
         }
       }
     }
-  }, [player1IsDead, player2IsDead, selectedOpponent, selectedPlayer2Character, registerVictory, registerDefeat]);
+  }, [player1IsDead, player2IsDead, selectedOpponent, selectedPlayer2Character, registerVictory, registerDefeat, giveVictoryReward]);
 
   useEffect(() => {
   }, [player1Wins]);

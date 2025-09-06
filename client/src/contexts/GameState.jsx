@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { EconomyProvider } from './EconomyContext';
 
 const GameStateContext = createContext({});
 
@@ -154,12 +155,6 @@ export const GameStateProvider = ({ children }) => {
     }
   }, [gameState.coins, gameState.defeatedOpponents.length, gameState.totalWins, gameState.totalFights, gameState.purchasedCharacters.length, gameState.characterStats]);
 
-  const addCoins = (amount) => {
-    setGameState(prev => ({
-      ...prev,
-      coins: prev.coins + amount
-    }));
-  };
 
 
   const registerVictory = useCallback((opponentId) => {
@@ -168,7 +163,6 @@ export const GameStateProvider = ({ children }) => {
         ...prev,
         totalWins: prev.totalWins + 1,
         totalFights: prev.totalFights + 1,
-        coins: prev.coins + GAME_CONFIG.COINS_PER_WIN,
       };
 
       const isFirstTimeDefeating = !prev.defeatedOpponents.includes(opponentId);
@@ -189,12 +183,6 @@ export const GameStateProvider = ({ children }) => {
     });
     }, []);
 
-  const startArcadeMode = useCallback(() => {
-    setGameState(prev => ({
-      ...prev,
-      coins: Math.max(0, prev.coins - 1)
-    }));
-  }, []);
 
   const registerDefeat = useCallback(() => {
     setGameState(prev => ({
@@ -205,126 +193,6 @@ export const GameStateProvider = ({ children }) => {
     }));
   }, []);
 
-  const purchaseCharacter = (characterId) => {
-    const character = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.find(c => c.id === characterId);
-    if (!character || character.price === null) return false;
-    
-    if (gameState.coins >= character.price && !gameState.purchasedCharacters.includes(characterId)) {
-      setGameState(prev => ({
-        ...prev,
-        coins: prev.coins - character.price,
-        purchasedCharacters: [...prev.purchasedCharacters, characterId],
-        characterStats: {
-          ...prev.characterStats,
-          [characterId]: character.baseStats
-        }
-      }));
-      return true;
-    }
-    return false;
-  };
-
-  const upgradeCharacterStat = (characterId, statName) => {
-    const currentStats = gameState.characterStats[characterId];
-    if (!currentStats) return false;
-    
-    const currentLevel = currentStats[statName];
-    const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
-    const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
-    
-    if (currentLevel >= maxLevel || gameState.statPoints < upgradeCost) {
-      return false;
-    }
-    
-    setGameState(prev => ({
-      ...prev,
-      statPoints: prev.statPoints - upgradeCost,
-      characterStats: {
-        ...prev.characterStats,
-        [characterId]: {
-          ...prev.characterStats[characterId],
-          [statName]: currentLevel + 1
-        }
-      }
-    }));
-    return true;
-  };
-
-  const generatePackContents = () => {
-    const { PACK_CONTENTS, STAT_POINTS_RANGES } = GAME_CONFIG.PACK_CONFIG;
-    const availableCharacters = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.filter(
-      char => char.price !== null && !gameState.purchasedCharacters.includes(char.id)
-    );
-    
-    const roll = Math.random() * 100;
-    
-    if (roll < PACK_CONTENTS.CHARACTER_LEGENDARY && availableCharacters.length > 0) {
-      const randomCharacter = availableCharacters[Math.floor(Math.random() * availableCharacters.length)];
-      return [{
-        type: 'character',
-        id: randomCharacter.id,
-        name: randomCharacter.name,
-        description: randomCharacter.description,
-        emoji: randomCharacter.emoji
-      }];
-    } else if (roll < PACK_CONTENTS.CHARACTER_LEGENDARY + PACK_CONTENTS.STAT_POINTS_RARE) {
-      const amount = Math.floor(Math.random() * (STAT_POINTS_RANGES.RARE.max - STAT_POINTS_RANGES.RARE.min + 1)) + STAT_POINTS_RANGES.RARE.min;
-      return [{
-        type: 'stat_points',
-        name: 'Rare Stat Points',
-        amount: amount
-      }];
-    } else {
-      const amount = Math.floor(Math.random() * (STAT_POINTS_RANGES.COMMON.max - STAT_POINTS_RANGES.COMMON.min + 1)) + STAT_POINTS_RANGES.COMMON.min;
-      return [{
-        type: 'stat_points',
-        name: 'Stat Points',
-        amount: amount
-      }];
-    }
-  };
-
-  const openPack = () => {
-    const packCost = GAME_CONFIG.PACK_CONFIG.PACK_COST;
-    
-    if (gameState.coins < packCost) {
-      return { success: false, reason: 'insufficient_coins' };
-    }
-    
-    const contents = generatePackContents();
-    
-    setGameState(prev => {
-      const newState = {
-        ...prev,
-        coins: prev.coins - packCost,
-        packsOpened: prev.packsOpened + 1
-      };
-      
-      contents.forEach(item => {
-        if (item.type === 'character') {
-          newState.purchasedCharacters = [...prev.purchasedCharacters, item.id];
-          
-          const character = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.find(c => c.id === item.id);
-          if (character) {
-            newState.characterStats = {
-              ...newState.characterStats,
-              [item.id]: character.baseStats
-            };
-          }
-        } else if (item.type === 'stat_points') {
-          newState.statPoints = prev.statPoints + item.amount;
-        }
-      });
-      
-      return newState;
-    });
-    
-    return { success: true, contents };
-  };
-
-  const getCharacterStats = (characterId) => {
-    return gameState.characterStats[characterId] || { speed: 1, stamina: 1, strength: 1 };
-  };
 
   const getNextOpponentToUnlock = (defeatedOpponentId) => {
     return GAME_CONFIG.OPPONENTS.find(opponent => 
@@ -336,15 +204,6 @@ export const GameStateProvider = ({ children }) => {
     return gameState.unlockedOpponents.includes(opponentId);
   };
 
-  const isCharacterPurchased = (characterId) => {
-    return gameState.purchasedCharacters.includes(characterId);
-  };
-
-  const canAffordCharacter = (characterId) => {
-    const character = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.find(c => c.id === characterId);
-    if (!character || character.price === null) return false;
-    return gameState.coins >= character.price;
-  };
 
   const getOpponentsStatus = () => {
     return GAME_CONFIG.OPPONENTS.map(opponent => ({
@@ -357,10 +216,11 @@ export const GameStateProvider = ({ children }) => {
   const getShopCharactersStatus = () => {
     return GAME_CONFIG.CHARACTERS_FOR_PURCHASE.map(character => ({
       ...character,
-      isPurchased: isCharacterPurchased(character.id),
-      canAfford: canAffordCharacter(character.id)
+      isPurchased: gameState.purchasedCharacters.includes(character.id),
+      canAfford: gameState.coins >= (character.price || 0)
     }));
   };
+
 
 
   const contextValue = {
@@ -373,20 +233,8 @@ export const GameStateProvider = ({ children }) => {
     totalFights: gameState.totalFights,
     packsOpened: gameState.packsOpened,
 
-    addCoins,
-
-    openPack,
-
     registerVictory,
     registerDefeat,
-    startArcadeMode,
-
-    purchaseCharacter,
-    isCharacterPurchased,
-    canAffordCharacter,
-
-    upgradeCharacterStat,
-    getCharacterStats,
 
     isOpponentUnlocked,
     getOpponentsStatus,
@@ -397,7 +245,13 @@ export const GameStateProvider = ({ children }) => {
 
   return (
     <GameStateContext.Provider value={contextValue}>
-      {children}
+      <EconomyProvider 
+        gameState={gameState} 
+        setGameState={setGameState} 
+        gameConfig={GAME_CONFIG}
+      >
+        {children}
+      </EconomyProvider>
     </GameStateContext.Provider>
   );
 };

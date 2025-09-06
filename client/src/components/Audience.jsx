@@ -49,7 +49,7 @@ function AudienceMember({ position, rotation, modelPath = "./models/pete.glb", i
             actions[crowdAnimationName].fadeOut(0.5).stop();
           }
           Object.values(actions).forEach(action => {
-            if (action.isRunning()) {
+            if (action && action.isRunning && action.isRunning()) {
               action.fadeOut(0.2).stop();
             }
           });

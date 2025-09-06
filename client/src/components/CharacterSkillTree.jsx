@@ -5,6 +5,7 @@ import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
+import { useCharacterEconomy } from '../hooks/useEconomy';
 import comboImg from '../assets/optimized/combo.webp';
 import CharacterPreview from './CharacterPreview';
 import StatUpgradeModal from './StatUpgradeModal';
@@ -26,19 +27,24 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
 
   const { 
     getShopCharactersStatus, 
-    upgradeCharacterStat, 
-    getCharacterStats, 
     coins,
     statPoints,
     GAME_CONFIG 
   } = useGameState();
   
+  const { 
+    upgradeCharacterStat, 
+    getCharacterStats 
+  } = useCharacterEconomy();
+
+  if (!getCharacterStats || !upgradeCharacterStat) {
+    return <div>Loading...</div>;
+  }
 
   const purchasedCharacters = useMemo(() => 
     getShopCharactersStatus().filter(char => char.isPurchased),
     [getShopCharactersStatus]
   );
-  
 
   const characters = useMemo(() => 
     purchasedCharacters.map(char => ({

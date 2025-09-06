@@ -5,6 +5,7 @@ import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
+import { useCurrency, usePackSystem } from '../hooks/useEconomy';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import packImg from '../assets/optimized/pack.webp';
 import CharacterPreview from './CharacterPreview';
@@ -15,12 +16,9 @@ const Shop = ({ onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { isExiting } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
-  const { 
-    coins,
-    addCoins,
-    openPack,
-    GAME_CONFIG
-  } = useGameState() || {};
+  const { coins, GAME_CONFIG } = useGameState() || {};
+  const { addCoins } = useCurrency();
+  const { openPack } = usePackSystem();
 
   const [showCoinPurchaseModal, setShowCoinPurchaseModal] = useState(false);
   const [showPackOpeningModal, setShowPackOpeningModal] = useState(false);

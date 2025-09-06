@@ -5,6 +5,7 @@ import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
+import { useCharacterEconomy, useRewards } from '../hooks/useEconomy';
 import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
 import punchImg from "../assets/optimized/punch.webp";
@@ -19,13 +20,17 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
     const {
     coins,
-    purchaseCharacter, 
     getShopCharactersStatus, 
-    getOpponentsStatus,
-    isCharacterPurchased, 
-    canAffordCharacter,
-    startArcadeMode
+    getOpponentsStatus
   } = useGameState();
+  
+  const { 
+    purchaseCharacter, 
+    isCharacterPurchased, 
+    canAffordCharacter 
+  } = useCharacterEconomy();
+  
+  const { startArcadeMode } = useRewards();
   const { lazyLoadModel } = useModelLoader();
   const [loadingModels, setLoadingModels] = useState(new Set());
   const [loadedModels, setLoadedModels] = useState(new Set());
