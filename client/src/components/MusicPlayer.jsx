@@ -7,22 +7,16 @@ import danceIcon from '../assets/optimized/dance.webp';
 const MusicPlayer = () => {
   const { isCombatMode, triggerSyncAnimation, animations, currentScreen } = useCharacterAnimations();
   
-  // Song list (OPTIMIZED - only existing files to prevent loading delays)
   const songs = [
     { id: 0, name: "No Music", artist: "", file: null },
     { id: 1, name: "Nine Thou", artist: "Styles Of Beyond", file: "/music/Styles Of Beyond - Nine Thou (Grant Mohrman Supertars Remix).mp3" },
     { id: 2, name: "Another", artist: "Full On The Mouth", file: "/music/Full On The Mouth - Another.mp3" }
-    // ❌ REMOVED: 8 non-existent files that were causing loading delays:
-    // - fight-club-theme.mp3, pixies-where-is-my-mind.mp3, this-is-your-life.mp3
-    // - marlas-theme.mp3, corporate-sponsorship.mp3, what-is-fight-club.mp3  
-    // - medulla-oblongata.mp3, his-apartment.mp3
   ];
 
   const [currentSongIndex, setCurrentSongIndex] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
-  // Configure volume according to mode
   useEffect(() => {
     if (audioRef.current && songs[currentSongIndex].file) {
       const targetVolume = isCombatMode ? 0.6 : 0.5;
@@ -32,7 +26,7 @@ const MusicPlayer = () => {
       if (audioRef.current.paused && isPlaying) {
         audioRef.current.play()
           .then(() => setIsPlaying(true))
-          .catch(() => {}); // Silent error handling
+          .catch(() => {});
       }
       
       const currentVolume = audioRef.current.volume;
@@ -56,7 +50,6 @@ const MusicPlayer = () => {
     }
   }, [isCombatMode]);
 
-  // Function to go to the next song
   const nextSong = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -87,7 +80,6 @@ const MusicPlayer = () => {
     }
   };
 
-  // Auto-play when the song changes
   useEffect(() => {
     if (songs[currentSongIndex].file && audioRef.current) {
       audioRef.current.load();
@@ -111,7 +103,6 @@ const MusicPlayer = () => {
     }
   }, [currentSongIndex]);
 
-  // Auto-play when component mounts
   useEffect(() => {
     const handleStartMusic = () => {
       if (currentSongIndex === 1 && audioRef.current && songs[1].file) {
@@ -173,12 +164,10 @@ const MusicPlayer = () => {
     };
   }, []);
 
-  // Handle when a song ends
   const handleSongEnd = () => {
     nextSong();
   };
 
-  // Function to trigger random dance
   const triggerRandomDance = () => {
     if (!isCombatMode && animations.length > 0) {
       const danceAnimations = ['dance1', 'dance2', 'dance3', 'dance4', 'dance5', 'dance6'];
@@ -200,7 +189,6 @@ const MusicPlayer = () => {
 
   const currentSong = songs[currentSongIndex];
 
-  // Mostrar en todas las pantallas
   const isVisible = true;
 
   return (

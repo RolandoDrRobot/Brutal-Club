@@ -19,9 +19,6 @@ const HealthBars = () => {
     player2IsBlocking
   } = useCharacterAnimations();
 
-  // Log para debug del contador
-
-  // Manual responsive design to avoid hook conflicts
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
@@ -36,14 +33,11 @@ const HealthBars = () => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // No mostrar si no estamos en modo combate, si no estamos en la pantalla de combate, o si el combate ha terminado
   const isCombatOver = player1IsDead || player2IsDead;
   if (!isCombatMode || currentScreen !== 'combat' || isCombatOver) return null;
 
-  // Determinar si el combate ha terminado
   const winner = player1IsDead ? "Player 2" : player2IsDead ? "Player 1" : null;
 
-  // Estilos comunes para las barras
   const barStyle = {
     position: "fixed",
     zIndex: 1000,
@@ -55,7 +49,6 @@ const HealthBars = () => {
     width: isMobile ? "160px" : isTablet ? "200px" : "250px",
   };
 
-  // Componente de icono de escudo
   const ShieldIcon = ({ color = "#F5F5DC", size = 16 }) => (
     <svg
       width={size}

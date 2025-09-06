@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 
 const GameStateContext = createContext({});
 
-// Game configuration
 const GAME_CONFIG = {
   COINS_PER_WIN: 1,
   OPPONENTS: [
@@ -11,7 +10,7 @@ const GAME_CONFIG = {
       name: 'TYPER',
       model: 'Tyler',
       description: 'Soap maker with deadly skills',
-      unlockRequirement: null, // Available from the start
+      unlockRequirement: null,
       coinReward: 1
     },
     {
@@ -19,7 +18,7 @@ const GAME_CONFIG = {
       name: 'PETE',
       model: 'pete',
       description: 'Construction worker with heavy fists',
-      unlockRequirement: 'tyler_1', // Unlocked by defeating Typer
+      unlockRequirement: 'tyler_1',
       coinReward: 1
     },
     {
@@ -27,7 +26,7 @@ const GAME_CONFIG = {
       name: 'TAYLER',
       model: 'Tyler',
       description: 'Final boss - ultimate challenger',
-      unlockRequirement: 'pete_1', // Unlocked by defeating Pete
+      unlockRequirement: 'pete_1',
       coinReward: 1
     }
   ],
@@ -37,7 +36,7 @@ const GAME_CONFIG = {
       name: 'PETE',
       model: 'pete',
       description: 'Construction Worker',
-      price: null, // Free initial character
+      price: null,
       emoji: '👷‍♂️',
       baseStats: { speed: 1, stamina: 1, strength: 1 }
     },
@@ -55,7 +54,7 @@ const GAME_CONFIG = {
       name: 'VINCE',
       model: 'Vince',
       description: 'Fire Fighter',
-      price: null, // Locked for now
+      price: null,
       emoji: '🧑‍🚒',
       baseStats: { speed: 1, stamina: 1, strength: 1 }
     },
@@ -64,14 +63,14 @@ const GAME_CONFIG = {
       name: 'BOB',
       model: 'Bob',
       description: 'Business Man',
-      price: null, // Locked for now
+      price: null,
       emoji: '👔',
       baseStats: { speed: 1, stamina: 1, strength: 1 }
     }
   ],
   STAT_CONFIG: {
     MAX_LEVEL: 10,
-    UPGRADE_COST: 1, // Now using stat points instead of coins
+    UPGRADE_COST: 1,
     STAT_NAMES: {
       speed: 'SPEED',
       stamina: 'STAMINA', 
@@ -84,12 +83,11 @@ const GAME_CONFIG = {
     }
   },
   PACK_CONFIG: {
-    PACK_COST: 5, // Coins needed to buy one pack
+    PACK_COST: 5,
     PACK_CONTENTS: {
-      // Probabilities for pack contents (total should be 100)
-      STAT_POINTS_COMMON: 60,    // 60% chance for 3-5 stat points
-      STAT_POINTS_RARE: 30,      // 30% chance for 8-12 stat points  
-      CHARACTER_LEGENDARY: 10    // 10% chance for a character
+      STAT_POINTS_COMMON: 60,
+      STAT_POINTS_RARE: 30,
+      CHARACTER_LEGENDARY: 10
     },
     STAT_POINTS_RANGES: {
       COMMON: { min: 3, max: 5 },
@@ -99,39 +97,33 @@ const GAME_CONFIG = {
 };
 
 export const GameStateProvider = ({ children }) => {
-  // Persistent game state
   const [gameState, setGameState] = useState(() => {
-    // Try to load saved state from localStorage
     const saved = localStorage.getItem('fightClubGameState');
     
     const initialState = {
-      coins: 100, // Start with 100 coins for buying packs
-      statPoints: 0, // New: stat points from packs
-      defeatedOpponents: [], // IDs of defeated opponents
-      purchasedCharacters: ['pete'], // Pete is free initially
-      unlockedOpponents: ['tyler_1'], // Only first opponent available at start
+      coins: 100,
+      statPoints: 0,
+      defeatedOpponents: [],
+      purchasedCharacters: ['pete'],
+      unlockedOpponents: ['tyler_1'],
       totalWins: 0,
       totalFights: 0,
-      packsOpened: 0, // Track total packs opened
+      packsOpened: 0,
       characterStats: {
-        // Initialize stats for owned characters
         'pete': { speed: 1, stamina: 1, strength: 1 }
       },
-      version: 6 // Version to force updates if needed (incremented to apply coin update)
+      version: 6
     };
     
     if (saved) {
       try {
         const parsedState = JSON.parse(saved);
-        // Check if we need to apply the coin bonus (version upgrade)
         if (!parsedState.version || parsedState.version < 6) {
-          parsedState.coins = 100; // Set to 100 coins
+          parsedState.coins = 100;
           parsedState.version = 6;
         }
-        // Merge saved state with initial state to handle new properties
         return { ...initialState, ...parsedState };
       } catch (error) {
-
         return initialState;
       }
     }
@@ -139,33 +131,29 @@ export const GameStateProvider = ({ children }) => {
     return initialState;
   });
 
-  // Save state to localStorage when it changes
   useEffect(() => {
     localStorage.setItem('fightClubGameState', JSON.stringify(gameState));
   }, [gameState]);
 
-  // Emergency coin system - give 3 coins if player has 0 coins and no progress (only for completely new players)
   useEffect(() => {
-    // Solo activar para jugadores completamente nuevos que nunca han jugado
     const isCompletelyNewPlayer = gameState.coins === 0 && 
         gameState.defeatedOpponents.length === 0 && 
         gameState.totalWins === 0 && 
         gameState.totalFights === 0 &&
-        gameState.purchasedCharacters.length === 1 && // Only Pete purchased (free character)
+        gameState.purchasedCharacters.length === 1 &&
         gameState.characterStats['pete'] && 
         gameState.characterStats['pete'].speed === 1 &&
         gameState.characterStats['pete'].stamina === 1 &&
-        gameState.characterStats['pete'].strength === 1; // Stats at base level
+        gameState.characterStats['pete'].strength === 1;
     
     if (isCompletelyNewPlayer) {
       setGameState(prev => ({
         ...prev,
-        coins: 3 // Emergency coins to prevent being stuck (only for completely new players)
+        coins: 3
       }));
     }
   }, [gameState.coins, gameState.defeatedOpponents.length, gameState.totalWins, gameState.totalFights, gameState.purchasedCharacters.length, gameState.characterStats]);
 
-  // Function to add coins
   const addCoins = (amount) => {
     setGameState(prev => ({
       ...prev,
@@ -173,7 +161,6 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  // Function to spend coins
   const spendCoins = (amount) => {
     setGameState(prev => ({
       ...prev,
@@ -181,30 +168,25 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  // Function to register a victory
   const registerVictory = useCallback((opponentId) => {
     setGameState(prev => {
       const newState = {
         ...prev,
         totalWins: prev.totalWins + 1,
         totalFights: prev.totalFights + 1,
-        coins: prev.coins + GAME_CONFIG.COINS_PER_WIN, // Always award 1 coin per victory
+        coins: prev.coins + GAME_CONFIG.COINS_PER_WIN,
       };
 
-      // Track defeated opponents for progression
       const isFirstTimeDefeating = !prev.defeatedOpponents.includes(opponentId);
       
       if (isFirstTimeDefeating) {
-        // First victory against this opponent - unlock next opponent
         newState.defeatedOpponents = [...prev.defeatedOpponents, opponentId];
         
-        // Unlock the next opponent
         const nextOpponent = getNextOpponentToUnlock(opponentId);
         if (nextOpponent && !prev.unlockedOpponents.includes(nextOpponent.id)) {
           newState.unlockedOpponents = [...prev.unlockedOpponents, nextOpponent.id];
         }
       } else {
-        // Repeat victory - keep current progression but still award coins
         newState.defeatedOpponents = prev.defeatedOpponents;
         newState.unlockedOpponents = prev.unlockedOpponents;
       }
@@ -213,27 +195,22 @@ export const GameStateProvider = ({ children }) => {
     });
     }, []);
 
-  // Function to start arcade mode (pay entry fee)
   const startArcadeMode = useCallback(() => {
     setGameState(prev => ({
       ...prev,
-      coins: Math.max(0, prev.coins - 1) // Pay 1 coin to start arcade
+      coins: Math.max(0, prev.coins - 1)
     }));
   }, []);
 
-  // Function to register a defeat - ARCADE MODE: Reset progress on loss
   const registerDefeat = useCallback(() => {
     setGameState(prev => ({
       ...prev,
       totalFights: prev.totalFights + 1,
-      // ARCADE MODE RESET: Lose all progress
-      defeatedOpponents: [], // Reset all defeated opponents
-      unlockedOpponents: ['tyler_1'] // Reset to only first opponent (TYPER)
-      // Note: No coin deduction here since we pay when starting
+      defeatedOpponents: [],
+      unlockedOpponents: ['tyler_1']
     }));
   }, []);
 
-  // Function to purchase a character
   const purchaseCharacter = (characterId) => {
     const character = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.find(c => c.id === characterId);
     if (!character || character.price === null) return false;
@@ -243,7 +220,6 @@ export const GameStateProvider = ({ children }) => {
         ...prev,
         coins: prev.coins - character.price,
         purchasedCharacters: [...prev.purchasedCharacters, characterId],
-        // Initialize stats for new character
         characterStats: {
           ...prev.characterStats,
           [characterId]: character.baseStats
@@ -254,7 +230,6 @@ export const GameStateProvider = ({ children }) => {
     return false;
   };
 
-  // Function to upgrade character stat (now uses stat points instead of coins)
   const upgradeCharacterStat = (characterId, statName) => {
     const currentStats = gameState.characterStats[characterId];
     if (!currentStats) return false;
@@ -263,7 +238,6 @@ export const GameStateProvider = ({ children }) => {
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
     
-    // Check if upgrade is possible (now using stat points)
     if (currentLevel >= maxLevel || gameState.statPoints < upgradeCost) {
       return false;
     }
@@ -282,7 +256,6 @@ export const GameStateProvider = ({ children }) => {
     return true;
   };
 
-  // Function to generate random pack contents
   const generatePackContents = () => {
     const { PACK_CONTENTS, STAT_POINTS_RANGES } = GAME_CONFIG.PACK_CONFIG;
     const availableCharacters = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.filter(
@@ -292,7 +265,6 @@ export const GameStateProvider = ({ children }) => {
     const roll = Math.random() * 100;
     
     if (roll < PACK_CONTENTS.CHARACTER_LEGENDARY && availableCharacters.length > 0) {
-      // Legendary character pull!
       const randomCharacter = availableCharacters[Math.floor(Math.random() * availableCharacters.length)];
       return [{
         type: 'character',
@@ -302,7 +274,6 @@ export const GameStateProvider = ({ children }) => {
         emoji: randomCharacter.emoji
       }];
     } else if (roll < PACK_CONTENTS.CHARACTER_LEGENDARY + PACK_CONTENTS.STAT_POINTS_RARE) {
-      // Rare stat points
       const amount = Math.floor(Math.random() * (STAT_POINTS_RANGES.RARE.max - STAT_POINTS_RANGES.RARE.min + 1)) + STAT_POINTS_RANGES.RARE.min;
       return [{
         type: 'stat_points',
@@ -310,7 +281,6 @@ export const GameStateProvider = ({ children }) => {
         amount: amount
       }];
     } else {
-      // Common stat points
       const amount = Math.floor(Math.random() * (STAT_POINTS_RANGES.COMMON.max - STAT_POINTS_RANGES.COMMON.min + 1)) + STAT_POINTS_RANGES.COMMON.min;
       return [{
         type: 'stat_points',
@@ -320,7 +290,6 @@ export const GameStateProvider = ({ children }) => {
     }
   };
 
-  // Function to open a pack
   const openPack = () => {
     const packCost = GAME_CONFIG.PACK_CONFIG.PACK_COST;
     
@@ -337,13 +306,10 @@ export const GameStateProvider = ({ children }) => {
         packsOpened: prev.packsOpened + 1
       };
       
-      // Process each item in the pack
       contents.forEach(item => {
         if (item.type === 'character') {
-          // Add character to purchased characters
           newState.purchasedCharacters = [...prev.purchasedCharacters, item.id];
           
-          // Initialize stats for new character
           const character = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.find(c => c.id === item.id);
           if (character) {
             newState.characterStats = {
@@ -352,7 +318,6 @@ export const GameStateProvider = ({ children }) => {
             };
           }
         } else if (item.type === 'stat_points') {
-          // Add stat points
           newState.statPoints = prev.statPoints + item.amount;
         }
       });
@@ -363,36 +328,30 @@ export const GameStateProvider = ({ children }) => {
     return { success: true, contents };
   };
 
-  // Function to get character stats
   const getCharacterStats = (characterId) => {
     return gameState.characterStats[characterId] || { speed: 1, stamina: 1, strength: 1 };
   };
 
-  // Function to get the next opponent to unlock
   const getNextOpponentToUnlock = (defeatedOpponentId) => {
     return GAME_CONFIG.OPPONENTS.find(opponent => 
       opponent.unlockRequirement === defeatedOpponentId
     );
   };
 
-  // Function to check if an opponent is unlocked
   const isOpponentUnlocked = (opponentId) => {
     return gameState.unlockedOpponents.includes(opponentId);
   };
 
-  // Function to check if a character is purchased
   const isCharacterPurchased = (characterId) => {
     return gameState.purchasedCharacters.includes(characterId);
   };
 
-  // Function to check if you can afford a character
   const canAffordCharacter = (characterId) => {
     const character = GAME_CONFIG.CHARACTERS_FOR_PURCHASE.find(c => c.id === characterId);
     if (!character || character.price === null) return false;
     return gameState.coins >= character.price;
   };
 
-  // Function to get available opponents with their status
   const getOpponentsStatus = () => {
     return GAME_CONFIG.OPPONENTS.map(opponent => ({
       ...opponent,
@@ -401,7 +360,6 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  // Function to get shop characters with their status
   const getShopCharactersStatus = () => {
     return GAME_CONFIG.CHARACTERS_FOR_PURCHASE.map(character => ({
       ...character,
@@ -410,13 +368,12 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  // Function to reset the game (for development/testing)
   const resetGameState = () => {
     const initialState = {
       coins: 3,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
-      unlockedOpponents: ['tyler_1'], // Only first opponent available at start
+      unlockedOpponents: ['tyler_1'],
       totalWins: 0,
       totalFights: 0,
       version: 2
@@ -425,19 +382,17 @@ export const GameStateProvider = ({ children }) => {
     localStorage.setItem('fightClubGameState', JSON.stringify(initialState));
   };
 
-  // Function to add coins (for development/testing)
   const addDebugCoins = (amount = 1000) => {
     addCoins(amount);
   };
 
-  // Function to completely clear localStorage and restart
   const clearSavedData = () => {
     localStorage.removeItem('fightClubGameState');
     const initialState = {
       coins: 3,
       defeatedOpponents: [],
       purchasedCharacters: ['pete'],
-      unlockedOpponents: ['tyler_1'], // Only first opponent available at start
+      unlockedOpponents: ['tyler_1'],
       totalWins: 0,
       totalFights: 0,
       version: 2
@@ -446,7 +401,6 @@ export const GameStateProvider = ({ children }) => {
   };
 
   const contextValue = {
-    // Game state
     coins: gameState.coins,
     statPoints: gameState.statPoints,
     defeatedOpponents: gameState.defeatedOpponents,
@@ -456,37 +410,29 @@ export const GameStateProvider = ({ children }) => {
     totalFights: gameState.totalFights,
     packsOpened: gameState.packsOpened,
 
-    // Coin management functions
     addCoins,
     spendCoins,
 
-    // Pack system functions
     openPack,
     generatePackContents,
 
-    // Combat functions
     registerVictory,
     registerDefeat,
     startArcadeMode,
 
-    // Shop functions (legacy - now mainly for pack system)
     purchaseCharacter,
     isCharacterPurchased,
     canAffordCharacter,
 
-    // Character stat functions
     upgradeCharacterStat,
     getCharacterStats,
 
-    // Opponent functions
     isOpponentUnlocked,
     getOpponentsStatus,
     getShopCharactersStatus,
 
-    // Game configuration
     GAME_CONFIG,
 
-    // Development/testing functions
     resetGameState,
     addDebugCoins,
     clearSavedData,

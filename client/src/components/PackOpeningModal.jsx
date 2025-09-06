@@ -10,10 +10,9 @@ const PackOpeningModal = ({
   onClose, 
   packContents = []
 }) => {
-  const [currentStep, setCurrentStep] = useState('opening'); // 'opening', 'revealing'
+  const [currentStep, setCurrentStep] = useState('opening');
   const [revealedItems, setRevealedItems] = useState([]);
   const [particles, setParticles] = useState([]);
-
 
   useEffect(() => {
     if (isVisible && currentStep === 'opening') {
@@ -105,8 +104,8 @@ const PackOpeningModal = ({
 
   const getItemTypeColor = (type) => {
     switch (type) {
-      case 'character': return '#F5F5DC'; // Bone color for characters (rare)
-      case 'stat_points': return '#f32210'; // Red for stat points
+      case 'character': return '#F5F5DC';
+      case 'stat_points': return '#f32210';
       default: return '#F5F5DC';
     }
   };

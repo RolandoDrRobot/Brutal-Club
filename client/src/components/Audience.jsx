@@ -8,26 +8,22 @@ function AudienceMember({ position, rotation, modelPath = "./models/pete.glb", i
   const { scene, animations } = useGLTF(modelPath);
   const [currentAnimationIndex, setCurrentAnimationIndex] = useState(initialAnimationIndex);
   
-  // Clone the scene to create independent instances and apply natural materials
   const clonedScene = useMemo(() => {
     const cloned = SkeletonUtils.clone(scene);
     
-    // Apply natural, non-shiny materials to all meshes
     cloned.traverse((child) => {
       if (child.isMesh && child.material) {
-        // If it's an array of materials
         if (Array.isArray(child.material)) {
           child.material = child.material.map((mat) => {
             const newMaterial = mat.clone();
-            newMaterial.roughness = 0.9; // Very rough (non-shiny)
-            newMaterial.metalness = 0.05; // Minimal metallic properties
+            newMaterial.roughness = 0.9;
+            newMaterial.metalness = 0.05;
             return newMaterial;
           });
         } else {
-          // Single material
           const newMaterial = child.material.clone();
-          newMaterial.roughness = 0.9; // Very rough (non-shiny)
-          newMaterial.metalness = 0.05; // Minimal metallic properties
+          newMaterial.roughness = 0.9;
+          newMaterial.metalness = 0.05;
           child.material = newMaterial;
         }
       }
@@ -38,26 +34,20 @@ function AudienceMember({ position, rotation, modelPath = "./models/pete.glb", i
   
   const { actions, names } = useAnimations(animations, group);
 
-  // Find and play the "crowd" animation in loop
   useEffect(() => {
     if (actions && names.length > 0) {
-      // Find the crowd animation
       const crowdAnimationName = names.find(name => name.toLowerCase().includes('crowd'));
       
       if (crowdAnimationName && actions[crowdAnimationName]) {
-        // Stop all other animations first
         Object.values(actions).forEach(action => action.stop());
         
-        // Play the crowd animation in loop
         actions[crowdAnimationName].reset().fadeIn(0.5).play();
-        actions[crowdAnimationName].setLoop(2201, Infinity); // Loop infinitely
+        actions[crowdAnimationName].setLoop(2201, Infinity);
         
-        // Proper cleanup function to prevent memory leaks
         return () => {
           if (actions[crowdAnimationName]) {
             actions[crowdAnimationName].fadeOut(0.5).stop();
           }
-          // Stop all animations on unmount
           Object.values(actions).forEach(action => {
             if (action.isRunning()) {
               action.fadeOut(0.2).stop();
@@ -65,7 +55,6 @@ function AudienceMember({ position, rotation, modelPath = "./models/pete.glb", i
           });
         };
       } else {
-        // Fallback to first available animation if crowd not found
         if (actions[names[0]]) {
           actions[names[0]].reset().fadeIn(0.5).play();
         }
@@ -80,7 +69,6 @@ function AudienceMember({ position, rotation, modelPath = "./models/pete.glb", i
   );
 }
 
-// Chuck audience member with crowd animation - Now using unified component
 const ChuckAudience = ({ position, rotation, ...props }) => (
   <AudienceMember 
     position={position} 
@@ -90,7 +78,6 @@ const ChuckAudience = ({ position, rotation, ...props }) => (
   />
 );
 
-// Earl audience member with crowd animation - Now using unified component
 const EarlAudience = ({ position, rotation, ...props }) => (
   <AudienceMember 
     position={position} 
@@ -100,7 +87,6 @@ const EarlAudience = ({ position, rotation, ...props }) => (
   />
 );
 
-// Wayne audience member with crowd animation - Now using unified component
 const WayneAudience = ({ position, rotation, ...props }) => (
   <AudienceMember 
     position={position} 
@@ -110,7 +96,6 @@ const WayneAudience = ({ position, rotation, ...props }) => (
   />
 );
 
-// Vince audience member with crowd animation - Now using unified component  
 const VinceAudience = ({ position, rotation, ...props }) => (
   <AudienceMember 
     position={position} 
@@ -123,7 +108,6 @@ const VinceAudience = ({ position, rotation, ...props }) => (
 function Audience() {
   const { animations } = useCharacterAnimations();
   
-  // Create a simplified audience circle with original configuration
   const audienceMembers = useMemo(() => {
     const members = [];
     const audienceTypes = [
@@ -133,20 +117,17 @@ function Audience() {
       { component: 'Vince', model: 'Vince.glb', name: 'Vince' }
     ];
     
-    const numMembers = audienceTypes.length; // 4 audience members
-    const radius = 2.8; // Closer distance from center where the fighters are
-    const centerY = -1.2; // Same level as main characters (adjusted for floor)
+    const numMembers = audienceTypes.length;
+    const radius = 2.8;
+    const centerY = -1.2;
     
     audienceTypes.forEach((type, i) => {
-      // Distribute evenly around the circle
       const angle = (i / numMembers) * Math.PI * 2;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
       
-      // Rotation to face the center (where main characters are)
       const rotationY = Math.atan2(-x, -z);
       
-      // Add some random variation to make it more natural
       const randomOffset = {
         x: (Math.random() - 0.5) * 0.15,
         z: (Math.random() - 0.5) * 0.15,
@@ -159,7 +140,7 @@ function Audience() {
         name: type.name,
         position: [x + randomOffset.x, centerY + randomOffset.y, z + randomOffset.z],
         rotation: [0, rotationY + (Math.random() - 0.5) * 0.1, 0],
-        scale: 1.0 // Uniform scale for all audience members
+        scale: 1.0
       });
     });
     
@@ -169,7 +150,6 @@ function Audience() {
   return (
     <group>
       {audienceMembers.map((member) => {
-        // Render the appropriate component based on type
         switch (member.type) {
           case 'Earl':
             return (
@@ -215,7 +195,6 @@ function Audience() {
   );
 }
 
-// Preload only the models we're actually using for better performance
 useGLTF.preload("./models/Chuck.glb");
 useGLTF.preload("./models/Earl.glb");
 useGLTF.preload("./models/Wayne.glb");

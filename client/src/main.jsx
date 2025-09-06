@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               '#1C7ED6',
               '#1971C2',
               '#1864AB',
-              '#F5F5DC', // Our main bone white color
+              '#F5F5DC',
             ],
             playerBlue: [
               '#e6f7ff',
@@ -58,7 +58,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             primaryColor: '#F5F5DC',
           },
           globalStyles: (_theme) => ({
-            // Ensure black background everywhere
             html: {
               backgroundColor: '#000000 !important',
               background: '#000000 !important',
@@ -81,29 +80,24 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               background: '#000000 !important',
               minHeight: '100dvh',
             },
-            // Ensure all buttons use Anton font
             ".mantine-Button-root": {
               fontFamily: 'Anton, Impact, sans-serif',
               fontWeight: 400,
               textTransform: 'uppercase',
               letterSpacing: '1px',
             },
-            // Also target any button elements
             "button": {
               fontFamily: 'Anton, Impact, sans-serif',
               fontWeight: 400,
               textTransform: 'uppercase',
               letterSpacing: '1px',
             },
-            // Ensure all text elements use Anton
             ".mantine-Text-root": {
               fontFamily: 'Anton, Impact, sans-serif',
             },
-            // Ensure all input elements use Anton
             ".mantine-Input-input": {
               fontFamily: 'Anton, Impact, sans-serif',
             },
-            // Global font for all elements
             "*": {
               fontFamily: 'Anton, Impact, sans-serif !important',
             },

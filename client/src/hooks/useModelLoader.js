@@ -3,12 +3,12 @@ import { useGLTF } from '@react-three/drei';
 
 
 const CRITICAL_MODELS = [
-  './models/pete.glb',      // Main character only
+  './models/pete.glb',
 ];
 
 
 const SECONDARY_MODELS = [
-  './models/Tyler.glb',     // Default opponent - load on demand
+  './models/Tyler.glb',
 ];
 
 
@@ -22,7 +22,7 @@ const LAZY_MODELS = [
 
 
 const ESSENTIAL_AUDIO = [
-  '/music/punch.mp3',       // Combat feedback only
+  '/music/punch.mp3',
 ];
 
 
@@ -32,7 +32,7 @@ const BACKGROUND_AUDIO = [
 
 
 const OPTIONAL_AUDIO = [
-  '/music/button.mp3'       // Only essential UI sound
+  '/music/button.mp3'
 ];
 
 
@@ -56,10 +56,10 @@ const OPTIONAL_IMAGES = [
 
 
 const MOBILE_TIMEOUTS = {
-  audio: 800,      // 800ms max for audio
-  image: 500,      // 500ms max for images  
-  model: 2000,     // 2s max for models
-  emergency: 8000  // 8s emergency timeout
+  audio: 800,
+  image: 500,
+  model: 2000,
+  emergency: 8000
 };
 
 
@@ -155,7 +155,6 @@ const preloadModel = (path, priority = 'normal') => {
       }, priority === 'critical' ? 50 : priority === 'secondary' ? 100 : 25);
 
     } catch (error) {
-
       resolve(false);
     }
   });
@@ -167,10 +166,7 @@ export const useModelLoader = () => {
   const [loadingStatus, setLoadingStatus] = useState('Initializing...');
 
   useEffect(() => {
-    
-
     const emergencyTimeout = setTimeout(() => {
-
       setLoadingProgress(100);
       setLoadingStatus('Ready to play!');
       setIsLoading(false);
@@ -180,62 +176,51 @@ export const useModelLoader = () => {
       try {
         let progress = 0;
         
-
         setLoadingStatus('Loading essential models...');
         const criticalPromises = CRITICAL_MODELS.map(path => preloadModel(path, 'critical'));
         await Promise.allSettled(criticalPromises);
         progress = 20;
         setLoadingProgress(progress);
         
-
         setLoadingStatus('Loading essential UI...');
-        const criticalImagePromises = CRITICAL_IMAGES.map(path => preloadImage(path, 300)); // Very fast timeout
+        const criticalImagePromises = CRITICAL_IMAGES.map(path => preloadImage(path, 300));
         await Promise.allSettled(criticalImagePromises);
         progress = 30;
         setLoadingProgress(progress);
         
-
         setLoadingStatus('Loading essential audio...');
-        const essentialAudioPromises = ESSENTIAL_AUDIO.map(path => preloadAudio(path, 500)); // Very fast timeout
+        const essentialAudioPromises = ESSENTIAL_AUDIO.map(path => preloadAudio(path, 500));
         await Promise.allSettled(essentialAudioPromises);
         progress = 35;
         setLoadingProgress(progress);
         
-
         setLoadingStatus('Ready to play!');
-        setIsLoading(false); // Allow user to start playing NOW
+        setIsLoading(false);
         
-
-        
-
         setLoadingStatus('Loading opponent...');
         const secondaryPromises = SECONDARY_MODELS.map(path => preloadModel(path, 'secondary'));
         await Promise.allSettled(secondaryPromises);
         progress = 50;
         setLoadingProgress(progress);
         
-
         setLoadingStatus('Loading additional UI...');
-        const optionalImagePromises = OPTIONAL_IMAGES.map(path => preloadImage(path, 200)); // Ultra short timeout
+        const optionalImagePromises = OPTIONAL_IMAGES.map(path => preloadImage(path, 200));
         await Promise.allSettled(optionalImagePromises);
         progress = 65;
         setLoadingProgress(progress);
         
-
         setLoadingStatus('Loading UI sounds...');
-        const optionalAudioPromises = OPTIONAL_AUDIO.map(path => preloadAudio(path, 300)); // Ultra short timeout
+        const optionalAudioPromises = OPTIONAL_AUDIO.map(path => preloadAudio(path, 300));
         await Promise.allSettled(optionalAudioPromises);
         progress = 80;
         setLoadingProgress(progress);
         
-
         setLoadingStatus('Loading ambient sounds...');
         const backgroundAudioPromises = BACKGROUND_AUDIO.map(path => preloadAudio(path, 400));
         await Promise.allSettled(backgroundAudioPromises);
         progress = 90;
         setLoadingProgress(progress);
         
-
         setLoadingStatus('All assets loaded!');
         progress = 100;
         setLoadingProgress(progress);
@@ -247,15 +232,12 @@ export const useModelLoader = () => {
         }, 200);
         
       } catch (error) {
-
         setLoadingStatus('Loading completed with some issues');
-        
         clearTimeout(emergencyTimeout);
         
-
         setTimeout(() => {
           setIsLoading(false);
-        }, 300); // Faster fallback
+        }, 300);
       }
     };
 
@@ -289,6 +271,6 @@ export const useModelLoader = () => {
     loadingProgress,
     loadingStatus,
     lazyLoadModel,
-    loadOpponentModel // New: function to load opponent models on demand
+    loadOpponentModel
   };
 }; 

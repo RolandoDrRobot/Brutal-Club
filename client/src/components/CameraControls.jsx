@@ -11,69 +11,55 @@ export const CameraControls = () => {
   const timeRef = useRef(0);
   const initialCameraPosition = useRef(null);
   
-  // Store initial camera position
   useEffect(() => {
     if (!initialCameraPosition.current) {
       initialCameraPosition.current = camera.position.clone();
     }
   }, [camera]);
 
-  // Cámara cinematográfica de pelea para capturar luchadores de perfil - Smooth movement
   useFrame((state, delta) => {
     if (!isCombatMode && orbitControlsRef.current) {
-      // Smooth continuous movement without frame skipping for fluid motion
       timeRef.current += delta;
       
-      // CÁMARA ORBITAL MUY CERCA DE LOS MODELOS - Smooth motion parameters
-      const orbitSpeed = 0.2; // Slower, more smooth orbital speed
-      const orbitAngle = timeRef.current * orbitSpeed; // Ángulo que incrementa continuamente
-      const baseDistance = 3.0; // Distancia alejada para mejor vista general
-      const baseHeight = 1.9; // Altura elevada para ver mejor los peleadores (subida desde 1.5)
+      const orbitSpeed = 0.2;
+      const orbitAngle = timeRef.current * orbitSpeed;
+      const baseDistance = 3.0;
+      const baseHeight = 1.9;
 
-      // Variaciones sutiles para movimiento más natural y fluido
-      const heightVariation = Math.sin(timeRef.current * 0.3) * 0.1; // Smoother height variation
-      const distanceVariation = Math.cos(timeRef.current * 0.4) * 0.15; // Smoother distance variation
-      const heightOffset = Math.cos(orbitAngle * 1.1) * 0.08; // Smoother height offset
+      const heightVariation = Math.sin(timeRef.current * 0.3) * 0.1;
+      const distanceVariation = Math.cos(timeRef.current * 0.4) * 0.15;
+      const heightOffset = Math.cos(orbitAngle * 1.1) * 0.08;
       
-              // POSICIÓN ORBITAL ALREDEDOR DE LOS MODELOS
         const finalDistance = baseDistance + distanceVariation;
         const x = finalDistance * Math.cos(orbitAngle);
         const z = finalDistance * Math.sin(orbitAngle);
         const y = baseHeight + heightVariation + heightOffset;
       
-      // Posicionar cámara lateralmente
       camera.position.x = x;
       camera.position.y = y; 
       camera.position.z = z;
       
-      // SIEMPRE APUNTAR AL CENTRO DONDE ESTÁN LOS MODELOS
-      const targetX = 0; // Centro exacto donde están los luchadores
-      const targetY = -0.5; // Apuntando a la parte media de los personajes
-      const targetZ = 0; // Centro exacto
+      const targetX = 0;
+      const targetY = -0.5;
+      const targetZ = 0;
       
-      // Enfocar directamente a los luchadores
       camera.lookAt(targetX, targetY, targetZ);
       
-      // Sin roll, queremos una toma limpia y profesional
       camera.rotation.z = 0;
       
-      // Update orbit controls target
       orbitControlsRef.current.target.set(targetX, targetY, targetZ);
       orbitControlsRef.current.update();
     }
   });
 
-  // Reset camera when switching modes
   useEffect(() => {
     if (isCombatMode && initialCameraPosition.current) {
-      // Perfect fighting game camera position (side profile view showing both fighters) - RAISED
-      camera.position.set(0, 0.6, 2.8); // Side view from Z-axis, HIGHER camera position
-      camera.rotation.z = 0; // Reset roll
+      camera.position.set(0, 0.6, 2.8);
+      camera.rotation.z = 0;
       if (orbitControlsRef.current) {
-        orbitControlsRef.current.target.set(0, -0.1, 0); // Look at fighter upper torso level (adjusted)
+        orbitControlsRef.current.target.set(0, -0.1, 0);
         orbitControlsRef.current.update();
       }
-      // Ensure camera looks at the center between both fighters at torso level
       camera.lookAt(0, -0.1, 0);
     }
   }, [isCombatMode, camera]);
@@ -82,15 +68,14 @@ export const CameraControls = () => {
     <>
       <OrbitControls 
         ref={orbitControlsRef}
-        enabled={isCombatMode} // Only enable manual controls in combat mode
-        enablePan={true} // Allow panning for full camera freedom
+        enabled={isCombatMode}
+        enablePan={true}
         enableZoom={true}
         enableRotate={isCombatMode}
-        minDistance={1.5} // Allow getting very close to the action
-        maxDistance={6} // RESTRICTED: Prevent zooming outside basement (was 10)
-        minPolarAngle={0} // Full vertical range
-        maxPolarAngle={Math.PI} // Full vertical range
-        // No azimuth angle limits - full 360° rotation freedom
+        minDistance={1.5}
+        maxDistance={6}
+        minPolarAngle={0}
+        maxPolarAngle={Math.PI}
       />
     </>
   );

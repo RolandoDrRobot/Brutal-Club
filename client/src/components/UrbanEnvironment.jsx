@@ -5,10 +5,8 @@ import { Box, Plane, Cylinder } from '@react-three/drei';
 const BarBasement = () => {
   const groupRef = useRef();
 
-  // Animación sutil del ambiente
   useFrame((state) => {
     if (groupRef.current) {
-      // Ligero parpadeo de luces para ambiente de sótano
       groupRef.current.children.forEach((child, i) => {
         if (child.type === 'PointLight') {
           child.intensity = 0.6 + Math.sin(state.clock.elapsedTime * 2 + i) * 0.2;
@@ -158,11 +156,11 @@ const BarBasement = () => {
             >
               <meshStandardMaterial 
                 color={
-                  i % 5 === 0 ? "#2d5a2d" : // Verde (vino)
-                  i % 5 === 1 ? "#8b4513" : // Marrón (whiskey)
-                  i % 5 === 2 ? "#4a4a4a" : // Gris (vodka)
-                  i % 5 === 3 ? "#654321" : // Marrón oscuro (ron)
-                  "#1a1a1a" // Negro (cerveza oscura)
+                  i % 5 === 0 ? "#2d5a2d" :
+                  i % 5 === 1 ? "#8b4513" :
+                  i % 5 === 2 ? "#4a4a4a" :
+                  i % 5 === 3 ? "#654321" :
+                  "#1a1a1a"
                 }
                 roughness={0.1}
                 metalness={0.3}
@@ -184,10 +182,10 @@ const BarBasement = () => {
             >
               <meshStandardMaterial 
                 color={
-                  i % 4 === 0 ? "#8b0000" : // Rojo oscuro
-                  i % 4 === 1 ? "#4169e1" : // Azul
-                  i % 4 === 2 ? "#228b22" : // Verde
-                  "#800080" // Morado
+                  i % 4 === 0 ? "#8b0000" :
+                  i % 4 === 1 ? "#4169e1" :
+                  i % 4 === 2 ? "#228b22" :
+                  "#800080"
                 }
                 roughness={0.1}
                 metalness={0.2}
@@ -209,9 +207,9 @@ const BarBasement = () => {
             >
               <meshStandardMaterial 
                 color={
-                  i % 3 === 0 ? "#ffd700" : // Dorado (whiskey premium)
-                  i % 3 === 1 ? "#8b008b" : // Morado (licores)
-                  "#ff6347" // Rojo tomate (licor de frutas)
+                  i % 3 === 0 ? "#ffd700" :
+                  i % 3 === 1 ? "#8b008b" :
+                  "#ff6347"
                 }
                 roughness={0.1}
                 metalness={0.4}
@@ -808,10 +806,10 @@ const BarBasement = () => {
           <Cylinder key={`scatter-bottle-1-${i}`} args={[0.025, 0.025, 0.2]} position={[(i % 3) * 0.2, 0.1, Math.floor(i / 3) * 0.15]} castShadow>
             <meshStandardMaterial 
               color={
-                i % 4 === 0 ? "#2d5a2d" : // Verde (vino)
-                i % 4 === 1 ? "#8b4513" : // Marrón (whiskey)
-                i % 4 === 2 ? "#4a4a4a" : // Gris (vodka)
-                "#8b0000" // Rojo (licor)
+                i % 4 === 0 ? "#2d5a2d" :
+                i % 4 === 1 ? "#8b4513" :
+                i % 4 === 2 ? "#4a4a4a" :
+                "#8b0000"
               }
               roughness={0.1}
               metalness={0.3}
@@ -826,11 +824,11 @@ const BarBasement = () => {
           <Cylinder key={`corner-bottle-${i}`} args={[0.025, 0.025, 0.2]} position={[(i % 3) * 0.12, 0.1, Math.floor(i / 3) * 0.12]} castShadow>
             <meshStandardMaterial 
               color={
-                i % 5 === 0 ? "#ffd700" : // Dorado
-                i % 5 === 1 ? "#8b008b" : // Morado
-                i % 5 === 2 ? "#228b22" : // Verde
-                i % 5 === 3 ? "#ff6347" : // Rojo tomate
-                "#4169e1" // Azul
+                i % 5 === 0 ? "#ffd700" :
+                i % 5 === 1 ? "#8b008b" :
+                i % 5 === 2 ? "#228b22" :
+                i % 5 === 3 ? "#ff6347" :
+                "#4169e1"
               }
               roughness={0.1}
               metalness={0.4}

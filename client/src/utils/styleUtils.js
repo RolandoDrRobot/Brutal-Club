@@ -1,8 +1,5 @@
 import { THEME } from './constants';
 
-/**
- * Base button style with common properties
- */
 const getBaseButtonStyle = (isMobile) => ({
   backgroundColor: 'rgba(0, 0, 0, 0.9)',
   border: 'none',
@@ -17,9 +14,6 @@ const getBaseButtonStyle = (isMobile) => ({
   gap: '8px'
 });
 
-/**
- * Get button style for shop/character cards
- */
 export const getButtonStyle = (character, options = {}) => {
   const { 
     isMobile = false, 
@@ -36,7 +30,6 @@ export const getButtonStyle = (character, options = {}) => {
   };
 
   if (isOpponent) {
-    // Opponent button styling
     const isLocked = character.isLocked;
     return {
       ...baseStyle,
@@ -44,7 +37,6 @@ export const getButtonStyle = (character, options = {}) => {
       cursor: isLocked ? 'not-allowed' : 'pointer'
     };
   } else {
-    // Shop character button styling
     if (character.isPurchased) {
       return {
         ...baseStyle,
@@ -64,9 +56,6 @@ export const getButtonStyle = (character, options = {}) => {
   }
 };
 
-/**
- * Get character card style
- */
 export const getCharacterCardStyle = (character, options = {}) => {
   const { 
     isMobile = false, 
@@ -91,7 +80,6 @@ export const getCharacterCardStyle = (character, options = {}) => {
   };
 
   if (isOpponent) {
-    // Opponent card styling
     const isLocked = character.isLocked;
     return {
       ...baseStyle,
@@ -100,7 +88,6 @@ export const getCharacterCardStyle = (character, options = {}) => {
       border: isLocked ? '3px solid #666' : '3px solid #f32210'
     };
   } else {
-    // Shop character card styling
     if (character.isPurchased) {
       return {
         ...baseStyle,

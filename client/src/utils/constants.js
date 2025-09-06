@@ -1,11 +1,9 @@
-// Breakpoints for responsive design
 export const BREAKPOINTS = {
   mobile: '(max-width: 768px)',
   tablet: '(min-width: 769px) and (max-width: 1024px)',
   desktop: '(min-width: 1025px)'
 };
 
-// Character model mappings (OPTIMIZED - removed unused legacy models)
 export const CHARACTER_MODELS = {
   paths: {
     'PETE': './models/pete.glb',
@@ -16,20 +14,17 @@ export const CHARACTER_MODELS = {
     'EARL': './models/Earl.glb',
     'WAYNE': './models/Wayne.glb',
     'MARLA': './models/woman.gltf'
-    // ❌ REMOVED: Lou.glb, Tony.glb, Lawrence.glb (unused legacy models)
   },
   components: {
     'pete': 'Pete',
     'tyler': 'Tyler',
-    'vince': 'Tyler', // Uses Tyler component
-    'bob': 'Pete'     // Uses Pete component
+    'vince': 'Tyler',
+    'bob': 'Pete'
   }
 };
 
-// Shop models that need lazy loading
 export const SHOP_MODELS = ['Vince', 'Bob'];
 
-// UI Theme constants
 export const THEME = {
   colors: {
     primary: '#f32210',

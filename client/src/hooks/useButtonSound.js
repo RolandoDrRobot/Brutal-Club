@@ -7,7 +7,6 @@ export const useButtonSound = () => {
       audio.volume = 0.3;
       audio.play();
     } catch (error) {
-      // Silent error handling
     }
   };
 
@@ -15,8 +14,7 @@ export const useButtonSound = () => {
 };
 
 try {
-  // Preload button sound
   new Audio('/music/button.mp3');
 } catch (error) {
-  // Silent error handling
+
 } 

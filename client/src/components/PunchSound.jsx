@@ -11,7 +11,6 @@ const PunchSound = () => {
     animations 
   } = useCharacterAnimations();
   
-  // Function to play punch sound
   const playPunchSound = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
@@ -26,7 +25,6 @@ const PunchSound = () => {
     }
   };
 
-  // Detect when an attack is executed and schedule sound for the end
   useEffect(() => {
     if (!isCombatMode || !animations.length) return;
     
@@ -67,7 +65,6 @@ const PunchSound = () => {
     
   }, [player1AnimationIndex, player2AnimationIndex, isCombatMode, animations]);
 
-  // Clean up timeout when component unmounts
   useEffect(() => {
     return () => {
       if (soundTimeoutRef.current) {

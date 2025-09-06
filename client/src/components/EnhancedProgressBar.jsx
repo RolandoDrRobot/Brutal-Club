@@ -9,9 +9,8 @@ const EnhancedProgressBar = ({
   color = "#4a6b8a",
   size = "lg"
 }) => {
-  // Use red for all stats as requested
   const getStatColor = (stat) => {
-    return '#f32210'; // Player red for all stats
+    return '#f32210';
   };
 
   const statColor = getStatColor(statName) || color;

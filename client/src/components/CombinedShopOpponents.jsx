@@ -89,14 +89,14 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     };
 
     loadShopModels();
-  }, []); // Removed lazyLoadModel dependency to prevent infinite loop
+  }, []);
 
 
   const opponents = getOpponentsStatus().map((opponent, index) => ({
     ...opponent,
     number: `${index + 1}.`,
     isLocked: !opponent.isUnlocked,
-    price: opponent.coinReward // Show coin reward for defeating
+    price: opponent.coinReward
   }));
 
 
@@ -204,20 +204,20 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       const hasNoCoins = coins === 0;
       const isActive = !isLocked && !isDefeated && !(isFirstOpponent && hasNoCoins);
       
-      let borderColor = '#666'; // Default: locked (gray)
+      let borderColor = '#666';
       let opacity = 0.6;
       let cursor = 'not-allowed';
       
       if (isDefeated) {
-        borderColor = '#f32210'; // Defeated: red
+        borderColor = '#f32210';
         opacity = 0.8;
         cursor = 'not-allowed';
       } else if (isFirstOpponent && hasNoCoins) {
-        borderColor = '#666'; // No coins: gray (same as locked)
+        borderColor = '#666';
         opacity = 0.4;
         cursor = 'not-allowed';
       } else if (isActive) {
-        borderColor = '#F5F5DC'; // Active/Available: bone white
+        borderColor = '#F5F5DC';
         opacity = 1;
         cursor = 'pointer';
       }
@@ -472,7 +472,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             gutter={isMobile ? "sm" : "md"}
             style={{ 
               width: '100%',
-              maxWidth: '400px', // ✅ Limitado a 400px para mejor proporción
+              maxWidth: '400px',
               margin: '0 auto'
             }}
           >

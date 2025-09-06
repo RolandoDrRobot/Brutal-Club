@@ -12,16 +12,13 @@ export const useCharacterModel = (modelPath, options = {}) => {
   const group = useRef();
   const { scene, animations } = useGLTF(modelPath);
 
-  // Clone the scene to create independent instances
   const clonedScene = useMemo(() => {
     if (!enableCloning) return scene;
     return SkeletonUtils.clone(scene);
   }, [scene, enableCloning]);
 
-  // Set up animations
   const { actions, names } = useAnimations(setupAnimations ? animations : [], group);
 
-  // Notify when animations are ready
   useEffect(() => {
     if (onAnimationsReady && names.length > 0) {
       onAnimationsReady(names);

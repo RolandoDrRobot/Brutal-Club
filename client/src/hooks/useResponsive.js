@@ -10,7 +10,6 @@ export const useResponsive = () => {
     isMobile,
     isTablet,
     isDesktop,
-    // Utility functions
     fontSize: (mobile, tablet, desktop) => {
       if (isMobile) return mobile;
       if (isTablet) return tablet;

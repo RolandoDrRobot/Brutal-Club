@@ -7,7 +7,6 @@ const CrowdSound = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { isCombatMode } = useCharacterAnimations();
 
-  // Initialize audio when loaded
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.loop = true;
@@ -50,7 +49,6 @@ const CrowdSound = () => {
     }
   }, [isLoaded, isPlaying]);
 
-  // Adjust volume when mode changes
   useEffect(() => {
     if (audioRef.current) {
       const targetVolume = isCombatMode ? 0.25 : 0.1;

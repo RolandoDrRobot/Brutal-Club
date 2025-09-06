@@ -13,7 +13,6 @@ const CharacterPurchaseModal = ({
 }) => {
   const [particles, setParticles] = useState([]);
 
-  // Generate particles for animation
   useEffect(() => {
     if (isVisible) {
       const newParticles = Array.from({ length: 20 }, (_, i) => ({
@@ -26,7 +25,6 @@ const CharacterPurchaseModal = ({
       }));
       setParticles(newParticles);
 
-      // Auto close after 4 seconds
       const timer = setTimeout(() => {
         onClose();
       }, 4000);
@@ -35,7 +33,6 @@ const CharacterPurchaseModal = ({
     }
   }, [isVisible, onClose]);
 
-  // Particle variants for different animations
   const particleVariants = {
     hidden: { 
       scale: 0, 

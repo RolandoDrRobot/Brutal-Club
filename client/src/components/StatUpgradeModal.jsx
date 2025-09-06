@@ -14,7 +14,6 @@ const StatUpgradeModal = ({
 }) => {
   const [particles, setParticles] = useState([]);
 
-
   useEffect(() => {
     if (isVisible) {
       const newParticles = Array.from({ length: 15 }, (_, i) => ({
@@ -38,7 +37,7 @@ const StatUpgradeModal = ({
 
 
   const getStatColor = (stat) => {
-    return '#f32210'; // Player red for all stats
+    return '#f32210';
   };
 
   const statColor = getStatColor(statName);

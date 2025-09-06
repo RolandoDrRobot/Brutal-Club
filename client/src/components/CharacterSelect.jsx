@@ -16,13 +16,10 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
   const { playButtonSound } = useButtonSound();
   const [selectedCharacter, setSelectedCharacter] = useState(0);
 
-  // Use GameState to get purchased characters
   const { getShopCharactersStatus } = useGameState();
   
-  // Filter only purchased characters
   const purchasedCharacters = getShopCharactersStatus().filter(char => char.isPurchased);
   
-  // Map to the expected format for character selection
   const characters = purchasedCharacters.map(char => ({
     id: char.id,
     name: char.name,
@@ -45,7 +42,6 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
     onSelectClick(characters[selectedCharacter]);
   };
 
-  // If no characters are available, show a message
   if (characters.length === 0) {
     return (
       <Box

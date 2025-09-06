@@ -4,25 +4,22 @@ import { useAnimations, useGLTF } from '@react-three/drei';
 import { SkeletonUtils } from 'three-stdlib';
 import * as THREE from 'three';
 
-// Individual character component for preview
 function CharacterModel({ characterName, ...props }) {
   const group = useRef();
   const [isReady, setIsReady] = useState(false);
   
-  // Load the appropriate model based on character name
   const getModelPath = (name) => {
     const modelMap = {
       'PETE': './models/pete.glb',
       'TYLER': './models/Tyler.glb',
-      'TYPER': './models/Tyler.glb',    // ✅ First arcade opponent (Tyler model)
-      'TAYLER': './models/Tyler.glb',   // ✅ Final arcade opponent (Tyler model)
+      'TYPER': './models/Tyler.glb',
+      'TAYLER': './models/Tyler.glb',
       'VINCE': './models/Vince.glb',
       'BOB': './models/Bob.glb',
       'CHUCK': './models/Chuck.glb',
       'EARL': './models/Earl.glb',
       'WAYNE': './models/Wayne.glb',
       'MARLA': './models/woman.gltf'
-      // ❌ REMOVED: LOU, TONY, LAWRENCE - unused legacy models
     };
     return modelMap[name] || './models/pete.glb';
   };
@@ -30,48 +27,40 @@ function CharacterModel({ characterName, ...props }) {
   const modelPath = getModelPath(characterName);
   const { scene, animations } = useGLTF(modelPath);
   
-  // Clone the scene to create independent instances and apply natural materials
   const clonedScene = useMemo(() => {
     const cloned = SkeletonUtils.clone(scene);
     
-    // Apply natural, non-shiny materials to all meshes
     cloned.traverse((child) => {
       if (child.isMesh && child.material) {
-        // If it's an array of materials
         if (Array.isArray(child.material)) {
           child.material = child.material.map((mat) => {
             const newMaterial = mat.clone();
-            newMaterial.roughness = 0.9; // Very rough (non-shiny)
-            newMaterial.metalness = 0.05; // Minimal metallic properties
+            newMaterial.roughness = 0.9;
+            newMaterial.metalness = 0.05;
             return newMaterial;
           });
         } else {
-          // Single material
           const newMaterial = child.material.clone();
-          newMaterial.roughness = 0.9; // Very rough (non-shiny)
-          newMaterial.metalness = 0.05; // Minimal metallic properties
+          newMaterial.roughness = 0.9;
+          newMaterial.metalness = 0.05;
           child.material = newMaterial;
         }
       }
     });
     
-    // Calculate bounding box for precise centering
     const box = new THREE.Box3().setFromObject(cloned);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
     
-    // Center the model perfectly at origin
     cloned.position.set(-center.x, -center.y, -center.z);
     
-    // Adjust position to show character from waist up, centered
-    cloned.position.y = -box.min.y + (size.y * 0.1); // Slightly above ground
+    cloned.position.y = -box.min.y + (size.y * 0.1);
     
     return cloned;
-  }, [scene, characterName]); // Add characterName as dependency
+  }, [scene, characterName]);
   
   const { actions, names } = useAnimations(animations, group);
 
-  // Force re-calculation when character changes
   useEffect(() => {
     setIsReady(false);
     const timer = setTimeout(() => {
@@ -85,7 +74,6 @@ function CharacterModel({ characterName, ...props }) {
     if (actions && names.length > 0 && isReady) {
       let animationName;
       
-      // Pete and Tyler use idleFight animation
       if (characterName === 'PETE' || characterName === 'TYLER') {
         animationName = names.find(name => 
           name.toLowerCase().includes('idlefight') || 
@@ -93,7 +81,6 @@ function CharacterModel({ characterName, ...props }) {
           name.toLowerCase().includes('fighting_idle')
         );
         
-        // If no fighting idle found, look for general idle
         if (!animationName) {
           animationName = names.find(name => 
             name.toLowerCase().includes('idle') ||
@@ -101,14 +88,12 @@ function CharacterModel({ characterName, ...props }) {
           );
         }
       } else {
-        // Other characters use crowd animation
         animationName = names.find(name => 
           name.toLowerCase().includes('crowd') ||
           name.toLowerCase().includes('cheer') ||
           name.toLowerCase().includes('wave')
         );
         
-        // If no crowd animation found, look for idle
         if (!animationName) {
           animationName = names.find(name => 
             name.toLowerCase().includes('idle') ||
@@ -117,18 +102,15 @@ function CharacterModel({ characterName, ...props }) {
         }
       }
       
-      // If no specific animation found, use the first available animation
       if (!animationName) {
         animationName = names[0];
       }
       
       if (actions[animationName]) {
-        // Stop all other animations first
         Object.values(actions).forEach(action => action.stop());
         
-        // Play the animation in loop
         actions[animationName].reset().fadeIn(0.5).play();
-        actions[animationName].setLoop(2201, Infinity); // Loop infinitely
+        actions[animationName].setLoop(2201, Infinity);
         
         return () => {
           if (actions[animationName]) {
@@ -150,26 +132,22 @@ function CharacterModel({ characterName, ...props }) {
   );
 }
 
-// Main CharacterPreview component
 const CharacterPreview = ({ characterName, style }) => {
   const containerRef = useRef(null);
-  const [dimensions, setDimensions] = useState({ width: 383, height: 535 }); // Set default dimensions
+  const [dimensions, setDimensions] = useState({ width: 383, height: 535 });
 
-  // Force proper dimensions calculation on mount and resize - Throttled for performance
   useLayoutEffect(() => {
     let isThrottling = false;
     
     const updateDimensions = () => {
       if (containerRef.current) {
         const { clientWidth, clientHeight } = containerRef.current;
-        // Only update if we get valid dimensions that are different from current
         if (clientWidth > 50 && clientHeight > 50) {
           setDimensions({ width: clientWidth, height: clientHeight });
         }
       }
     };
 
-    // Throttled resize handler to prevent excessive calls
     const throttledUpdateDimensions = () => {
       if (!isThrottling) {
         isThrottling = true;
@@ -180,12 +158,10 @@ const CharacterPreview = ({ characterName, style }) => {
       }
     };
 
-    // Initial calculation with a small delay to ensure container is rendered
     const timer = setTimeout(() => {
       updateDimensions();
     }, 50);
 
-    // Add throttled resize listener
     window.addEventListener('resize', throttledUpdateDimensions);
 
     return () => {
@@ -303,16 +279,13 @@ const CharacterPreview = ({ characterName, style }) => {
   );
 };
 
-// Preload the models that are actually being used in the current game
-useGLTF.preload('./models/pete.glb');      // Main character + opponent
-useGLTF.preload('./models/Tyler.glb');     // Main opponent + purchasable character
-useGLTF.preload('./models/Vince.glb');     // Purchasable character in shop
-useGLTF.preload('./models/Bob.glb');       // Purchasable character in shop
-useGLTF.preload('./models/Chuck.glb');     // Audience member
-useGLTF.preload('./models/Earl.glb');      // Audience member
-useGLTF.preload('./models/Wayne.glb');     // Audience member
+useGLTF.preload('./models/pete.glb');
+useGLTF.preload('./models/Tyler.glb');
+useGLTF.preload('./models/Vince.glb');
+useGLTF.preload('./models/Bob.glb');
+useGLTF.preload('./models/Chuck.glb');
+useGLTF.preload('./models/Earl.glb');
+useGLTF.preload('./models/Wayne.glb');
 
-// Models available but not currently used in game (loaded on-demand)
-// ❌ REMOVED: Preloads for unused legacy models (Lou, Tony, Lawrence)
 
 export default CharacterPreview; 

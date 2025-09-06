@@ -19,8 +19,6 @@ export const useShopModels = (lazyLoadModel) => {
         const modelName = SHOP_MODELS[index];
         if (result.status === 'fulfilled' && result.value) {
           successful.add(modelName);
-        } else {
-
         }
       });
       
@@ -29,7 +27,7 @@ export const useShopModels = (lazyLoadModel) => {
     };
 
     loadShopModels();
-  }, []); // Removed lazyLoadModel dependency to prevent infinite loop
+  }, []);
 
   return {
     loadingModels,

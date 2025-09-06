@@ -6,7 +6,6 @@ import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import React, { Suspense, useState, useEffect } from "react";
 import { useModelLoader } from "../hooks/useModelLoader";
 
-// OPTIMIZED: Lazy load heavy 3D components for better code splitting
 const Audience = React.lazy(() => import("./Audience"));
 const BarBasement = React.lazy(() => import("./BarBasement"));
 
@@ -14,11 +13,9 @@ const Experience = () => {
   const { isCombatMode, selectedPlayer1Character, selectedPlayer2Character } = useCharacterAnimations();
   const { loadOpponentModel } = useModelLoader();
   
-  // 🚀 OPTIMIZATION: Track loaded models to avoid re-loading
-  const [loadedModels, setLoadedModels] = useState(new Set(['pete'])); // Pete is always loaded
+  const [loadedModels, setLoadedModels] = useState(new Set(['pete']));
   const [showAudience, setShowAudience] = useState(false);
 
-  // 🎯 Load opponent model only when needed
   useEffect(() => {
     const loadOpponentIfNeeded = async () => {
       if (selectedPlayer2Character && !loadedModels.has(selectedPlayer2Character.toLowerCase())) {
@@ -34,19 +31,16 @@ const Experience = () => {
     loadOpponentIfNeeded();
   }, [selectedPlayer2Character, loadedModels, loadOpponentModel]);
 
-  // 🎭 Show audience only after initial load is complete
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowAudience(true);
-    }, 2000); // Show audience after 2 seconds
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Positions and rotations according to mode
   const getCharacterTransforms = () => {
     if (isCombatMode) {
-      // Combat mode: facing each other
       return {
         player1: {
           position: [-0.5, -1.2, 0],
@@ -58,28 +52,24 @@ const Experience = () => {
         }
       };
     } else {
-      // Sync mode: same distance but facing each other (like combat)
       return {
         player1: {
           position: [-0.5, -1.2, 0],
-          rotation: [0, Math.PI / 2, 0]  // Mirando hacia la derecha (al Player 2)
+          rotation: [0, Math.PI / 2, 0]
         },
         player2: {
           position: [0.5, -1.2, 0],
-          rotation: [0, -Math.PI / 2, 0] // Mirando hacia la izquierda (al Player 1)
+          rotation: [0, -Math.PI / 2, 0]
         }
       };
     }
   };
 
-  // Function to render the correct character according to selection
   const renderCharacter = (characterModel, player, position, rotation) => {
     const props = { player, position, rotation };
     
-    // 🚀 OPTIMIZATION: Only render if model is loaded or is the default
     const modelName = characterModel.toLowerCase();
     if (!loadedModels.has(modelName) && modelName !== 'pete') {
-      // Show loading placeholder or fallback to Pete
       return <Pete {...props} />;
     }
     

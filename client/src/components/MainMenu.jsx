@@ -6,7 +6,6 @@ import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 
-// Import button assets
 import button1 from '../assets/optimized/button1.webp';
 import button2 from '../assets/optimized/button2.webp';
 import button3 from '../assets/optimized/button3.webp';
@@ -51,7 +50,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     transition: "all 0.3s ease",
     cursor: "pointer",
     animation: "none",
-    // Reset any residual animation styles
     filter: "none",
     opacity: 1,
     transform: "none"

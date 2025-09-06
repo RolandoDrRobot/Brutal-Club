@@ -15,11 +15,10 @@ const CoinPurchaseModal = ({
   onPurchase
 }) => {
   const [particles, setParticles] = useState([]);
-  const [currentStep, setCurrentStep] = useState('selection'); // 'selection', 'purchasing'
+  const [currentStep, setCurrentStep] = useState('selection');
   const [purchasedPackage, setPurchasedPackage] = useState(null);
   const [purchaseParticles, setPurchaseParticles] = useState([]);
   const [showResultModal, setShowResultModal] = useState(false);
-
 
   useEffect(() => {
     if (isVisible && currentStep === 'selection') {
@@ -260,7 +259,7 @@ const CoinPurchaseModal = ({
 
   const handleResultModalClose = () => {
     setShowResultModal(false);
-    setCurrentStep('selection'); // Return to selection screen
+    setCurrentStep('selection');
 
   };
 

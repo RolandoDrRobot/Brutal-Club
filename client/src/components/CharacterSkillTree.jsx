@@ -52,7 +52,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
   );
 
   const handlePreviousCharacter = useCallback(() => {
-    if (characters.length <= 1) return; // No action if only one character
+    if (characters.length <= 1) return;
     playButtonSound();
     const newIndex = selectedCharacter > 0 ? selectedCharacter - 1 : characters.length - 1;
     setSelectedCharacter(newIndex);
@@ -63,7 +63,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
   }, [playButtonSound, characters, selectedCharacter, setSelectedPlayer1Character]);
 
   const handleNextCharacter = useCallback(() => {
-    if (characters.length <= 1) return; // No action if only one character
+    if (characters.length <= 1) return;
     playButtonSound();
     const newIndex = selectedCharacter < characters.length - 1 ? selectedCharacter + 1 : 0;
     setSelectedCharacter(newIndex);
@@ -114,7 +114,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     const success = upgradeCharacterStat(characterId, statName);
     if (success) {
 
-      const newLevel = getStatLevel(statName) + 1; // This will be the new level after upgrade
+      const newLevel = getStatLevel(statName) + 1;
       setUpgradeModalData({
         statName: statName,
         statDisplayName: GAME_CONFIG.STAT_CONFIG.STAT_NAMES[statName],
@@ -132,7 +132,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     const currentLevel = getStatLevel(statName);
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
-    // Verificación estricta: debe tener al menos el costo exacto de la mejora
     return currentLevel < maxLevel && statPoints >= upgradeCost;
   }, [getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL, GAME_CONFIG.STAT_CONFIG.UPGRADE_COST, statPoints]);
 
@@ -142,7 +141,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     return currentLevel >= maxLevel;
   }, [getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL]);
 
-  // Skill tree component for a single stat
   const StatUpgradeTree = ({ statName }) => {
     const statConfig = GAME_CONFIG.STAT_CONFIG;
     const icon = statConfig.STAT_ICONS[statName];
@@ -180,8 +178,8 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             inset 0 0 15px rgba(243, 34, 16, 0.1)
           `,
           width: '100%',
-          maxWidth: isMobile ? 'calc(33.333% - 6px)' : '280px', // 3 cajas en una fila móvil
-          flex: isMobile ? '1' : 'none', // Flex igual para las 3 cajas en móvil
+          maxWidth: isMobile ? 'calc(33.333% - 6px)' : '280px',
+          flex: isMobile ? '1' : 'none',
           cursor: canUpgrade(statName) ? 'pointer' : 'not-allowed',
           transition: 'all 0.2s ease',
           opacity: canUpgrade(statName) ? 1 : 0.6
@@ -277,7 +275,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
     );
   };
 
-  // If no characters are available, show a message
   if (characters.length === 0) {
     return (
       <Box
@@ -398,7 +395,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             key={selectedCharacter}
             style={{
               width: '100%',
-              height: '120%', // Aumentado para hacer el elemento más alto
+              height: '120%',
               borderRadius: '8px',
               position: 'relative',
               overflow: 'hidden',
@@ -449,7 +446,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
       {/* Skill Trees Grid */}
       <Box style={{
         display: 'flex',
-        flexDirection: 'row', // Siempre horizontal, tanto móvil como desktop
+        flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         gap: isMobile ? '8px' : '25px',

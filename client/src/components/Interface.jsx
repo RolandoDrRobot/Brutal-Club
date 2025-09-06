@@ -2,7 +2,6 @@ import { Affix, Button, Group, Switch, Text, Stack, Box } from "@mantine/core";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import { useMediaQuery } from "@mantine/hooks";
 import React, { useState, useEffect, Suspense } from 'react';
-// OPTIMIZED: Lazy load menu screens for better code splitting
 const MusicPlayer = React.lazy(() => import("./MusicPlayer"));
 const MainMenu = React.lazy(() => import("./MainMenu"));
 const CharacterSkillTree = React.lazy(() => import("./CharacterSkillTree"));
@@ -14,14 +13,12 @@ import kickImg from "../assets/optimized/kick.webp";
 import comboImg from "../assets/optimized/combo.webp";
 import coverImg from "../assets/optimized/cover.webp";
 import danceImg from "../assets/optimized/dance.webp";
-// ❌ REMOVED: fightImg - imported but never used in component
-import mainButtonImg from "../assets/mainbutton.jpeg"; // ✅ Used in multiple buttons
+import mainButtonImg from "../assets/mainbutton.jpeg";
 import { useButtonSound } from '../hooks/useButtonSound';
 import { useModelLoader } from '../hooks/useModelLoader';
 import { useGameState } from '../contexts/GameState';
 import CharacterPreview from "./CharacterPreview";
 
-// CSS Animations for the interface
 const interfaceStyles = `
   @keyframes pulse {
     0%, 100% { 
@@ -148,24 +145,19 @@ const Interface = () => {
   const { playButtonSound } = useButtonSound();
   const { coins, statPoints } = useGameState() || {};
 
-  // Media queries para responsive design
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(max-width: 1024px)");
 
-  // State to show/hide the music player
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   
-  // State to handle fight transition
   const [fightTransition, setFightTransition] = useState(false);
 
-  // Botones de ataque para modo combate - usando las animaciones reales de Pete
   const attackButtons = [
     { name: "punch", label: "Puñetazo", image: punchImg, shortcut: "Q" },
     { name: "kick", label: "Patada", image: kickImg, shortcut: "W" },
     { name: "punches", label: "Combo", image: comboImg, shortcut: "E" }
   ];
 
-  // Animaciones de baile - solo estas en modo sincronizado
   const danceAnimations = [
     "dance1", 
     "dance2",
@@ -175,7 +167,6 @@ const Interface = () => {
     "dance6"
   ];
 
-  // Combinaciones de bailes predefinidas
   const danceCombinations = [
     { name: "COMBO 1", dances: ["dance1", "dance3", "dance5"] },
     { name: "COMBO 2", dances: ["dance2", "dance4", "dance6"] },
@@ -185,19 +176,16 @@ const Interface = () => {
     { name: "COMBO 6", dances: ["dance3", "dance5", "dance2"] }
   ];
 
-  // Estado para el combo actual y el baile dentro del combo
   const [currentComboIndex, setCurrentComboIndex] = React.useState(0);
   const [currentDanceInCombo, setCurrentDanceInCombo] = React.useState(0);
   const [isPlayingCombo, setIsPlayingCombo] = React.useState(false);
 
-  // Function to toggle between dance combinations
   const toggleDanceCombo = () => {
-    if (isCombatMode) return; // No dance combos in combat mode
+    if (isCombatMode) return;
     
     if (currentComboIndex < danceCombinations.length - 1) {
       setCurrentComboIndex(currentComboIndex + 1);
     } else {
-      // Finished current combo, move to next
       setCurrentComboIndex(0);
       if (currentDanceInCombo < danceCombinations[currentComboIndex].dances.length - 1) {
         setCurrentDanceInCombo(currentDanceInCombo + 1);
@@ -207,7 +195,6 @@ const Interface = () => {
     }
   };
 
-  // Function to stop combo (right click or secondary button)
   const stopCombo = () => {
     if (isCombatMode) return;
     
@@ -225,37 +212,29 @@ const Interface = () => {
     }
   };
 
-  // Manejar cambio de modo
   const handleModeChange = (event) => {
     const combatMode = event.currentTarget.checked;
     setIsCombatMode(combatMode);
     
-    // Si se activa modo combate, inicializar ambos en idle
     if (combatMode) {
       initializeCombat();
     }
   };
 
-  // Determinar si el combate ha terminado
   const isCombatOver = player1IsDead || player2IsDead;
 
-  // NEW: Function to check if an attack is available with turn system
   const isAttackAvailable = (attackType) => {
-    // Basic checks
     if (!isCombatMode || player1IsDead || player2IsDead) {
       return false;
     }
     
-    // NEW LOGIC: Use the realistic turn system
     return canPlayerAttack(1);
   };
 
-  // Function to check if blocking is possible
   const isBlockAvailable = () => {
     return isCombatMode && !player1IsDead && !player2IsDead && player1Stamina > 0;
   };
   
-  // CSS para la animación de countdown y efectos del pad de pelea
   React.useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
@@ -385,22 +364,17 @@ const Interface = () => {
     };
   }, []);
   
-  // Función mejorada para navegar al menú con efecto de impacto y ataques dobles
   const handleNavigateToMenu = () => {
-    // 🥊 PRIMERO: Ejecutar primer ataque del Player 1
-    triggerPlayer1Attack('punch'); // Primer golpe
+    triggerPlayer1Attack('punch');
     
-    // 🥊 SEGUNDO: Ejecutar segundo ataque después de un delay
     setTimeout(() => {
-      triggerPlayer1Attack('kick'); // Segundo golpe (patada)
-    }, 1200); // Esperar 1.2 segundos para que termine el primer ataque
+      triggerPlayer1Attack('kick');
+    }, 1200);
     
     setFightTransition(true);
     
-    // Crear efecto de sacudida en toda la pantalla
     document.body.style.animation = "impactShake 0.6s ease-out";
     
-    // Agregar flash rojo temporal
     const flashOverlay = document.createElement('div');
     flashOverlay.style.cssText = `
       position: fixed;
@@ -415,7 +389,6 @@ const Interface = () => {
     `;
     document.body.appendChild(flashOverlay);
     
-    // Limpiar efectos y navegar
     setTimeout(() => {
       document.body.style.animation = "";
       document.body.removeChild(flashOverlay);
@@ -424,7 +397,6 @@ const Interface = () => {
     }, 600);
   };
 
-  // Import the optimized model loader
   const { isLoading, loadingProgress, loadingStatus, lazyLoadModel } = useModelLoader();
 
   return (
@@ -751,7 +723,6 @@ const Interface = () => {
                     size="xl"
                     onClick={() => {
                       playButtonSound();
-                      // Aquí se podría abrir un menú de selección de personajes
                     }}
                     style={{
                       fontSize: isMobile ? "36px" : "48px",
