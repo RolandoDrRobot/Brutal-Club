@@ -11,7 +11,6 @@ import StatUpgradeModal from './StatUpgradeModal';
 
 const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const isVerySmall = useMediaQuery("(max-width: 480px)");
   const { isExiting, setSelectedPlayer1Character } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   const [selectedCharacter, setSelectedCharacter] = useState(0);

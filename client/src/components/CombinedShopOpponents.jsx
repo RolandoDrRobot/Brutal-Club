@@ -14,7 +14,6 @@ import CharacterPurchaseModal from './CharacterPurchaseModal';
 
 const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting, selectedPlayer1Character, setSelectedPlayer1Character } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   const [selectedCharacter, setSelectedCharacter] = useState(0);

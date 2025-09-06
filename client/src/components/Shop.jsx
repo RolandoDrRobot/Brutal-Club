@@ -8,14 +8,12 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import packImg from '../assets/optimized/pack.webp';
 import CharacterPreview from './CharacterPreview';
-import { useModelLoader } from '../hooks/useModelLoader';
 import CharacterPurchaseModal from './CharacterPurchaseModal';
 import CoinPurchaseModal from './CoinPurchaseModal';
 import PackOpeningModal from './PackOpeningModal';
 
 const Shop = ({ onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   const { 

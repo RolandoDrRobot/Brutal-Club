@@ -15,7 +15,6 @@ import coverImg from "../assets/optimized/cover.webp";
 import coverbgImg from '../assets/optimized/coverbg.webp';
 import { useButtonSound } from '../hooks/useButtonSound';
 import { useModelLoader } from '../hooks/useModelLoader';
-import { useGameState } from '../contexts/GameState';
 import CharacterPreview from "./CharacterPreview";
 
 const interfaceStyles = `
@@ -142,10 +141,8 @@ const Interface = () => {
   } = useCharacterAnimations();
 
   const { playButtonSound } = useButtonSound();
-  const { coins, statPoints } = useGameState() || {};
 
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const isTablet = useMediaQuery("(max-width: 1024px)");
 
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   

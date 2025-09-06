@@ -6,7 +6,7 @@ import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 function AudienceMember({ position, rotation, modelPath = "./models/pete.glb", initialAnimationIndex, memberId, ...props }) {
   const group = useRef();
   const { scene, animations } = useGLTF(modelPath);
-  const [currentAnimationIndex, setCurrentAnimationIndex] = useState(initialAnimationIndex);
+  const [currentAnimationIndex] = useState(initialAnimationIndex);
   
   const clonedScene = useMemo(() => {
     const cloned = SkeletonUtils.clone(scene);
