@@ -8,7 +8,6 @@ function Tyler({ player = 2, ...props }) {
   const { scene, animations } = useGLTF("./models/Tyler.glb");
   const { 
     setAnimations, 
-    animationIndex, 
     animations: contextAnimations,
     player1AnimationIndex,
     player2AnimationIndex,

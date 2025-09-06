@@ -1,4 +1,4 @@
-import { Affix, Button, Group, Switch, Text, Stack, Box } from "@mantine/core";
+import { Affix, Button, Group, Text, Stack, Box } from "@mantine/core";
 import { useCharacterAnimations } from "../contexts/CharacterAnimations";
 import { useMediaQuery } from "@mantine/hooks";
 import React, { useState, useEffect, Suspense } from 'react';
@@ -12,8 +12,6 @@ import punchImg from "../assets/optimized/punch.webp";
 import kickImg from "../assets/optimized/kick.webp";
 import comboImg from "../assets/optimized/combo.webp";
 import coverImg from "../assets/optimized/cover.webp";
-import danceImg from "../assets/optimized/dance.webp";
-import mainButtonImg from "../assets/mainbutton.jpeg";
 import coverbgImg from '../assets/optimized/coverbg.webp';
 import { useButtonSound } from '../hooks/useButtonSound';
 import { useModelLoader } from '../hooks/useModelLoader';

@@ -9,7 +9,6 @@ function Pete({ player = 1, ...props }) {
   const { scene, animations } = useGLTF("./models/pete.glb");
   const { 
     setAnimations, 
-    animationIndex, 
     animations: contextAnimations,
     player1AnimationIndex,
     player2AnimationIndex,

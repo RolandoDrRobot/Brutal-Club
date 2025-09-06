@@ -4,24 +4,6 @@ export const BREAKPOINTS = {
   desktop: '(min-width: 1025px)'
 };
 
-export const CHARACTER_MODELS = {
-  paths: {
-    'PETE': './models/pete.glb',
-    'TYLER': './models/Tyler.glb',
-    'VINCE': './models/Vince.glb',
-    'BOB': './models/Bob.glb',
-    'CHUCK': './models/Chuck.glb',
-    'EARL': './models/Earl.glb',
-    'WAYNE': './models/Wayne.glb',
-    'MARLA': './models/woman.gltf'
-  },
-  components: {
-    'pete': 'Pete',
-    'tyler': 'Tyler',
-    'vince': 'Tyler',
-    'bob': 'Pete'
-  }
-};
 
 export const SHOP_MODELS = ['Vince', 'Bob'];
 
