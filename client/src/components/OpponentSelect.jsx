@@ -5,16 +5,14 @@ import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
-import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
 
 const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const { isExiting } = useCharacterAnimations();
   const { playButtonSound } = useButtonSound();
   
-  const { getOpponentsStatus, coins } = useGameState();
+  const { getOpponentsStatus } = useGameState();
 
   const opponents = getOpponentsStatus().map((opponent, index) => ({
     ...opponent,

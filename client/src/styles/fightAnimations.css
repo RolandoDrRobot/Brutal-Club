@@ -14,53 +14,9 @@
 
 
 
-@keyframes backgroundImpact {
-  0% {
-    background-color: transparent;
-  }
-  5% {
-    background-color: transparent;
-  }
-  15% {
-    background-color: transparent;
-  }
-  25% {
-    background-color: transparent;
-  }
-  35% {
-    background-color: transparent;
-  }
-  100% {
-    background-color: transparent;
-  }
-}
 
-@keyframes redFlash {
-  0%, 100% { 
-    box-shadow: 
-      0 0 20px #f32210,
-      0 0 40px rgba(243, 34, 16, 0.3),
-      inset 0 0 20px rgba(243, 34, 16, 0.1);
-  }
-  50% { 
-    box-shadow: 
-      0 0 40px #f32210,
-      0 0 80px rgba(243, 34, 16, 0.6),
-      inset 0 0 40px rgba(243, 34, 16, 0.3);
-  }
-}
 
 /* Character selection animations */
-@keyframes characterEnter {
-  0% {
-    transform: scale(0.8) translateY(50px);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-  }
-}
 
 @keyframes characterSwitch {
   0% {
@@ -96,20 +52,6 @@
   }
 }
 
-@keyframes selectButtonGlow {
-  0%, 100% {
-    box-shadow: 
-      0 0 20px #f32210,
-      0 0 40px rgba(243, 34, 16, 0.3),
-      inset 0 0 20px rgba(243, 34, 16, 0.1);
-  }
-  50% {
-    box-shadow: 
-      0 0 40px #f32210,
-      0 0 80px rgba(243, 34, 16, 0.6),
-      inset 0 0 40px rgba(243, 34, 16, 0.3);
-  }
-}
 
 /* Interface animations */
 @keyframes pulse {
@@ -142,24 +84,6 @@
   }
 }
 
-@keyframes neonPulseGreen {
-  0%, 100% {
-    box-shadow: 
-      0 0 30px rgba(0, 255, 0, 0.6),
-      0 0 60px rgba(0, 255, 0, 0.4),
-      0 0 90px rgba(0, 255, 0, 0.2),
-      inset 0 0 30px rgba(0, 255, 0, 0.1),
-      inset 0 0 60px rgba(0, 255, 0, 0.05);
-  }
-  50% {
-    box-shadow: 
-      0 0 40px rgba(0, 255, 0, 0.8),
-      0 0 80px rgba(0, 255, 0, 0.6),
-      0 0 120px rgba(0, 255, 0, 0.4),
-      inset 0 0 40px rgba(0, 255, 0, 0.2),
-      inset 0 0 80px rgba(0, 255, 0, 0.1);
-  }
-}
 
 @keyframes rotate {
   from { transform: rotate(0deg); }
@@ -207,61 +131,6 @@
 }
 
 /* Screen entrance animations */
-@keyframes screenEnterFromLeft {
-  0% {
-    transform: translateX(-100vw) scale(0.8);
-    opacity: 0;
-  }
-  70% {
-    transform: translateX(20px) scale(1.05);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes screenEnterFromRight {
-  0% {
-    transform: translateX(100vw) scale(0.8);
-    opacity: 0;
-  }
-  70% {
-    transform: translateX(-20px) scale(1.05);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes screenEnterFromTop {
-  0% {
-    transform: translateY(-100dvh) scale(0.8);
-    opacity: 0;
-  }
-  70% {
-    transform: translateY(20px) scale(1.05);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes screenEnterFromBottom {
-  0% {
-    transform: translateY(100dvh);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
 @keyframes fadeInSpray {
   0% {

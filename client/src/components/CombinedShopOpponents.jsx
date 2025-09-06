@@ -5,7 +5,6 @@ import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
-import mainButtonImg from '../assets/mainbutton.jpeg';
 import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
 import punchImg from "../assets/optimized/punch.webp";
@@ -20,7 +19,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
     const {
     coins,
-    statPoints,
     purchaseCharacter, 
     getShopCharactersStatus, 
     getOpponentsStatus,

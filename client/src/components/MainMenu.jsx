@@ -6,10 +6,8 @@ import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useButtonSound } from '../hooks/useButtonSound';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 
-import button1 from '../assets/optimized/button1.webp';
 import button2 from '../assets/optimized/button2.webp';
 import button3 from '../assets/optimized/button3.webp';
-import button4 from '../assets/optimized/button4.webp';
 
 const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
