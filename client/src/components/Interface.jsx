@@ -14,6 +14,7 @@ import comboImg from "../assets/optimized/combo.webp";
 import coverImg from "../assets/optimized/cover.webp";
 import coverbgImg from '../assets/optimized/coverbg.webp';
 import { useButtonSound } from '../hooks/useButtonSound';
+import { useCombatControls } from '../hooks/useInput';
 import { useModelLoader } from '../hooks/useModelLoader';
 import CharacterPreview from "./CharacterPreview";
 
@@ -94,15 +95,9 @@ const interfaceStyles = `
 
 const Interface = () => {
   const { 
-    animations, 
-    animationIndex, 
-    setAnimationIndex,
     currentScreen,
-    isExiting,
     navigateToMenu,
-    navigateToCombat,
     navigateBackToDance,
-    navigateBackToMenu,
     navigateToCharacterSelect,
     navigateBackFromCharacterSelect,
     handleCharacterSelection,
@@ -114,10 +109,7 @@ const Interface = () => {
     isCombatMode,
     setIsCombatMode,
     triggerPlayer1Attack,
-    triggerPlayer2Attack,
-    triggerSyncAnimation,
     initializeCombat,
-    resetHealth,
     reviveLosingPlayer,
     player1Health,
     player2Health,
@@ -126,21 +118,14 @@ const Interface = () => {
     maxStamina,
     player1IsDead,
     player2IsDead,
-    player1IsBlocking,
-    player2IsBlocking,
     togglePlayer1Block,
-    togglePlayer2Block,
-    staminaCosts,
-    player1CombatState,
-    player2CombatState,
     canPlayerAttack,
-    COMBAT_STATES,
-    ATTACK_TIMINGS,
     navigateToShop,
     navigateBackFromShop
   } = useCharacterAnimations();
 
   const { playButtonSound } = useButtonSound();
+  const { createAttackHandler, createBlockHandler } = useCombatControls();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -149,73 +134,13 @@ const Interface = () => {
   const [fightTransition, setFightTransition] = useState(false);
 
   const attackButtons = [
-    { name: "punch", label: "Puñetazo", image: punchImg, shortcut: "Q" },
-    { name: "kick", label: "Patada", image: kickImg, shortcut: "W" },
-    { name: "punches", label: "Combo", image: comboImg, shortcut: "E" }
+    { name: "punch", label: "Puñetazo", image: punchImg },
+    { name: "kick", label: "Patada", image: kickImg },
+    { name: "punches", label: "Combo", image: comboImg }
   ];
 
-  const danceAnimations = [
-    "dance1", 
-    "dance2",
-    "dance3",
-    "dance4",
-    "dance5",
-    "dance6"
-  ];
 
-  const danceCombinations = [
-    { name: "COMBO 1", dances: ["dance1", "dance3", "dance5"] },
-    { name: "COMBO 2", dances: ["dance2", "dance4", "dance6"] },
-    { name: "COMBO 3", dances: ["dance1", "dance2", "dance3"] },
-    { name: "COMBO 4", dances: ["dance4", "dance5", "dance6"] },
-    { name: "COMBO 5", dances: ["dance6", "dance1", "dance4"] },
-    { name: "COMBO 6", dances: ["dance3", "dance5", "dance2"] }
-  ];
 
-  const [currentComboIndex, setCurrentComboIndex] = React.useState(0);
-  const [currentDanceInCombo, setCurrentDanceInCombo] = React.useState(0);
-  const [isPlayingCombo, setIsPlayingCombo] = React.useState(false);
-
-  const toggleDanceCombo = () => {
-    if (isCombatMode) return;
-    
-    if (currentComboIndex < danceCombinations.length - 1) {
-      setCurrentComboIndex(currentComboIndex + 1);
-    } else {
-      setCurrentComboIndex(0);
-      if (currentDanceInCombo < danceCombinations[currentComboIndex].dances.length - 1) {
-        setCurrentDanceInCombo(currentDanceInCombo + 1);
-      } else {
-        setCurrentDanceInCombo(0);
-      }
-    }
-  };
-
-  const stopCombo = () => {
-    if (isCombatMode) return;
-    
-    setCurrentComboIndex(0);
-    setCurrentDanceInCombo(0);
-    setAnimationIndex(-1);
-    
-    const idleIndex = animations.findIndex(anim => 
-      anim.toLowerCase().includes('idle') && 
-      !anim.toLowerCase().includes('fight')
-    );
-    
-    if (idleIndex >= 0) {
-      triggerSyncAnimation(idleIndex);
-    }
-  };
-
-  const handleModeChange = (event) => {
-    const combatMode = event.currentTarget.checked;
-    setIsCombatMode(combatMode);
-    
-    if (combatMode) {
-      initializeCombat();
-    }
-  };
 
   const isCombatOver = player1IsDead || player2IsDead;
 
@@ -802,9 +727,9 @@ const Interface = () => {
                     display: "flex",
                     flexDirection: "row"
                   }}>
-                    {attackButtons.map((attack, index) => {
+                    {attackButtons.map((attack) => {
                       const canUseAttack = isAttackAvailable(attack.name);
-                      const staminaCost = staminaCosts[attack.name] || 0;
+                      const attackHandler = createAttackHandler(attack.name);
                       
                       return (
                         <Box
@@ -824,6 +749,7 @@ const Interface = () => {
                             size={isMobile ? "lg" : "xl"}
                             disabled={!canUseAttack}
                             onClick={() => triggerPlayer1Attack(attack.name)}
+                            {...attackHandler}
                             style={{
                               position: "relative",
                               zIndex: 1,
@@ -841,34 +767,6 @@ const Interface = () => {
                               alignItems: "center",
                               justifyContent: "center",
                               boxShadow: "none"
-                            }}
-                            onTouchStart={(e) => {
-                              if (canUseAttack && isMobile) {
-                                e.target.style.transform = "scale(0.95)";
-                                e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
-                                e.target.style.animation = "impactShake 0.3s ease-out";
-                              }
-                            }}
-                            onTouchEnd={(e) => {
-                              if (canUseAttack && isMobile) {
-                                e.target.style.transform = "scale(1)";
-                                e.target.style.backgroundColor = "transparent";
-                                e.target.style.animation = "none";
-                              }
-                            }}
-                            onMouseEnter={(e) => {
-                              if (canUseAttack && !isMobile) {
-                                e.target.style.transform = "scale(1.05)";
-                                e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
-                                e.target.style.animation = "impactShake 0.3s ease-out";
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              if (canUseAttack && !isMobile) {
-                                e.target.style.transform = "scale(1)";
-                                e.target.style.backgroundColor = "transparent";
-                                e.target.style.animation = "none";
-                              }
                             }}
                           >
                             <img 
@@ -902,6 +800,7 @@ const Interface = () => {
                     size={isMobile ? "sm" : "xl"}
                     disabled={!isBlockAvailable()}
                     onClick={togglePlayer1Block}
+                    {...createBlockHandler()}
                     style={{
                       position: "relative",
                       zIndex: 1,
@@ -917,34 +816,6 @@ const Interface = () => {
                       overflow: "hidden",
                       boxShadow: "none",
                       flexShrink: 0
-                    }}
-                    onTouchStart={(e) => {
-                      if (isBlockAvailable() && isMobile) {
-                        e.target.style.transform = "scale(0.95)";
-                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
-                        e.target.style.animation = "impactShake 0.3s ease-out";
-                      }
-                    }}
-                    onTouchEnd={(e) => {
-                      if (isBlockAvailable() && isMobile) {
-                        e.target.style.transform = "scale(1)";
-                        e.target.style.backgroundColor = "transparent";
-                        e.target.style.animation = "none";
-                      }
-                    }}
-                    onMouseEnter={(e) => {
-                      if (isBlockAvailable() && !isMobile) {
-                        e.target.style.transform = "scale(1.05)";
-                        e.target.style.backgroundColor = "rgba(243, 34, 16, 0.1)";
-                        e.target.style.animation = "impactShake 0.3s ease-out";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (isBlockAvailable() && !isMobile) {
-                        e.target.style.transform = "scale(1)";
-                        e.target.style.backgroundColor = "transparent";
-                        e.target.style.animation = "none";
-                      }
                     }}
                   >
                     <img 
