@@ -11,8 +11,6 @@ const CrowdSound = React.lazy(() => import("./components/CrowdSound"));
 const PunchSound = React.lazy(() => import("./components/PunchSound"));
 const CurrencyBar = React.lazy(() => import("./components/CurrencyBar"));
 
-const MusicPlayer = React.lazy(() => import("./components/MusicPlayer"));
-const ParticleEffect = React.lazy(() => import("./components/ParticleEffect"));
 
 const ComponentFallback = () => (
   <div style={{ 

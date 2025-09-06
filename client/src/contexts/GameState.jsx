@@ -161,12 +161,6 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  const spendCoins = (amount) => {
-    setGameState(prev => ({
-      ...prev,
-      coins: Math.max(0, prev.coins - amount)
-    }));
-  };
 
   const registerVictory = useCallback((opponentId) => {
     setGameState(prev => {
@@ -368,37 +362,6 @@ export const GameStateProvider = ({ children }) => {
     }));
   };
 
-  const resetGameState = () => {
-    const initialState = {
-      coins: 3,
-      defeatedOpponents: [],
-      purchasedCharacters: ['pete'],
-      unlockedOpponents: ['tyler_1'],
-      totalWins: 0,
-      totalFights: 0,
-      version: 2
-    };
-    setGameState(initialState);
-    localStorage.setItem('fightClubGameState', JSON.stringify(initialState));
-  };
-
-  const addDebugCoins = (amount = 1000) => {
-    addCoins(amount);
-  };
-
-  const clearSavedData = () => {
-    localStorage.removeItem('fightClubGameState');
-    const initialState = {
-      coins: 3,
-      defeatedOpponents: [],
-      purchasedCharacters: ['pete'],
-      unlockedOpponents: ['tyler_1'],
-      totalWins: 0,
-      totalFights: 0,
-      version: 2
-    };
-    setGameState(initialState);
-  };
 
   const contextValue = {
     coins: gameState.coins,
@@ -411,10 +374,8 @@ export const GameStateProvider = ({ children }) => {
     packsOpened: gameState.packsOpened,
 
     addCoins,
-    spendCoins,
 
     openPack,
-    generatePackContents,
 
     registerVictory,
     registerDefeat,
@@ -432,10 +393,6 @@ export const GameStateProvider = ({ children }) => {
     getShopCharactersStatus,
 
     GAME_CONFIG,
-
-    resetGameState,
-    addDebugCoins,
-    clearSavedData,
   };
 
   return (

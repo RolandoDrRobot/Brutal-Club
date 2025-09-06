@@ -150,30 +150,3 @@ export const useOptimizedImage = (src, options = {}) => {
     load: () => setShouldLoad(true)
   };
 };
-
-export const useCriticalImage = (src, options = {}) => {
-  return useOptimizedImage(src, {
-    ...options,
-    lazy: false,
-    preload: true
-  });
-};
-
-export const useOptimizedBackground = (src, options = {}) => {
-  const { src: optimizedSrc, isLoaded, isLoading } = useOptimizedImage(src, options);
-  
-  const backgroundStyle = {
-    backgroundImage: isLoaded ? `url(${optimizedSrc})` : 'none',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    transition: 'opacity 0.3s ease-in-out',
-    opacity: isLoaded ? 1 : 0
-  };
-  
-  return {
-    backgroundStyle,
-    isLoaded,
-    isLoading
-  };
-}; 
