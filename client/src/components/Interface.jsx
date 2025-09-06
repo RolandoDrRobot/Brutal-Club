@@ -14,6 +14,7 @@ import comboImg from "../assets/optimized/combo.webp";
 import coverImg from "../assets/optimized/cover.webp";
 import danceImg from "../assets/optimized/dance.webp";
 import mainButtonImg from "../assets/mainbutton.jpeg";
+import coverbgImg from '../assets/optimized/coverbg.webp';
 import { useButtonSound } from '../hooks/useButtonSound';
 import { useModelLoader } from '../hooks/useModelLoader';
 import { useGameState } from '../contexts/GameState';
@@ -461,13 +462,15 @@ const Interface = () => {
           {/* Victory Screen - Full Screen Overlay */}
           {isCombatOver && (
             <div 
-              className="fight-screen-background"
               style={{
+                backgroundImage: `url(${coverbgImg})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
                 position: 'fixed',
                 top: 0,
                 left: 0,
                 width: '100vw',
-                height: '100dvh',
+                height: '100vh',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -476,7 +479,8 @@ const Interface = () => {
                 animation: 'fadeInSpray 1s ease-out',
                 backdropFilter: 'blur(2px)',
                 padding: isMobile ? '10px' : '20px',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                overflow: 'hidden'
               }}>
               
               {/* 3D Model of winning character - Large background */}
@@ -492,85 +496,76 @@ const Interface = () => {
                   transform: 'translate(-50%, -50%)',
                   width: isMobile ? '120vw' : '80vw',
                   height: isMobile ? '120vh' : '100vh',
-                  zIndex: 1,
-                  opacity: 1,
+                  zIndex: 0,
+                  opacity: 0.7,
                   pointerEvents: 'none'
                 }}
               />
               
               {/* Winner Title */}
-              <div style={{
-                fontSize: isMobile ? '32px' : '72px',
-                fontWeight: 900,
-                color: '#f32210',
-                fontFamily: 'Anton, sans-serif',
-                letterSpacing: isMobile ? '4px' : '8px',
-                textAlign: 'center',
-                marginBottom: isMobile ? '10px' : '40px',
-                textShadow: '4px 4px 8px rgba(0, 0, 0, 0.9)',
-                textTransform: 'uppercase',
-                lineHeight: isMobile ? '1.1' : '1.2',
-                zIndex: 10,
-                position: 'relative'
-              }}>
-                {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"}
+              <div
+                style={{
+                  animation: 'electricTitle 0.8s ease-out 0.2s both',
+                  zIndex: 10,
+                  position: 'relative'
+                }}
+              >
+                <div style={{
+                  fontSize: '20px',
+                  fontWeight: 700,
+                  color: '#F5F5DC',
+                  fontFamily: 'Anton, sans-serif',
+                  letterSpacing: '1px',
+                  textTransform: 'uppercase',
+                  marginBottom: '15px',
+                  textAlign: 'center',
+                  zIndex: 10,
+                  position: 'relative'
+                }}>
+                  {player1IsDead ? "PLAYER 2 WINS!" : "PLAYER 1 WINS!"}
+                </div>
               </div>
 
               {/* Coins Reward - Only show for Player 1 victory */}
               {!player1IsDead && (
-                <div style={{
-                  backgroundColor: 'rgba(243, 34, 16, 0.2)',
-                  borderRadius: '0px',
-                  padding: isMobile ? '10px 20px' : '20px 40px',
-                  marginBottom: isMobile ? '15px' : '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: isMobile ? '8px' : '15px',
-                  animation: 'neonPulse 2s ease-in-out infinite',
-                  zIndex: 10,
-                  position: 'relative'
-                }}>
-                  {/* Coin Icon */}
-                  <div style={{
-                    width: isMobile ? '30px' : '60px',
-                    height: isMobile ? '30px' : '60px',
-                    backgroundColor: '#4a6b8a',
-                    borderRadius: '0px',
+                <div
+                  style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: isMobile ? '16px' : '30px',
-                    boxShadow: '0 0 15px rgba(255, 215, 0, 0.6)',
-                    animation: 'rotate 3s linear infinite'
-                  }}>
-                    ⭐
-                  </div>
-                  
-                  {/* Coins Text */}
+                    gap: '15px',
+                    animation: 'electricPulse 0.8s ease-out 0.4s both',
+                    zIndex: 10,
+                    position: 'relative'
+                  }}
+                >
                   <div style={{
-                    fontSize: isMobile ? '20px' : '36px',
+                    fontSize: '48px',
                     fontWeight: 900,
-                    color: '#4a6b8a',
+                    color: '#f32210',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
+                    zIndex: 10,
+                    position: 'relative'
                   }}>
-                    +1
+                    REWARD: +1 COIN
                   </div>
                 </div>
               )}
 
               {/* Action Buttons */}
-              <div style={{
-                display: 'flex',
-                gap: isMobile ? '15px' : '40px',
-                marginTop: isMobile ? '10px' : '30px',
-                width: '100%',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-                zIndex: 10,
-                position: 'relative'
-              }}>
+              <div 
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '15px',
+                  animation: 'electricPulse 0.8s ease-out 0.6s both',
+                  marginTop: '30px',
+                  zIndex: 10,
+                  position: 'relative'
+                }}
+              >
 
 
                 {/* FIGHT Button */}
@@ -580,38 +575,30 @@ const Interface = () => {
                     navigateToOpponentSelect();
                   }}
                   style={{
-                    fontSize: isMobile ? '16px' : '24px',
+                    fontSize: '20px',
                     fontWeight: 700,
+                    color: '#F5F5DC',
                     fontFamily: 'Anton, sans-serif',
-                    letterSpacing: '2px',
+                    letterSpacing: '1px',
                     textTransform: 'uppercase',
-                    color: '#f32210',
                     backgroundColor: 'transparent',
-                    backgroundImage: `url(${mainButtonImg})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    border: '3px solid #f32210',
-                    borderRadius: '0px',
-                    padding: isMobile ? '12px 24px' : '20px 40px',
-                    minWidth: isMobile ? '110px' : '160px',
+                    border: '2px solid #F5F5DC',
+                    borderRadius: '8px',
+                    padding: '15px 30px',
                     cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
+                    transition: 'all 0.2s ease',
+                    opacity: 1
                   }}
                   onMouseEnter={(e) => {
                     if (!isMobile) {
                       e.target.style.transform = 'scale(1.05)';
-                      e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.2)';
-                      e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
+                      e.target.style.backgroundColor = 'transparent';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isMobile) {
                       e.target.style.transform = 'scale(1)';
                       e.target.style.backgroundColor = 'transparent';
-                      e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
                     }
                   }}
                 >
