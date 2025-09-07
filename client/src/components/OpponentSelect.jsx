@@ -30,7 +30,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
 
   const getOpponentCardStyle = (opponent) => ({
     backgroundColor: 'transparent',
-    border: '3px solid #f32210',
+    border: '3px solid #A00000',
     borderRadius: '0px',
     padding: '0px',
     height: isMobile ? '140px' : '180px',
@@ -141,7 +141,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 animation: `fadeInSpray 0.5s ease-out ${0.3 + index * 0.1}s both`,
                 marginBottom: isMobile ? "20px" : "30px",
                 boxShadow: `
-                  0 0 15px #f32210,
+                  0 0 15px #A00000,
                   0 0 30px rgba(243, 34, 16, 0.4),
                   0 0 45px rgba(243, 34, 16, 0.2),
                   inset 0 0 15px rgba(243, 34, 16, 0.1)
@@ -155,7 +155,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 if (!isMobile && !opponent.isLocked) {
                   e.currentTarget.style.transform = "scale(1.02)";
                   e.currentTarget.style.boxShadow = `
-                    0 0 25px #f32210,
+                    0 0 25px #A00000,
                     0 0 50px rgba(243, 34, 16, 0.6),
                     0 0 75px rgba(243, 34, 16, 0.3),
                     inset 0 0 25px rgba(243, 34, 16, 0.2)
@@ -166,7 +166,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 if (!isMobile && !opponent.isLocked) {
                   e.currentTarget.style.transform = "scale(1)";
                   e.currentTarget.style.boxShadow = `
-                    0 0 15px #f32210,
+                    0 0 15px #A00000,
                     0 0 30px rgba(243, 34, 16, 0.4),
                     0 0 45px rgba(243, 34, 16, 0.2),
                     inset 0 0 15px rgba(243, 34, 16, 0.1)

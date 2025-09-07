@@ -211,7 +211,7 @@ const CharacterPurchaseModal = ({
                 left: '50%',
                 width: '250px',
                 height: '250px',
-                background: 'radial-gradient(circle, #f3221030 0%, transparent 70%)',
+                background: 'radial-gradient(circle, #A0000030 0%, transparent 70%)',
                 transform: 'translate(-50%, -50%)',
                 borderRadius: '0px',
                 pointerEvents: 'none'
@@ -226,7 +226,7 @@ const CharacterPurchaseModal = ({
               style={{
                 fontSize: '80px',
                 marginBottom: '20px',
-                filter: 'drop-shadow(0 0 15px #f32210)'
+                filter: 'drop-shadow(0 0 15px #A00000)'
               }}
             >
               {characterEmoji || '🥊'}
@@ -243,7 +243,7 @@ const CharacterPurchaseModal = ({
                 style={{
                   fontSize: '32px',
                   fontWeight: 900,
-                  color: '#f32210',
+                  color: '#A00000',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '2px',
                   textTransform: 'uppercase',
@@ -349,7 +349,7 @@ const CharacterPurchaseModal = ({
                 style={{
                   fontSize: '20px',
                   fontWeight: 700,
-                  color: '#f32210',
+                  color: '#A00000',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px',
                   textTransform: 'uppercase'

@@ -94,7 +94,7 @@ const CoinPurchaseModal = ({
       id: 'large',
       coins: 30,
       price: '$6.99', 
-      color: '#f32210',
+      color: '#A00000',
       label: 'MEGA PACK',
       description: 'Maximum coins!',
       image: pack3Img
@@ -545,7 +545,7 @@ const CoinPurchaseModal = ({
                             style={{
                               fontSize: '12px',
                               fontWeight: 600,
-                              color: '#f32210',
+                              color: '#A00000',
                               fontFamily: 'Anton, sans-serif',
                               letterSpacing: '0.5px'
                             }}

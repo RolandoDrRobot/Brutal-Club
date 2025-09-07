@@ -10,7 +10,7 @@ const EnhancedProgressBar = ({
   size = "lg"
 }) => {
   const getStatColor = (stat) => {
-    return '#f32210';
+    return '#A00000';
   };
 
   const statColor = getStatColor(statName) || color;

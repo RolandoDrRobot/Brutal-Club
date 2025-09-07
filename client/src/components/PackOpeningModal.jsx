@@ -75,7 +75,7 @@ const PackOpeningModal = ({
   const getItemTypeColor = (type) => {
     switch (type) {
       case 'character': return '#F5F5DC';
-      case 'stat_points': return '#f32210';
+      case 'stat_points': return '#A00000';
       default: return '#F5F5DC';
     }
   };

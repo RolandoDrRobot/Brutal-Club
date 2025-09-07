@@ -121,7 +121,7 @@ const Shop = ({ onBackClick }) => {
           <Text style={{
             fontSize: isMobile ? '28px' : '32px',
             fontWeight: 900,
-            color: '#f32210',
+            color: '#A00000',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             textTransform: 'uppercase',
@@ -148,7 +148,7 @@ const Shop = ({ onBackClick }) => {
             <Text style={{
               fontSize: '14px',
               fontWeight: 600,
-              color: '#f32210',
+              color: '#A00000',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '0.5px',
               marginBottom: '20px',

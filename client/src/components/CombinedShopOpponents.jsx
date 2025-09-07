@@ -199,7 +199,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const getCharacterCardStyle = (character, isOpponent = false) => {
     const baseStyle = {
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      border: '3px solid #f32210',
+      border: '3px solid #A00000',
       borderRadius: '8px',
       padding: isMobile ? '8px' : '12px',
       aspectRatio: '1',
@@ -211,7 +211,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       position: 'relative',
       transition: 'all 0.3s ease',
       boxShadow: `
-        0 0 10px #f32210,
+        0 0 10px #A00000,
         0 0 20px rgba(243, 34, 16, 0.2),
         inset 0 0 10px rgba(243, 34, 16, 0.05)
       `,
@@ -231,7 +231,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       let cursor = 'not-allowed';
       
       if (isDefeated) {
-        borderColor = '#f32210';
+        borderColor = '#A00000';
         opacity = 0.8;
         cursor = 'not-allowed';
       } else if (isFirstOpponent && hasNoCoins) {
@@ -275,7 +275,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         ...baseStyle,
         cursor: isLocked ? 'not-allowed' : 'pointer',
         opacity: isLocked ? 0.6 : 1,
-        border: isLocked ? '3px solid #666' : '3px solid #f32210'
+        border: isLocked ? '3px solid #666' : '3px solid #A00000'
       };
     }
   };
@@ -304,7 +304,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       const isLocked = character.isLocked;
       return {
         ...baseStyle,
-        color: isLocked ? '#666' : '#f32210',
+        color: isLocked ? '#666' : '#A00000',
         cursor: isLocked ? 'not-allowed' : 'pointer'
       };
     } else {
@@ -364,11 +364,11 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             top: 0,
             right: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            border: '2px solid #f32210',
+            border: '2px solid #A00000',
             borderRadius: '8px',
             padding: isMobile ? '8px 12px' : '12px 16px',
             boxShadow: `
-              0 0 15px #f32210,
+              0 0 15px #A00000,
               0 0 30px rgba(243, 34, 16, 0.3),
               inset 0 0 15px rgba(243, 34, 16, 0.1)
             `,
@@ -410,10 +410,10 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <div style={{
             fontSize: isMobile ? '24px' : '32px',
             fontWeight: 900,
-            color: '#f32210',
+            color: '#A00000',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
-            textShadow: '0 0 10px #f32210, 0 0 20px rgba(243, 34, 16, 0.5)',
+            textShadow: '0 0 10px #A00000, 0 0 20px rgba(243, 34, 16, 0.5)',
             lineHeight: 1
           }}>
             {playerLevel}

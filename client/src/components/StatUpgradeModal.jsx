@@ -31,7 +31,7 @@ const StatUpgradeModal = ({
   const particleVariants = createStatUpgradeEffect().variants;
   const modalVariants = createDefaultModal();
   const textVariants = getTextVariants();
-  const statColor = '#f32210';
+  const statColor = '#A00000';
 
   const levelNumberVariants = {
     hidden: { scale: 0, opacity: 0 },

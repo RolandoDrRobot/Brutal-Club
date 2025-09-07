@@ -173,7 +173,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         style={{
           padding: isMobile ? '15px' : '25px',
           backgroundColor: '#000000',
-          border: `2px solid ${isMaxLevel(statName) ? '#4a6b8a' : '#f32210'}`,
+          border: `2px solid ${isMaxLevel(statName) ? '#4a6b8a' : '#A00000'}`,
           borderRadius: '8px',
           boxShadow: isMaxLevel(statName) ? `
             0 0 15px rgba(74, 107, 138, 0.3),
@@ -216,7 +216,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           <Box style={{ width: '100%', marginBottom: isMobile ? '6px' : '10px' }}>
             <Progress
               value={progress}
-              color="#f32210"
+              color="#A00000"
               size={isMobile ? 'sm' : 'lg'}
               radius="md"
               style={{
@@ -225,7 +225,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               }}
               styles={{
                 bar: {
-                  background: `linear-gradient(90deg, #f32210, #ff4530)`,
+                  background: `linear-gradient(90deg, #A00000, #ff4530)`,
                   boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)'
                 }
               }}
@@ -297,7 +297,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         <Text style={{
           fontSize: isMobile ? '24px' : '32px',
           fontWeight: 700,
-          color: '#f32210',
+          color: '#A00000',
           fontFamily: 'Anton, sans-serif',
           letterSpacing: '2px',
           textAlign: 'center',
@@ -488,7 +488,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           <Box
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0.95)',
-              border: '3px solid #f32210',
+              border: '3px solid #A00000',
               borderRadius: '8px',
               padding: isMobile ? '30px 20px' : '40px 30px',
               maxWidth: isMobile ? '90%' : '400px',
@@ -521,7 +521,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               style={{
                 fontSize: isMobile ? '24px' : '32px',
                 fontWeight: 900,
-                color: '#f32210',
+                color: '#A00000',
                 fontFamily: 'Anton, sans-serif',
                 letterSpacing: '2px',
                 marginBottom: '15px',
@@ -553,9 +553,9 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
                 fontWeight: 700,
                 padding: isMobile ? '12px 25px' : '15px 30px',
                 backgroundColor: 'transparent',
-                border: '3px solid #f32210',
+                border: '3px solid #A00000',
                 borderRadius: '8px',
-                color: '#f32210',
+                color: '#A00000',
                 textTransform: 'uppercase',
                 letterSpacing: '2px',
                 fontFamily: 'Anton, sans-serif',

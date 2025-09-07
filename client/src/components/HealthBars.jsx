@@ -189,15 +189,15 @@ const HealthBars = () => {
         {/* Barra de vida */}
         <Box mb={6}>
           <Group position="apart" mb={2} spacing={4}>
-            <Text size="xs" weight={700} style={{ color: "#f32210" }}>{player2Health}</Text>
+            <Text size="xs" weight={700} style={{ color: "#A00000" }}>{player2Health}</Text>
             <Group spacing={4} align="center">
               {player2IsBlocking && (
                 <div style={{ display: 'flex', alignItems: 'center', marginRight: '4px' }}>
-                  <ShieldIcon color="#f32210" size={14} />
+                  <ShieldIcon color="#A00000" size={14} />
                 </div>
               )}
-              <Text size="xs" weight={700} style={{ color: "#f32210" }}>PLAYER 2</Text>
-              <Text size="xs" weight={700} style={{ color: "#f32210" }}>HP</Text>
+              <Text size="xs" weight={700} style={{ color: "#A00000" }}>PLAYER 2</Text>
+              <Text size="xs" weight={700} style={{ color: "#A00000" }}>HP</Text>
             </Group>
           </Group>
           <Progress
@@ -211,7 +211,7 @@ const HealthBars = () => {
                 border: '2px solid rgba(255, 255, 255, 0.2)',
               },
               bar: {
-                background: `linear-gradient(90deg, #f32210 0%, rgba(243, 34, 16, 0.8) 100%)`,
+                background: `linear-gradient(90deg, #A00000 0%, rgba(243, 34, 16, 0.8) 100%)`,
                 boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)',
               }
             }}
@@ -221,9 +221,9 @@ const HealthBars = () => {
         {/* Barra de stamina */}
         <Box>
           <Group position="apart" mb={2} spacing={4}>
-            <Text size="xs" weight={700} style={{ color: "#f32210" }}>{Math.round(player2Stamina)}</Text>
+            <Text size="xs" weight={700} style={{ color: "#A00000" }}>{Math.round(player2Stamina)}</Text>
             <Group spacing={4} align="center">
-              <Text size="xs" weight={700} style={{ color: "#f32210" }}>SP</Text>
+              <Text size="xs" weight={700} style={{ color: "#A00000" }}>SP</Text>
             </Group>
           </Group>
           <Progress
@@ -237,7 +237,7 @@ const HealthBars = () => {
                 border: '2px solid rgba(255, 255, 255, 0.2)',
               },
               bar: {
-                background: `linear-gradient(90deg, #f32210 0%, rgba(243, 34, 16, 0.8) 100%)`,
+                background: `linear-gradient(90deg, #A00000 0%, rgba(243, 34, 16, 0.8) 100%)`,
                 boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)',
               }
             }}

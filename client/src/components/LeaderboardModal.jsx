@@ -23,7 +23,7 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
       case 1: return '#FFD700';
       case 2: return '#C0C0C0';
       case 3: return '#CD7F32';
-      default: return '#f32210';
+      default: return '#A00000';
     }
   };
 
@@ -103,7 +103,7 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
                 style={{
                   fontSize: '16px',
                   fontWeight: 600,
-                  color: '#f32210',
+                  color: '#A00000',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '0.5px',
                   marginBottom: '30px',

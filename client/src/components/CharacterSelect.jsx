@@ -59,7 +59,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         <Text style={{
           fontSize: isMobile ? '24px' : '32px',
           fontWeight: 700,
-          color: '#f32210',
+          color: '#A00000',
           fontFamily: 'Anton, sans-serif',
           letterSpacing: '2px',
           textAlign: 'center',
@@ -87,10 +87,10 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             fontWeight: 700,
             padding: isMobile ? "12px 20px" : "15px 30px",
             backgroundColor: "transparent",
-            borderColor: "#f32210",
-            border: "3px solid #f32210",
+            borderColor: "#A00000",
+            border: "3px solid #A00000",
             borderRadius: "0px",
-            color: "#f32210",
+            color: "#A00000",
             textTransform: "uppercase",
             letterSpacing: "2px",
             fontFamily: "Anton, sans-serif",
@@ -153,7 +153,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               const bgElement = e.target.querySelector('.left-arrow-bg');
               if (bgElement) {
                 bgElement.style.transform = "scaleX(-1) scale(1.1)";
-                bgElement.style.filter = "drop-shadow(0 0 10px #f32210)";
+                bgElement.style.filter = "drop-shadow(0 0 10px #A00000)";
               }
             }
           }}
@@ -203,11 +203,11 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             style={{
               width: '100%',
               height: '80%',
-              border: '3px solid #f32210',
+              border: '3px solid #A00000',
               borderRadius: '0px',
               marginBottom: '15px',
               boxShadow: `
-                0 0 30px #f32210,
+                0 0 30px #A00000,
                 0 0 60px rgba(243, 34, 16, 0.4),
                 0 0 90px rgba(243, 34, 16, 0.2),
                 inset 0 0 30px rgba(243, 34, 16, 0.1),
@@ -291,7 +291,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
           onMouseEnter={(e) => {
             if (!isMobile) {
               e.target.style.transform = "scale(1.1)";
-              e.target.style.filter = "drop-shadow(0 0 10px #f32210)";
+              e.target.style.filter = "drop-shadow(0 0 10px #A00000)";
             }
           }}
           onMouseLeave={(e) => {

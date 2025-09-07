@@ -198,7 +198,7 @@ const CurrencyBar = () => {
           style={{
             fontSize: isMobile ? '18px' : '22px',
             fontWeight: 700,
-            color: '#f32210',
+            color: '#A00000',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             textTransform: 'uppercase',
@@ -310,7 +310,7 @@ const CurrencyBar = () => {
               fontSize: isMobile ? '16px' : '18px',
               fontWeight: 700,
               backgroundColor: 'transparent',
-              color: '#f32210',
+              color: '#A00000',
               textTransform: 'uppercase',
               letterSpacing: '1px',
               fontFamily: 'Anton, sans-serif',

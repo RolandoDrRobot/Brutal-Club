@@ -33,14 +33,14 @@ const interfaceStyles = `
   @keyframes neonPulse {
     0%, 100% {
       box-shadow: 
-        0 0 15px #f32210,
+        0 0 15px #A00000,
         0 0 30px rgba(243, 34, 16, 0.5),
         0 4px 12px rgba(243, 34, 16, 0.3),
         inset 0 0 15px rgba(243, 34, 16, 0.1);
     }
     50% {
       box-shadow: 
-        0 0 25px #f32210,
+        0 0 25px #A00000,
         0 0 50px rgba(243, 34, 16, 0.8),
         0 4px 20px rgba(243, 34, 16, 0.6),
         inset 0 0 25px rgba(243, 34, 16, 0.2);
@@ -198,21 +198,21 @@ const Interface = () => {
       @keyframes neonPulse {
         0% {
           box-shadow: 
-            0 0 10px #f32210,
+            0 0 10px #A00000,
             0 0 20px rgba(243, 34, 16, 0.3),
             0 4px 8px rgba(243, 34, 16, 0.2),
             inset 0 0 10px rgba(243, 34, 16, 0.05);
         }
         50% {
           box-shadow: 
-            0 0 25px #f32210,
+            0 0 25px #A00000,
             0 0 50px rgba(243, 34, 16, 0.8),
             0 4px 20px rgba(243, 34, 16, 0.5),
             inset 0 0 25px rgba(243, 34, 16, 0.2);
         }
         100% {
           box-shadow: 
-            0 0 10px #f32210,
+            0 0 10px #A00000,
             0 0 20px rgba(243, 34, 16, 0.3),
             0 4px 8px rgba(243, 34, 16, 0.2),
             inset 0 0 10px rgba(243, 34, 16, 0.05);
@@ -222,23 +222,23 @@ const Interface = () => {
       @keyframes redNeonText {
         0% {
           text-shadow: 
-            0 0 3px #f32210,
-            0 0 6px #f32210,
+            0 0 3px #A00000,
+            0 0 6px #A00000,
             0 0 9px rgba(243, 34, 16, 0.4),
             2px 2px 4px rgba(0,0,0,0.8);
         }
         50% {
           text-shadow: 
-            0 0 5px #f32210,
-            0 0 10px #f32210,
+            0 0 5px #A00000,
+            0 0 10px #A00000,
             0 0 15px rgba(243, 34, 16, 0.6),
             0 0 20px rgba(243, 34, 16, 0.3),
             2px 2px 4px rgba(0,0,0,0.8);
         }
         100% {
           text-shadow: 
-            0 0 3px #f32210,
-            0 0 6px #f32210,
+            0 0 3px #A00000,
+            0 0 6px #A00000,
             0 0 9px rgba(243, 34, 16, 0.4),
             2px 2px 4px rgba(0,0,0,0.8);
         }
@@ -462,7 +462,7 @@ const Interface = () => {
                   <div style={{
                     fontSize: '48px',
                     fontWeight: 900,
-                    color: '#f32210',
+                    color: '#A00000',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
                     zIndex: 10,
@@ -593,15 +593,15 @@ const Interface = () => {
                       minHeight: isMobile ? "80px" : "100px",
                       minWidth: isMobile ? "280px" : "350px",
                       backgroundColor: "transparent",
-                      borderColor: "#f32210",
-                      border: "4px solid #f32210",
+                      borderColor: "#A00000",
+                      border: "4px solid #A00000",
                       borderRadius: "0px",
-                      color: "#f32210",
+                      color: "#A00000",
                       textTransform: "uppercase",
                       letterSpacing: "3px",
                       fontFamily: "Anton, sans-serif",
                       boxShadow: `
-                        0 0 20px #f32210,
+                        0 0 20px #A00000,
                         0 0 40px rgba(243, 34, 16, 0.3),
                         inset 0 0 20px rgba(243, 34, 16, 0.1)
                       `,
@@ -638,15 +638,15 @@ const Interface = () => {
                       minHeight: isMobile ? "80px" : "100px",
                       minWidth: isMobile ? "280px" : "350px",
                       backgroundColor: "transparent",
-                      borderColor: "#f32210",
-                      border: "4px solid #f32210",
+                      borderColor: "#A00000",
+                      border: "4px solid #A00000",
                       borderRadius: "0px",
-                      color: "#f32210",
+                      color: "#A00000",
                       textTransform: "uppercase",
                       letterSpacing: "3px",
                       fontFamily: "Anton, sans-serif",
                       boxShadow: `
-                        0 0 20px #f32210,
+                        0 0 20px #A00000,
                         0 0 40px rgba(243, 34, 16, 0.3),
                         inset 0 0 20px rgba(243, 34, 16, 0.1)
                       `,
@@ -861,7 +861,7 @@ const Interface = () => {
                       style={{ 
                         padding: isMobile ? "4px 8px" : "8px 12px",
                         backgroundColor: "transparent",
-                        border: `3px solid #f32210`,
+                        border: `3px solid #A00000`,
                         borderRadius: "0px",
                         transition: "all 0.2s ease",
                         minWidth: isMobile ? "60px" : "120px",
@@ -869,15 +869,15 @@ const Interface = () => {
                         cursor: "pointer",
                         overflow: "hidden",
                         boxShadow: `
-                          0 0 10px #f32210,
+                          0 0 10px #A00000,
                           0 0 20px rgba(243, 34, 16, 0.4),
                           inset 0 0 10px rgba(243, 34, 16, 0.1)
                         `,
                         fontSize: isMobile ? "8px" : "12px",
                         fontWeight: 700,
-                        color: "#f32210",
+                        color: "#A00000",
                         textTransform: "uppercase",
-                        textShadow: "0 0 5px #f32210"
+                        textShadow: "0 0 5px #A00000"
                       }}
                     >
                       {isMobile ? "REVIVE" : "REVIVE LOSER"}

@@ -13,7 +13,7 @@ class EffectManager {
         statUpgrade: {
           count: 15,
           duration: 2,
-          colors: ['#f32210'],
+          colors: ['#A00000'],
           scale: { min: 0.5, max: 1.0 },
           delay: { min: 0, max: 0.5 },
           rotation: { min: 0, max: 360 }
