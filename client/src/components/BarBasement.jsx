@@ -74,7 +74,7 @@ const BarBasement = () => {
       metalness: 0.0,
       transparent: true,
       opacity: 0.9,
-      emissive: '#7788aa',
+      emissive: '#aa8866',
       emissiveIntensity: 0.3
     }),
     lightSocket: new THREE.MeshStandardMaterial({
@@ -377,18 +377,18 @@ const BarBasement = () => {
       ))}
 
 
-      {/* ATMOSPHERIC FOG INSIDE BASEMENT - DARK INDUSTRIAL */}
-      <fog attach="fog" args={['#1a1d22', 1.5, 8]} />
+      {/* ATMOSPHERIC FOG INSIDE BASEMENT - SEPIA TONE */}
+      <fog attach="fog" args={['#2a1f1a', 1.5, 8]} />
 
-      {/* DARK INDUSTRIAL BASEMENT LIGHTING SYSTEM */}
-      {/* Dark ambient light */}
-      <ambientLight intensity={0.35} color="#3a3d42" />
+      {/* SEPIA BASEMENT LIGHTING SYSTEM */}
+      {/* Warm ambient light */}
+      <ambientLight intensity={0.35} color="#4a3d2a" />
       
-      {/* Main overhead lighting - muted industrial */}
+      {/* Main overhead lighting - warm sepia */}
       <directionalLight
         position={[0, 8, 0]}
         intensity={0.65}
-        color="#4a4d52"
+        color="#6a5a42"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -401,14 +401,14 @@ const BarBasement = () => {
         shadow-camera-far={30}
       />
 
-      {/* Fixed ceiling spotlights for ambient lighting - muted industrial */}
+      {/* Fixed ceiling spotlights for ambient lighting - warm sepia */}
       <spotLight
         ref={flickerLight1Ref}
         position={[-5, 3.8, -5]}
         intensity={2.2}
         angle={0.8}
         penumbra={0.6}
-        color="#6a7580"
+        color="#8a7a5a"
         castShadow
         target-position={[0, 0, 0]}
       />
@@ -419,42 +419,42 @@ const BarBasement = () => {
         intensity={2.2}
         angle={0.8}
         penumbra={0.6}
-        color="#6a7580"
+        color="#8a7a5a"
         castShadow
         target-position={[0, 0, 0]}
       />
 
-      {/* Additional atmospheric lighting - muted industrial */}
+      {/* Additional atmospheric lighting - warm sepia */}
       <directionalLight
         position={[-8, 3, 0]}
         intensity={0.25}
-        color="#444955"
+        color="#5a4a35"
       />
       
       <directionalLight
         position={[8, 3, 0]}
         intensity={0.2}
-        color="#444955"
+        color="#5a4a35"
       />
 
-      {/* Rim lighting for atmosphere - dark gray tones */}
+      {/* Rim lighting for atmosphere - warm brown tones */}
       <directionalLight
         position={[0, 1, -12]}
         intensity={0.15}
-        color="#373b44"
+        color="#4a3a2a"
       />
       
       <directionalLight
         position={[0, 1, 12]}
         intensity={0.15}
-        color="#373b44"
+        color="#4a3a2a"
       />
 
-      {/* Underground atmosphere - very dark */}
+      {/* Underground atmosphere - very dark sepia */}
       <directionalLight
         position={[0, -1, 0]}
         intensity={0.05}
-        color="#282c35"
+        color="#2a1f15"
       />
     </group>
   );

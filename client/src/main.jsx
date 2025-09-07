@@ -15,29 +15,29 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           fontFamily: 'Anton, Impact, sans-serif',
           headings: { fontFamily: 'Anton, Impact, sans-serif' },
           colors: {
-            blue: [
-              '#E7F5FF',
-              '#D0EBFF',
-              '#A5D8FF',
-              '#74C0FC',
-              '#339AF0',
-              '#228BE6',
-              '#1C7ED6',
-              '#1971C2',
-              '#1864AB',
+            gold: [
+              '#FFF8E1',
+              '#FFECB3',
+              '#FFE082',
+              '#FFD54F',
+              '#FFCA28',
+              '#FFC107',
+              '#FFB300',
+              '#FF8F00',
+              '#FF6F00',
               '#F5F5DC',
             ],
-            playerBlue: [
-              '#e6f7ff',
-              '#b3ebff',
-              '#80dfff',
-              '#4dd3ff',
-              '#1ac7ff',
-              '#04cbee',
-              '#03a8c7',
-              '#0285a0',
-              '#016279',
-              '#003f52'
+            playerGold: [
+              '#fff8e1',
+              '#ffecb3',
+              '#ffe082',
+              '#ffd54f',
+              '#ffca28',
+              '#ffc107',
+              '#ffb300',
+              '#ff8f00',
+              '#ff6f00',
+              '#e65100'
             ],
             playerRed: [
               '#ffe6e6',
@@ -52,7 +52,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               '#701b15'
             ]
           },
-          primaryColor: 'blue',
+          primaryColor: 'gold',
           primaryShade: 9,
           other: {
             primaryColor: '#F5F5DC',

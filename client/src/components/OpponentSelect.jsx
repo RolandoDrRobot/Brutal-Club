@@ -49,7 +49,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
 
   const getButtonStyle = (opponent) => ({
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
-    color: '#4a6b8a',
+    color: '#FFB300',
     border: 'none',
     fontSize: isMobile ? '18px' : '20px',
     fontWeight: 700,
@@ -278,7 +278,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                   <Text style={{
                     fontSize: isMobile ? '20px' : '24px',
                     fontWeight: 700,
-                    color: '#4a6b8a',
+                    color: '#FFB300',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '1px',
                     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)'

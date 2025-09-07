@@ -173,11 +173,11 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         style={{
           padding: isMobile ? '15px' : '25px',
           backgroundColor: '#000000',
-          border: `2px solid ${isMaxLevel(statName) ? '#4a6b8a' : '#A00000'}`,
+          border: `2px solid ${isMaxLevel(statName) ? '#FFB300' : '#A00000'}`,
           borderRadius: '8px',
           boxShadow: isMaxLevel(statName) ? `
-            0 0 15px rgba(74, 107, 138, 0.3),
-            inset 0 0 15px rgba(74, 107, 138, 0.1)
+            0 0 15px rgba(255, 179, 0, 0.3),
+            inset 0 0 15px rgba(255, 179, 0, 0.1)
           ` : `
             0 0 15px rgba(243, 34, 16, 0.3),
             inset 0 0 15px rgba(243, 34, 16, 0.1)
@@ -236,7 +236,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           <Text style={{
             fontSize: isMobile ? '14px' : '16px',
             fontWeight: 700,
-            color: '#4a6b8a',
+            color: '#FFB300',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'center',
@@ -265,7 +265,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             <Text style={{
               fontSize: isMobile ? '12px' : '14px',
               fontWeight: 600,
-              color: '#4a6b8a',
+              color: '#FFB300',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',
@@ -542,7 +542,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               style={{
                 width: isMobile ? '60px' : '80px',
                 height: isMobile ? '60px' : '80px',
-                backgroundColor: '#4a6b8a',
+                backgroundColor: '#FFB300',
                 borderRadius: '8px',
                 display: 'flex',
                 alignItems: 'center',

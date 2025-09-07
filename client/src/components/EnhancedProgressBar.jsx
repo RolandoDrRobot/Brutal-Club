@@ -6,7 +6,7 @@ const EnhancedProgressBar = ({
   value, 
   statName, 
   isAnimating = false, 
-  color = "#4a6b8a",
+  color = "#FFB300",
   size = "lg"
 }) => {
   const getStatColor = (stat) => {
@@ -33,7 +33,7 @@ const EnhancedProgressBar = ({
     >
       <Progress
         value={value}
-        color="#4a6b8a"
+        color="#FFB300"
         size={size}
         radius="md"
         style={{
