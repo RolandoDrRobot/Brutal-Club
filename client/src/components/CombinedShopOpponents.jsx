@@ -378,7 +378,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             textShadow: '0 0 8px #F5F5DC',
             textAlign: 'left'
           }}>
-            ARCADE
+            ARCADE MODE
           </div>
           <div style={{
             fontSize: isMobile ? '14px' : '18px',
@@ -390,7 +390,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             lineHeight: 1.2,
             textShadow: '0 0 5px #A00000'
           }}>
-            BIENVENIDO AL MODO ARCADE
+            Every time you defeat all fighters, you level up
           </div>
         </Box>
 
