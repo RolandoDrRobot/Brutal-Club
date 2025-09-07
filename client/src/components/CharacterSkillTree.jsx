@@ -334,7 +334,47 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         alignItems: "center"
       }}
     >
-
+      {/* Character Title */}
+      <Box
+        style={{
+          position: 'absolute',
+          top: '15px',
+          left: '15px',
+          padding: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
+          minWidth: isMobile ? '120px' : '160px',
+          zIndex: 10
+        }}
+      >
+        <div style={{
+          fontSize: isMobile ? '24px' : '28px',
+          fontWeight: 900,
+          color: '#F5F5DC',
+          fontFamily: 'Anton, sans-serif',
+          letterSpacing: '2px',
+          textTransform: 'uppercase',
+          marginBottom: '4px',
+          textShadow: '0 0 8px #F5F5DC',
+          textAlign: 'left'
+        }}>
+          {characters[selectedCharacter]?.name || 'FIGHTER'}
+        </div>
+        <div style={{
+          fontSize: isMobile ? '14px' : '16px',
+          fontWeight: 600,
+          color: '#A00000',
+          fontFamily: 'Anton, sans-serif',
+          letterSpacing: '1px',
+          textAlign: 'left',
+          lineHeight: 1.2,
+          textShadow: '0 0 5px #A00000'
+        }}>
+          Upgrade your fighter's abilities
+        </div>
+      </Box>
 
       {/* Character selection area */}
       <Box style={{
