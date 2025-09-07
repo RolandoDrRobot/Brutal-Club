@@ -216,7 +216,6 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                      border: `2px solid ${getRankColor(player.rank)}`,
                       borderRadius: '8px',
                       padding: '8px 16px',
                       flexShrink: 0,

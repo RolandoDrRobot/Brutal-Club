@@ -353,6 +353,47 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         width: "100%",
         position: 'relative'
       }}>
+        {/* Arcade Title - Top Left Corner */}
+        <Box
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            padding: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            minWidth: isMobile ? '120px' : '160px'
+          }}
+        >
+          <div style={{
+            fontSize: isMobile ? '24px' : '32px',
+            fontWeight: 900,
+            color: '#F5F5DC',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            marginBottom: '4px',
+            textShadow: '0 0 8px #F5F5DC',
+            textAlign: 'left'
+          }}>
+            ARCADE
+          </div>
+          <div style={{
+            fontSize: isMobile ? '14px' : '18px',
+            fontWeight: 600,
+            color: '#A00000',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '1px',
+            textAlign: 'left',
+            lineHeight: 1.2,
+            textShadow: '0 0 5px #A00000'
+          }}>
+            BIENVENIDO AL MODO ARCADE
+          </div>
+        </Box>
+
         {/* Level Indicator - Top Right Corner */}
         <Box 
           onClick={() => {
@@ -364,21 +405,14 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             top: 0,
             right: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            border: '2px solid #A00000',
             borderRadius: '8px',
-            padding: isMobile ? '8px 12px' : '12px 16px',
-            boxShadow: `
-              0 0 15px #A00000,
-              0 0 30px rgba(243, 34, 16, 0.3),
-              inset 0 0 15px rgba(243, 34, 16, 0.1)
-            `,
+            padding: 0,
             backdropFilter: 'blur(10px)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             minWidth: isMobile ? '60px' : '80px',
-            animation: 'neonPulse 2s ease-in-out infinite',
             cursor: 'pointer',
             transition: 'all 0.3s ease'
           }}
@@ -396,24 +430,22 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           }}
         >
           <div style={{
-            fontSize: isMobile ? '10px' : '12px',
+            fontSize: isMobile ? '14px' : '16px',
             fontWeight: 700,
             color: '#F5F5DC',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textTransform: 'uppercase',
-            marginBottom: '2px',
-            textShadow: '0 0 5px #F5F5DC'
+            marginBottom: '2px'
           }}>
             LEVEL
           </div>
           <div style={{
-            fontSize: isMobile ? '24px' : '32px',
+            fontSize: isMobile ? '32px' : '40px',
             fontWeight: 900,
             color: '#A00000',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
-            textShadow: '0 0 10px #A00000, 0 0 20px rgba(243, 34, 16, 0.5)',
             lineHeight: 1
           }}>
             {playerLevel}
