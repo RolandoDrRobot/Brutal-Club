@@ -390,7 +390,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             lineHeight: 1.2,
             textShadow: '0 0 5px #A00000'
           }}>
-            Every time you defeat all fighters, you level up
+            Defeat fighters to level up
           </div>
         </Box>
 
