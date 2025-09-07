@@ -372,7 +372,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           lineHeight: 1.2,
           textShadow: '0 0 5px #A00000'
         }}>
-          Upgrade your fighter's abilities
+          Defeat fighters to level up
         </div>
       </Box>
 
