@@ -6,11 +6,12 @@ import { useCharacterAnimations } from '../contexts/CharacterAnimations';
 import { useGameState } from '../contexts/GameState';
 import { useButtonSound } from '../hooks/useButtonSound';
 import { useCharacterEconomy, useRewards } from '../hooks/useEconomy';
+import { useEconomy } from '../contexts/EconomyContext';
 import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
-import punchImg from "../assets/optimized/punch.webp";
 import comboImg from "../assets/optimized/combo.webp";
 import CharacterPurchaseModal from './CharacterPurchaseModal';
+import LeaderboardModal from './LeaderboardModal';
 
 const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -31,6 +32,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   } = useCharacterEconomy();
   
   const { startArcadeMode } = useRewards();
+  const { getCharacterStats } = useEconomy();
   const { lazyLoadModel } = useModelLoader();
   const [loadingModels, setLoadingModels] = useState(new Set());
   const [loadedModels, setLoadedModels] = useState(new Set());
@@ -41,6 +43,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     characterEmoji: '',
     coinsSpent: 0
   });
+  const [showLeaderboardModal, setShowLeaderboardModal] = useState(false);
 
 
   if (coins === undefined) {
@@ -111,6 +114,20 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     name: char.name.toUpperCase(),
     model: char.model
   }));
+
+  const getPlayerLevel = () => {
+    if (!selectedPlayer1Character) return 9;
+    
+    const characterId = selectedPlayer1Character.toLowerCase();
+    const stats = getCharacterStats(characterId);
+    
+    const totalStats = (stats.speed || 1) + (stats.stamina || 1) + (stats.strength || 1);
+    const baseLevel = Math.floor(totalStats / 3);
+    
+    return Math.max(9, baseLevel);
+  };
+
+  const playerLevel = getPlayerLevel();
 
 
 
@@ -321,8 +338,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         flexDirection: "column"
       }}
     >
-
-
       {/* Scrollable Content Container - Vertically Centered */}
       <Box style={{ 
         flex: 1,
@@ -335,8 +350,75 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         animation: "electricFadeIn 0.8s ease-out 0.3s both",
         minHeight: 0,
         maxWidth: "100%",
-        width: "100%"
+        width: "100%",
+        position: 'relative'
       }}>
+        {/* Level Indicator - Top Right Corner */}
+        <Box 
+          onClick={() => {
+            playButtonSound();
+            setShowLeaderboardModal(true);
+          }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            border: '2px solid #f32210',
+            borderRadius: '8px',
+            padding: isMobile ? '8px 12px' : '12px 16px',
+            boxShadow: `
+              0 0 15px #f32210,
+              0 0 30px rgba(243, 34, 16, 0.3),
+              inset 0 0 15px rgba(243, 34, 16, 0.1)
+            `,
+            backdropFilter: 'blur(10px)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: isMobile ? '60px' : '80px',
+            animation: 'neonPulse 2s ease-in-out infinite',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = 'scale(1.05)';
+              e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.1)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isMobile) {
+              e.target.style.transform = 'scale(1)';
+              e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            }
+          }}
+        >
+          <div style={{
+            fontSize: isMobile ? '10px' : '12px',
+            fontWeight: 700,
+            color: '#F5F5DC',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '1px',
+            textTransform: 'uppercase',
+            marginBottom: '2px',
+            textShadow: '0 0 5px #F5F5DC'
+          }}>
+            LEVEL
+          </div>
+          <div style={{
+            fontSize: isMobile ? '24px' : '32px',
+            fontWeight: 900,
+            color: '#f32210',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '2px',
+            textShadow: '0 0 10px #f32210, 0 0 20px rgba(243, 34, 16, 0.5)',
+            lineHeight: 1
+          }}>
+            {playerLevel}
+          </div>
+        </Box>
         {/* CHARACTER SELECTION Section */}
         {ownedCharacters.length > 0 && (
           <Box style={{ width: '100%' }}>
@@ -560,6 +642,12 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         characterDescription={purchaseModalData.characterDescription}
         characterEmoji={purchaseModalData.characterEmoji}
         coinsSpent={purchaseModalData.coinsSpent}
+      />
+
+      {/* Leaderboard Modal */}
+      <LeaderboardModal
+        isVisible={showLeaderboardModal}
+        onClose={() => setShowLeaderboardModal(false)}
       />
 
     </Box>
