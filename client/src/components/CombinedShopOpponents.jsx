@@ -58,6 +58,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     newLevel: 0,
     characterName: ''
   });
+  const [showOpponentsGrid, setShowOpponentsGrid] = useState(true);
 
   const purchasedCharacters = useMemo(() => 
     getShopCharactersStatus().filter(char => char.isPurchased),
@@ -134,6 +135,11 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
     return currentLevel >= maxLevel;
   }, [ownedCharacters, getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL]);
+
+  const handleToggleView = useCallback(() => {
+    playButtonSound();
+    setShowOpponentsGrid(prev => !prev);
+  }, [playButtonSound]);
 
   const StatUpgradeTree = ({ statName }) => {
     const statConfig = GAME_CONFIG.STAT_CONFIG;
@@ -786,111 +792,131 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           position: 'relative'
         }}>
           
-          {/* Punch Icon */}
+          {/* Punch Icon Toggle */}
           <img
             src={punchImg}
             alt="Punch Icon"
+            onClick={handleToggleView}
             style={{
               width: '50px',
               height: '50px',
               position: 'absolute',
               top: '-60px',
-              right: '0'
+              right: '0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              zIndex: 10
+            }}
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = 'scale(1.1)';
+                e.target.style.opacity = '0.8';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                e.target.style.transform = 'scale(1)';
+                e.target.style.opacity = '1';
+              }
             }}
           />
           
-          {/* Opponents Grid */}
-          <Grid 
-            gutter={isMobile ? "sm" : "md"}
-            style={{ 
-              width: '100%',
-              maxWidth: '400px',
-              margin: '0 auto'
-            }}
-          >
-            {opponents.map((opponent, index) => (
-              <Grid.Col 
-                key={opponent.id} 
-                span={4}
-                style={{
-                  animation: `electricStatic 0.6s ease-out ${0.5 + index * 0.12}s both`
-                }}
-              >
-                <Box style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  <Card
-                    style={getCharacterCardStyle(opponent, true)}
-                    onClick={() => handleOpponentSelect(opponent)}
-                  >
-                    {/* 3D Model */}
-                    {opponent.model && (
-                      <Box style={{
-                        position: 'absolute',
-                        top: '60%',
-                        left: '40%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '90%',
-                        height: '55%',
-                        zIndex: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}>
-                        <CharacterPreview
-                          characterName={opponent.name}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            transform: 'scale(1.4)',
-                            filter: opponent.isLocked ? 'grayscale(100%)' : 'none'
-                          }}
-                        />
-                      </Box>
-                    )}
-
-
-                  </Card>
-                  
-                  {/* Fighter Name */}
-                  <Text style={{
-                    fontSize: isMobile ? '18px' : '20px',
-                    fontWeight: 700,
-                    color: opponent.isLocked ? '#666' : '#F5F5DC',
-                    fontFamily: 'Anton, sans-serif',
-                    letterSpacing: '1px',
-                    textAlign: 'center',
-                    textTransform: 'uppercase',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+          {/* Conditional Content Based on Toggle */}
+          {showOpponentsGrid ? (
+            /* Opponents Grid */
+            <Grid 
+              gutter={isMobile ? "sm" : "md"}
+              style={{ 
+                width: '100%',
+                maxWidth: '400px',
+                margin: '0 auto'
+              }}
+            >
+              {opponents.map((opponent, index) => (
+                <Grid.Col 
+                  key={opponent.id} 
+                  span={4}
+                  style={{
+                    animation: `electricStatic 0.6s ease-out ${0.5 + index * 0.12}s both`
+                  }}
+                >
+                  <Box style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '8px'
                   }}>
-                    {opponent.isDefeated ? 'DEFEATED' : opponent.isUnlocked ? 'FIGHT' : opponent.name}
-                  </Text>
-                </Box>
-              </Grid.Col>
-            ))}
-          </Grid>
+                    <Card
+                      style={getCharacterCardStyle(opponent, true)}
+                      onClick={() => handleOpponentSelect(opponent)}
+                    >
+                      {/* 3D Model */}
+                      {opponent.model && (
+                        <Box style={{
+                          position: 'absolute',
+                          top: '60%',
+                          left: '40%',
+                          transform: 'translate(-50%, -50%)',
+                          width: '90%',
+                          height: '55%',
+                          zIndex: 1,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          <CharacterPreview
+                            characterName={opponent.name}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              transform: 'scale(1.4)',
+                              filter: opponent.isLocked ? 'grayscale(100%)' : 'none'
+                            }}
+                          />
+                        </Box>
+                      )}
 
-          {/* Stats Display */}
-          {ownedCharacters.length > 0 && (
-            <Box style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              gap: '8px',
-              width: '100%',
-              maxWidth: isMobile ? '100%' : '600px',
-              margin: '0px',
-              flexShrink: 0,
-              padding: '0px 5px'
-            }}>
-              <StatUpgradeTree statName="speed" />
-              <StatUpgradeTree statName="stamina" />
-              <StatUpgradeTree statName="strength" />
-            </Box>
+
+                    </Card>
+                    
+                    {/* Fighter Name */}
+                    <Text style={{
+                      fontSize: isMobile ? '18px' : '20px',
+                      fontWeight: 700,
+                      color: opponent.isLocked ? '#666' : '#F5F5DC',
+                      fontFamily: 'Anton, sans-serif',
+                      letterSpacing: '1px',
+                      textAlign: 'center',
+                      textTransform: 'uppercase',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                    }}>
+                      {opponent.isDefeated ? 'DEFEATED' : opponent.isUnlocked ? 'FIGHT' : opponent.name}
+                    </Text>
+                  </Box>
+                </Grid.Col>
+              ))}
+            </Grid>
+          ) : (
+            /* Stats Display */
+            ownedCharacters.length > 0 && (
+              <Box style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                gap: '8px',
+                width: '100%',
+                maxWidth: isMobile ? '100%' : '600px',
+                margin: '0px',
+                flexShrink: 0,
+                padding: '0px 5px',
+                animation: 'electricStatic 0.6s ease-out 0.5s both'
+              }}>
+                <StatUpgradeTree statName="speed" />
+                <StatUpgradeTree statName="stamina" />
+                <StatUpgradeTree statName="strength" />
+              </Box>
+            )
           )}
 
         </Box>
