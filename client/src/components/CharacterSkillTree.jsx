@@ -323,7 +323,9 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
       className="fight-screen-container fight-screen-background"
       style={{
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricFadeIn 0.8s ease-out",
-        padding: isMobile ? "10px" : "40px",
+        paddingTop: isMobile ? "10px" : "40px",
+        paddingLeft: isMobile ? "10px" : "40px",
+        paddingRight: isMobile ? "10px" : "40px",
         paddingBottom: "40px",
         minHeight: "100dvh",
         height: "auto",

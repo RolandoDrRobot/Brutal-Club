@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Box, Text, Stack, Grid, Card, Group } from '@mantine/core';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Button, Box, Text, Stack, Grid, Card, Group, Paper, Progress } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
 import { useCharacterAnimations } from '../contexts/CharacterAnimations';
@@ -10,8 +10,10 @@ import { useEconomy } from '../contexts/EconomyContext';
 import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
 import comboImg from "../assets/optimized/combo.webp";
+import punchImg from "../assets/optimized/punch.webp";
 import CharacterPurchaseModal from './CharacterPurchaseModal';
 import LeaderboardModal from './LeaderboardModal';
+import StatUpgradeModal from './StatUpgradeModal';
 
 const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -21,6 +23,8 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
     const {
     coins,
+    statPoints,
+    GAME_CONFIG,
     getShopCharactersStatus, 
     getOpponentsStatus
   } = useGameState();
@@ -28,7 +32,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const { 
     purchaseCharacter, 
     isCharacterPurchased, 
-    canAffordCharacter 
+    canAffordCharacter,
+    upgradeCharacterStat,
+    getCharacterStats: getCharacterStatsFromEconomy
   } = useCharacterEconomy();
   
   const { startArcadeMode } = useRewards();
@@ -44,7 +50,203 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     coinsSpent: 0
   });
   const [showLeaderboardModal, setShowLeaderboardModal] = useState(false);
+  const [showNoCoinsModal, setShowNoCoinsModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeModalData, setUpgradeModalData] = useState({
+    statName: '',
+    statDisplayName: '',
+    newLevel: 0,
+    characterName: ''
+  });
 
+  const purchasedCharacters = useMemo(() => 
+    getShopCharactersStatus().filter(char => char.isPurchased),
+    [getShopCharactersStatus]
+  );
+
+  const ownedCharacters = useMemo(() => 
+    purchasedCharacters.map(char => ({
+      id: char.id,
+      name: char.name.toUpperCase(),
+      description: char.description,
+      model: char.model
+    })),
+    [purchasedCharacters]
+  );
+
+  const getStatLevel = useCallback((statName) => {
+    if (ownedCharacters.length === 0) return 1;
+    const characterId = ownedCharacters[selectedCharacter].id;
+    const stats = getCharacterStatsFromEconomy(characterId);
+    return stats[statName];
+  }, [ownedCharacters, selectedCharacter, getCharacterStatsFromEconomy]);
+
+  const getStatProgress = useCallback((statName) => {
+    if (ownedCharacters.length === 0) return 0;
+    const characterId = ownedCharacters[selectedCharacter].id;
+    const stats = getCharacterStatsFromEconomy(characterId);
+    const currentLevel = stats[statName];
+    const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
+    return (currentLevel / maxLevel) * 100;
+  }, [ownedCharacters, selectedCharacter, getCharacterStatsFromEconomy, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL]);
+
+  const handleUpgradeStat = useCallback((statName) => {
+    if (ownedCharacters.length === 0) return;
+    playButtonSound();
+    const characterId = ownedCharacters[selectedCharacter].id;
+    const currentLevel = getStatLevel(statName);
+    const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
+    const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
+    
+    if (currentLevel >= maxLevel) {
+      return;
+    }
+    
+    if (statPoints < upgradeCost) {
+      setShowNoCoinsModal(true);
+      return;
+    }
+    
+    const success = upgradeCharacterStat(characterId, statName);
+    if (success) {
+      const newLevel = getStatLevel(statName) + 1;
+      setUpgradeModalData({
+        statName: statName,
+        statDisplayName: GAME_CONFIG.STAT_CONFIG.STAT_NAMES[statName],
+        newLevel: newLevel,
+        characterName: ownedCharacters[selectedCharacter].name
+      });
+      setShowUpgradeModal(true);
+    }
+  }, [playButtonSound, ownedCharacters, selectedCharacter, upgradeCharacterStat, statPoints, getStatLevel, GAME_CONFIG.STAT_CONFIG]);
+
+  const canUpgrade = useCallback((statName) => {
+    if (ownedCharacters.length === 0) return false;
+    const currentLevel = getStatLevel(statName);
+    const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
+    const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
+    return currentLevel < maxLevel && statPoints >= upgradeCost;
+  }, [ownedCharacters, getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL, GAME_CONFIG.STAT_CONFIG.UPGRADE_COST, statPoints]);
+
+  const isMaxLevel = useCallback((statName) => {
+    if (ownedCharacters.length === 0) return false;
+    const currentLevel = getStatLevel(statName);
+    const maxLevel = GAME_CONFIG.STAT_CONFIG.MAX_LEVEL;
+    return currentLevel >= maxLevel;
+  }, [ownedCharacters, getStatLevel, GAME_CONFIG.STAT_CONFIG.MAX_LEVEL]);
+
+  const StatUpgradeTree = ({ statName }) => {
+    const statConfig = GAME_CONFIG.STAT_CONFIG;
+    const icon = statConfig.STAT_ICONS[statName];
+    const displayName = statConfig.STAT_NAMES[statName];
+    const currentLevel = getStatLevel(statName);
+    const progress = getStatProgress(statName);
+    const maxLevel = statConfig.MAX_LEVEL;
+    const upgradeCost = statConfig.UPGRADE_COST;
+
+    return (
+      <Paper
+        onClick={() => canUpgrade(statName) ? handleUpgradeStat(statName) : null}
+        onMouseEnter={(e) => {
+          if (canUpgrade(statName) && !isMobile) {
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.backgroundColor = 'rgba(255, 179, 0, 0.1)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (canUpgrade(statName) && !isMobile) {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.backgroundColor = '#000000';
+          }
+        }}
+        style={{
+          padding: isMobile ? '15px' : '25px',
+          backgroundColor: '#000000',
+          border: `2px solid ${isMaxLevel(statName) ? '#FFB300' : '#A00000'}`,
+          borderRadius: '8px',
+          boxShadow: isMaxLevel(statName) ? `
+            0 0 15px rgba(255, 179, 0, 0.3),
+            inset 0 0 15px rgba(255, 179, 0, 0.1)
+          ` : `
+            0 0 15px rgba(243, 34, 16, 0.3),
+            inset 0 0 15px rgba(243, 34, 16, 0.1)
+          `,
+          width: '100%',
+          maxWidth: isMobile ? 'calc(33.333% - 6px)' : '280px',
+          flex: isMobile ? '1' : 'none',
+          cursor: canUpgrade(statName) ? 'pointer' : 'not-allowed',
+          transition: 'all 0.2s ease',
+          opacity: canUpgrade(statName) ? 1 : 0.6
+        }}
+      >
+        <Stack spacing="sm" align="center">
+          <Text style={{
+            fontSize: isMobile ? '20px' : '24px',
+            fontWeight: 700,
+            color: '#F5F5DC',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '1px',
+            textAlign: 'center',
+            lineHeight: 1,
+            textShadow: '0 0 10px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,1), 2px 2px 4px rgba(0,0,0,1)'
+          }}>
+            {displayName}
+          </Text>
+          
+          <Box style={{ width: '100%', marginBottom: '6px' }}>
+            <Progress
+              value={progress}
+              color={isMaxLevel(statName) ? '#FFB300' : '#A00000'}
+              size="lg"
+              radius="md"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                height: isMobile ? '20px' : '30px'
+              }}
+            />
+          </Box>
+          
+          <Text style={{
+            fontSize: isMobile ? '12px' : '14px',
+            fontWeight: 700,
+            color: isMaxLevel(statName) ? '#FFB300' : '#A00000',
+            fontFamily: 'Anton, sans-serif',
+            letterSpacing: '1px',
+            textAlign: 'center',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+          }}>
+            LEVEL {currentLevel}/{maxLevel}
+          </Text>
+          
+          {isMaxLevel(statName) ? (
+            <Text style={{
+              fontSize: isMobile ? '10px' : '12px',
+              fontWeight: 600,
+              color: '#FFB300',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              textAlign: 'center',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+            }}>
+              MAX LEVEL
+            </Text>
+          ) : (
+            <Text style={{
+              fontSize: isMobile ? '10px' : '12px',
+              fontWeight: 600,
+              color: '#A00000',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              textAlign: 'center',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+            }}>
+              {upgradeCost} STAT POINT{upgradeCost > 1 ? 'S' : ''}
+            </Text>
+          )}
+        </Stack>
+      </Paper>
+    );
+  };
 
   if (coins === undefined) {
     return (
@@ -109,11 +311,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
 
   const allCharacters = getShopCharactersStatus();
-  const ownedCharacters = allCharacters.filter(char => char.isPurchased).map(char => ({
-    id: char.id,
-    name: char.name.toUpperCase(),
-    model: char.model
-  }));
 
   const getPlayerLevel = () => {
     if (!selectedPlayer1Character) return 9;
@@ -582,11 +779,27 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         <Box style={{ 
           width: '100%',
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: isMobile ? 'column' : 'row',
           alignItems: 'center',
-          gap: '30px'
+          justifyContent: 'center',
+          gap: isMobile ? '30px' : '50px',
+          position: 'relative'
         }}>
           
+          {/* Punch Icon */}
+          <img
+            src={punchImg}
+            alt="Punch Icon"
+            style={{
+              width: '50px',
+              height: '50px',
+              position: 'absolute',
+              top: '-60px',
+              right: '0'
+            }}
+          />
+          
+          {/* Opponents Grid */}
           <Grid 
             gutter={isMobile ? "sm" : "md"}
             style={{ 
@@ -660,6 +873,25 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             ))}
           </Grid>
 
+          {/* Stats Display */}
+          {ownedCharacters.length > 0 && (
+            <Box style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              gap: '8px',
+              width: '100%',
+              maxWidth: isMobile ? '100%' : '600px',
+              margin: '0px',
+              flexShrink: 0,
+              padding: '0px 5px'
+            }}>
+              <StatUpgradeTree statName="speed" />
+              <StatUpgradeTree statName="stamina" />
+              <StatUpgradeTree statName="strength" />
+            </Box>
+          )}
 
         </Box>
 
@@ -680,6 +912,97 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       <LeaderboardModal
         isVisible={showLeaderboardModal}
         onClose={() => setShowLeaderboardModal(false)}
+      />
+
+      {/* No Coins Modal */}
+      {showNoCoinsModal && (
+        <Box style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <Box style={{
+            backgroundColor: '#000000',
+            border: '3px solid #A00000',
+            borderRadius: '12px',
+            padding: isMobile ? '30px' : '40px',
+            maxWidth: isMobile ? '90%' : '500px',
+            textAlign: 'center',
+            boxShadow: '0 0 30px rgba(243, 34, 16, 0.5)'
+          }}>
+            <Text style={{
+              fontSize: isMobile ? '24px' : '28px',
+              fontWeight: 700,
+              color: '#A00000',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '2px',
+              marginBottom: '20px',
+              textTransform: 'uppercase'
+            }}>
+              INSUFFICIENT STAT POINTS
+            </Text>
+            
+            <Text style={{
+              fontSize: isMobile ? '16px' : '18px',
+              color: '#F5F5DC',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              marginBottom: '30px',
+              lineHeight: 1.4
+            }}>
+              You need 1 stat point to upgrade your fighter's stats. Buy packs from the store to get more stat points!
+            </Text>
+
+            <Button
+              onClick={() => setShowNoCoinsModal(false)}
+              style={{
+                fontSize: isMobile ? '16px' : '18px',
+                fontWeight: 700,
+                padding: isMobile ? '12px 25px' : '15px 30px',
+                backgroundColor: 'transparent',
+                border: '3px solid #A00000',
+                borderRadius: '8px',
+                color: '#A00000',
+                textTransform: 'uppercase',
+                letterSpacing: '2px',
+                fontFamily: 'Anton, sans-serif',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
+                  e.target.style.backgroundColor = 'rgba(243, 34, 16, 0.1)';
+                  e.target.style.transform = 'scale(1.05)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
+                  e.target.style.backgroundColor = 'transparent';
+                  e.target.style.transform = 'scale(1)';
+                }
+              }}
+            >
+              OK
+            </Button>
+          </Box>
+        </Box>
+      )}
+
+      {/* Stat Upgrade Success Modal */}
+      <StatUpgradeModal
+        isVisible={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        statName={upgradeModalData.statName}
+        statDisplayName={upgradeModalData.statDisplayName}
+        newLevel={upgradeModalData.newLevel}
+        characterName={upgradeModalData.characterName}
       />
 
     </Box>
