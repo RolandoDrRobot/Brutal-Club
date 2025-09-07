@@ -212,17 +212,19 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             />
           </Box>
           
-          <Text style={{
-            fontSize: '14px',
-            fontWeight: 700,
-            color: isMaxLevel(statName) ? '#FFB300' : '#A00000',
-            fontFamily: 'Anton, sans-serif',
-            letterSpacing: '1px',
-            textAlign: 'center',
-            textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-          }}>
-            LEVEL {currentLevel}/{maxLevel}
-          </Text>
+          {!isMaxLevel(statName) && (
+            <Text style={{
+              fontSize: '14px',
+              fontWeight: 700,
+              color: '#A00000',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              textAlign: 'center',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+            }}>
+              LEVEL {currentLevel}/{maxLevel}
+            </Text>
+          )}
           
           {isMaxLevel(statName) ? (
             <Text style={{
@@ -550,7 +552,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         alignItems: 'center',
         overflowY: "auto",
         overflowX: "hidden",
-        animation: "electricFadeIn 0.8s ease-out 0.3s both",
         minHeight: 0,
         maxWidth: "100%",
         width: "100%",
@@ -829,7 +830,8 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             style={{ 
               width: '100%',
               maxWidth: '400px',
-              margin: '0 auto'
+                margin: '0 auto',
+                minHeight: '151px'
             }}
           >
             {opponents.map((opponent, index) => (
@@ -906,10 +908,11 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                 alignItems: 'flex-start',
                 gap: '8px',
                 width: '100%',
-                maxWidth: isMobile ? '100%' : '600px',
+                maxWidth: '400px',
                 margin: '0px',
                 flexShrink: 0,
                 padding: '0px 5px',
+                minHeight: '151px',
                 animation: 'electricStatic 0.6s ease-out 0.5s both'
               }}>
                 <StatUpgradeTree statName="speed" />

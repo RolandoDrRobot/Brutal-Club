@@ -4,7 +4,6 @@ import { useMediaQuery } from "@mantine/hooks";
 import React, { useState, useEffect, Suspense } from 'react';
 const MusicPlayer = React.lazy(() => import("./MusicPlayer"));
 const MainMenu = React.lazy(() => import("./MainMenu"));
-const CharacterSkillTree = React.lazy(() => import("./CharacterSkillTree"));
 const CombinedShopOpponents = React.lazy(() => import("./CombinedShopOpponents"));
 const Shop = React.lazy(() => import("./Shop"));
 import '../styles/fightAnimations.css';
@@ -98,9 +97,6 @@ const Interface = () => {
     currentScreen,
     navigateToMenu,
     navigateBackToDance,
-    navigateToCharacterSelect,
-    navigateBackFromCharacterSelect,
-    handleCharacterSelection,
     navigateToOpponentSelect,
     navigateBackFromOpponentSelect,
     handleOpponentChallenge,
@@ -337,19 +333,8 @@ const Interface = () => {
         <Suspense fallback={null}>
           <MainMenu 
             onStartClick={navigateToOpponentSelect}
-            onFightersClick={navigateToCharacterSelect}
             onStoreClick={navigateToShop}
             onBackClick={navigateBackToDance}
-          />
-        </Suspense>
-      )}
-
-      {/* Mostrar pantalla de árbol de habilidades cuando currentScreen es 'characterSelect' - Lazy loaded */}
-      {currentScreen === 'characterSelect' && (
-        <Suspense fallback={null}>
-          <CharacterSkillTree 
-            onSelectClick={handleCharacterSelection}
-            onBackClick={navigateBackFromCharacterSelect}
           />
         </Suspense>
       )}

@@ -69,8 +69,7 @@ const Shop = ({ onBackClick }) => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '40px',
-        animation: "electricFadeIn 0.7s ease-out 0.4s both"
+        gap: '40px'
       }}>
         
 
