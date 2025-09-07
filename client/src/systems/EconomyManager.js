@@ -173,6 +173,10 @@ class EconomyManager {
   startArcadeMode() {
     const arcadeCost = 1;
     if (this.spendCoins(arcadeCost)) {
+      this.setGameState(prev => ({
+        ...prev,
+        unlockedOpponents: this.config.OPPONENTS.map(opponent => opponent.id)
+      }));
       return true;
     }
     return false;

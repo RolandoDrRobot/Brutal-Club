@@ -146,7 +146,10 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       
 
       if (isFirstOpponent) {
-        startArcadeMode();
+        const arcadeStarted = startArcadeMode();
+        if (!arcadeStarted) {
+          return;
+        }
       }
       
       onChallengeClick(opponent);

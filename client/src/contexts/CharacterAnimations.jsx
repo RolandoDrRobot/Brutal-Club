@@ -996,7 +996,7 @@ export const CharacterAnimationsProvider = (props) => {
       
       if (player1IsDead && !player2IsDead) {
         registerDefeat();
-      } else if (player2IsDead && !player1IsDead) {
+      } else if (player2IsDead && !player1IsDead && !victoryCountedThisRound) {
         if (selectedOpponent) {
           const opponentId = selectedOpponent.id;
           registerVictory(opponentId);
@@ -1008,7 +1008,7 @@ export const CharacterAnimationsProvider = (props) => {
         }
       }
     }
-  }, [player1IsDead, player2IsDead, selectedOpponent, selectedPlayer2Character, registerVictory, registerDefeat, giveVictoryReward]);
+  }, [player1IsDead, player2IsDead, selectedOpponent, selectedPlayer2Character, victoryCountedThisRound]);
 
   useEffect(() => {
   }, [player1Wins]);
