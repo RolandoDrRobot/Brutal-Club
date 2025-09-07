@@ -187,7 +187,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       >
         <Stack spacing="sm" align="center">
           <Text style={{
-            fontSize: isMobile ? '20px' : '24px',
+            fontSize: '24px',
             fontWeight: 700,
             color: '#F5F5DC',
             fontFamily: 'Anton, sans-serif',
@@ -207,13 +207,13 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
               radius="md"
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                height: isMobile ? '20px' : '30px'
+                height: '30px'
               }}
             />
           </Box>
           
           <Text style={{
-            fontSize: isMobile ? '12px' : '14px',
+            fontSize: '14px',
             fontWeight: 700,
             color: isMaxLevel(statName) ? '#FFB300' : '#A00000',
             fontFamily: 'Anton, sans-serif',
@@ -226,7 +226,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           
           {isMaxLevel(statName) ? (
             <Text style={{
-              fontSize: isMobile ? '10px' : '12px',
+              fontSize: '12px',
               fontWeight: 600,
               color: '#FFB300',
               fontFamily: 'Anton, sans-serif',
@@ -238,7 +238,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             </Text>
           ) : (
             <Text style={{
-              fontSize: isMobile ? '10px' : '12px',
+              fontSize: '12px',
               fontWeight: 600,
               color: '#A00000',
               fontFamily: 'Anton, sans-serif',
@@ -824,78 +824,78 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           {/* Conditional Content Based on Toggle */}
           {showOpponentsGrid ? (
             /* Opponents Grid */
-            <Grid 
-              gutter={isMobile ? "sm" : "md"}
-              style={{ 
-                width: '100%',
-                maxWidth: '400px',
-                margin: '0 auto'
-              }}
-            >
-              {opponents.map((opponent, index) => (
-                <Grid.Col 
-                  key={opponent.id} 
-                  span={4}
-                  style={{
-                    animation: `electricStatic 0.6s ease-out ${0.5 + index * 0.12}s both`
-                  }}
-                >
-                  <Box style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '8px'
+          <Grid 
+            gutter={isMobile ? "sm" : "md"}
+            style={{ 
+              width: '100%',
+              maxWidth: '400px',
+              margin: '0 auto'
+            }}
+          >
+            {opponents.map((opponent, index) => (
+              <Grid.Col 
+                key={opponent.id} 
+                span={4}
+                style={{
+                  animation: `electricStatic 0.6s ease-out ${0.5 + index * 0.12}s both`
+                }}
+              >
+                <Box style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <Card
+                    style={getCharacterCardStyle(opponent, true)}
+                    onClick={() => handleOpponentSelect(opponent)}
+                  >
+                    {/* 3D Model */}
+                    {opponent.model && (
+                      <Box style={{
+                        position: 'absolute',
+                        top: '60%',
+                        left: '40%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '90%',
+                        height: '55%',
+                        zIndex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <CharacterPreview
+                          characterName={opponent.name}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            transform: 'scale(1.4)',
+                            filter: opponent.isLocked ? 'grayscale(100%)' : 'none'
+                          }}
+                        />
+                      </Box>
+                    )}
+
+
+                  </Card>
+                  
+                  {/* Fighter Name */}
+                  <Text style={{
+                    fontSize: isMobile ? '18px' : '20px',
+                    fontWeight: 700,
+                    color: opponent.isLocked ? '#666' : '#F5F5DC',
+                    fontFamily: 'Anton, sans-serif',
+                    letterSpacing: '1px',
+                    textAlign: 'center',
+                    textTransform: 'uppercase',
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                   }}>
-                    <Card
-                      style={getCharacterCardStyle(opponent, true)}
-                      onClick={() => handleOpponentSelect(opponent)}
-                    >
-                      {/* 3D Model */}
-                      {opponent.model && (
-                        <Box style={{
-                          position: 'absolute',
-                          top: '60%',
-                          left: '40%',
-                          transform: 'translate(-50%, -50%)',
-                          width: '90%',
-                          height: '55%',
-                          zIndex: 1,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}>
-                          <CharacterPreview
-                            characterName={opponent.name}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              transform: 'scale(1.4)',
-                              filter: opponent.isLocked ? 'grayscale(100%)' : 'none'
-                            }}
-                          />
-                        </Box>
-                      )}
-
-
-                    </Card>
-                    
-                    {/* Fighter Name */}
-                    <Text style={{
-                      fontSize: isMobile ? '18px' : '20px',
-                      fontWeight: 700,
-                      color: opponent.isLocked ? '#666' : '#F5F5DC',
-                      fontFamily: 'Anton, sans-serif',
-                      letterSpacing: '1px',
-                      textAlign: 'center',
-                      textTransform: 'uppercase',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-                    }}>
-                      {opponent.isDefeated ? 'DEFEATED' : opponent.isUnlocked ? 'FIGHT' : opponent.name}
-                    </Text>
-                  </Box>
-                </Grid.Col>
-              ))}
-            </Grid>
+                    {opponent.isDefeated ? 'DEFEATED' : opponent.isUnlocked ? 'FIGHT' : opponent.name}
+                  </Text>
+                </Box>
+              </Grid.Col>
+            ))}
+          </Grid>
           ) : (
             /* Stats Display */
             ownedCharacters.length > 0 && (
