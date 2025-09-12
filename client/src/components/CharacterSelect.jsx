@@ -206,14 +206,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
               border: '3px solid #A00000',
               borderRadius: '0px',
               marginBottom: '15px',
-              boxShadow: `
-                0 0 30px #A00000,
-                0 0 60px rgba(243, 34, 16, 0.4),
-                0 0 90px rgba(243, 34, 16, 0.2),
-                inset 0 0 30px rgba(243, 34, 16, 0.1),
-                inset 0 0 60px rgba(243, 34, 16, 0.05)
-              `,
-              animation: "characterSwitch 0.8s ease-out, neonPulse 3s ease-in-out infinite",
+              animation: "characterSwitch 0.8s ease-out",
               position: 'relative',
               overflow: 'hidden',
               padding: 0,
@@ -331,11 +324,6 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            textShadow: `
-              0 0 10px #000000,
-              0 0 20px #000000,
-              2px 2px 4px #000000
-            `,
             animation: "none"
           }}
           onMouseEnter={(e) => {

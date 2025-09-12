@@ -114,18 +114,6 @@ const CoinPurchaseResultModal = ({
     }
   };
 
-  const glowVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: {
-      scale: [0, 1.8, 1.2],
-      opacity: [0, 0.8, 0.4],
-      transition: {
-        delay: 0.2,
-        duration: 1.2,
-        ease: "easeOut"
-      }
-    }
-  };
 
   return (
     <AnimatePresence>
@@ -139,7 +127,7 @@ const CoinPurchaseResultModal = ({
             top: 0,
             left: 0,
             width: '100vw',
-            height: '100vh',
+            height: '100dvh',
             backgroundColor: 'rgba(0, 0, 0, 0.85)',
             display: 'flex',
             alignItems: 'center',
@@ -178,7 +166,7 @@ const CoinPurchaseResultModal = ({
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               width: '100vw',
-              height: '100vh',
+              height: '100dvh',
               padding: '40px',
               textAlign: 'center',
               position: 'relative',

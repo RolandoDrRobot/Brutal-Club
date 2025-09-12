@@ -29,22 +29,6 @@ const interfaceStyles = `
     }
   }
   
-  @keyframes neonPulse {
-    0%, 100% {
-      box-shadow: 
-        0 0 15px #A00000,
-        0 0 30px rgba(243, 34, 16, 0.5),
-        0 4px 12px rgba(243, 34, 16, 0.3),
-        inset 0 0 15px rgba(243, 34, 16, 0.1);
-    }
-    50% {
-      box-shadow: 
-        0 0 25px #A00000,
-        0 0 50px rgba(243, 34, 16, 0.8),
-        0 4px 20px rgba(243, 34, 16, 0.6),
-        inset 0 0 25px rgba(243, 34, 16, 0.2);
-    }
-  }
   
   @keyframes rotate {
     from { transform: rotate(0deg); }
@@ -79,15 +63,12 @@ const interfaceStyles = `
   @keyframes buttonPowerUp {
     0% {
       transform: scale(1);
-      box-shadow: 0 0 10px rgba(243, 34, 16, 0.3);
     }
     50% {
       transform: scale(1.1);
-      box-shadow: 0 0 30px rgba(243, 34, 16, 0.8);
     }
     100% {
       transform: scale(1);
-      box-shadow: 0 0 10px rgba(243, 34, 16, 0.3);
     }
   }
 `;
@@ -179,91 +160,9 @@ const Interface = () => {
         }
       }
       
-      @keyframes glow {
-        0% {
-          box-shadow: 0 0 5px rgba(4, 203, 238, 0.5);
-        }
-        50% {
-          box-shadow: 0 0 20px rgba(4, 203, 238, 0.8), 0 0 30px rgba(4, 203, 238, 0.6);
-        }
-        100% {
-          box-shadow: 0 0 5px rgba(4, 203, 238, 0.5);
-        }
-      }
       
-      @keyframes neonPulse {
-        0% {
-          box-shadow: 
-            0 0 10px #A00000,
-            0 0 20px rgba(243, 34, 16, 0.3),
-            0 4px 8px rgba(243, 34, 16, 0.2),
-            inset 0 0 10px rgba(243, 34, 16, 0.05);
-        }
-        50% {
-          box-shadow: 
-            0 0 25px #A00000,
-            0 0 50px rgba(243, 34, 16, 0.8),
-            0 4px 20px rgba(243, 34, 16, 0.5),
-            inset 0 0 25px rgba(243, 34, 16, 0.2);
-        }
-        100% {
-          box-shadow: 
-            0 0 10px #A00000,
-            0 0 20px rgba(243, 34, 16, 0.3),
-            0 4px 8px rgba(243, 34, 16, 0.2),
-            inset 0 0 10px rgba(243, 34, 16, 0.05);
-        }
-      }
       
-      @keyframes redNeonText {
-        0% {
-          text-shadow: 
-            0 0 3px #A00000,
-            0 0 6px #A00000,
-            0 0 9px rgba(243, 34, 16, 0.4),
-            2px 2px 4px rgba(0,0,0,0.8);
-        }
-        50% {
-          text-shadow: 
-            0 0 5px #A00000,
-            0 0 10px #A00000,
-            0 0 15px rgba(243, 34, 16, 0.6),
-            0 0 20px rgba(243, 34, 16, 0.3),
-            2px 2px 4px rgba(0,0,0,0.8);
-        }
-        100% {
-          text-shadow: 
-            0 0 3px #A00000,
-            0 0 6px #A00000,
-            0 0 9px rgba(243, 34, 16, 0.4),
-            2px 2px 4px rgba(0,0,0,0.8);
-        }
-      }
       
-      @keyframes goldNeonText {
-        0% {
-          text-shadow: 
-            0 0 3px #F5F5DC,
-            0 0 6px #F5F5DC,
-            0 0 9px rgba(245, 245, 220, 0.4),
-            1px 1px 2px rgba(0,0,0,0.8);
-        }
-        50% {
-          text-shadow: 
-            0 0 5px #F5F5DC,
-            0 0 10px #F5F5DC,
-            0 0 15px rgba(245, 245, 220, 0.6),
-            0 0 20px rgba(245, 245, 220, 0.3),
-            1px 1px 2px rgba(0,0,0,0.8);
-        }
-        100% {
-          text-shadow: 
-            0 0 3px #F5F5DC,
-            0 0 6px #F5F5DC,
-            0 0 9px rgba(245, 245, 220, 0.4),
-            1px 1px 2px rgba(0,0,0,0.8);
-        }
-      }
       
       @keyframes shimmer {
         0% {
@@ -375,7 +274,7 @@ const Interface = () => {
                 top: 0,
                 left: 0,
                 width: '100vw',
-                height: '100vh',
+                height: '100dvh',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -400,7 +299,7 @@ const Interface = () => {
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
                   width: isMobile ? '120vw' : '80vw',
-                  height: isMobile ? '120vh' : '100vh',
+                  height: isMobile ? '120dvh' : '100dvh',
                   zIndex: 0,
                   opacity: 0.7,
                   pointerEvents: 'none'
@@ -585,11 +484,6 @@ const Interface = () => {
                       textTransform: "uppercase",
                       letterSpacing: "3px",
                       fontFamily: "Anton, sans-serif",
-                      boxShadow: `
-                        0 0 20px #A00000,
-                        0 0 40px rgba(243, 34, 16, 0.3),
-                        inset 0 0 20px rgba(243, 34, 16, 0.1)
-                      `,
                       transition: "all 0.3s ease",
                       cursor: "pointer"
                     }}
@@ -630,11 +524,6 @@ const Interface = () => {
                       textTransform: "uppercase",
                       letterSpacing: "3px",
                       fontFamily: "Anton, sans-serif",
-                      boxShadow: `
-                        0 0 20px #A00000,
-                        0 0 40px rgba(243, 34, 16, 0.3),
-                        inset 0 0 20px rgba(243, 34, 16, 0.1)
-                      `,
                       transition: "all 0.3s ease",
                       cursor: "pointer"
                     }}
@@ -853,16 +742,10 @@ const Interface = () => {
                         height: isMobile ? "40px" : "80px",
                         cursor: "pointer",
                         overflow: "hidden",
-                        boxShadow: `
-                          0 0 10px #A00000,
-                          0 0 20px rgba(243, 34, 16, 0.4),
-                          inset 0 0 10px rgba(243, 34, 16, 0.1)
-                        `,
                         fontSize: isMobile ? "8px" : "12px",
                         fontWeight: 700,
                         color: "#A00000",
                         textTransform: "uppercase",
-                        textShadow: "0 0 5px #A00000"
                       }}
                     >
                       {isMobile ? "REVIVE" : "REVIVE LOSER"}

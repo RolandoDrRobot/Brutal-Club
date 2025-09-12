@@ -46,18 +46,6 @@ const StatUpgradeModal = ({
     }
   };
 
-  const glowVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: {
-      scale: [0, 1.5, 1],
-      opacity: [0, 0.8, 0.3],
-      transition: {
-        delay: 0.2,
-        duration: 1,
-        ease: "easeOut"
-      }
-    }
-  };
 
   return (
     <AnimatePresence>
@@ -71,7 +59,7 @@ const StatUpgradeModal = ({
             top: 0,
             left: 0,
             width: '100vw',
-            height: '100vh',
+            height: '100dvh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -109,7 +97,7 @@ const StatUpgradeModal = ({
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               width: '100vw',
-              height: '100vh',
+              height: '100dvh',
               padding: '40px',
               textAlign: 'center',
               position: 'relative',

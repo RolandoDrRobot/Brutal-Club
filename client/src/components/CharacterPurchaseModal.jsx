@@ -123,18 +123,6 @@ const CharacterPurchaseModal = ({
     }
   };
 
-  const glowVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: {
-      scale: [0, 2, 1.5],
-      opacity: [0, 0.6, 0.2],
-      transition: {
-        delay: 0.2,
-        duration: 1.2,
-        ease: "easeOut"
-      }
-    }
-  };
 
   return (
     <AnimatePresence>
@@ -148,7 +136,7 @@ const CharacterPurchaseModal = ({
             top: 0,
             left: 0,
             width: '100vw',
-            height: '100vh',
+            height: '100dvh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -200,23 +188,6 @@ const CharacterPurchaseModal = ({
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Background Glow */}
-            <motion.div
-              variants={glowVariants}
-              initial="hidden"
-              animate="visible"
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: '250px',
-                height: '250px',
-                background: 'radial-gradient(circle, #A0000030 0%, transparent 70%)',
-                transform: 'translate(-50%, -50%)',
-                borderRadius: '0px',
-                pointerEvents: 'none'
-              }}
-            />
 
             {/* Character Emoji */}
             <motion.div

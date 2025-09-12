@@ -368,7 +368,7 @@ const CoinPurchaseModal = ({
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               width: '100vw',
-              height: '100vh',
+              height: '100dvh',
               padding: '40px 30px',
               textAlign: 'center',
               position: 'relative',

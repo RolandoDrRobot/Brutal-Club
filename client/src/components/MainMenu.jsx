@@ -35,16 +35,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    textShadow: `
-      0 0 10px #000000,
-      0 0 20px #000000,
-      2px 2px 4px #000000
-    `,
-    boxShadow: `
-      0 0 20px #A00000,
-      0 0 40px rgba(243, 34, 16, 0.3),
-      inset 0 0 20px rgba(243, 34, 16, 0.1)
-    `,
     transition: "all 0.3s ease",
     cursor: "pointer",
     animation: "none",
@@ -55,23 +45,11 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
 
   const handleButtonHover = (e, isEntering) => {
     if (!isMobile) {
-      const neonBoxShadow = `
-        0 0 20px #A00000,
-        0 0 40px rgba(243, 34, 16, 0.3),
-        inset 0 0 20px rgba(243, 34, 16, 0.1)
-      `;
-      
       if (isEntering) {
         e.target.style.transform = "scale(1.05) rotate(1deg)";
-        e.target.style.boxShadow = `
-          0 0 30px #A00000,
-          0 0 60px rgba(243, 34, 16, 0.5),
-          inset 0 0 30px rgba(243, 34, 16, 0.2)
-        `;
         e.target.style.animation = "screenShake 0.5s ease-in-out";
       } else {
         e.target.style.transform = "scale(1) rotate(0deg)";
-        e.target.style.boxShadow = neonBoxShadow;
         e.target.style.animation = "none";
       }
     }
@@ -85,7 +63,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        minHeight: "100vh"
+        minHeight: "100dvh"
       }}
     >
       {/* Title at the top */}
