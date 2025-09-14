@@ -238,7 +238,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 <Text style={{
                   fontSize: isMobile ? '24px' : '32px',
                   fontWeight: 700,
-                  color: opponent.isLocked ? '#666' : '#F5F5DC',
+                  color: opponent.isLocked ? '#666' : 'rgb(245, 245, 220)',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '2px',
                   textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)',
@@ -251,7 +251,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                 <Text style={{
                   fontSize: isMobile ? '20px' : '26px',
                   fontWeight: 700,
-                  color: opponent.isLocked ? '#666' : '#F5F5DC',
+                  color: opponent.isLocked ? '#666' : 'rgb(245, 245, 220)',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px',
                   textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)',

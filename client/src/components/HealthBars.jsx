@@ -49,7 +49,7 @@ const HealthBars = () => {
     width: isMobile ? "160px" : isTablet ? "200px" : "250px",
   };
 
-  const ShieldIcon = ({ color = "#F5F5DC", size = 16 }) => (
+  const ShieldIcon = ({ color = "rgb(245, 245, 220)", size = 16 }) => (
     <svg
       width={size}
       height={size}
@@ -100,7 +100,7 @@ const HealthBars = () => {
             backgroundColor: "rgba(0, 0, 0, 0.6)",
             padding: "0",
             fontSize: "55px",
-            color: "rgb(245, 245, 220)",
+            color: "#F5F5DC",
             textShadow: "rgba(245, 245, 220, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.8) 1px 1px 2px",
             textTransform: "uppercase",
             letterSpacing: "1px",
@@ -123,28 +123,28 @@ const HealthBars = () => {
         <Box mb={6}>
           <Group position="apart" mb={2} spacing={4}>
             <Group spacing={4} align="center">
-              <Text size="xs" color="#F5F5DC" weight={700}>HP</Text>
-              <Text size="xs" color="#F5F5DC" weight={700}>PLAYER 1</Text>
+              <Text size="xs" color="rgb(245, 245, 220)" weight={700}>HP</Text>
+              <Text size="xs" color="rgb(245, 245, 220)" weight={700}>PLAYER 1</Text>
               {player1IsBlocking && (
                 <div style={{ display: 'flex', alignItems: 'center', marginLeft: '4px' }}>
-                  <ShieldIcon color="#F5F5DC" size={14} />
+                  <ShieldIcon color="rgb(245, 245, 220)" size={14} />
                 </div>
               )}
             </Group>
-            <Text size="xs" color="#F5F5DC" weight={700}>{player1Health}</Text>
+            <Text size="xs" color="rgb(245, 245, 220)" weight={700}>{player1Health}</Text>
           </Group>
           <Progress
             value={(player1Health / maxHealth) * 100}
             size="lg"
             radius="md"
-            color="#F5F5DC"
+            color="rgb(245, 245, 220)"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
                 border: '2px solid rgba(255, 255, 255, 0.2)',
               },
               bar: {
-                background: `linear-gradient(90deg, #F5F5DC 0%, rgba(245, 245, 220, 0.8) 100%)`,
+                background: `linear-gradient(90deg, rgb(245, 245, 220) 0%, rgba(245, 245, 220, 0.8) 100%)`,
                 boxShadow: '0 0 10px rgba(245, 245, 220, 0.5)',
               }
             }}
@@ -155,22 +155,22 @@ const HealthBars = () => {
         <Box>
           <Group position="apart" mb={2} spacing={4}>
             <Group spacing={4} align="center">
-              <Text size="xs" weight={700} style={{ color: "#F5F5DC" }}>SP</Text>
+              <Text size="xs" weight={700} style={{ color: "rgb(245, 245, 220)" }}>SP</Text>
             </Group>
-            <Text size="xs" weight={700} style={{ color: "#F5F5DC" }}>{Math.round(player1Stamina)}</Text>
+            <Text size="xs" weight={700} style={{ color: "rgb(245, 245, 220)" }}>{Math.round(player1Stamina)}</Text>
           </Group>
           <Progress
             value={(player1Stamina / maxStamina) * 100}
             size="lg"
             radius="md"
-            color="#F5F5DC"
+            color="rgb(245, 245, 220)"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
                 border: '2px solid rgba(255, 255, 255, 0.2)',
               },
               bar: {
-                background: `linear-gradient(90deg, #F5F5DC 0%, rgba(245, 245, 220, 0.8) 100%)`,
+                background: `linear-gradient(90deg, rgb(245, 245, 220) 0%, rgba(245, 245, 220, 0.8) 100%)`,
                 boxShadow: '0 0 10px rgba(245, 245, 220, 0.5)',
               }
             }}
@@ -204,7 +204,7 @@ const HealthBars = () => {
             value={(player2Health / maxHealth) * 100}
             size="lg"
             radius="md"
-            color="#F5F5DC"
+            color="rgb(245, 245, 220)"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
@@ -230,7 +230,7 @@ const HealthBars = () => {
             value={(player2Stamina / maxStamina) * 100}
             size="lg"
             radius="md"
-            color="#F5F5DC"
+            color="rgb(245, 245, 220)"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',

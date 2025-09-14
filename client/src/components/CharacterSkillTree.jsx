@@ -196,7 +196,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           <Text style={{
             fontSize: '24px',
             fontWeight: 700,
-            color: '#F5F5DC',
+            color: 'rgb(245, 245, 220)',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'center',
@@ -250,7 +250,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             <Text style={{
               fontSize: '8px',
               fontWeight: 600,
-              color: '#F5F5DC',
+              color: 'rgb(245, 245, 220)',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',
@@ -307,7 +307,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         </Text>
         <Text style={{
           fontSize: isMobile ? '16px' : '20px',
-          color: '#F5F5DC',
+          color: 'rgb(245, 245, 220)',
           textAlign: 'center',
           marginBottom: '30px'
         }}>
@@ -354,12 +354,12 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         <div style={{
           fontSize: isMobile ? '24px' : '28px',
           fontWeight: 900,
-          color: '#F5F5DC',
+          color: 'rgb(245, 245, 220)',
           fontFamily: 'Anton, sans-serif',
           letterSpacing: '2px',
           textTransform: 'uppercase',
           marginBottom: '4px',
-          textShadow: '0 0 8px #F5F5DC',
+          textShadow: '0 0 8px rgb(245, 245, 220)',
           textAlign: 'left'
         }}>
           {characters[selectedCharacter]?.name || 'FIGHTER'}
@@ -577,7 +577,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             <Text
               style={{
                 fontSize: isMobile ? '16px' : '18px',
-                color: '#F5F5DC',
+                color: 'rgb(245, 245, 220)',
                 fontFamily: 'Anton, sans-serif',
                 letterSpacing: '1px',
                 marginBottom: '25px',

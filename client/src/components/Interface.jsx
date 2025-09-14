@@ -317,7 +317,7 @@ const Interface = () => {
                 <div style={{
                   fontSize: '20px',
                   fontWeight: 700,
-                  color: '#F5F5DC',
+                  color: 'rgb(245, 245, 220)',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px',
                   textTransform: 'uppercase',
@@ -381,12 +381,12 @@ const Interface = () => {
                   style={{
                     fontSize: '20px',
                     fontWeight: 700,
-                    color: '#F5F5DC',
+                    color: 'rgb(245, 245, 220)',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '1px',
                     textTransform: 'uppercase',
                     backgroundColor: 'transparent',
-                    border: '2px solid #F5F5DC',
+                    border: '2px solid rgb(245, 245, 220)',
                     borderRadius: '8px',
                     padding: '15px 30px',
                     cursor: 'pointer',

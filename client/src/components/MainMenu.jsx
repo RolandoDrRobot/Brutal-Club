@@ -27,7 +27,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     backgroundRepeat: "no-repeat",
     border: "2px solid #000000",
     borderRadius: "10px",
-    color: "#F5F5DC",
+    color: "rgb(245, 245, 220)",
     textTransform: "uppercase",
     letterSpacing: "2px",
     fontFamily: "Anton, sans-serif",

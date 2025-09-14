@@ -329,7 +329,7 @@ const CurrencyBar = () => {
             />
             <span style={{
               fontWeight: 900,
-              color: '#F5F5DC'
+              color: 'rgb(245, 245, 220)'
             }}>
               {statPoints || 0}
             </span>
@@ -344,7 +344,7 @@ const CurrencyBar = () => {
               fontSize: isMobile ? '16px' : '18px',
               fontWeight: 700,
               backgroundColor: 'transparent',
-              color: '#F5F5DC',
+              color: 'rgb(245, 245, 220)',
               textTransform: 'uppercase',
               letterSpacing: '1px',
               fontFamily: 'Anton, sans-serif',

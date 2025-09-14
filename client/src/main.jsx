@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               '#FFB300',
               '#FF8F00',
               '#FF6F00',
-              '#F5F5DC',
+              'rgb(245, 245, 220)',
             ],
             playerGold: [
               '#fff8e1',
@@ -55,7 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           primaryColor: 'gold',
           primaryShade: 9,
           other: {
-            primaryColor: '#F5F5DC',
+            primaryColor: 'rgb(245, 245, 220)',
           },
           globalStyles: (_theme) => ({
             html: {
