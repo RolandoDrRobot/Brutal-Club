@@ -18,7 +18,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             fontSize: isMobile ? "30px" : "40px",
     fontWeight: 700,
     padding: "0px",
-    minHeight: isMobile ? "65px" : "80px",
+    minHeight: "90px",
     minWidth: isMobile ? "140px" : "180px",
     backgroundColor: "transparent",
     backgroundImage: `url(${backgroundImage})`,
@@ -27,7 +27,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     backgroundRepeat: "no-repeat",
     border: "2px solid #000000",
     borderRadius: "10px",
-    color: "#A00000",
+    color: "#F5F5DC",
     textTransform: "uppercase",
     letterSpacing: "2px",
     fontFamily: "Anton, sans-serif",
@@ -115,8 +115,8 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             width: "100%",
             margin: "0 auto",
             display: "flex",
-            flexDirection: "column",
-            gap: isMobile ? "16px" : "24px",
+            flexDirection: "row",
+            gap: "10px",
             padding: "0 15px"
           }}
         >
@@ -129,9 +129,8 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
               onStartClick();
             }}
             style={{
-              ...getMenuButtonStyle(mainButtonImg),
-              width: "100%",
-              minWidth: "100%",
+              ...getMenuButtonStyle(button2),
+              flex: "1",
               animation: "electricEntry 0.8s ease-out 0.8s both",
               boxShadow: "none"
             }}
@@ -163,7 +162,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             }}
             style={{
               ...getMenuButtonStyle(button3),
-              width: "100%",
+              flex: "1",
               animation: "electricPulse 0.7s ease-out 0.6s both",
               boxShadow: "none"
             }}

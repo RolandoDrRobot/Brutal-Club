@@ -3,6 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Text, Button } from '@mantine/core';
 import '../styles/fightAnimations.css';
 import coverbgImg from '../assets/optimized/coverbg.webp';
+import goldTrophy from '../assets/optimized/gold.webp';
+import silverTrophy from '../assets/optimized/silver.webp';
+import bronzeTrophy from '../assets/optimized/bronze.webp';
+import bloodTrophy from '../assets/optimized/blood.webp';
 
 const LeaderboardModal = ({ isVisible, onClose }) => {
   const fakeLeaderboardData = [
@@ -20,7 +24,7 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
 
   const getRankColor = (rank) => {
     switch (rank) {
-      case 1: return '#FFD700';
+      case 1: return '#e79d01';
       case 2: return '#C0C0C0';
       case 3: return '#CD7F32';
       default: return '#A00000';
@@ -29,10 +33,10 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
 
   const getRankIcon = (rank) => {
     switch (rank) {
-      case 1: return '🥇';
-      case 2: return '🥈';
-      case 3: return '🥉';
-      default: return `#${rank}`;
+      case 1: return goldTrophy;
+      case 2: return silverTrophy;
+      case 3: return bronzeTrophy;
+      default: return bloodTrophy;
     }
   };
 
@@ -93,26 +97,12 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
                   letterSpacing: '2px',
                   textTransform: 'uppercase',
                   animation: 'electricTitle 0.8s ease-out 0.3s both',
-                  marginBottom: '10px'
+                  marginBottom: '24px'
                 }}
               >
                 LEADERBOARD
               </Text>
               
-              <Text
-                style={{
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  color: '#A00000',
-                  fontFamily: 'Anton, sans-serif',
-                  letterSpacing: '0.5px',
-                  marginBottom: '30px',
-                  lineHeight: 1.3,
-                  animation: 'electricGlitch 0.7s ease-out 0.5s both'
-                }}
-              >
-                TOP FIGHTERS WORLDWIDE
-              </Text>
             </div>
 
             {/* Leaderboard List */}
@@ -165,21 +155,24 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
                       margin: '0 auto'
                     }}
                   >
-                    {/* Rank Circle */}
+                    {/* Rank Trophy */}
                     <Box style={{
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       width: '55px',
                       height: '55px',
-                      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                      border: `3px solid ${getRankColor(player.rank)}`,
-                      borderRadius: '50%',
-                      fontSize: '22px',
-                      flexShrink: 0,
-                      boxShadow: `0 0 15px ${getRankColor(player.rank)}`
+                      flexShrink: 0
                     }}>
-                      {getRankIcon(player.rank)}
+                      <img 
+                        src={getRankIcon(player.rank)} 
+                        alt={`Rank ${player.rank} trophy`}
+                        style={{
+                          width: '50px',
+                          height: '50px',
+                          objectFit: 'contain'
+                        }}
+                      />
                     </Box>
                     
                     {/* Player Info */}
