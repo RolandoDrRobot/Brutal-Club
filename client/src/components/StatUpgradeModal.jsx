@@ -120,7 +120,7 @@ const StatUpgradeModal = ({
                 style={{
                   fontSize: '20px',
                   fontWeight: 700,
-                  color: '#F5F5DC',
+                  color: '#bbb092',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px',
                   textTransform: 'uppercase',
@@ -147,7 +147,7 @@ const StatUpgradeModal = ({
                 style={{
                   fontSize: '48px',
                   fontWeight: 900,
-                  color: '#F5F5DC',
+                  color: '#bbb092',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '2px'
                 }}

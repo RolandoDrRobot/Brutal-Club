@@ -49,7 +49,7 @@ const HealthBars = () => {
     width: isMobile ? "160px" : isTablet ? "200px" : "250px",
   };
 
-  const ShieldIcon = ({ color = "#F5F5DC", size = 16 }) => (
+  const ShieldIcon = ({ color = "#bbb092", size = 16 }) => (
     <svg
       width={size}
       height={size}
@@ -80,72 +80,36 @@ const HealthBars = () => {
 
   return (
     <>
-
-
-      {/* CONTADOR DE VICTORIAS - CENTRO SUPERIOR */}
+      {/* Player 1 - Izquierda */}
       <Box
         style={{
-          position: "absolute",
-          top: 28,
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 1001,
-          textAlign: "center",
-          pointerEvents: "none",
-        }}
-      >
-        <Text
-          style={{
-            borderRadius: "0px",
-            backgroundColor: "rgba(0, 0, 0, 0.6)",
-            padding: "0",
-            fontSize: "55px",
-            color: "rgb(245, 245, 220)",
-            textShadow: "rgba(245, 245, 220, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.8) 1px 1px 2px",
-            textTransform: "uppercase",
-            letterSpacing: "1px",
-            fontFamily: "Anton, Impact, sans-serif",
-          }}
-        >
-          {player1Wins}
-        </Text>
-      </Box>
-
-      {/* Player 1 - Esquina superior izquierda */}
-      <Box
-        style={{
-          ...barStyle,
-          top: 15,
-          left: isMobile ? 20 : 30,
+          position: "fixed",
+          zIndex: 1000,
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
+          border: "none",
+          borderRadius: "0px",
+          backdropFilter: "blur(4px)",
+          width: "160px",
+          top: "15px",
+          left: "20px",
         }}
       >
         {/* Barra de vida */}
         <Box mb={6}>
-          <Group position="apart" mb={2} spacing={4}>
-            <Group spacing={4} align="center">
-              <Text size="xs" color="#F5F5DC" weight={700}>HP</Text>
-              <Text size="xs" color="#F5F5DC" weight={700}>PLAYER 1</Text>
-              {player1IsBlocking && (
-                <div style={{ display: 'flex', alignItems: 'center', marginLeft: '4px' }}>
-                  <ShieldIcon color="#F5F5DC" size={14} />
-                </div>
-              )}
-            </Group>
-            <Text size="xs" color="#F5F5DC" weight={700}>{player1Health}</Text>
-          </Group>
           <Progress
             value={(player1Health / maxHealth) * 100}
-            size="lg"
+            size="xl"
             radius="md"
-            color="#F5F5DC"
+            color="rgb(160, 0, 0)"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '2px solid rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(160, 0, 0, 0.3)',
+                height: '40px',
               },
               bar: {
-                background: `linear-gradient(90deg, #F5F5DC 0%, rgba(245, 245, 220, 0.8) 100%)`,
-                boxShadow: '0 0 10px rgba(245, 245, 220, 0.5)',
+                background: 'rgb(160, 0, 0)',
+                boxShadow: '0 0 15px rgba(160, 0, 0, 0.8)',
               }
             }}
           />
@@ -153,24 +117,19 @@ const HealthBars = () => {
 
         {/* Barra de stamina */}
         <Box>
-          <Group position="apart" mb={2} spacing={4}>
-            <Group spacing={4} align="center">
-              <Text size="xs" weight={700} style={{ color: "#F5F5DC" }}>SP</Text>
-            </Group>
-            <Text size="xs" weight={700} style={{ color: "#F5F5DC" }}>{Math.round(player1Stamina)}</Text>
-          </Group>
           <Progress
             value={(player1Stamina / maxStamina) * 100}
-            size="lg"
+            size="sm"
             radius="md"
-            color="#F5F5DC"
+            color="#bbb092"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '2px solid rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(245, 245, 220, 0.3)',
+                height: '12px',
               },
               bar: {
-                background: `linear-gradient(90deg, #F5F5DC 0%, rgba(245, 245, 220, 0.8) 100%)`,
+                background: '#bbb092',
                 boxShadow: '0 0 10px rgba(245, 245, 220, 0.5)',
               }
             }}
@@ -178,41 +137,38 @@ const HealthBars = () => {
         </Box>
       </Box>
 
-      {/* Player 2 - Esquina superior derecha */}
+      {/* Player 2 - Derecha */}
       <Box
         style={{
-          ...barStyle,
-          top: 15,
-          right: isMobile ? 20 : 30,
+          position: "fixed",
+          zIndex: 1000,
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
+          border: "none",
+          borderRadius: "0px",
+          backdropFilter: "blur(4px)",
+          width: "160px",
+          top: "15px",
+          right: "20px",
         }}
       >
         {/* Barra de vida */}
         <Box mb={6}>
-          <Group position="apart" mb={2} spacing={4}>
-            <Text size="xs" weight={700} style={{ color: "#A00000" }}>{player2Health}</Text>
-            <Group spacing={4} align="center">
-              {player2IsBlocking && (
-                <div style={{ display: 'flex', alignItems: 'center', marginRight: '4px' }}>
-                  <ShieldIcon color="#A00000" size={14} />
-                </div>
-              )}
-              <Text size="xs" weight={700} style={{ color: "#A00000" }}>PLAYER 2</Text>
-              <Text size="xs" weight={700} style={{ color: "#A00000" }}>HP</Text>
-            </Group>
-          </Group>
           <Progress
             value={(player2Health / maxHealth) * 100}
-            size="lg"
+            size="xl"
             radius="md"
-            color="#F5F5DC"
+            color="rgb(160, 0, 0)"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '2px solid rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(160, 0, 0, 0.3)',
+                height: '40px',
+                transform: 'scaleX(-1)',
               },
               bar: {
-                background: `linear-gradient(90deg, #A00000 0%, rgba(243, 34, 16, 0.8) 100%)`,
-                boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)',
+                background: 'rgb(160, 0, 0)',
+                boxShadow: '0 0 15px rgba(160, 0, 0, 0.8)',
+                transform: 'scaleX(-1)',
               }
             }}
           />
@@ -220,25 +176,22 @@ const HealthBars = () => {
 
         {/* Barra de stamina */}
         <Box>
-          <Group position="apart" mb={2} spacing={4}>
-            <Text size="xs" weight={700} style={{ color: "#A00000" }}>{Math.round(player2Stamina)}</Text>
-            <Group spacing={4} align="center">
-              <Text size="xs" weight={700} style={{ color: "#A00000" }}>SP</Text>
-            </Group>
-          </Group>
           <Progress
             value={(player2Stamina / maxStamina) * 100}
-            size="lg"
+            size="sm"
             radius="md"
-            color="#F5F5DC"
+            color="#bbb092"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '2px solid rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(245, 245, 220, 0.3)',
+                height: '12px',
+                transform: 'scaleX(-1)',
               },
               bar: {
-                background: `linear-gradient(90deg, #A00000 0%, rgba(243, 34, 16, 0.8) 100%)`,
-                boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)',
+                background: '#bbb092',
+                boxShadow: '0 0 10px rgba(245, 245, 220, 0.5)',
+                transform: 'scaleX(-1)',
               }
             }}
           />

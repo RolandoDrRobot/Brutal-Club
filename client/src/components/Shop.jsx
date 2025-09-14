@@ -133,7 +133,7 @@ const Shop = ({ onBackClick }) => {
           <Text style={{
             fontSize: '16px',
             fontWeight: 600,
-            color: '#F5F5DC',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '0.5px',
             marginBottom: !canAffordPack() ? '10px' : '20px',

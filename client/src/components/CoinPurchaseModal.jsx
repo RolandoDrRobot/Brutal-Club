@@ -44,7 +44,7 @@ const CoinPurchaseModal = ({
         delay: Math.random() * 1.0,
         scale: 0.8 + Math.random() * 0.6,
         rotation: Math.random() * 360,
-        color: Math.random() > 0.4 ? '#F5F5DC' : '#FFF'
+        color: Math.random() > 0.4 ? '#bbb092' : '#bbb092'
       }));
       setPurchaseParticles(newPurchaseParticles);
 
@@ -75,7 +75,7 @@ const CoinPurchaseModal = ({
       id: 'small',
       coins: 10,
       price: '$2.99',
-      color: '#F5F5DC',
+      color: '#bbb092',
       label: 'STARTER PACK',
       description: 'Perfect to get started',
       image: pack1Img
@@ -298,11 +298,11 @@ const CoinPurchaseModal = ({
                 position: 'absolute',
                 width: '10px',
                 height: '10px',
-                backgroundColor: '#F5F5DC',
+                backgroundColor: '#bbb092',
                 borderRadius: '0px',
                 left: `${particle.x}%`,
                 top: `${particle.y}%`,
-                boxShadow: '0 0 10px #F5F5DC',
+                boxShadow: '0 0 10px #bbb092',
                 pointerEvents: 'none'
               }}
             />
@@ -344,7 +344,7 @@ const CoinPurchaseModal = ({
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                filter: 'drop-shadow(0 0 30px #F5F5DC)'
+                filter: 'drop-shadow(0 0 30px #bbb092)'
               }}
             >
               <img 
@@ -407,7 +407,7 @@ const CoinPurchaseModal = ({
                   style={{
                     fontSize: '32px',
                     fontWeight: 900,
-                    color: '#F5F5DC',
+                    color: '#bbb092',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
                     textTransform: 'uppercase',
@@ -422,7 +422,7 @@ const CoinPurchaseModal = ({
                 style={{
                   fontSize: '16px',
                   fontWeight: 600,
-                  color: '#F5F5DC',
+                  color: '#bbb092',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '0.5px',
                   marginBottom: '30px',
@@ -483,7 +483,7 @@ const CoinPurchaseModal = ({
                           position: 'absolute',
                           top: '-10px',
                           right: '15px',
-                          backgroundColor: '#F5F5DC',
+                          backgroundColor: '#bbb092',
                           color: '#000',
                           fontSize: '12px',
                           fontWeight: 900,
@@ -533,7 +533,7 @@ const CoinPurchaseModal = ({
                             style={{
                               fontSize: '24px',
                               fontWeight: 900,
-                              color: '#F5F5DC',
+                              color: '#bbb092',
                               fontFamily: 'Anton, sans-serif',
                               letterSpacing: '1px',
                               lineHeight: 1
@@ -563,7 +563,7 @@ const CoinPurchaseModal = ({
                           style={{
                             fontSize: '20px',
                             fontWeight: 700,
-                            color: '#F5F5DC',
+                            color: '#bbb092',
                             fontFamily: 'Anton, sans-serif',
                             letterSpacing: '1px',
                             lineHeight: 1
@@ -593,7 +593,7 @@ const CoinPurchaseModal = ({
                   padding: '12px 30px',
                   backgroundColor: 'transparent',
                   borderRadius: '0px',
-                  color: '#F5F5DC',
+                  color: '#bbb092',
                   textTransform: 'uppercase',
                   letterSpacing: '1px',
                   fontFamily: 'Anton, sans-serif',

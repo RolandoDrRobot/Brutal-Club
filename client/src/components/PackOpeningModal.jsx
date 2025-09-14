@@ -74,9 +74,9 @@ const PackOpeningModal = ({
 
   const getItemTypeColor = (type) => {
     switch (type) {
-      case 'character': return '#F5F5DC';
+      case 'character': return '#bbb092';
       case 'stat_points': return '#A00000';
-      default: return '#F5F5DC';
+      default: return '#bbb092';
     }
   };
 
@@ -154,7 +154,6 @@ const PackOpeningModal = ({
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                filter: 'drop-shadow(0 0 20px #F5F5DC)'
               }}
             >
               <img 
@@ -197,7 +196,7 @@ const PackOpeningModal = ({
                   style={{
                     fontSize: '36px',
                     fontWeight: 900,
-                    color: '#F5F5DC',
+                    color: '#bbb092',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
                     textTransform: 'uppercase',
@@ -222,7 +221,6 @@ const PackOpeningModal = ({
                       borderRadius: '10px',
                       padding: '20px',
                       position: 'relative',
-                      boxShadow: `0 0 15px ${getItemTypeColor(item.type)}40`,
                       animation: `electricStatic 0.6s ease-out ${0.4 + index * 0.2}s both`
                     }}
                   >
@@ -276,7 +274,7 @@ const PackOpeningModal = ({
                         style={{
                           fontSize: '18px',
                           fontWeight: 600,
-                          color: '#F5F5DC',
+                          color: '#bbb092',
                           fontFamily: 'Anton, sans-serif',
                           letterSpacing: '0.5px',
                           animation: `electricGlitch 0.7s ease-out ${0.8 + index * 0.1}s both`
@@ -291,7 +289,7 @@ const PackOpeningModal = ({
                         style={{
                           fontSize: '16px',
                           fontWeight: 600,
-                          color: '#F5F5DC',
+                          color: '#bbb092',
                           fontFamily: 'Anton, sans-serif',
                           letterSpacing: '0.5px',
                           animation: `electricGlitch 0.7s ease-out ${0.8 + index * 0.1}s both`
@@ -318,7 +316,7 @@ const PackOpeningModal = ({
                     padding: '0',
                     backgroundColor: 'transparent',
                     borderRadius: '0px',
-                    color: '#F5F5DC',
+                    color: '#bbb092',
                     textTransform: 'uppercase',
                     letterSpacing: '1px',
                     fontFamily: 'Anton, sans-serif',
