@@ -149,11 +149,11 @@ const CoinPurchaseResultModal = ({
                 position: 'absolute',
                 width: '12px',
                 height: '12px',
-                backgroundColor: 'rgb(245, 245, 220)',
+                backgroundColor: '#bbb092',
                 borderRadius: '50%',
                 left: `${particle.x}%`,
                 top: `${particle.y}%`,
-                boxShadow: '0 0 12px rgb(245, 245, 220)',
+                boxShadow: '0 0 12px #bbb092',
                 pointerEvents: 'none'
               }}
             />
@@ -189,7 +189,7 @@ const CoinPurchaseResultModal = ({
                 style={{
                   fontSize: '28px',
                   fontWeight: 700,
-                  color: 'rgb(245, 245, 220)',
+                  color: '#bbb092',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '2px',
                   textTransform: 'uppercase',
@@ -223,7 +223,7 @@ const CoinPurchaseResultModal = ({
                 style={{
                   fontSize: '56px',
                   fontWeight: 900,
-                  color: 'rgb(245, 245, 220)',
+                  color: '#bbb092',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '3px',
                   animation: 'electricPulse 0.7s ease-out 0.6s both'
@@ -243,7 +243,7 @@ const CoinPurchaseResultModal = ({
                 style={{
                   fontSize: '18px',
                   fontWeight: 600,
-                  color: 'rgb(245, 245, 220)',
+                  color: '#bbb092',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px',
                   textTransform: 'uppercase'

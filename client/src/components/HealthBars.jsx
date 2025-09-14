@@ -49,7 +49,7 @@ const HealthBars = () => {
     width: isMobile ? "160px" : isTablet ? "200px" : "250px",
   };
 
-  const ShieldIcon = ({ color = "rgb(245, 245, 220)", size = 16 }) => (
+  const ShieldIcon = ({ color = "#bbb092", size = 16 }) => (
     <svg
       width={size}
       height={size}
@@ -79,25 +79,12 @@ const HealthBars = () => {
   );
 
   return (
-    <Box
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "15px 20px",
-        pointerEvents: "none"
-      }}
-    >
+    <>
       {/* Player 1 - Izquierda */}
       <Box
         style={{
           position: "fixed",
           zIndex: 1000,
-          padding: "8px",
           backgroundColor: "rgba(0, 0, 0, 0.9)",
           border: "none",
           borderRadius: "0px",
@@ -113,16 +100,16 @@ const HealthBars = () => {
             value={(player1Health / maxHealth) * 100}
             size="xl"
             radius="md"
-            color="#e79d01"
+            color="rgb(160, 0, 0)"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '2px solid rgba(231, 157, 1, 0.3)',
-                height: '30px',
+                border: '2px solid rgba(160, 0, 0, 0.3)',
+                height: '40px',
               },
               bar: {
-                background: `linear-gradient(90deg, #e79d01 0%, #ffd700 50%, #e79d01 100%)`,
-                boxShadow: '0 0 15px rgba(231, 157, 1, 0.8)',
+                background: 'rgb(160, 0, 0)',
+                boxShadow: '0 0 15px rgba(160, 0, 0, 0.8)',
               }
             }}
           />
@@ -132,16 +119,17 @@ const HealthBars = () => {
         <Box>
           <Progress
             value={(player1Stamina / maxStamina) * 100}
-            size="lg"
+            size="sm"
             radius="md"
-            color="rgb(245, 245, 220)"
+            color="#bbb092"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '2px solid rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(245, 245, 220, 0.3)',
+                height: '12px',
               },
               bar: {
-                background: `linear-gradient(90deg, rgb(245, 245, 220) 0%, rgba(245, 245, 220, 0.8) 100%)`,
+                background: '#bbb092',
                 boxShadow: '0 0 10px rgba(245, 245, 220, 0.5)',
               }
             }}
@@ -154,7 +142,6 @@ const HealthBars = () => {
         style={{
           position: "fixed",
           zIndex: 1000,
-          padding: "8px",
           backgroundColor: "rgba(0, 0, 0, 0.9)",
           border: "none",
           borderRadius: "0px",
@@ -170,16 +157,18 @@ const HealthBars = () => {
             value={(player2Health / maxHealth) * 100}
             size="xl"
             radius="md"
-            color="#e79d01"
+            color="rgb(160, 0, 0)"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '2px solid rgba(231, 157, 1, 0.3)',
-                height: '30px',
+                border: '2px solid rgba(160, 0, 0, 0.3)',
+                height: '40px',
+                transform: 'scaleX(-1)',
               },
               bar: {
-                background: `linear-gradient(90deg, #e79d01 0%, #ffd700 50%, #e79d01 100%)`,
-                boxShadow: '0 0 15px rgba(231, 157, 1, 0.8)',
+                background: 'rgb(160, 0, 0)',
+                boxShadow: '0 0 15px rgba(160, 0, 0, 0.8)',
+                transform: 'scaleX(-1)',
               }
             }}
           />
@@ -189,23 +178,26 @@ const HealthBars = () => {
         <Box>
           <Progress
             value={(player2Stamina / maxStamina) * 100}
-            size="lg"
+            size="sm"
             radius="md"
-            color="rgb(245, 245, 220)"
+            color="#bbb092"
             styles={{
               root: {
                 backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                border: '2px solid rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(245, 245, 220, 0.3)',
+                height: '12px',
+                transform: 'scaleX(-1)',
               },
               bar: {
-                background: `linear-gradient(90deg, rgb(160, 0, 0) 0%, rgba(243, 34, 16, 0.8) 100%)`,
-                boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)',
+                background: '#bbb092',
+                boxShadow: '0 0 10px rgba(245, 245, 220, 0.5)',
+                transform: 'scaleX(-1)',
               }
             }}
           />
         </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

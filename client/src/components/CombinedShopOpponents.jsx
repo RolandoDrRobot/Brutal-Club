@@ -189,7 +189,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <Text style={{
             fontSize: '24px',
             fontWeight: 700,
-            color: 'rgb(245, 245, 220)',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'center',
@@ -444,7 +444,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
         opacity = 0.4;
         cursor = 'not-allowed';
       } else if (isActive) {
-        borderColor = 'rgb(245, 245, 220)';
+        borderColor = '#bbb092';
         opacity = 1;
         cursor = 'pointer';
       }
@@ -471,7 +471,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           ...baseStyle,
           cursor: 'default',
           opacity: 1,
-          border: '3px solid rgb(245, 245, 220)'
+          border: '3px solid #bbb092'
         };
       }
       
@@ -517,7 +517,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       if (character.isPurchased) {
         return {
           ...baseStyle,
-              color: 'rgb(245, 245, 220)',
+              color: '#bbb092',
           cursor: 'default'
         };
       }
@@ -525,7 +525,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       const isLocked = (character.price !== null && !character.canAfford && !character.isPurchased);
       return {
         ...baseStyle,
-        color: isLocked ? '#666' : 'rgb(245, 245, 220)',
+        color: isLocked ? '#666' : '#bbb092',
         cursor: isLocked ? 'not-allowed' : 'pointer'
       };
     }
@@ -574,12 +574,12 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <div style={{
             fontSize: isMobile ? '24px' : '32px',
             fontWeight: 900,
-            color: 'rgb(245, 245, 220)',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             textTransform: 'uppercase',
             marginBottom: '4px',
-            textShadow: '0 0 8px rgb(245, 245, 220)',
+            textShadow: '0 0 8px #bbb092',
             textAlign: 'left'
           }}>
             ARCADE MODE
@@ -636,7 +636,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <div style={{
             fontSize: isMobile ? '14px' : '16px',
             fontWeight: 700,
-            color: 'rgb(245, 245, 220)',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textTransform: 'uppercase',
@@ -885,7 +885,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                   <Text style={{
                     fontSize: isMobile ? '18px' : '20px',
                     fontWeight: 700,
-                    color: opponent.isLocked ? '#666' : 'rgb(245, 245, 220)',
+                    color: opponent.isLocked ? '#666' : '#bbb092',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '1px',
                     textAlign: 'center',
@@ -980,7 +980,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             
             <Text style={{
               fontSize: isMobile ? '16px' : '18px',
-              color: 'rgb(245, 245, 220)',
+              color: '#bbb092',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               marginBottom: '30px',

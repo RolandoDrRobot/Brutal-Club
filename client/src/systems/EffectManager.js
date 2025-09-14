@@ -5,7 +5,7 @@ class EffectManager {
         packOpening: {
           count: 40,
           duration: 3.5,
-          colors: ['rgb(245, 245, 220)', 'rgb(245, 245, 220)'],
+          colors: ['#bbb092', '#bbb092'],
           scale: { min: 0.5, max: 1.3 },
           delay: { min: 0, max: 1.5 },
           rotation: { min: 0, max: 360 }

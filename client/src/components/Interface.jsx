@@ -317,7 +317,7 @@ const Interface = () => {
                 <div style={{
                   fontSize: '20px',
                   fontWeight: 700,
-                  color: 'rgb(245, 245, 220)',
+                  color: '#bbb092',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px',
                   textTransform: 'uppercase',
@@ -346,7 +346,7 @@ const Interface = () => {
                   <div style={{
                     fontSize: '48px',
                     fontWeight: 900,
-                    color: '#A00000',
+                    color: '#e79d01',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '2px',
                     zIndex: 10,
@@ -381,12 +381,12 @@ const Interface = () => {
                   style={{
                     fontSize: '20px',
                     fontWeight: 700,
-                    color: 'rgb(245, 245, 220)',
+                    color: '#bbb092',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '1px',
                     textTransform: 'uppercase',
                     backgroundColor: 'transparent',
-                    border: '2px solid rgb(245, 245, 220)',
+                    border: 'none',
                     borderRadius: '8px',
                     padding: '15px 30px',
                     cursor: 'pointer',
@@ -406,7 +406,7 @@ const Interface = () => {
                     }
                   }}
                 >
-                  FIGHT
+                  Continue
                 </button>
               </div>
             </div>

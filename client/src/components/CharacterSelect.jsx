@@ -69,7 +69,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
         </Text>
         <Text style={{
           fontSize: isMobile ? '16px' : '20px',
-          color: 'rgb(245, 245, 220)',
+          color: '#bbb092',
           textAlign: 'center',
           marginBottom: '30px'
         }}>
@@ -254,7 +254,7 @@ const CharacterSelect = ({ onSelectClick, onBackClick }) => {
             <Text style={{
               fontSize: isMobile ? '24px' : '32px',
               fontWeight: 700,
-              color: 'rgb(245, 245, 220)',
+              color: '#bbb092',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '2px'
             }}>
