@@ -66,7 +66,7 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
               backgroundPosition: 'center',
               width: '100vw',
               height: '100dvh',
-              padding: '40px 30px',
+              padding: '30px 15px',
               textAlign: 'center',
               position: 'relative',
               overflow: 'auto',

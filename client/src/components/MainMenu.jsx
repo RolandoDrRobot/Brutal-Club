@@ -63,7 +63,8 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        minHeight: "100dvh"
+        minHeight: "100dvh",
+        paddingBottom: "70px"
       }}
     >
       {/* Title at the top */}
@@ -106,7 +107,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
           maxWidth: "400px",
           margin: "0 auto",
           position: "relative",
-          bottom: "80px",
           animation: "electricFadeIn 0.9s ease-out 0.3s both"
         }}
       >

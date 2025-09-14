@@ -154,7 +154,6 @@ const PackOpeningModal = ({
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                filter: 'drop-shadow(0 0 20px #F5F5DC)'
               }}
             >
               <img 
@@ -222,7 +221,6 @@ const PackOpeningModal = ({
                       borderRadius: '10px',
                       padding: '20px',
                       position: 'relative',
-                      boxShadow: `0 0 15px ${getItemTypeColor(item.type)}40`,
                       animation: `electricStatic 0.6s ease-out ${0.4 + index * 0.2}s both`
                     }}
                   >

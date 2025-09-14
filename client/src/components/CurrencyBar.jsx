@@ -178,7 +178,6 @@ const CurrencyBar = () => {
         zIndex: 9999,
         padding: isMobile ? '8px 15px' : '10px 20px',
         backdropFilter: 'blur(10px)',
-        boxShadow: '0 -4px 15px rgba(0, 0, 0, 0.7), 0 0 20px rgba(243, 34, 16, 0.3)',
         borderRadius: '0px',
         animation: 'electricFadeIn 0.8s ease-out 0.2s both'
       }}
