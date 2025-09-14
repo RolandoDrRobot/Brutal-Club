@@ -143,11 +143,6 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
                       position: 'relative',
                       cursor: 'default',
                       border: `2px solid ${getRankColor(player.rank)}`,
-                      boxShadow: `
-                        0 0 15px ${getRankColor(player.rank)},
-                        0 0 25px rgba(243, 34, 16, 0.3),
-                        inset 0 0 15px rgba(243, 34, 16, 0.1)
-                      `,
                       minHeight: '80px',
                       display: 'flex',
                       alignItems: 'center',
@@ -212,7 +207,6 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
                       borderRadius: '8px',
                       padding: '8px 16px',
                       flexShrink: 0,
-                      boxShadow: `0 0 10px ${getRankColor(player.rank)}`
                     }}>
                       <Text
                         style={{

@@ -37,7 +37,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     alignItems: "center",
     transition: "all 0.3s ease",
     cursor: "pointer",
-    animation: "none",
     filter: "none",
     opacity: 1,
     transform: "none"
@@ -59,7 +58,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
-        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "fadeInSpray 0.6s ease-out, backgroundImpact 0.8s ease-out",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -71,7 +69,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
       <div style={{ 
         textAlign: "center",
         paddingTop: "25px",
-        animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricTitle 0.8s ease-out 0.1s both"
       }}>
         <div 
           className="fight-title"
@@ -107,7 +104,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
           maxWidth: "400px",
           margin: "0 auto",
           position: "relative",
-          animation: "electricFadeIn 0.9s ease-out 0.3s both"
         }}
       >
         <Box
@@ -131,7 +127,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             style={{
               ...getMenuButtonStyle(button2),
               flex: "1",
-              animation: "electricEntry 0.8s ease-out 0.8s both",
               boxShadow: "none"
             }}
             onMouseEnter={(e) => {
@@ -163,7 +158,6 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             style={{
               ...getMenuButtonStyle(button3),
               flex: "1",
-              animation: "electricPulse 0.7s ease-out 0.6s both",
               boxShadow: "none"
             }}
             onMouseEnter={(e) => {

@@ -58,7 +58,6 @@ const HealthBars = () => {
       xmlns="http://www.w3.org/2000/svg"
       style={{
         filter: `drop-shadow(0 0 4px ${color})`,
-        animation: "shieldPulse 1.5s ease-in-out infinite alternate"
       }}
     >
       <path
@@ -67,14 +66,6 @@ const HealthBars = () => {
         stroke={color}
         strokeWidth="1"
       />
-      <style>
-        {`
-          @keyframes shieldPulse {
-            0% { opacity: 0.7; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.1); }
-          }
-        `}
-      </style>
     </svg>
   );
 
@@ -109,7 +100,6 @@ const HealthBars = () => {
               },
               bar: {
                 background: 'rgb(160, 0, 0)',
-                boxShadow: '0 0 15px rgba(160, 0, 0, 0.8)',
               }
             }}
           />
@@ -130,7 +120,6 @@ const HealthBars = () => {
               },
               bar: {
                 background: '#bbb092',
-                boxShadow: '0 0 10px rgba(245, 245, 220, 0.5)',
               }
             }}
           />
@@ -167,7 +156,6 @@ const HealthBars = () => {
               },
               bar: {
                 background: 'rgb(160, 0, 0)',
-                boxShadow: '0 0 15px rgba(160, 0, 0, 0.8)',
                 transform: 'scaleX(-1)',
               }
             }}
@@ -190,7 +178,6 @@ const HealthBars = () => {
               },
               bar: {
                 background: '#bbb092',
-                boxShadow: '0 0 10px rgba(245, 245, 220, 0.5)',
                 transform: 'scaleX(-1)',
               }
             }}

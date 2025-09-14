@@ -170,13 +170,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           backgroundColor: '#000000',
           border: `2px solid ${isMaxLevel(statName) ? '#FFB300' : '#A00000'}`,
           borderRadius: '8px',
-          boxShadow: isMaxLevel(statName) ? `
-            0 0 15px rgba(255, 179, 0, 0.3),
-            inset 0 0 15px rgba(255, 179, 0, 0.1)
-          ` : `
-            0 0 15px rgba(243, 34, 16, 0.3),
-            inset 0 0 15px rgba(243, 34, 16, 0.1)
-          `,
           width: '100%',
           maxWidth: isMobile ? 'calc(33.333% - 6px)' : '280px',
           flex: isMobile ? '1' : 'none',
@@ -964,7 +957,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             padding: isMobile ? '30px' : '40px',
             maxWidth: isMobile ? '90%' : '500px',
             textAlign: 'center',
-            boxShadow: '0 0 30px rgba(243, 34, 16, 0.5)'
           }}>
             <Text style={{
               fontSize: isMobile ? '24px' : '28px',

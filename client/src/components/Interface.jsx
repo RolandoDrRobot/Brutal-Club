@@ -17,61 +17,7 @@ import { useCombatControls } from '../hooks/useInput';
 import { useModelLoader } from '../hooks/useModelLoader';
 import CharacterPreview from "./CharacterPreview";
 
-const interfaceStyles = `
-  @keyframes pulse {
-    0%, 100% { 
-      transform: scale(1);
-      opacity: 1;
-    }
-    50% { 
-      transform: scale(1.05);
-      opacity: 0.8;
-    }
-  }
-  
-  
-  @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  
-  @keyframes fightTransition {
-    0% {
-      transform: scale(1);
-      filter: brightness(1);
-    }
-    30% {
-      transform: scale(1.02);
-      filter: brightness(1.2) contrast(1.3);
-    }
-    60% {
-      transform: scale(0.98);
-      filter: brightness(0.8) contrast(1.1);
-    }
-    100% {
-      transform: scale(1);
-      filter: brightness(1);
-    }
-  }
-  
-  @keyframes impactShake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-3px) rotate(1deg); }
-    75% { transform: translateX(3px) rotate(-1deg); }
-  }
-  
-  @keyframes buttonPowerUp {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-`;
+const interfaceStyles = ``;
 
 const Interface = () => {
   const { 
@@ -201,7 +147,6 @@ const Interface = () => {
       background: radial-gradient(circle, rgba(243, 34, 16, 0.3) 0%, transparent 70%);
       pointer-events: none;
       z-index: 9999;
-      animation: fightTransition 0.8s ease-out;
     `;
     document.body.appendChild(flashOverlay);
     

@@ -153,7 +153,6 @@ const CoinPurchaseResultModal = ({
                 borderRadius: '50%',
                 left: `${particle.x}%`,
                 top: `${particle.y}%`,
-                boxShadow: '0 0 12px #bbb092',
                 pointerEvents: 'none'
               }}
             />

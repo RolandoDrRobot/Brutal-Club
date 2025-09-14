@@ -43,7 +43,6 @@ const EnhancedProgressBar = ({
         styles={{
           bar: {
             background: `linear-gradient(90deg, ${statColor}, ${statColor}AA)`,
-            boxShadow: `0 0 10px ${statColor}50`,
             transition: 'all 0.3s ease'
           }
         }}

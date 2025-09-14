@@ -175,13 +175,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           backgroundColor: '#000000',
           border: `2px solid ${isMaxLevel(statName) ? '#FFB300' : '#A00000'}`,
           borderRadius: '8px',
-          boxShadow: isMaxLevel(statName) ? `
-            0 0 15px rgba(255, 179, 0, 0.3),
-            inset 0 0 15px rgba(255, 179, 0, 0.1)
-          ` : `
-            0 0 15px rgba(243, 34, 16, 0.3),
-            inset 0 0 15px rgba(243, 34, 16, 0.1)
-          `,
           width: '100%',
           maxWidth: isMobile ? 'calc(33.333% - 6px)' : '280px',
           flex: isMobile ? '1' : 'none',
@@ -226,7 +219,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               styles={{
                 bar: {
                   background: `linear-gradient(90deg, #A00000, #ff4530)`,
-                  boxShadow: '0 0 10px rgba(243, 34, 16, 0.5)'
                 }
               }}
             />
@@ -285,7 +277,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
       <Box
         className="fight-screen-container fight-screen-background"
         style={{
-          animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricFadeIn 0.8s ease-out",
           padding: isMobile ? "20px" : "40px",
           display: "flex",
           flexDirection: "column",
@@ -523,7 +514,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
-            animation: 'electricPulse 0.5s ease-out'
           }}
           onClick={() => setShowNoCoinsModal(false)}
         >
@@ -535,7 +525,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               padding: isMobile ? '30px 20px' : '40px 30px',
               maxWidth: isMobile ? '90%' : '400px',
               textAlign: 'center',
-              animation: 'electricEntry 0.6s ease-out 0.1s both'
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -551,8 +540,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
                 justifyContent: 'center',
                 fontSize: isMobile ? '30px' : '40px',
                 margin: '0 auto 20px',
-                boxShadow: '0 0 20px rgba(255, 215, 0, 0.6)',
-                animation: 'rotate 3s linear infinite'
               }}
             >
               ⭐

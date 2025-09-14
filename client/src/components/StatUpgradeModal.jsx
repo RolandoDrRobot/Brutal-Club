@@ -84,7 +84,6 @@ const StatUpgradeModal = ({
                 borderRadius: '0px',
                 left: `${particle.x}%`,
                 top: `${particle.y}%`,
-                boxShadow: `0 0 10px ${statColor}`,
                 pointerEvents: 'none'
               }}
             />

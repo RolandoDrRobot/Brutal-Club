@@ -42,7 +42,6 @@ const LoadingScreen = ({ progress = 0 }) => {
             height: '100%',
             backgroundColor: '#bbb092',
             transition: 'width 0.3s ease-out',
-            boxShadow: '0 0 10px rgba(245, 245, 220, 0.8), 0 0 20px rgba(245, 245, 220, 0.4)',
           }}
         />
       </div>
