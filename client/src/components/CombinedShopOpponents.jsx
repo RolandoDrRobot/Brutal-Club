@@ -53,6 +53,11 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   const [showLeaderboardModal, setShowLeaderboardModal] = useState(false);
   const [showNoCoinsModal, setShowNoCoinsModal] = useState(false);
   const [showMaxLevelModal, setShowMaxLevelModal] = useState(false);
+  const [showFightRestrictionModal, setShowFightRestrictionModal] = useState(false);
+  const [fightRestrictionData, setFightRestrictionData] = useState({
+    type: '', // 'locked' or 'defeated'
+    opponentName: ''
+  });
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeModalData, setUpgradeModalData] = useState({
     statName: '',
@@ -297,6 +302,16 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     }
   }, [showMaxLevelModal]);
 
+  useEffect(() => {
+    if (showFightRestrictionModal) {
+      const timer = setTimeout(() => {
+        setShowFightRestrictionModal(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showFightRestrictionModal]);
+
   const opponents = getOpponentsStatus().map((opponent, index) => ({
     ...opponent,
     number: `${index + 1}.`,
@@ -365,8 +380,19 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       }
       
       onChallengeClick(opponent);
-    } else if (isFirstOpponent && hasNoCoins) {
     } else if (isDefeated) {
+      setFightRestrictionData({
+        type: 'defeated',
+        opponentName: opponent.name
+      });
+      setShowFightRestrictionModal(true);
+    } else if (isLocked) {
+      setFightRestrictionData({
+        type: 'locked',
+        opponentName: opponent.name
+      });
+      setShowFightRestrictionModal(true);
+    } else if (isFirstOpponent && hasNoCoins) {
     }
   };
 
@@ -1055,6 +1081,57 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
               lineHeight: 1.4
             }}>
               This stat is already at maximum level and cannot be upgraded further.
+            </Text>
+          </Box>
+        </Box>
+      )}
+
+      {/* Fight Restriction Modal */}
+      {showFightRestrictionModal && (
+        <Box style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <Box style={{
+            backgroundColor: '#000000',
+            border: `3px solid ${fightRestrictionData.type === 'locked' ? '#666' : '#A00000'}`,
+            borderRadius: '12px',
+            padding: isMobile ? '30px' : '40px',
+            maxWidth: isMobile ? '90%' : '500px',
+            textAlign: 'center',
+            animation: 'electricEntry 0.8s ease-out'
+          }}>
+            <Text style={{
+              fontSize: isMobile ? '24px' : '28px',
+              fontWeight: 700,
+              color: fightRestrictionData.type === 'locked' ? '#666' : '#A00000',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '2px',
+              marginBottom: '20px',
+              textTransform: 'uppercase'
+            }}>
+              {fightRestrictionData.type === 'locked' ? 'FIGHTER LOCKED' : 'FIGHTER DEFEATED'}
+            </Text>
+            
+            <Text style={{
+              fontSize: isMobile ? '16px' : '18px',
+              color: '#bbb092',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              lineHeight: 1.4
+            }}>
+              {fightRestrictionData.type === 'locked' 
+                ? `${fightRestrictionData.opponentName} is locked. Defeat previous fighters to unlock this opponent.`
+                : `You have already defeated ${fightRestrictionData.opponentName}. This fighter cannot be challenged again.`
+              }
             </Text>
           </Box>
         </Box>
