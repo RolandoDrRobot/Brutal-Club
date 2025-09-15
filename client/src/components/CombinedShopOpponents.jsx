@@ -11,6 +11,7 @@ import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
 import comboImg from "../assets/optimized/combo.webp";
 import punchImg from "../assets/optimized/punch.webp";
+import coverbgImg from '../assets/optimized/coverbg.webp';
 import CharacterPurchaseModal from './CharacterPurchaseModal';
 import LeaderboardModal from './LeaderboardModal';
 import StatUpgradeModal from './StatUpgradeModal';
@@ -186,8 +187,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'center',
-            lineHeight: 1,
-            textShadow: '0 0 10px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,1), 2px 2px 4px rgba(0,0,0,1)'
+            lineHeight: 1
           }}>
             {displayName}
           </Text>
@@ -209,17 +209,16 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             <Text style={{
               fontSize: '14px',
               fontWeight: 700,
-              color: '#A00000',
+              color: '#bbb092',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
             }}>
               LEVEL {currentLevel}/{maxLevel}
             </Text>
           )}
           
-          {isMaxLevel(statName) ? (
+          {isMaxLevel(statName) && (
             <Text style={{
               fontSize: '12px',
               fontWeight: 600,
@@ -227,21 +226,8 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
             }}>
               MAX LEVEL
-            </Text>
-          ) : (
-            <Text style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              color: '#A00000',
-              fontFamily: 'Anton, sans-serif',
-              letterSpacing: '1px',
-              textAlign: 'center',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-            }}>
-              {upgradeCost} STAT POINT{upgradeCost > 1 ? 'S' : ''}
             </Text>
           )}
         </Stack>
@@ -489,7 +475,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       textTransform: 'uppercase',
       letterSpacing: '1px',
       fontFamily: 'Anton, sans-serif',
-      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -528,6 +513,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
+        backgroundImage: `url(${coverbgImg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricEntry 0.8s ease-out",
         padding: isMobile ? "30px 15px 25px" : "50px 30px 40px",
         height: "100dvh",
@@ -572,7 +560,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             letterSpacing: '2px',
             textTransform: 'uppercase',
             marginBottom: '4px',
-            textShadow: '0 0 8px #bbb092',
             textAlign: 'left'
           }}>
             ARCADE MODE
@@ -580,12 +567,11 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <div style={{
             fontSize: isMobile ? '14px' : '18px',
             fontWeight: 600,
-            color: '#A00000',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'left',
             lineHeight: 1.2,
-            textShadow: '0 0 5px #A00000'
           }}>
             Defeat fighters to level up
           </div>
@@ -640,7 +626,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <div style={{
             fontSize: isMobile ? '32px' : '40px',
             fontWeight: 900,
-            color: '#A00000',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             lineHeight: 1
@@ -883,7 +869,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                     letterSpacing: '1px',
                     textAlign: 'center',
                     textTransform: 'uppercase',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                   }}>
                     {opponent.isDefeated ? 'DEFEATED' : opponent.isUnlocked ? 'FIGHT' : opponent.name}
                   </Text>

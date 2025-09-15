@@ -138,11 +138,10 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
                       width: '100%',
                       height: '80px',
                       backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                      borderRadius: '12px',
+                      borderRadius: '15px',
                       padding: '0 10px',
                       position: 'relative',
                       cursor: 'default',
-                      border: `2px solid ${getRankColor(player.rank)}`,
                       minHeight: '80px',
                       display: 'flex',
                       alignItems: 'center',
@@ -187,7 +186,6 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
                           letterSpacing: '1px',
                           lineHeight: 1.2,
                           textTransform: 'uppercase',
-                          textShadow: '0 0 5px #bbb092',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -217,7 +215,6 @@ const LeaderboardModal = ({ isVisible, onClose }) => {
                           letterSpacing: '1px',
                           lineHeight: 1,
                           textTransform: 'uppercase',
-                          textShadow: `0 0 8px ${getRankColor(player.rank)}`
                         }}
                       >
                         LVL {player.level}

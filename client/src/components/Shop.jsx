@@ -8,6 +8,7 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import { useCurrency, usePackSystem } from '../hooks/useEconomy';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import packImg from '../assets/optimized/pack.webp';
+import coverbgImg from '../assets/optimized/coverbg.webp';
 import CharacterPreview from './CharacterPreview';
 import CoinPurchaseModal from './CoinPurchaseModal';
 import PackOpeningModal from './PackOpeningModal';
@@ -52,6 +53,9 @@ const Shop = ({ onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
+        backgroundImage: `url(${coverbgImg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricEntry 0.8s ease-out",
         padding: isMobile ? "40px 20px 20px 20px" : "60px 40px 40px 40px",
         height: "100dvh",
@@ -120,7 +124,7 @@ const Shop = ({ onBackClick }) => {
           <Text style={{
             fontSize: isMobile ? '28px' : '32px',
             fontWeight: 900,
-            color: '#A00000',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             textTransform: 'uppercase',

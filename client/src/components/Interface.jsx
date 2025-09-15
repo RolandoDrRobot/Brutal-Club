@@ -661,7 +661,6 @@ const Interface = () => {
                     {/* Estado del combate */}
                     {isCombatOver && (
                     <Text size={isMobile ? "xs" : "md"} color="yellow" weight={700} align="center" style={{
-                      textShadow: "0 0 10px yellow",
                       fontSize: isMobile ? "10px" : "16px"
                     }}>
                       {player1IsDead ? "DEFEAT" : "VICTORY"}

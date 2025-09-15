@@ -58,7 +58,6 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
     textTransform: 'uppercase',
     letterSpacing: '2px',
     fontFamily: 'Anton, sans-serif',
-    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
     cursor: opponent.isLocked ? 'not-allowed' : 'pointer',
     minWidth: isMobile ? '100px' : '120px',
     minHeight: isMobile ? '45px' : '50px',
@@ -241,7 +240,6 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                   color: opponent.isLocked ? '#666' : '#bbb092',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '2px',
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)',
                   textAlign: 'center',
                   lineHeight: 1,
                   marginBottom: '2px'
@@ -254,7 +252,6 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                   color: opponent.isLocked ? '#666' : '#bbb092',
                   fontFamily: 'Anton, sans-serif',
                   letterSpacing: '1px',
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)',
                   textAlign: 'center',
                   lineHeight: 1
                 }}>
@@ -281,7 +278,6 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
                     color: '#FFB300',
                     fontFamily: 'Anton, sans-serif',
                     letterSpacing: '1px',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)'
                   }}>
                     Arcade Mode
                   </Text>

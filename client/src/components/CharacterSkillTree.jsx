@@ -193,12 +193,7 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'center',
-            lineHeight: 1,
-            textShadow: `
-              0 0 10px #000000,
-              0 0 20px #000000,
-              2px 2px 4px #000000
-            `
+            lineHeight: 1
           }}>
             {displayName}
           </Text>
@@ -232,7 +227,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'center',
-            textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
           }}>
             LEVEL {currentLevel}/{maxLevel}
           </Text>
@@ -246,7 +240,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',
-              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
             }}>
               COST: {upgradeCost} STAT POINT{upgradeCost !== 1 ? 'S' : ''}
             </Text>
@@ -261,7 +254,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',
-              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
             }}>
               MAX LEVEL
             </Text>
@@ -350,7 +342,6 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
           letterSpacing: '2px',
           textTransform: 'uppercase',
           marginBottom: '4px',
-          textShadow: '0 0 8px #bbb092',
           textAlign: 'left'
         }}>
           {characters[selectedCharacter]?.name || 'FIGHTER'}
@@ -358,12 +349,11 @@ const CharacterSkillTree = ({ onSelectClick, onBackClick }) => {
         <div style={{
           fontSize: isMobile ? '14px' : '16px',
           fontWeight: 600,
-          color: '#A00000',
+          color: '#bbb092',
           fontFamily: 'Anton, sans-serif',
           letterSpacing: '1px',
           textAlign: 'left',
           lineHeight: 1.2,
-          textShadow: '0 0 5px #A00000'
         }}>
           Defeat fighters to level up
         </div>
