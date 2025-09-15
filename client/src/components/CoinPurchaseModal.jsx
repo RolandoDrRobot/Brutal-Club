@@ -324,7 +324,6 @@ const CoinPurchaseModal = ({
                 pointerEvents: 'none',
                 fontSize: '20px',
                 color: particle.color,
-                textShadow: `0 0 15px ${particle.color}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'

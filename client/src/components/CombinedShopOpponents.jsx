@@ -11,6 +11,7 @@ import CharacterPreview from './CharacterPreview';
 import { useModelLoader } from '../hooks/useModelLoader';
 import comboImg from "../assets/optimized/combo.webp";
 import punchImg from "../assets/optimized/punch.webp";
+import coverbgImg from '../assets/optimized/coverbg.webp';
 import CharacterPurchaseModal from './CharacterPurchaseModal';
 import LeaderboardModal from './LeaderboardModal';
 import StatUpgradeModal from './StatUpgradeModal';
@@ -51,6 +52,12 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   });
   const [showLeaderboardModal, setShowLeaderboardModal] = useState(false);
   const [showNoCoinsModal, setShowNoCoinsModal] = useState(false);
+  const [showMaxLevelModal, setShowMaxLevelModal] = useState(false);
+  const [showFightRestrictionModal, setShowFightRestrictionModal] = useState(false);
+  const [fightRestrictionData, setFightRestrictionData] = useState({
+    type: '', // 'locked' or 'defeated'
+    opponentName: ''
+  });
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeModalData, setUpgradeModalData] = useState({
     statName: '',
@@ -100,6 +107,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
     
     if (currentLevel >= maxLevel) {
+      setShowMaxLevelModal(true);
       return;
     }
     
@@ -152,7 +160,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
     return (
       <Paper
-        onClick={() => canUpgrade(statName) ? handleUpgradeStat(statName) : null}
+        onClick={() => handleUpgradeStat(statName)}
         onMouseEnter={(e) => {
           if (canUpgrade(statName) && !isMobile) {
             e.currentTarget.style.transform = 'scale(1.05)';
@@ -186,8 +194,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'center',
-            lineHeight: 1,
-            textShadow: '0 0 10px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,1), 2px 2px 4px rgba(0,0,0,1)'
+            lineHeight: 1
           }}>
             {displayName}
           </Text>
@@ -209,17 +216,16 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             <Text style={{
               fontSize: '14px',
               fontWeight: 700,
-              color: '#A00000',
+              color: '#bbb092',
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
             }}>
               LEVEL {currentLevel}/{maxLevel}
             </Text>
           )}
           
-          {isMaxLevel(statName) ? (
+          {isMaxLevel(statName) && (
             <Text style={{
               fontSize: '12px',
               fontWeight: 600,
@@ -227,21 +233,8 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
               fontFamily: 'Anton, sans-serif',
               letterSpacing: '1px',
               textAlign: 'center',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
             }}>
               MAX LEVEL
-            </Text>
-          ) : (
-            <Text style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              color: '#A00000',
-              fontFamily: 'Anton, sans-serif',
-              letterSpacing: '1px',
-              textAlign: 'center',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-            }}>
-              {upgradeCost} STAT POINT{upgradeCost > 1 ? 'S' : ''}
             </Text>
           )}
         </Stack>
@@ -299,6 +292,25 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     loadShopModels();
   }, []);
 
+  useEffect(() => {
+    if (showMaxLevelModal) {
+      const timer = setTimeout(() => {
+        setShowMaxLevelModal(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showMaxLevelModal]);
+
+  useEffect(() => {
+    if (showFightRestrictionModal) {
+      const timer = setTimeout(() => {
+        setShowFightRestrictionModal(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showFightRestrictionModal]);
 
   const opponents = getOpponentsStatus().map((opponent, index) => ({
     ...opponent,
@@ -368,8 +380,19 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       }
       
       onChallengeClick(opponent);
-    } else if (isFirstOpponent && hasNoCoins) {
     } else if (isDefeated) {
+      setFightRestrictionData({
+        type: 'defeated',
+        opponentName: opponent.name
+      });
+      setShowFightRestrictionModal(true);
+    } else if (isLocked) {
+      setFightRestrictionData({
+        type: 'locked',
+        opponentName: opponent.name
+      });
+      setShowFightRestrictionModal(true);
+    } else if (isFirstOpponent && hasNoCoins) {
     }
   };
 
@@ -489,7 +512,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
       textTransform: 'uppercase',
       letterSpacing: '1px',
       fontFamily: 'Anton, sans-serif',
-      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -528,6 +550,9 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
+        backgroundImage: `url(${coverbgImg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricEntry 0.8s ease-out",
         padding: isMobile ? "30px 15px 25px" : "50px 30px 40px",
         height: "100dvh",
@@ -572,7 +597,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             letterSpacing: '2px',
             textTransform: 'uppercase',
             marginBottom: '4px',
-            textShadow: '0 0 8px #bbb092',
             textAlign: 'left'
           }}>
             ARCADE MODE
@@ -580,12 +604,11 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <div style={{
             fontSize: isMobile ? '14px' : '18px',
             fontWeight: 600,
-            color: '#A00000',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '1px',
             textAlign: 'left',
             lineHeight: 1.2,
-            textShadow: '0 0 5px #A00000'
           }}>
             Defeat fighters to level up
           </div>
@@ -640,7 +663,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
           <div style={{
             fontSize: isMobile ? '32px' : '40px',
             fontWeight: 900,
-            color: '#A00000',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             lineHeight: 1
@@ -883,7 +906,6 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
                     letterSpacing: '1px',
                     textAlign: 'center',
                     textTransform: 'uppercase',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                   }}>
                     {opponent.isDefeated ? 'DEFEATED' : opponent.isUnlocked ? 'FIGHT' : opponent.name}
                   </Text>
@@ -1012,6 +1034,105 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             >
               OK
             </Button>
+          </Box>
+        </Box>
+      )}
+
+      {/* Max Level Modal */}
+      {showMaxLevelModal && (
+        <Box style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <Box style={{
+            backgroundColor: '#000000',
+            border: '3px solid #FFB300',
+            borderRadius: '12px',
+            padding: isMobile ? '30px' : '40px',
+            maxWidth: isMobile ? '90%' : '500px',
+            textAlign: 'center',
+            animation: 'electricEntry 0.8s ease-out'
+          }}>
+            <Text style={{
+              fontSize: isMobile ? '24px' : '28px',
+              fontWeight: 700,
+              color: '#FFB300',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '2px',
+              marginBottom: '20px',
+              textTransform: 'uppercase'
+            }}>
+              MAX LEVEL REACHED
+            </Text>
+            
+            <Text style={{
+              fontSize: isMobile ? '16px' : '18px',
+              color: '#bbb092',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              lineHeight: 1.4
+            }}>
+              This stat is already at maximum level and cannot be upgraded further.
+            </Text>
+          </Box>
+        </Box>
+      )}
+
+      {/* Fight Restriction Modal */}
+      {showFightRestrictionModal && (
+        <Box style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <Box style={{
+            backgroundColor: '#000000',
+            border: `3px solid ${fightRestrictionData.type === 'locked' ? '#666' : '#A00000'}`,
+            borderRadius: '12px',
+            padding: isMobile ? '30px' : '40px',
+            maxWidth: isMobile ? '90%' : '500px',
+            textAlign: 'center',
+            animation: 'electricEntry 0.8s ease-out'
+          }}>
+            <Text style={{
+              fontSize: isMobile ? '24px' : '28px',
+              fontWeight: 700,
+              color: fightRestrictionData.type === 'locked' ? '#666' : '#A00000',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '2px',
+              marginBottom: '20px',
+              textTransform: 'uppercase'
+            }}>
+              {fightRestrictionData.type === 'locked' ? 'FIGHTER LOCKED' : 'FIGHTER DEFEATED'}
+            </Text>
+            
+            <Text style={{
+              fontSize: isMobile ? '16px' : '18px',
+              color: '#bbb092',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              lineHeight: 1.4
+            }}>
+              {fightRestrictionData.type === 'locked' 
+                ? `${fightRestrictionData.opponentName} is locked. Defeat previous fighters to unlock this opponent.`
+                : `You have already defeated ${fightRestrictionData.opponentName}. This fighter cannot be challenged again.`
+              }
+            </Text>
           </Box>
         </Box>
       )}

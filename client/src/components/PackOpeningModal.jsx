@@ -75,7 +75,7 @@ const PackOpeningModal = ({
   const getItemTypeColor = (type) => {
     switch (type) {
       case 'character': return '#bbb092';
-      case 'stat_points': return '#A00000';
+      case 'stat_points': return '#bbb092';
       default: return '#bbb092';
     }
   };
@@ -135,7 +135,6 @@ const PackOpeningModal = ({
                 pointerEvents: 'none',
                 fontSize: '16px',
                 color: particle.color,
-                textShadow: `0 0 10px ${particle.color}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'

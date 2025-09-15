@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Box, Text, Stack, Grid, Card, Group } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import '../styles/fightAnimations.css';
@@ -8,6 +8,7 @@ import { useButtonSound } from '../hooks/useButtonSound';
 import { useCurrency, usePackSystem } from '../hooks/useEconomy';
 import mainButtonImg from '../assets/mainbutton.jpeg';
 import packImg from '../assets/optimized/pack.webp';
+import coverbgImg from '../assets/optimized/coverbg.webp';
 import CharacterPreview from './CharacterPreview';
 import CoinPurchaseModal from './CoinPurchaseModal';
 import PackOpeningModal from './PackOpeningModal';
@@ -22,8 +23,18 @@ const Shop = ({ onBackClick }) => {
 
   const [showCoinPurchaseModal, setShowCoinPurchaseModal] = useState(false);
   const [showPackOpeningModal, setShowPackOpeningModal] = useState(false);
+  const [showInsufficientCoinsModal, setShowInsufficientCoinsModal] = useState(false);
   const [packContents, setPackContents] = useState([]);
 
+  useEffect(() => {
+    if (showInsufficientCoinsModal) {
+      const timer = setTimeout(() => {
+        setShowInsufficientCoinsModal(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showInsufficientCoinsModal]);
 
   const handleBuyPack = () => {
     if (!openPack) return;
@@ -33,6 +44,8 @@ const Shop = ({ onBackClick }) => {
       playButtonSound();
       setPackContents(result.contents);
       setShowPackOpeningModal(true);
+    } else {
+      setShowInsufficientCoinsModal(true);
     }
   };
 
@@ -52,6 +65,9 @@ const Shop = ({ onBackClick }) => {
     <Box
       className="fight-screen-container fight-screen-background"
       style={{
+        backgroundImage: `url(${coverbgImg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         animation: isExiting ? "fadeOutSpray 0.4s ease-out" : "electricEntry 0.8s ease-out",
         padding: isMobile ? "40px 20px 20px 20px" : "60px 40px 40px 40px",
         height: "100dvh",
@@ -120,7 +136,7 @@ const Shop = ({ onBackClick }) => {
           <Text style={{
             fontSize: isMobile ? '28px' : '32px',
             fontWeight: 900,
-            color: '#A00000',
+            color: '#bbb092',
             fontFamily: 'Anton, sans-serif',
             letterSpacing: '2px',
             textTransform: 'uppercase',
@@ -166,6 +182,54 @@ const Shop = ({ onBackClick }) => {
 
 
 
+
+      {/* Insufficient Coins Modal */}
+      {showInsufficientCoinsModal && (
+        <Box style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <Box style={{
+            backgroundColor: '#000000',
+            border: '3px solid #A00000',
+            borderRadius: '12px',
+            padding: isMobile ? '30px' : '40px',
+            maxWidth: isMobile ? '90%' : '500px',
+            textAlign: 'center',
+            animation: 'electricEntry 0.8s ease-out'
+          }}>
+            <Text style={{
+              fontSize: isMobile ? '24px' : '28px',
+              fontWeight: 700,
+              color: '#A00000',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '2px',
+              marginBottom: '20px',
+              textTransform: 'uppercase'
+            }}>
+              INSUFFICIENT COINS
+            </Text>
+            
+            <Text style={{
+              fontSize: isMobile ? '16px' : '18px',
+              color: '#bbb092',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              lineHeight: 1.4
+            }}>
+              You need {packCost} coins to open a Fighter Pack. You currently have {coins} coins.
+            </Text>
+          </Box>
+        </Box>
+      )}
 
       <CoinPurchaseModal
         isVisible={showCoinPurchaseModal}
