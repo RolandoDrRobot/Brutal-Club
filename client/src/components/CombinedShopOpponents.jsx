@@ -52,6 +52,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
   });
   const [showLeaderboardModal, setShowLeaderboardModal] = useState(false);
   const [showNoCoinsModal, setShowNoCoinsModal] = useState(false);
+  const [showMaxLevelModal, setShowMaxLevelModal] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeModalData, setUpgradeModalData] = useState({
     statName: '',
@@ -101,6 +102,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     const upgradeCost = GAME_CONFIG.STAT_CONFIG.UPGRADE_COST;
     
     if (currentLevel >= maxLevel) {
+      setShowMaxLevelModal(true);
       return;
     }
     
@@ -153,7 +155,7 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
 
     return (
       <Paper
-        onClick={() => canUpgrade(statName) ? handleUpgradeStat(statName) : null}
+        onClick={() => handleUpgradeStat(statName)}
         onMouseEnter={(e) => {
           if (canUpgrade(statName) && !isMobile) {
             e.currentTarget.style.transform = 'scale(1.05)';
@@ -285,6 +287,15 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
     loadShopModels();
   }, []);
 
+  useEffect(() => {
+    if (showMaxLevelModal) {
+      const timer = setTimeout(() => {
+        setShowMaxLevelModal(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showMaxLevelModal]);
 
   const opponents = getOpponentsStatus().map((opponent, index) => ({
     ...opponent,
@@ -997,6 +1008,54 @@ const CombinedShopOpponents = ({ onChallengeClick, onBackClick }) => {
             >
               OK
             </Button>
+          </Box>
+        </Box>
+      )}
+
+      {/* Max Level Modal */}
+      {showMaxLevelModal && (
+        <Box style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <Box style={{
+            backgroundColor: '#000000',
+            border: '3px solid #FFB300',
+            borderRadius: '12px',
+            padding: isMobile ? '30px' : '40px',
+            maxWidth: isMobile ? '90%' : '500px',
+            textAlign: 'center',
+            animation: 'electricEntry 0.8s ease-out'
+          }}>
+            <Text style={{
+              fontSize: isMobile ? '24px' : '28px',
+              fontWeight: 700,
+              color: '#FFB300',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '2px',
+              marginBottom: '20px',
+              textTransform: 'uppercase'
+            }}>
+              MAX LEVEL REACHED
+            </Text>
+            
+            <Text style={{
+              fontSize: isMobile ? '16px' : '18px',
+              color: '#bbb092',
+              fontFamily: 'Anton, sans-serif',
+              letterSpacing: '1px',
+              lineHeight: 1.4
+            }}>
+              This stat is already at maximum level and cannot be upgraded further.
+            </Text>
           </Box>
         </Box>
       )}
