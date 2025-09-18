@@ -90,7 +90,7 @@ const MainMenu = ({ onStartClick, onFightersClick, onStoreClick, onBackClick }) 
             e.target.style.opacity = "1";
           }}
         >
-          FIGHT CLUB
+          BRUTAL CLUB
         </div>
       </div>
 

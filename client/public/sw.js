@@ -1,7 +1,7 @@
 // 🚀 MOBILE OPTIMIZATION: Enhanced Service Worker for better caching
-const CACHE_NAME = 'fightclub-v1.2.0';
-const STATIC_CACHE = 'fightclub-static-v1.2.0';
-const DYNAMIC_CACHE = 'fightclub-dynamic-v1.2.0';
+const CACHE_NAME = 'brutalclub-v1.2.0';
+const STATIC_CACHE = 'brutalclub-static-v1.2.0';
+const DYNAMIC_CACHE = 'brutalclub-dynamic-v1.2.0';
 
 // 🎯 Critical assets that should be cached immediately
 const CRITICAL_ASSETS = [
@@ -197,7 +197,7 @@ self.addEventListener('push', (event) => {
     };
     
     event.waitUntil(
-      self.registration.showNotification(data.title || 'FightClub', options)
+      self.registration.showNotification(data.title || 'BrutalClub', options)
     );
   }
 });

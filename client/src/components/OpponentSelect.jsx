@@ -106,7 +106,7 @@ const OpponentSelect = ({ onChallengeClick, onBackClick }) => {
             e.target.style.opacity = "1";
           }}
         >
-          FIGHT CLUB
+          BRUTAL CLUB
         </Text>
         <Text className="fight-subtitle">
           OPPONENTS

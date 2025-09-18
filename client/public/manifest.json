@@ -1,7 +1,7 @@
 {
-  "name": "Fight Club - Character Customization",
-  "short_name": "Fight Club",
-  "description": "Fight Club character customization and battle application",
+  "name": "Brutal Club - Character Customization",
+  "short_name": "Brutal Club",
+  "description": "Brutal Club character customization and battle application",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",

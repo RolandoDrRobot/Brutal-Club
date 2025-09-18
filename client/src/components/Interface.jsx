@@ -360,7 +360,7 @@ const Interface = () => {
           {/* Controles de animación de baile - Solo en modo sincronizado - CENTRO ARRIBA */}
           {!isCombatMode && (
             <>
-              {/* Título Fight Club - ARRIBA CENTRO */}
+              {/* Título Brutal Club - ARRIBA CENTRO */}
               <Affix position={{ 
                 top: 25, 
                 left: "50%",
@@ -387,14 +387,14 @@ const Interface = () => {
                       e.target.style.opacity = "1";
                     }}
                   >
-                    FIGHT CLUB
+                    BRUTAL CLUB
                   </div>
                   
 
                 </div>
               </Affix>
 
-              {/* MENÚ CENTRAL ESTILO FIGHT CLUB */}
+              {/* MENÚ CENTRAL ESTILO BRUTAL CLUB */}
               <Affix position={{ 
                 top: "50%",
                 left: "50%",

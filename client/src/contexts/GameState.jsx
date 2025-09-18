@@ -99,7 +99,7 @@ const GAME_CONFIG = {
 
 export const GameStateProvider = ({ children }) => {
   const [gameState, setGameState] = useState(() => {
-    const saved = localStorage.getItem('fightClubGameState');
+    const saved = localStorage.getItem('brutalClubGameState');
     
     const initialState = {
       coins: 100,
@@ -133,7 +133,7 @@ export const GameStateProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    localStorage.setItem('fightClubGameState', JSON.stringify(gameState));
+    localStorage.setItem('brutalClubGameState', JSON.stringify(gameState));
   }, [gameState]);
 
   useEffect(() => {
